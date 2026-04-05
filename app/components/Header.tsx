@@ -1,67 +1,67 @@
 import { ModeToggle } from '@/components/ModeToggle'
-import { Button } from '@/components/ui/button'
 import { ConnectButton } from '@rainbow-me/rainbowkit'
 import { Menu, X } from 'lucide-react'
 import { useState } from 'react'
 import { NavLink } from 'react-router'
+import { Button } from '@/components/ui/button'
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
+  const navLinks = [
+    { name: 'Home', path: '/' },
+    { name: 'Projects', path: '/projects' }, // Pointing to projects page
+    { name: 'Launch Your Idea', path: '/idea' },
+    { name: 'My Campaigns', path: '/my-campaigns' }
+  ]
+
   return (
-    <header className="h-[60px] fixed top-0 w-full border-b border-gray-200 dark:border-gray-800 flex items-center justify-between px-4 md:px-6 bg-white dark:bg-[#030712] z-50">
+    <header className="fixed top-0 w-full z-50 bg-background/80 backdrop-blur-xl border-b border-border/50 shadow-[0_4px_20px_rgba(var(--primary),0.05)] flex items-center justify-between px-4 md:px-8 h-20 transition-colors duration-300">
+      {/* Logo */}
       <NavLink to="/" onClick={() => setIsMenuOpen(false)}>
-        <h1 className="text-lg md:text-xl font-semibold m-0 dark:text-white">
-          crowdfunding.
-        </h1>
+        <div className="text-2xl font-bold tracking-tighter text-primary drop-shadow-[0_0_8px_rgba(var(--primary),0.5)] font-headline">
+          VAULT_PRIME
+        </div>
       </NavLink>
 
       {/* Desktop Navigation */}
-      <nav className="hidden md:block">
-        <ul className="flex items-center gap-6">
-          <li className="font-mono text-sm">
-            <NavLink
-              to="/idea"
-              className={({ isActive }) =>
+      <nav className="hidden md:flex items-center gap-8 font-headline tracking-tight">
+        {navLinks.map((link) => (
+          <NavLink
+            key={link.name}
+            to={link.path}
+            className={({ isActive }) =>
+              `transition-colors font-bold ${
                 isActive
-                  ? 'text-blue-500'
-                  : 'text-gray-700 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400'
-              }
-            >
-              Launch Your Idea
-            </NavLink>
-          </li>
-          <li className="font-mono text-sm">
-            <NavLink
-              to="/my-campaigns"
-              className={({ isActive }) =>
-                isActive
-                  ? 'text-blue-500'
-                  : 'text-gray-700 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400'
-              }
-            >
-              My Campaigns
-            </NavLink>
-          </li>
-        </ul>
+                  ? 'text-foreground'
+                  : 'text-muted-foreground hover:text-foreground'
+              }`
+            }
+          >
+            {link.name}
+          </NavLink>
+        ))}
       </nav>
 
       {/* Desktop Actions */}
-      <div className="hidden md:flex items-center gap-2">
+      <div className="hidden md:flex items-center gap-4">
         <ModeToggle />
-        <ConnectButton showBalance label="Connect" />
+        <div className="neon-glow-secondary rounded-xl">
+          <ConnectButton showBalance label="Connect Wallet" />
+        </div>
       </div>
 
       {/* Mobile Menu Button */}
-      <div className="flex md:hidden items-center gap-2">
+      <div className="flex md:hidden items-center gap-3">
         <ModeToggle />
-        <ConnectButton showBalance={false} label="Connect Wallet" />
+        <ConnectButton showBalance={false} label="Connect" />
 
         <Button
           variant="ghost"
           size="icon"
           onClick={() => setIsMenuOpen(!isMenuOpen)}
           aria-label="Toggle menu"
+          className="text-foreground"
         >
           {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
         </Button>
@@ -69,39 +69,26 @@ const Header = () => {
 
       {/* Mobile Menu Overlay */}
       {isMenuOpen && (
-        <div className="fixed inset-0 top-[60px] bg-white dark:bg-[#030712] z-40 md:hidden">
-          <nav className="container mx-auto px-4 py-6">
+        <div className="fixed inset-0 top-20 bg-background/95 backdrop-blur-xl z-40 md:hidden border-t border-border/50">
+          <nav className="container mx-auto px-4 py-8">
             <ul className="space-y-4">
-              <li>
-                <NavLink
-                  to="/idea"
-                  onClick={() => setIsMenuOpen(false)}
-                  className={({ isActive }) =>
-                    `block py-3 px-4 rounded-lg font-mono text-base ${
-                      isActive
-                        ? 'bg-blue-50 dark:bg-blue-950 text-blue-500'
-                        : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
-                    }`
-                  }
-                >
-                  🚀 Launch Your Idea
-                </NavLink>
-              </li>
-              <li>
-                <NavLink
-                  to="/my-campaigns"
-                  onClick={() => setIsMenuOpen(false)}
-                  className={({ isActive }) =>
-                    `block py-3 px-4 rounded-lg font-mono text-base ${
-                      isActive
-                        ? 'bg-blue-50 dark:bg-blue-950 text-blue-500'
-                        : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
-                    }`
-                  }
-                >
-                  📋 My Campaigns
-                </NavLink>
-              </li>
+              {navLinks.map((link) => (
+                <li key={link.name}>
+                  <NavLink
+                    to={link.path}
+                    onClick={() => setIsMenuOpen(false)}
+                    className={({ isActive }) =>
+                      `block py-4 px-6 rounded-xl font-headline font-bold text-lg border border-transparent transition-all ${
+                        isActive
+                          ? 'bg-primary/10 text-primary border-primary/20'
+                          : 'text-muted-foreground hover:bg-surface-variant hover:text-foreground'
+                      }`
+                    }
+                  >
+                    {link.name}
+                  </NavLink>
+                </li>
+              ))}
             </ul>
           </nav>
         </div>

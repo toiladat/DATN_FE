@@ -6,6 +6,24 @@
   --font-sans:
     'Inter', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji',
     'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  --font-headline: 'Space Grotesk', sans-serif;
+  --font-body: 'Inter', sans-serif;
+  --font-label: 'Inter', sans-serif;
+
+  --color-surface-bright: var(--surface-bright);
+  --color-on-surface: var(--on-surface);
+  --color-primary-container: #00eefc;
+  --color-secondary-dim: #874cff;
+  --color-primary: #8ff5ff;
+  --color-secondary: #ac89ff;
+  --color-tertiary: #7d98ff;
+  
+  --color-surface-container-highest: var(--surface-container-highest);
+  --color-surface-container-low: var(--surface-container-low);
+  --color-surface-container-lowest: var(--surface-container-lowest);
+  --color-on-surface-variant: var(--on-surface-variant);
+  --color-outline-variant: var(--outline-variant);
+  --color-surface: var(--surface);
 }
 
 html,
@@ -99,6 +117,15 @@ input[type='number'] {
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+
+  --surface-bright: #f8f9fa;
+  --on-surface: #0b0e14;
+  --surface-container-highest: #f1f3f5;
+  --surface-container-low: #f8f9fa;
+  --surface-container-lowest: #ffffff;
+  --on-surface-variant: #495057;
+  --outline-variant: #dee2e6;
+  --surface: #ffffff;
 }
 
 .dark {
@@ -133,6 +160,15 @@ input[type='number'] {
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
+
+  --surface-bright: #282c36;
+  --on-surface: #ecedf6;
+  --surface-container-highest: #22262f;
+  --surface-container-low: #10131a;
+  --surface-container-lowest: #000000;
+  --on-surface-variant: #a9abb3;
+  --outline-variant: #45484f;
+  --surface: #0b0e14;
 }
 
 @layer base {
@@ -142,6 +178,28 @@ input[type='number'] {
   body {
     @apply bg-background text-foreground;
   }
+}
+
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+.glass-panel {
+  background: rgba(143, 245, 255, 0.05);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(143, 245, 255, 0.1);
+}
+
+.glow-soft {
+  box-shadow: 0 0 40px rgba(143, 245, 255, 0.08);
+}
+
+.icon-glow-cyan {
+  text-shadow: 0 0 15px rgba(143, 245, 255, 0.6);
+}
+
+.icon-glow-purple {
+  text-shadow: 0 0 15px rgba(172, 137, 255, 0.6);
 }
 
 /* Flash Card 3D Flip Animation */
