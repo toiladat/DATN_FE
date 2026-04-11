@@ -11,7 +11,7 @@ const Header = () => {
   const navLinks = [
     { name: 'Home', path: '/' },
     { name: 'Projects', path: '/projects' }, // Pointing to projects page
-    { name: 'Launch Your Idea', path: '/idea' },
+    { name: 'Launch Your Idea', path: '/launch-project' },
     { name: 'My Campaigns', path: '/my-campaigns' }
   ]
 

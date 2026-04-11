@@ -1,7 +1,7 @@
 import { Globe, Shield, Activity } from 'lucide-react'
-import { LANDING_PAGE_DATA } from '../../data/mockData'
+import { LANDING_PAGE_DATA } from '../data/mockData'
 
-export function Footer() {
+const Footer = () => {
   const { footer } = LANDING_PAGE_DATA
 
   return (
@@ -142,3 +142,5 @@ export function Footer() {
     </footer>
   )
 }
+
+export default Footer

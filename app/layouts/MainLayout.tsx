@@ -1,7 +1,7 @@
 // src/layouts/MainLayout.tsx
 
 import Header from '@/components/Header'
-import { Footer } from '@/components/landing/Footer'
+import Footer from '@/components/Footer'
 import { Outlet } from 'react-router'
 
 export default function MainLayout() {
