@@ -12,16 +12,10 @@ const tasks = [
     icon: 'check_circle'
   },
   {
-    title: 'Funding',
-    description: 'Define your goal and campaign duration...',
+    title: 'Milestones',
+    description: 'Define your milestones...',
     status: 'In Progress' as TaskStatus,
     icon: 'pending'
-  },
-  {
-    title: 'Rewards',
-    description: 'Set your rewards and shipping costs.',
-    status: 'Not Started' as TaskStatus,
-    icon: 'redeem'
   },
   {
     title: 'Story',

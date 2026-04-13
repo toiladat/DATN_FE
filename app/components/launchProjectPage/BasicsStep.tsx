@@ -18,6 +18,7 @@ import {
   SelectValue
 } from '@/components/ui/select'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
+import { ActionFooter } from './ActionFooter'
 
 export function BasicsStep() {
   const [launchDate, setLaunchDate] = useState<Date>()
@@ -444,26 +445,7 @@ export function BasicsStep() {
         </section>
       </div>
 
-      {/* Sticky Footer Actions */}
-      <div className="fixed bottom-0 left-0 md:left-[var(--sidebar-width)] right-0 h-24 bg-[#0b0e14]/80 backdrop-blur-md border-t border-[#45484f]/15 flex items-center justify-between px-6 md:px-12 z-40 transition-all duration-300">
-        <button className="flex items-center gap-2 text-[#a9abb3] hover:text-[#ecedf6] transition-colors font-['Space_Grotesk'] font-bold uppercase tracking-widest text-xs">
-          <span className="material-symbols-outlined text-sm">
-            chevron_left
-          </span>
-          Discard Changes
-        </button>
-        <div className="flex gap-4">
-          <Button
-            variant="outline"
-            className="px-8 py-3 h-12 rounded-full font-['Space_Grotesk'] font-bold uppercase tracking-widest text-xs border-[#45484f]/30 hover:bg-[#22262f] bg-transparent text-[#ecedf6] transition-colors"
-          >
-            Save Draft
-          </Button>
-          <Button className="bg-[#8ff5ff] hover:bg-[#00eefc] text-[#005d63] px-10 py-3 h-12 rounded-full font-['Space_Grotesk'] font-bold uppercase tracking-widest text-xs shadow-[0_0_20px_rgba(143,245,255,0.4)] hover:shadow-[0_0_30px_rgba(143,245,255,0.6)] transition-all active:scale-95">
-            Continue to Funding
-          </Button>
-        </div>
-      </div>
+      <ActionFooter continueText="Continue to Milestones" />
     </div>
   )
 }

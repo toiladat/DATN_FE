@@ -26,8 +26,7 @@ export function LaunchSidebar({
   const steps = [
     { id: 'Overview', label: 'Overview', icon: 'dashboard' },
     { id: 'Basics', label: 'Basics', icon: 'info' },
-    { id: 'Funding', label: 'Funding', icon: 'payments' },
-    { id: 'Rewards', label: 'Rewards', icon: 'card_giftcard' },
+    { id: 'Milestones', label: 'Milestones', icon: 'pending' },
     { id: 'Story', label: 'Story', icon: 'auto_stories', fill: true },
     { id: 'Team', label: 'Team', icon: 'group' },
     { id: 'Payment', label: 'Payment', icon: 'account_balance' }
@@ -65,7 +64,6 @@ export function LaunchSidebar({
             <SidebarMenu className="gap-2">
               {steps.map((step) => {
                 const isActive = currentStep === step.id
-                // Nếu đang collapse thì bớt flex-gap và icon margin cho icon về giữa
                 return (
                   <SidebarMenuItem key={step.id}>
                     <SidebarMenuButton

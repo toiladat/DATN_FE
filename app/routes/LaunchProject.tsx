@@ -8,6 +8,7 @@ import { LaunchSidebar } from '@/components/launchProjectPage/LaunchSidebar'
 import { OverviewStep } from '@/components/launchProjectPage/OverviewStep'
 import { StoryStep } from '@/components/launchProjectPage/StoryStep'
 import { BasicsStep } from '@/components/launchProjectPage/BasicsStep'
+import { MilestonesStep } from '@/components/launchProjectPage/MilestonesStep'
 
 export default function LaunchProject() {
   const [currentStep, setCurrentStep] = useState<string>('Overview')
@@ -19,6 +20,8 @@ export default function LaunchProject() {
         return <OverviewStep />
       case 'Basics':
         return <BasicsStep />
+      case 'Milestones':
+        return <MilestonesStep />
       case 'Story':
         return <StoryStep />
       // Tương tự cho các bước khác (Basics, Funding, Team...)

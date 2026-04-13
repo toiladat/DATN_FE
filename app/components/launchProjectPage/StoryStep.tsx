@@ -1,4 +1,6 @@
 import { Textarea } from '@/components/ui/textarea'
+import { ActionFooter } from './ActionFooter'
+import { RichTextEditor } from '@/components/ui/rich-text-editor'
 
 export function StoryStep() {
   return (
@@ -51,47 +53,11 @@ export function StoryStep() {
           <label className="text-sm font-semibold text-[#8ff5ff] uppercase tracking-widest">
             Project Description
           </label>
-          <div className="rounded-2xl border border-[#45484f]/15 bg-[#161a21] overflow-hidden">
-            {/* Toolbar (Static UI for now) */}
-            <div className="flex items-center gap-1 p-2 border-b border-[#45484f]/15 bg-[#1c2028]">
-              <button className="p-2 rounded-lg text-[#a9abb3] hover:text-[#8ff5ff] hover:bg-[#8ff5ff]/10 transition-all">
-                <span className="material-symbols-outlined text-sm">
-                  format_bold
-                </span>
-              </button>
-              <button className="p-2 rounded-lg text-[#a9abb3] hover:text-[#8ff5ff] hover:bg-[#8ff5ff]/10 transition-all">
-                <span className="material-symbols-outlined text-sm">
-                  format_italic
-                </span>
-              </button>
-              <button className="p-2 rounded-lg text-[#a9abb3] hover:text-[#8ff5ff] hover:bg-[#8ff5ff]/10 transition-all">
-                <span className="material-symbols-outlined text-sm">
-                  format_list_bulleted
-                </span>
-              </button>
-              <button className="p-2 rounded-lg text-[#a9abb3] hover:text-[#8ff5ff] hover:bg-[#8ff5ff]/10 transition-all">
-                <span className="material-symbols-outlined text-sm">
-                  format_quote
-                </span>
-              </button>
-              <div className="h-6 w-[1px] bg-[#45484f]/30 mx-2"></div>
-              <button className="p-2 rounded-lg text-[#a9abb3] hover:text-[#8ff5ff] hover:bg-[#8ff5ff]/10 transition-all">
-                <span className="material-symbols-outlined text-sm">image</span>
-              </button>
-              <button className="p-2 rounded-lg text-[#a9abb3] hover:text-[#8ff5ff] hover:bg-[#8ff5ff]/10 transition-all">
-                <span className="material-symbols-outlined text-sm">link</span>
-              </button>
-              <button className="p-2 rounded-lg text-[#a9abb3] hover:text-[#8ff5ff] hover:bg-[#8ff5ff]/10 transition-all">
-                <span className="material-symbols-outlined text-sm">code</span>
-              </button>
-            </div>
-            {/* Text Area */}
-            <div className="p-0 bg-[#10131a]/50 h-[400px]">
-              <Textarea
-                className="w-full h-full bg-transparent border-none focus-visible:ring-0 text-[#ecedf6] text-lg p-8 resize-none placeholder:text-[#a9abb3] placeholder:italic rounded-none focus:outline-none focus:ring-0"
-                placeholder="Start typing your project's story here...&#10;&#10;Use this space to explain the core problem you are solving, your technical approach, and how you will use the funds. You can drag and drop images directly into this area."
-              />
-            </div>
+          <div className="rounded-2xl overflow-hidden shadow-[0_4px_24px_rgba(0,0,0,0.2)]">
+            <RichTextEditor
+              height={450}
+              placeholder="Start typing your project's story here... Use this space to explain the core problem you are solving, your technical approach, and how you will use the funds. You can drag and drop images directly into this area."
+            />
           </div>
         </section>
 
@@ -114,21 +80,7 @@ export function StoryStep() {
           </div>
         </section>
 
-        {/* Bottom Action */}
-        <footer className="flex justify-between items-center py-10 border-t border-[#45484f]/15">
-          <button className="flex items-center gap-2 text-[#a9abb3] hover:text-[#ecedf6] transition-colors">
-            <span className="material-symbols-outlined">arrow_back</span>
-            Back to Rewards
-          </button>
-          <div className="flex gap-4">
-            <button className="px-8 py-3 rounded-full border border-[#73757d]/40 text-[#ecedf6] font-medium hover:bg-[#22262f] transition-all">
-              Save Preview
-            </button>
-            <button className="px-10 py-3 rounded-full bg-gradient-to-r from-[#8ff5ff] to-[#00deec] text-[#005359] font-bold hover:shadow-[0_0_20px_rgba(143,245,255,0.4)] active:scale-95 transition-all">
-              Next: Team
-            </button>
-          </div>
-        </footer>
+        <ActionFooter continueText="Continue to Team" />
       </div>
 
       {/* Sidebar Tips Column */}
