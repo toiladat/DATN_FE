@@ -28,16 +28,14 @@ const tasks = [
     description: 'Edit your profile and add collaborators.',
     status: 'Not Started' as TaskStatus,
     icon: 'group'
-  },
-  {
-    title: 'Payment',
-    description: 'Verify details and link a wallet.',
-    status: 'Not Started' as TaskStatus,
-    icon: 'account_balance'
   }
 ]
 
-export function OverviewStep() {
+interface OverviewStepProps {
+  onStepChange?: (step: string) => void
+}
+
+export function OverviewStep({ onStepChange }: OverviewStepProps = {}) {
   return (
     <div className="max-w-5xl mx-auto w-full">
       <header className="mb-12">
@@ -66,6 +64,7 @@ export function OverviewStep() {
             description={task.description}
             status={task.status}
             icon={task.icon}
+            onClick={() => onStepChange?.(task.title)}
           />
         ))}
       </section>

@@ -9,9 +9,16 @@ interface TaskCardProps {
   description: string
   status: TaskStatus
   icon: string
+  onClick?: () => void
 }
 
-export function TaskCard({ title, description, status, icon }: TaskCardProps) {
+export function TaskCard({
+  title,
+  description,
+  status,
+  icon,
+  onClick
+}: TaskCardProps) {
   const isComplete = status === 'Complete'
   const isInProgress = status === 'In Progress'
 
@@ -20,7 +27,7 @@ export function TaskCard({ title, description, status, icon }: TaskCardProps) {
     isInProgress
       ? 'border border-[#8ff5ff]/20 shadow-[0_0_20px_rgba(143,245,255,0.15)]'
       : 'border border-[#8ff5ff]/10'
-  }`
+  } ${onClick ? 'cursor-pointer' : ''}`
 
   const iconBoxClass = `w-12 h-12 rounded-full flex items-center justify-center shrink-0 border ${
     isComplete
@@ -31,7 +38,7 @@ export function TaskCard({ title, description, status, icon }: TaskCardProps) {
   }`
 
   return (
-    <Card className={containerClass}>
+    <Card className={containerClass} onClick={onClick}>
       <CardContent className="p-0 border-none flex flex-col md:flex-row md:items-center justify-between w-full gap-4">
         <div className="flex items-center gap-6">
           <div className={iconBoxClass}>

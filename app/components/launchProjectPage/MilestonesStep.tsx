@@ -4,6 +4,8 @@ import { Button } from '@/components/ui/button'
 import { ActionFooter } from './ActionFooter'
 import { RichTextEditor } from '@/components/ui/rich-text-editor'
 import { ImageUpload } from '@/components/ui/image-upload'
+import { Label } from '@/components/ui/label'
+import { Card, CardContent } from '@/components/ui/card'
 
 export function MilestonesStep() {
   return (
@@ -24,44 +26,48 @@ export function MilestonesStep() {
         <div className="md:col-span-12 lg:col-span-8 space-y-8">
           {/* Budget/Time Summary Card */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="bg-[#22262f]/40 backdrop-blur-xl border border-[#8ff5ff]/10 p-6 rounded-xl relative overflow-hidden">
-              <div className="flex justify-between items-center mb-4">
-                <span className="text-[#a9abb3] text-sm">Total Budget</span>
-                <span className="text-[#8ff5ff] font-bold font-['Space_Grotesk'] text-lg">
-                  €50,000
-                </span>
-              </div>
-              <div className="h-2 bg-[#22262f] rounded-full overflow-hidden">
-                <div className="h-full bg-gradient-to-r from-[#8ff5ff] to-[#7d98ff] w-1/2 shadow-[0_0_10px_rgba(143,245,255,0.4)]"></div>
-              </div>
-              <p className="mt-3 text-xs text-[#a9abb3] italic">
-                Remaining: €25,000
-              </p>
-            </div>
+            <Card className="bg-[#22262f]/40 backdrop-blur-xl border-[#8ff5ff]/10 rounded-xl relative overflow-hidden shadow-none">
+              <CardContent className="p-6">
+                <div className="flex justify-between items-center mb-4">
+                  <span className="text-[#a9abb3] text-sm">Total Budget</span>
+                  <span className="text-[#8ff5ff] font-bold font-['Space_Grotesk'] text-lg">
+                    €50,000
+                  </span>
+                </div>
+                <div className="h-2 bg-[#22262f] rounded-full overflow-hidden">
+                  <div className="h-full bg-gradient-to-r from-[#8ff5ff] to-[#7d98ff] w-1/2 shadow-[0_0_10px_rgba(143,245,255,0.4)]"></div>
+                </div>
+                <p className="mt-3 text-xs text-[#a9abb3] italic">
+                  Remaining: €25,000
+                </p>
+              </CardContent>
+            </Card>
 
-            <div className="bg-[#22262f]/40 backdrop-blur-xl border border-[#8ff5ff]/10 p-6 rounded-xl relative overflow-hidden">
-              <div className="flex justify-between items-center mb-4">
-                <span className="text-[#a9abb3] text-sm">Total Duration</span>
-                <span className="text-[#8ff5ff] font-bold font-['Space_Grotesk'] text-lg">
-                  60 Days
-                </span>
-              </div>
-              <div className="h-2 bg-[#22262f] rounded-full overflow-hidden">
-                <div className="h-full bg-gradient-to-r from-[#8ff5ff] to-[#7d98ff] w-3/4 shadow-[0_0_10px_rgba(143,245,255,0.4)]"></div>
-              </div>
-              <p className="mt-3 text-xs text-[#a9abb3] italic">
-                Remaining: 25 Days
-              </p>
-            </div>
+            <Card className="bg-[#22262f]/40 backdrop-blur-xl border-[#8ff5ff]/10 rounded-xl relative overflow-hidden shadow-none">
+              <CardContent className="p-6">
+                <div className="flex justify-between items-center mb-4">
+                  <span className="text-[#a9abb3] text-sm">Total Duration</span>
+                  <span className="text-[#8ff5ff] font-bold font-['Space_Grotesk'] text-lg">
+                    60 Days
+                  </span>
+                </div>
+                <div className="h-2 bg-[#22262f] rounded-full overflow-hidden">
+                  <div className="h-full bg-gradient-to-r from-[#8ff5ff] to-[#7d98ff] w-3/4 shadow-[0_0_10px_rgba(143,245,255,0.4)]"></div>
+                </div>
+                <p className="mt-3 text-xs text-[#a9abb3] italic">
+                  Remaining: 25 Days
+                </p>
+              </CardContent>
+            </Card>
           </div>
 
           {/* Milestone Form */}
-          <div className="bg-[#10131a] p-8 rounded-xl border border-[#45484f]/10">
-            <div className="space-y-6">
+          <Card className="bg-[#10131a] rounded-xl border-[#45484f]/10 shadow-none">
+            <CardContent className="p-8 space-y-6">
               <div>
-                <label className="block text-sm font-medium text-[#a9abb3] mb-2">
+                <Label className="block text-sm font-medium text-[#a9abb3] mb-2">
                   Milestone Name
-                </label>
+                </Label>
                 <Input
                   className="w-full bg-[#1c2028] border-none text-[#ecedf6] rounded-lg focus-visible:ring-1 focus-visible:ring-[#8ff5ff] py-6 px-4"
                   placeholder="e.g., Phase 1: MVP Development"
@@ -70,11 +76,11 @@ export function MilestonesStep() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-[#a9abb3] mb-2">
+                <Label className="block text-sm font-medium text-[#a9abb3] mb-2">
                   Description
-                </label>
+                </Label>
                 <Textarea
-                  className="w-full bg-[#1c2028] border-none text-[#ecedf6] rounded-lg focus-visible:ring-1 focus-visible:ring-[#8ff5ff] p-4 resize-none"
+                  className="w-full bg-[#1c2028] border-none text-[#ecedf6] rounded-lg focus-visible:ring-1 focus-visible:ring-[#8ff5ff] p-4 resize-none shadow-none"
                   placeholder="Detail the specific tasks and technical requirements..."
                   rows={4}
                 />
@@ -82,11 +88,11 @@ export function MilestonesStep() {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-sm font-medium text-[#a9abb3] mb-1">
+                  <Label className="block text-sm font-medium text-[#a9abb3] mb-1">
                     Duration (Days)
-                  </label>
+                  </Label>
                   <Input
-                    className="w-full bg-[#1c2028] border-none text-[#ecedf6] rounded-lg focus-visible:ring-1 focus-visible:ring-[#8ff5ff] py-6 px-4"
+                    className="w-full bg-[#1c2028] border-none text-[#ecedf6] rounded-lg focus-visible:ring-1 focus-visible:ring-[#8ff5ff] py-6 px-4 shadow-none"
                     type="number"
                   />
                   <p className="mt-2 text-[10px] text-[#a9abb3] uppercase tracking-wider">
@@ -94,11 +100,11 @@ export function MilestonesStep() {
                   </p>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-[#a9abb3] mb-1">
+                  <Label className="block text-sm font-medium text-[#a9abb3] mb-1">
                     Budget Allocation (€)
-                  </label>
+                  </Label>
                   <Input
-                    className="w-full bg-[#1c2028] border-none text-[#ecedf6] rounded-lg focus-visible:ring-1 focus-visible:ring-[#8ff5ff] py-6 px-4"
+                    className="w-full bg-[#1c2028] border-none text-[#ecedf6] rounded-lg focus-visible:ring-1 focus-visible:ring-[#8ff5ff] py-6 px-4 shadow-none"
                     type="number"
                   />
                   <p className="mt-2 text-[10px] text-[#a9abb3] uppercase tracking-wider">
@@ -109,20 +115,20 @@ export function MilestonesStep() {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-sm font-medium text-[#a9abb3] mb-2">
+                  <Label className="block text-sm font-medium text-[#a9abb3] mb-2">
                     Advantages (Optional)
-                  </label>
+                  </Label>
                   <Input
-                    className="w-full bg-[#1c2028] border-none text-[#ecedf6] rounded-lg focus-visible:ring-1 focus-visible:ring-[#8ff5ff] py-6 px-4"
+                    className="w-full bg-[#1c2028] border-none text-[#ecedf6] rounded-lg focus-visible:ring-1 focus-visible:ring-[#8ff5ff] py-6 px-4 shadow-none"
                     type="text"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-[#a9abb3] mb-2">
+                  <Label className="block text-sm font-medium text-[#a9abb3] mb-2">
                     Challenges (Optional)
-                  </label>
+                  </Label>
                   <Input
-                    className="w-full bg-[#1c2028] border-none text-[#ecedf6] rounded-lg focus-visible:ring-1 focus-visible:ring-[#8ff5ff] py-6 px-4"
+                    className="w-full bg-[#1c2028] border-none text-[#ecedf6] rounded-lg focus-visible:ring-1 focus-visible:ring-[#8ff5ff] py-6 px-4 shadow-none"
                     type="text"
                   />
                 </div>
@@ -130,16 +136,16 @@ export function MilestonesStep() {
 
               <div className="space-y-6">
                 <div>
-                  <label className="block text-sm font-medium text-[#a9abb3] mb-2">
+                  <Label className="block text-sm font-medium text-[#a9abb3] mb-2">
                     Reference Image (Optional)
-                  </label>
+                  </Label>
                   <ImageUpload maxImages={4} />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-[#a9abb3] mb-2">
+                  <Label className="block text-sm font-medium text-[#a9abb3] mb-2">
                     Expected Outcome
-                  </label>
+                  </Label>
                   <div className="mb-6 shadow-[0_4px_24px_rgba(0,0,0,0.15)] rounded-xl relative z-10">
                     <RichTextEditor placeholder="Describe the expected results and deliverables of this milestone..." />
                   </div>
@@ -161,8 +167,8 @@ export function MilestonesStep() {
                   Add Milestone
                 </Button>
               </div>
-            </div>
-          </div>
+            </CardContent>
+          </Card>
         </div>
 
         {/* Right Column: Step-by-Step Summary */}
@@ -187,23 +193,25 @@ export function MilestonesStep() {
                   </span>
                 </div>
               </div>
-              <div className="bg-[#1c2028] p-5 rounded-xl border border-[#45484f]/15 hover:border-[#8ff5ff]/30 transition-colors">
-                <h4 className="font-bold text-[#ecedf6]">Genesis Block</h4>
-                <div className="flex items-center gap-4 mt-2 text-xs text-[#a9abb3] font-medium">
-                  <span className="flex items-center gap-1">
-                    <span className="material-symbols-outlined text-[14px]">
-                      calendar_today
-                    </span>{' '}
-                    15 Days
-                  </span>
-                  <span className="flex items-center gap-1">
-                    <span className="material-symbols-outlined text-[14px]">
-                      payments
-                    </span>{' '}
-                    €10,000
-                  </span>
-                </div>
-              </div>
+              <Card className="bg-[#1c2028] rounded-xl border-[#45484f]/15 hover:border-[#8ff5ff]/30 transition-colors shadow-none">
+                <CardContent className="p-5">
+                  <h4 className="font-bold text-[#ecedf6]">Genesis Block</h4>
+                  <div className="flex items-center gap-4 mt-2 text-xs text-[#a9abb3] font-medium">
+                    <span className="flex items-center gap-1">
+                      <span className="material-symbols-outlined text-[14px]">
+                        calendar_today
+                      </span>{' '}
+                      15 Days
+                    </span>
+                    <span className="flex items-center gap-1">
+                      <span className="material-symbols-outlined text-[14px]">
+                        payments
+                      </span>{' '}
+                      €10,000
+                    </span>
+                  </div>
+                </CardContent>
+              </Card>
             </div>
 
             {/* Milestone Card 2 */}
@@ -215,25 +223,27 @@ export function MilestonesStep() {
                   </span>
                 </div>
               </div>
-              <div className="bg-[#1c2028] p-5 rounded-xl border border-[#45484f]/15 hover:border-[#8ff5ff]/30 transition-colors">
-                <h4 className="font-bold text-[#ecedf6]">
-                  Neural Network Alpha
-                </h4>
-                <div className="flex items-center gap-4 mt-2 text-xs text-[#a9abb3] font-medium">
-                  <span className="flex items-center gap-1">
-                    <span className="material-symbols-outlined text-[14px]">
-                      calendar_today
-                    </span>{' '}
-                    20 Days
-                  </span>
-                  <span className="flex items-center gap-1">
-                    <span className="material-symbols-outlined text-[14px]">
-                      payments
-                    </span>{' '}
-                    €15,000
-                  </span>
-                </div>
-              </div>
+              <Card className="bg-[#1c2028] rounded-xl border-[#45484f]/15 hover:border-[#8ff5ff]/30 transition-colors shadow-none">
+                <CardContent className="p-5">
+                  <h4 className="font-bold text-[#ecedf6]">
+                    Neural Network Alpha
+                  </h4>
+                  <div className="flex items-center gap-4 mt-2 text-xs text-[#a9abb3] font-medium">
+                    <span className="flex items-center gap-1">
+                      <span className="material-symbols-outlined text-[14px]">
+                        calendar_today
+                      </span>{' '}
+                      20 Days
+                    </span>
+                    <span className="flex items-center gap-1">
+                      <span className="material-symbols-outlined text-[14px]">
+                        payments
+                      </span>{' '}
+                      €15,000
+                    </span>
+                  </div>
+                </CardContent>
+              </Card>
             </div>
 
             {/* Add Button */}

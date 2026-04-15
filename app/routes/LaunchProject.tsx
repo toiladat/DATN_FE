@@ -9,6 +9,7 @@ import { OverviewStep } from '@/components/launchProjectPage/OverviewStep'
 import { StoryStep } from '@/components/launchProjectPage/StoryStep'
 import { BasicsStep } from '@/components/launchProjectPage/BasicsStep'
 import { MilestonesStep } from '@/components/launchProjectPage/MilestonesStep'
+import { TeamStep } from '@/components/launchProjectPage/TeamStep'
 
 export default function LaunchProject() {
   const [currentStep, setCurrentStep] = useState<string>('Overview')
@@ -17,13 +18,15 @@ export default function LaunchProject() {
   const renderContent = () => {
     switch (currentStep) {
       case 'Overview':
-        return <OverviewStep />
+        return <OverviewStep onStepChange={setCurrentStep} />
       case 'Basics':
         return <BasicsStep />
       case 'Milestones':
         return <MilestonesStep />
       case 'Story':
         return <StoryStep />
+      case 'Team':
+        return <TeamStep />
       // Tương tự cho các bước khác (Basics, Funding, Team...)
       // Tạm thời render rỗng nếu chưa có component
       default:
@@ -44,7 +47,14 @@ export default function LaunchProject() {
   }
 
   return (
-    <SidebarProvider defaultOpen={true}>
+    <SidebarProvider
+      defaultOpen={true}
+      style={
+        {
+          '--sidebar-width': '14rem'
+        } as React.CSSProperties
+      }
+    >
       <div className="flex min-h-screen bg-background w-full">
         {/* Sidebar điều hướng (Cố định bên trái) */}
         <LaunchSidebar
@@ -53,7 +63,7 @@ export default function LaunchProject() {
         />
 
         {/* Content Canvas */}
-        <SidebarInset className="bg-transparent flex-1 pt-24 px-6 md:px-12 pb-12 overflow-x-hidden relative">
+        <SidebarInset className="bg-transparent flex-1 pt-24 px-6 md:px-12 pb-24 overflow-x-hidden relative">
           {/* Nút Toggle Sidebar (Chỉ chạy trên Shadcn Sidebar) */}
           <div className="absolute top-24 left-6 md:left-8 z-50">
             <SidebarTrigger className="text-[#a9abb3] hover:text-[#8ff5ff] hover:bg-[#8ff5ff]/10 bg-[#161a21] border border-[#45484f]/20 shadow-md" />
@@ -61,6 +71,11 @@ export default function LaunchProject() {
 
           <div className="mt-12 w-full">{renderContent()}</div>
         </SidebarInset>
+
+        {/* Global Footer Hide Override */}
+        <style>{`
+          footer { display: none !important; }
+        `}</style>
       </div>
     </SidebarProvider>
   )

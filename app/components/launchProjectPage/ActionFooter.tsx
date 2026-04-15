@@ -1,4 +1,5 @@
 import { Button } from '@/components/ui/button'
+import { useSidebar } from '@/components/ui/sidebar'
 
 interface ActionFooterProps {
   onDiscard?: () => void
@@ -13,8 +14,20 @@ export function ActionFooter({
   onContinue,
   continueText = 'Continue'
 }: ActionFooterProps) {
+  const { state, isMobile } = useSidebar()
+  const isCollapsed = state === 'collapsed'
+
+  const leftOffset = isMobile
+    ? '0px'
+    : isCollapsed
+      ? 'var(--sidebar-width-icon)'
+      : 'var(--sidebar-width)'
+
   return (
-    <div className="fixed bottom-0 left-0 md:left-[16rem] lg:left-[16rem] right-0 bg-[#0b0e14]/80 backdrop-blur-xl border-t border-[#45484f]/20 py-4 px-8 flex justify-between items-center z-40">
+    <div
+      className="fixed bottom-0 right-0 bg-[#0b0e14]/80 backdrop-blur-xl border-t border-[#45484f]/20 py-3 px-6 flex justify-between items-center z-40 transition-all duration-200"
+      style={{ left: leftOffset }}
+    >
       <button
         onClick={onDiscard}
         className="flex items-center gap-2 text-[#a9abb3] hover:text-[#ecedf6] transition-colors font-['Space_Grotesk'] font-bold uppercase tracking-widest text-xs"
@@ -26,13 +39,13 @@ export function ActionFooter({
         <Button
           onClick={onSaveDraft}
           variant="outline"
-          className="px-8 py-3 h-12 rounded-full font-['Space_Grotesk'] font-bold uppercase tracking-widest text-xs border-[#45484f]/30 hover:bg-[#22262f] bg-transparent text-[#ecedf6] transition-colors"
+          className="px-6 py-2 h-10 rounded-full font-['Space_Grotesk'] font-bold uppercase tracking-widest text-xs border-[#45484f]/30 hover:bg-[#22262f] bg-transparent text-[#ecedf6] transition-colors"
         >
           Save Draft
         </Button>
         <Button
           onClick={onContinue}
-          className="bg-[#8ff5ff] hover:bg-[#00eefc] text-[#005d63] px-10 py-3 h-12 rounded-full font-['Space_Grotesk'] font-bold uppercase tracking-widest text-xs shadow-[0_0_20px_rgba(143,245,255,0.4)] hover:shadow-[0_0_30px_rgba(143,245,255,0.6)] transition-all active:scale-95 border-none"
+          className="bg-[#8ff5ff] hover:bg-[#00eefc] text-[#005d63] px-8 py-2 h-10 rounded-full font-['Space_Grotesk'] font-bold uppercase tracking-widest text-xs shadow-[0_0_15px_rgba(143,245,255,0.4)] hover:shadow-[0_0_20px_rgba(143,245,255,0.6)] transition-all active:scale-95 border-none"
         >
           {continueText}
         </Button>

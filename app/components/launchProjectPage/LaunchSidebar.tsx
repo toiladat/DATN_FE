@@ -28,8 +28,7 @@ export function LaunchSidebar({
     { id: 'Basics', label: 'Basics', icon: 'info' },
     { id: 'Milestones', label: 'Milestones', icon: 'pending' },
     { id: 'Story', label: 'Story', icon: 'auto_stories', fill: true },
-    { id: 'Team', label: 'Team', icon: 'group' },
-    { id: 'Payment', label: 'Payment', icon: 'account_balance' }
+    { id: 'Team', label: 'Team', icon: 'group' }
   ]
 
   return (
