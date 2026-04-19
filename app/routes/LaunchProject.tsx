@@ -6,7 +6,6 @@ import {
 } from '@/components/ui/sidebar'
 import { LaunchSidebar } from '@/components/launchProjectPage/LaunchSidebar'
 import { OverviewStep } from '@/components/launchProjectPage/OverviewStep'
-import { StoryStep } from '@/components/launchProjectPage/StoryStep'
 import { BasicsStep } from '@/components/launchProjectPage/BasicsStep'
 import { MilestonesStep } from '@/components/launchProjectPage/MilestonesStep'
 import { TeamStep } from '@/components/launchProjectPage/TeamStep'
@@ -20,13 +19,11 @@ export default function LaunchProject() {
       case 'Overview':
         return <OverviewStep onStepChange={setCurrentStep} />
       case 'Basics':
-        return <BasicsStep />
+        return <BasicsStep onStepChange={setCurrentStep} />
       case 'Milestones':
-        return <MilestonesStep />
-      case 'Story':
-        return <StoryStep />
+        return <MilestonesStep onStepChange={setCurrentStep} />
       case 'Team':
-        return <TeamStep />
+        return <TeamStep onStepChange={setCurrentStep} />
       // Tương tự cho các bước khác (Basics, Funding, Team...)
       // Tạm thời render rỗng nếu chưa có component
       default:

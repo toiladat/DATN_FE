@@ -1,8 +1,10 @@
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Button } from '@/components/ui/button'
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { format } from 'date-fns'
+import { RichTextEditor } from '@/components/ui/rich-text-editor'
+
 import {
   Popover,
   PopoverContent,
@@ -19,10 +21,63 @@ import {
 } from '@/components/ui/select'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { ActionFooter } from './ActionFooter'
+import { useLaunchProject } from '@/contexts/LaunchProjectContext'
+import { ImageUpload } from '@/components/ui/image-upload'
+import { Label } from '../ui/label'
+import { toast } from 'sonner'
+import { BasicsSchema } from '@/schemas/projectSchema'
 
-export function BasicsStep() {
-  const [launchDate, setLaunchDate] = useState<Date>()
-  const [endDate, setEndDate] = useState<Date>()
+interface BasicsStepProps {
+  onStepChange?: (step: string) => void
+}
+
+export function BasicsStep({ onStepChange }: BasicsStepProps = {}) {
+  const { project, setBasics } = useLaunchProject()
+  const { basics } = project
+  const videoInputRef = useRef<HTMLInputElement>(null)
+
+  const handleImagesChange = (files: File[]) => {
+    const urls = files.map((file) => URL.createObjectURL(file))
+    setBasics({ image: urls })
+  }
+
+  const handleVideoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      setBasics({ video: URL.createObjectURL(e.target.files[0]) })
+    }
+  }
+
+  const handleContinue = () => {
+    const result = BasicsSchema.safeParse(basics)
+
+    if (!result.success) {
+      // Collect the first error message from Zod
+      const errorMessages = result.error.issues
+        .map((err: any) => err.message)
+        .join(', ')
+      toast.error('Missing Required Fields', {
+        description: errorMessages
+      })
+      return
+    }
+
+    onStepChange?.('Milestones')
+  }
+
+  // Format dates for display
+  const startDate = basics.startDate ? new Date(basics.startDate) : undefined
+  const endDate = basics.endDate ? new Date(basics.endDate) : undefined
+
+  const handleDateSelect = (
+    date: Date | undefined,
+    field: 'startDate' | 'endDate'
+  ) => {
+    if (date) {
+      setBasics({ [field]: date.toISOString() })
+    } else {
+      setBasics({ [field]: '' })
+    }
+  }
 
   return (
     <div className="max-w-5xl mx-auto pb-32">
@@ -59,9 +114,11 @@ export function BasicsStep() {
                 maxLength={60}
                 placeholder="The Eternal Vault: A Cinematic Web3 Experience"
                 type="text"
+                value={basics.title}
+                onChange={(e) => setBasics({ title: e.target.value })}
               />
               <span className="absolute right-4 bottom-4 text-[10px] text-[#a9abb3]/50">
-                0 / 60
+                {basics.title.length} / 60
               </span>
             </div>
 
@@ -74,9 +131,11 @@ export function BasicsStep() {
                 maxLength={135}
                 placeholder="An immersive journey through the Radiant Void, leveraging multi-dimensional UI and smart contract security."
                 rows={3}
+                value={basics.subtitle}
+                onChange={(e) => setBasics({ subtitle: e.target.value })}
               />
               <span className="absolute right-4 bottom-4 text-[10px] text-[#a9abb3]/50">
-                0 / 135
+                {basics.subtitle?.length || 0} / 135
               </span>
             </div>
           </div>
@@ -98,9 +157,12 @@ export function BasicsStep() {
               <label className="block text-xs font-['Space_Grotesk'] font-bold uppercase tracking-widest text-[#8ff5ff]">
                 Primary Category
               </label>
-              <Select>
+              <Select
+                value={basics.primaryCategory}
+                onValueChange={(val) => setBasics({ primaryCategory: val })}
+              >
                 <SelectTrigger className="w-full bg-[#10131a] border-[#45484f]/30 rounded-xl px-4 py-6 focus:ring-1 focus:ring-[#8ff5ff]">
-                  <SelectValue placeholder="Tech" />
+                  <SelectValue placeholder="Select Category" />
                 </SelectTrigger>
                 <SelectContent className="bg-[#161a21] border-[#45484f]/20">
                   <SelectItem value="tech">Tech</SelectItem>
@@ -109,41 +171,22 @@ export function BasicsStep() {
                   <SelectItem value="design">Design</SelectItem>
                 </SelectContent>
               </Select>
-
-              <Select>
-                <SelectTrigger className="w-full bg-[#10131a] border-[#45484f]/30 rounded-xl px-4 py-6 focus:ring-1 focus:ring-[#8ff5ff]">
-                  <SelectValue placeholder="Software" />
-                </SelectTrigger>
-                <SelectContent className="bg-[#161a21] border-[#45484f]/20">
-                  <SelectItem value="software">Software</SelectItem>
-                  <SelectItem value="hardware">Hardware</SelectItem>
-                  <SelectItem value="web3">Web3</SelectItem>
-                  <SelectItem value="ai">AI</SelectItem>
-                </SelectContent>
-              </Select>
             </div>
 
             <div className="space-y-4">
               <label className="block text-xs font-['Space_Grotesk'] font-bold uppercase tracking-widest text-[#a9abb3]/60">
                 Secondary Category (Optional)
               </label>
-              <Select>
+              <Select
+                value={basics.secondaryCategory}
+                onValueChange={(val) => setBasics({ secondaryCategory: val })}
+              >
                 <SelectTrigger className="w-full bg-[#10131a] border-[#45484f]/30 rounded-xl px-4 py-6 focus:ring-1 focus:ring-[#8ff5ff]">
                   <SelectValue placeholder="Select Category" />
                 </SelectTrigger>
                 <SelectContent className="bg-[#161a21] border-[#45484f]/20">
                   <SelectItem value="art">Art</SelectItem>
                   <SelectItem value="music">Music</SelectItem>
-                </SelectContent>
-              </Select>
-
-              <Select>
-                <SelectTrigger className="w-full bg-[#10131a] border-[#45484f]/30 rounded-xl px-4 py-6 focus:ring-1 focus:ring-[#8ff5ff]">
-                  <SelectValue placeholder="Select Subcategory" />
-                </SelectTrigger>
-                <SelectContent className="bg-[#161a21] border-[#45484f]/20">
-                  <SelectItem value="digital-art">Digital Art</SelectItem>
-                  <SelectItem value="illustration">Illustration</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -170,6 +213,8 @@ export function BasicsStep() {
                 className="w-full bg-[#10131a] border-[#45484f]/30 rounded-xl pl-12 pr-4 py-6 focus-visible:ring-1 focus-visible:ring-[#8ff5ff] transition-all text-[#ecedf6]"
                 placeholder="Search for city or country"
                 type="text"
+                value={basics.location}
+                onChange={(e) => setBasics({ location: e.target.value })}
               />
             </div>
           </div>
@@ -188,44 +233,119 @@ export function BasicsStep() {
           </div>
           <div className="lg:col-span-8 space-y-8">
             {/* Image Upload */}
-            <div className="relative group/media cursor-pointer overflow-hidden rounded-xl border-2 border-dashed border-[#45484f]/30 hover:border-[#8ff5ff]/50 transition-all bg-[#10131a] aspect-video flex flex-col items-center justify-center">
-              <img
-                className="absolute inset-0 w-full h-full object-cover opacity-20 group-hover/media:scale-105 transition-transform duration-700"
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuAAj4Pj2TSQ_4WbzgS6HjYgT8HNCZrFvwPqH4KGIQ_KdWHqQ1S5148d4lfAXkufRswmrtusm1dmpv1Ftm9FdBjY7KiA_Oo7k65YxQyY6LTi_zoGEz-82pNrD3LwNGR3aZLu1YaGX-yMHxZHGUQBNO5mWX2mOAItQ7z3El5qcPsuQfL5dcX52oc-rcCBK3iQwDHWjOJmZHqUZpRwROzgLFJ5CEuq9YGkJMGie6F2hiXKwBkQlLhI-BbeQhiPcMXFD_JTn5-2IG4a8I8"
-                alt="Upload preview"
-              />
-              <div className="relative z-10 flex flex-col items-center text-center p-6">
-                <span className="material-symbols-outlined text-4xl text-[#8ff5ff] mb-3">
-                  add_photo_alternate
-                </span>
-                <h4 className="font-bold text-lg mb-1">Project Image</h4>
-                <p className="text-xs text-[#a9abb3]">
-                  Min 1024x576 pixels (16:9 ratio). JPEG, PNG, or TIFF.
-                </p>
-              </div>
+            <div>
+              <Label className="block text-sm font-medium text-[#a9abb3] mb-2">
+                Reference Image (Required)
+              </Label>
+              <ImageUpload maxImages={4} onImagesChange={handleImagesChange} />
             </div>
 
             {/* Video Upload */}
-            <div className="relative group/video cursor-pointer rounded-xl border border-[#45484f]/30 hover:bg-[#1c2028] transition-all bg-[#10131a] p-8 flex items-center gap-6">
-              <div className="w-16 h-16 rounded-full bg-[#22262f] flex items-center justify-center text-[#8ff5ff] group-hover/video:bg-[#8ff5ff] group-hover/video:text-[#005d63] transition-colors">
-                <span className="material-symbols-outlined text-3xl">
-                  videocam
-                </span>
+            <div className="space-y-4">
+              <div
+                onClick={() => videoInputRef.current?.click()}
+                className="relative group/video cursor-pointer rounded-xl border border-[#45484f]/30 hover:bg-[#1c2028] transition-all bg-[#10131a] p-8 flex items-center gap-6"
+              >
+                <input
+                  type="file"
+                  accept="video/*"
+                  className="hidden"
+                  ref={videoInputRef}
+                  onChange={handleVideoChange}
+                />
+                <div className="w-16 h-16 rounded-full bg-[#22262f] flex items-center justify-center text-[#8ff5ff] group-hover/video:bg-[#8ff5ff] group-hover/video:text-[#005d63] transition-colors">
+                  <span className="material-symbols-outlined text-3xl">
+                    {basics.video ? 'smart_display' : 'videocam'}
+                  </span>
+                </div>
+                <div className="flex-1">
+                  <h4 className="font-bold">Project Video (Optional)</h4>
+                  <p className="text-sm text-[#a9abb3]">
+                    {basics.video
+                      ? 'Video selected. Click to change.'
+                      : 'Up to 5GB. MP4, MOV, or AVI format. High definition recommended.'}
+                  </p>
+                </div>
+                <button className="text-xs font-bold uppercase tracking-widest text-[#8ff5ff] border border-[#8ff5ff]/20 px-4 py-2 rounded-lg group-hover/video:bg-[#8ff5ff]/10 transition-colors">
+                  {basics.video ? 'Change' : 'Upload'}
+                </button>
               </div>
-              <div className="flex-1">
-                <h4 className="font-bold">Project Video (Optional)</h4>
-                <p className="text-sm text-[#a9abb3]">
-                  Up to 5GB. MP4, MOV, or AVI format. High definition
-                  recommended.
-                </p>
-              </div>
-              <button className="text-xs font-bold uppercase tracking-widest text-[#8ff5ff] border border-[#8ff5ff]/20 px-4 py-2 rounded-lg group-hover/video:bg-[#8ff5ff]/10 transition-colors">
-                Upload
-              </button>
+
+              {basics.video && (
+                <div className="relative rounded-xl overflow-hidden border border-[#45484f]/30 bg-[#10131a] aspect-video shadow-lg">
+                  <video
+                    src={basics.video}
+                    controls
+                    className="w-full h-full object-contain bg-black"
+                  >
+                    Your browser does not support the video tag.
+                  </video>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      setBasics({ video: undefined })
+                      if (videoInputRef.current)
+                        videoInputRef.current.value = ''
+                    }}
+                    className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center bg-black/60 hover:bg-[#ff716c]/80 text-white rounded-full transition-colors backdrop-blur-md"
+                    title="Remove Video"
+                  >
+                    <span className="material-symbols-outlined text-sm">
+                      close
+                    </span>
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </section>
 
+        {/* Project Story Section */}
+        <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          <div className="lg:col-span-4">
+            <h3 className="text-xl font-['Space_Grotesk'] font-bold mb-2">
+              Project story
+            </h3>
+            <p className="text-[#a9abb3] text-sm">
+              Tell the world about what you're building. Be transparent about
+              risks and challenges.
+            </p>
+          </div>
+          <div className="lg:col-span-8 space-y-8">
+            <div className="space-y-4">
+              <label className="block text-xs font-['Space_Grotesk'] font-bold uppercase tracking-widest text-[#8ff5ff]">
+                Project Description
+              </label>
+              <div className="rounded-2xl overflow-hidden border border-[#45484f]/30">
+                <RichTextEditor
+                  height={450}
+                  placeholder="Start typing your project's story here..."
+                  value={basics.description || ''}
+                  onChange={(val) => setBasics({ description: val })}
+                />
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              <div className="flex items-center justify-between mt-2">
+                <label className="block text-xs font-['Space_Grotesk'] font-bold uppercase tracking-widest text-[#8ff5ff]">
+                  Risks & Challenges
+                </label>
+                <span className="text-[10px] text-[#a9abb3] bg-[#22262f] px-2 py-1 rounded-full uppercase font-bold tracking-widest">
+                  Required
+                </span>
+              </div>
+              <div className="rounded-2xl border border-[#45484f]/30 bg-[#10131a] relative">
+                <Textarea
+                  className="w-full bg-transparent border-none focus-visible:ring-0 text-[#ecedf6] px-4 py-4 min-h-[120px] resize-none shadow-none"
+                  placeholder="Be transparent about potential technical hurdles, market risks, or regulatory challenges..."
+                  value={basics.risks || ''}
+                  onChange={(e) => setBasics({ risks: e.target.value })}
+                />
+              </div>
+            </div>
+          </div>
+        </section>
         {/* Funding Goal Section */}
         <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           <div className="lg:col-span-4">
@@ -246,6 +366,10 @@ export function BasicsStep() {
                 className="w-full bg-[#10131a] border-[#45484f]/30 rounded-xl pl-10 pr-4 py-6 focus-visible:ring-1 focus-visible:ring-[#8ff5ff] transition-all text-2xl font-bold text-[#ecedf6]"
                 placeholder="50,000"
                 type="number"
+                value={basics.fundingGoal || ''}
+                onChange={(e) =>
+                  setBasics({ fundingGoal: Number(e.target.value) })
+                }
               />
             </div>
             <div className="mt-6 p-4 rounded-xl bg-[#9f0519]/10 border border-[#d7383b]/20 flex gap-4">
@@ -284,14 +408,14 @@ export function BasicsStep() {
                     variant="outline"
                     className={cn(
                       'w-full md:w-[280px] justify-start text-left font-normal bg-[#10131a] border-[#45484f]/30 rounded-xl px-4 py-6 focus:ring-1 focus:ring-[#8ff5ff] hover:bg-[#161a21] text-[#ecedf6] border-solid shadow-none',
-                      !launchDate && 'text-[#45484f]'
+                      !startDate && 'text-[#45484f]'
                     )}
                   >
                     <span className="material-symbols-outlined text-[#8ff5ff] mr-2 text-xl">
                       calendar_month
                     </span>
-                    {launchDate ? (
-                      format(launchDate, 'PPP')
+                    {startDate ? (
+                      format(startDate, 'PPP')
                     ) : (
                       <span>Pick a target launch date</span>
                     )}
@@ -303,8 +427,8 @@ export function BasicsStep() {
                 >
                   <Calendar
                     mode="single"
-                    selected={launchDate}
-                    onSelect={setLaunchDate}
+                    selected={startDate}
+                    onSelect={(date) => handleDateSelect(date, 'startDate')}
                     initialFocus
                     className="bg-[#161a21] rounded-xl text-[#ecedf6]"
                   />
@@ -373,6 +497,14 @@ export function BasicsStep() {
                     className="w-full bg-[#161a21]/50 border border-[#45484f]/20 rounded-lg px-3 py-2 text-sm focus-visible:ring-1 focus-visible:ring-[#8ff5ff] h-10 pointer-events-auto"
                     placeholder="30"
                     type="number"
+                    onChange={(e) => {
+                      const days = Number(e.target.value)
+                      if (days > 0 && startDate) {
+                        const newEndDate = new Date(startDate)
+                        newEndDate.setDate(newEndDate.getDate() + days)
+                        setBasics({ endDate: newEndDate.toISOString() })
+                      }
+                    }}
                   />
                 </div>
               </div>
@@ -431,7 +563,7 @@ export function BasicsStep() {
                         <Calendar
                           mode="single"
                           selected={endDate}
-                          onSelect={setEndDate}
+                          onSelect={(date) => handleDateSelect(date, 'endDate')}
                           initialFocus
                           className="bg-[#161a21] rounded-xl text-[#ecedf6]"
                         />
@@ -445,7 +577,10 @@ export function BasicsStep() {
         </section>
       </div>
 
-      <ActionFooter continueText="Continue to Milestones" />
+      <ActionFooter
+        onContinue={handleContinue}
+        continueText="Continue to Milestones"
+      />
     </div>
   )
 }

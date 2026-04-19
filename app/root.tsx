@@ -13,9 +13,10 @@ import TanstackProvider from '@/components/providers/TanstackProvider'
 import { ThemeProvider } from '@/components/providers/ThemeProvider'
 import { Toaster } from '@/components/ui/sonner'
 import '@rainbow-me/rainbowkit/styles.css'
-import type { ReactNode } from 'react'
+import React from 'react'
 import type { Route } from './+types/root'
 import './app.css'
+import { LaunchProjectProvider } from '@/contexts/LaunchProjectContext'
 
 export const links: Route.LinksFunction = () => [
   { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
@@ -38,7 +39,7 @@ export const links: Route.LinksFunction = () => [
   }
 ]
 
-export function Layout({ children }: { children: ReactNode }) {
+export function Layout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <head>
@@ -51,7 +52,7 @@ export function Layout({ children }: { children: ReactNode }) {
         <TanstackProvider>
           <Web3ClientProvider>
             <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-              {children}
+              <LaunchProjectProvider>{children}</LaunchProjectProvider>
               <Toaster position="top-right" />
             </ThemeProvider>
           </Web3ClientProvider>

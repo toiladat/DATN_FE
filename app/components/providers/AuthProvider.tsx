@@ -1,11 +1,5 @@
 import { useGetNonce, useLogin } from '@/apis/queries/auth'
-import {
-  createContext,
-  useContext,
-  useEffect,
-  useState,
-  type ReactNode
-} from 'react'
+import React, { createContext, useContext, useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import { useAccount, useDisconnect, useSignMessage } from 'wagmi'
 
@@ -19,7 +13,7 @@ const AuthContext = createContext<AuthContextType>({
   logout: () => {}
 })
 
-export function AuthProvider({ children }: { children: ReactNode }) {
+export function AuthProvider({ children }: { children: React.ReactNode }) {
   const { address, isConnected, status } = useAccount()
   const { disconnect } = useDisconnect()
   const { signMessageAsync } = useSignMessage()

@@ -23,11 +23,10 @@ export function LaunchSidebar({
   const { state } = useSidebar()
   const isCollapsed = state === 'collapsed'
 
-  const steps = [
+  const steps: { id: string; label: string; icon: string; fill?: boolean }[] = [
     { id: 'Overview', label: 'Overview', icon: 'dashboard' },
     { id: 'Basics', label: 'Basics', icon: 'info' },
     { id: 'Milestones', label: 'Milestones', icon: 'pending' },
-    { id: 'Story', label: 'Story', icon: 'auto_stories', fill: true },
     { id: 'Team', label: 'Team', icon: 'group' }
   ]
 

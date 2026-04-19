@@ -3,14 +3,12 @@ import { useSidebar } from '@/components/ui/sidebar'
 
 interface ActionFooterProps {
   onDiscard?: () => void
-  onSaveDraft?: () => void
   onContinue?: () => void
   continueText?: string
 }
 
 export function ActionFooter({
   onDiscard,
-  onSaveDraft,
   onContinue,
   continueText = 'Continue'
 }: ActionFooterProps) {
@@ -36,13 +34,6 @@ export function ActionFooter({
         Discard Changes
       </button>
       <div className="flex gap-4">
-        <Button
-          onClick={onSaveDraft}
-          variant="outline"
-          className="px-6 py-2 h-10 rounded-full font-['Space_Grotesk'] font-bold uppercase tracking-widest text-xs border-[#45484f]/30 hover:bg-[#22262f] bg-transparent text-[#ecedf6] transition-colors"
-        >
-          Save Draft
-        </Button>
         <Button
           onClick={onContinue}
           className="bg-[#8ff5ff] hover:bg-[#00eefc] text-[#005d63] px-8 py-2 h-10 rounded-full font-['Space_Grotesk'] font-bold uppercase tracking-widest text-xs shadow-[0_0_15px_rgba(143,245,255,0.4)] hover:shadow-[0_0_20px_rgba(143,245,255,0.6)] transition-all active:scale-95 border-none"

@@ -1,10 +1,10 @@
 import { AuthProvider } from '@/components/providers/AuthProvider'
 import { wagmiConfig } from '@/shared/config/wagmiConfig'
 import { RainbowKitProvider } from '@rainbow-me/rainbowkit'
-import { type ReactNode, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { WagmiProvider } from 'wagmi'
 
-export function ClientOnly({ children }: { children: ReactNode }) {
+export function ClientOnly({ children }: { children: React.ReactNode }) {
   const [hasMounted, setHasMounted] = useState(false)
 
   useEffect(() => {
@@ -18,7 +18,11 @@ export function ClientOnly({ children }: { children: ReactNode }) {
   return <>{children}</>
 }
 
-export function Web3ClientProvider({ children }: { children: ReactNode }) {
+export function Web3ClientProvider({
+  children
+}: {
+  children: React.ReactNode
+}) {
   return (
     <ClientOnly>
       <WagmiProvider config={wagmiConfig}>
