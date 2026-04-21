@@ -8,6 +8,7 @@ import { createProject } from '@/api/project'
 import { ProjectSubmissionSchema } from '@/schemas/projectSchema'
 import { toast } from 'sonner'
 import { z } from 'zod'
+import { formatDistanceToNow } from 'date-fns'
 
 interface OverviewStepProps {
   onStepChange?: (step: string) => void
@@ -78,7 +79,12 @@ export function OverviewStep({ onStepChange }: OverviewStepProps = {}) {
           </h1>
           <div className="flex items-center gap-2 text-[#a9abb3] text-sm hidden md:flex">
             <span className="material-symbols-outlined text-xs">info</span>
-            <span>Last edited 2 hours ago</span>
+            <span>
+              Last edited{' '}
+              {project.updatedAt
+                ? formatDistanceToNow(project.updatedAt, { addSuffix: true })
+                : 'just now'}
+            </span>
           </div>
         </div>
         <p className="text-[#a9abb3] max-w-2xl mt-4 text-lg">

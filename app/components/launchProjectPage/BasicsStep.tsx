@@ -1,7 +1,7 @@
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Button } from '@/components/ui/button'
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { format } from 'date-fns'
 import { RichTextEditor } from '@/components/ui/rich-text-editor'
 
@@ -26,6 +26,8 @@ import { ImageUpload } from '@/components/ui/image-upload'
 import { Label } from '../ui/label'
 import { toast } from 'sonner'
 import { BasicsSchema } from '@/schemas/projectSchema'
+import mediaRequests from '@/apis/requests/media'
+import { useGetCategories } from '@/apis/queries/category'
 
 interface BasicsStepProps {
   onStepChange?: (step: string) => void
@@ -36,14 +38,98 @@ export function BasicsStep({ onStepChange }: BasicsStepProps = {}) {
   const { basics } = project
   const videoInputRef = useRef<HTMLInputElement>(null)
 
-  const handleImagesChange = (files: File[]) => {
-    const urls = files.map((file) => URL.createObjectURL(file))
-    setBasics({ image: urls })
+  const { data: categories = [], isLoading: isLoadingCategories } =
+    useGetCategories()
+
+  useEffect(() => {
+    if (categories.length > 0 && !basics.primaryCategory) {
+      setBasics({ primaryCategory: categories[0].id })
+    }
+  }, [categories, basics.primaryCategory, setBasics])
+
+  const [isUploadingImage, setIsUploadingImage] = useState(false)
+  const [isUploadingVideo, setIsUploadingVideo] = useState(false)
+  const [uploadedImageCache, setUploadedImageCache] = useState<
+    Record<string, string>
+  >({})
+
+  const handleImagesChange = async (
+    files: File[],
+    remainingInitialUrls: string[] = []
+  ) => {
+    const currentKeys = files.map((f) => f.name + f.size)
+    const newCache = { ...uploadedImageCache }
+
+    Object.keys(newCache).forEach((key) => {
+      if (!currentKeys.includes(key)) {
+        mediaRequests.deleteFile(newCache[key]).catch(console.error)
+        delete newCache[key]
+      }
+    })
+
+    const filesToUpload = files.filter((f) => !newCache[f.name + f.size])
+    if (filesToUpload.length > 0) {
+      setIsUploadingImage(true)
+      try {
+        const urls = await mediaRequests.uploadFiles(filesToUpload, 'cover')
+        filesToUpload.forEach((f, idx) => {
+          newCache[f.name + f.size] = urls[idx]
+        })
+      } catch (error) {
+        toast.error('Upload Failed', {
+          description: 'Failed to upload some images.'
+        })
+        throw error
+      } finally {
+        setIsUploadingImage(false)
+      }
+    }
+
+    setUploadedImageCache(newCache)
+    const activeUrls = files
+      .map((f) => newCache[f.name + f.size])
+      .filter(Boolean)
+    setBasics({ image: [...remainingInitialUrls, ...activeUrls] })
   }
 
-  const handleVideoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleVideoChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
-      setBasics({ video: URL.createObjectURL(e.target.files[0]) })
+      const file = e.target.files[0]
+      if (file.size > 100 * 1024 * 1024) {
+        toast.error('Video too large', { description: 'Max size is 100MB.' })
+        return
+      }
+
+      setIsUploadingVideo(true)
+      try {
+        const { data } = await mediaRequests.presignUrls({
+          info: { type: 'project' },
+          files: [
+            { filename: file.name, filetype: file.type, filesize: file.size }
+          ]
+        })
+        const uploadUrl = data[0].uploadUrl
+        const finalUrl = data[0].fileUrl
+
+        toast.info('Uploading video...')
+        await mediaRequests.uploadToPresignedUrl(file, uploadUrl)
+
+        if (basics.video && basics.video.startsWith('http')) {
+          mediaRequests.deleteFile(basics.video).catch(console.error)
+        }
+        setBasics({ video: finalUrl })
+        toast.success('Video uploaded successfully!')
+      } catch (error) {
+        console.error(error)
+        toast.error('Video upload failed', {
+          description: 'Please try again with a different format.'
+        })
+      } finally {
+        setIsUploadingVideo(false)
+        if (videoInputRef.current) {
+          videoInputRef.current.value = ''
+        }
+      }
     }
   }
 
@@ -165,10 +251,21 @@ export function BasicsStep({ onStepChange }: BasicsStepProps = {}) {
                   <SelectValue placeholder="Select Category" />
                 </SelectTrigger>
                 <SelectContent className="bg-[#161a21] border-[#45484f]/20">
-                  <SelectItem value="tech">Tech</SelectItem>
-                  <SelectItem value="art">Art</SelectItem>
-                  <SelectItem value="comics">Comics</SelectItem>
-                  <SelectItem value="design">Design</SelectItem>
+                  {isLoadingCategories ? (
+                    <SelectItem value="loading" disabled>
+                      Loading categories...
+                    </SelectItem>
+                  ) : categories.length > 0 ? (
+                    categories.map((cat) => (
+                      <SelectItem key={cat.id} value={cat.id}>
+                        {cat.name}
+                      </SelectItem>
+                    ))
+                  ) : (
+                    <SelectItem value="empty" disabled>
+                      No categories found
+                    </SelectItem>
+                  )}
                 </SelectContent>
               </Select>
             </div>
@@ -185,8 +282,21 @@ export function BasicsStep({ onStepChange }: BasicsStepProps = {}) {
                   <SelectValue placeholder="Select Category" />
                 </SelectTrigger>
                 <SelectContent className="bg-[#161a21] border-[#45484f]/20">
-                  <SelectItem value="art">Art</SelectItem>
-                  <SelectItem value="music">Music</SelectItem>
+                  {isLoadingCategories ? (
+                    <SelectItem value="loading" disabled>
+                      Loading categories...
+                    </SelectItem>
+                  ) : categories.length > 0 ? (
+                    categories.map((cat) => (
+                      <SelectItem key={cat.id} value={cat.id}>
+                        {cat.name}
+                      </SelectItem>
+                    ))
+                  ) : (
+                    <SelectItem value="empty" disabled>
+                      No categories found
+                    </SelectItem>
+                  )}
                 </SelectContent>
               </Select>
             </div>
@@ -237,7 +347,30 @@ export function BasicsStep({ onStepChange }: BasicsStepProps = {}) {
               <Label className="block text-sm font-medium text-[#a9abb3] mb-2">
                 Reference Image (Required)
               </Label>
-              <ImageUpload maxImages={4} onImagesChange={handleImagesChange} />
+              <ImageUpload
+                maxImages={4}
+                initialPreviews={basics.image || []}
+                onImagesChange={handleImagesChange}
+                onRemoveInitial={(url) => {
+                  const newCache = { ...uploadedImageCache }
+                  const keyToDelete = Object.keys(newCache).find(
+                    (k) => newCache[k] === url
+                  )
+                  if (keyToDelete) {
+                    delete newCache[keyToDelete]
+                    setUploadedImageCache(newCache)
+                  }
+                  mediaRequests.deleteFile(url).catch(console.error)
+                  setBasics({
+                    image: (basics.image || []).filter((img) => img !== url)
+                  })
+                }}
+              />
+              {isUploadingImage && (
+                <p className="text-sm text-[#8ff5ff] mt-2">
+                  Uploading images...
+                </p>
+              )}
             </div>
 
             {/* Video Upload */}
@@ -261,13 +394,23 @@ export function BasicsStep({ onStepChange }: BasicsStepProps = {}) {
                 <div className="flex-1">
                   <h4 className="font-bold">Project Video (Optional)</h4>
                   <p className="text-sm text-[#a9abb3]">
-                    {basics.video
-                      ? 'Video selected. Click to change.'
-                      : 'Up to 5GB. MP4, MOV, or AVI format. High definition recommended.'}
+                    {isUploadingVideo
+                      ? 'Uploading video, please wait...'
+                      : basics.video
+                        ? 'Video selected. Click to change.'
+                        : 'Up to 100MB. MP4, WEBM, or MOV format. High definition recommended.'}
                   </p>
                 </div>
-                <button className="text-xs font-bold uppercase tracking-widest text-[#8ff5ff] border border-[#8ff5ff]/20 px-4 py-2 rounded-lg group-hover/video:bg-[#8ff5ff]/10 transition-colors">
-                  {basics.video ? 'Change' : 'Upload'}
+                <button
+                  type="button"
+                  disabled={isUploadingVideo}
+                  className="text-xs font-bold uppercase tracking-widest text-[#8ff5ff] border border-[#8ff5ff]/20 px-4 py-2 rounded-lg group-hover/video:bg-[#8ff5ff]/10 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {isUploadingVideo
+                    ? 'Uploading...'
+                    : basics.video
+                      ? 'Change'
+                      : 'Upload'}
                 </button>
               </div>
 
@@ -281,8 +424,14 @@ export function BasicsStep({ onStepChange }: BasicsStepProps = {}) {
                     Your browser does not support the video tag.
                   </video>
                   <button
+                    type="button"
                     onClick={(e) => {
                       e.stopPropagation()
+                      if (basics.video && basics.video.startsWith('http')) {
+                        mediaRequests
+                          .deleteFile(basics.video)
+                          .catch(console.error)
+                      }
                       setBasics({ video: undefined })
                       if (videoInputRef.current)
                         videoInputRef.current.value = ''

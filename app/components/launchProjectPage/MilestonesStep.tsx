@@ -7,48 +7,40 @@ import { ImageUpload } from '@/components/ui/image-upload'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent } from '@/components/ui/card'
 
-import { useLaunchProject } from '@/contexts/LaunchProjectContext'
-import { useState } from 'react'
+import {
+  useLaunchProject,
+  defaultMilestone
+} from '@/contexts/LaunchProjectContext'
+import { useState, useEffect } from 'react'
 import { toast } from 'sonner'
 import { MilestoneSchema } from '@/schemas/projectSchema'
+import mediaRequests from '@/apis/requests/media'
 
 interface MilestonesStepProps {
   onStepChange?: (step: string) => void
 }
 
 export function MilestonesStep({ onStepChange }: MilestonesStepProps = {}) {
-  const { project, addMilestone, updateMilestone, removeMilestone } =
-    useLaunchProject()
-  const { milestones } = project
+  const {
+    project,
+    addMilestone,
+    updateMilestone,
+    removeMilestone,
+    setMilestoneDraft,
+    setMilestoneCache
+  } = useLaunchProject()
+  const {
+    milestones,
+    milestoneDraft: newMilestone,
+    milestoneCache: uploadedCache
+  } = project
 
   const [currentPage, setCurrentPage] = useState(1)
   const itemsPerPage = 4
   const [resetKey, setResetKey] = useState(0)
   const [editingIndex, setEditingIndex] = useState<number | null>(null)
 
-  const [newMilestone, setNewMilestone] = useState<{
-    name: string
-    description: string
-    durationDays: number
-    startDate: string
-    endDate: string
-    budget: number
-    expectedOutcome: string
-    images: string[]
-    advantages: string
-    challenges: string
-  }>({
-    name: '',
-    description: '',
-    durationDays: 0,
-    startDate: '',
-    endDate: '',
-    budget: 0,
-    expectedOutcome: '',
-    images: [],
-    advantages: '',
-    challenges: ''
-  })
+  const [isUploading, setIsUploading] = useState(false)
 
   const totalBudget = milestones.reduce((sum, m) => sum + (m.budget || 0), 0)
   const totalDuration = milestones.reduce(
@@ -96,15 +88,15 @@ export function MilestonesStep({ onStepChange }: MilestonesStepProps = {}) {
     endDateObj.setDate(endDateObj.getDate() + (val > 0 ? val - 1 : 0))
     const calculatedEndDate = endDateObj.toISOString()
 
-    setNewMilestone((prev) => ({
-      ...prev,
+    setMilestoneDraft({
+      ...newMilestone,
       durationDays: val,
       startDate: calculatedStartDate,
       endDate: calculatedEndDate
-    }))
+    })
   }
 
-  const handleAddMilestone = () => {
+  const handleAddMilestone = async () => {
     const result = MilestoneSchema.safeParse(newMilestone)
 
     if (!result.success) {
@@ -116,6 +108,8 @@ export function MilestonesStep({ onStepChange }: MilestonesStepProps = {}) {
       })
       return
     }
+
+    const finalImages = newMilestone.images
 
     const originalBudget =
       editingIndex !== null ? milestones[editingIndex].budget : 0
@@ -142,32 +136,67 @@ export function MilestonesStep({ onStepChange }: MilestonesStepProps = {}) {
     if (editingIndex !== null) {
       updateMilestone(editingIndex, {
         ...newMilestone,
-        expectedOutcome: newMilestone.expectedOutcome || ''
+        expectedOutcome: newMilestone.expectedOutcome || '',
+        images: finalImages
       })
       setEditingIndex(null)
       toast.success('Milestone Updated')
     } else {
       addMilestone({
         ...newMilestone,
-        expectedOutcome: newMilestone.expectedOutcome || ''
+        expectedOutcome: newMilestone.expectedOutcome || '',
+        images: finalImages
       })
       const newTotalPages = Math.ceil((milestones.length + 1) / itemsPerPage)
       setCurrentPage(newTotalPages)
       toast.success('Milestone Added')
     }
-    setNewMilestone({
-      images: [],
-      name: '',
-      description: '',
-      durationDays: 0,
-      startDate: '',
-      endDate: '',
-      budget: 0,
-      expectedOutcome: '',
-      advantages: '',
-      challenges: ''
-    })
+    setMilestoneDraft(defaultMilestone)
+    setMilestoneCache({})
     setResetKey((prev) => prev + 1)
+    setIsUploading(false)
+  }
+
+  const handleImageChange = async (
+    files: File[],
+    remainingInitialUrls: string[] = []
+  ) => {
+    const currentKeys = files.map((f) => f.name + f.size)
+    const newCache = { ...uploadedCache }
+
+    // Xóa ảnh đã bị remove ở UI khỏi server luôn
+    Object.keys(newCache).forEach((key) => {
+      if (!currentKeys.includes(key)) {
+        mediaRequests.deleteFile(newCache[key]).catch(console.error)
+        delete newCache[key]
+      }
+    })
+
+    const filesToUpload = files.filter((f) => !newCache[f.name + f.size])
+    if (filesToUpload.length > 0) {
+      setIsUploading(true)
+      try {
+        const urls = await mediaRequests.uploadFiles(filesToUpload, 'milestone')
+        filesToUpload.forEach((f, idx) => {
+          newCache[f.name + f.size] = urls[idx]
+        })
+      } catch (error) {
+        toast.error('Upload Failed', {
+          description: 'Failed to upload some images.'
+        })
+      } finally {
+        setIsUploading(false)
+      }
+    }
+
+    setMilestoneCache(newCache)
+    const activeUrls = files
+      .map((f) => newCache[f.name + f.size])
+      .filter(Boolean)
+    setMilestoneDraft({
+      ...newMilestone,
+      images: [...remainingInitialUrls, ...activeUrls]
+    })
   }
 
   return (
@@ -248,7 +277,7 @@ export function MilestonesStep({ onStepChange }: MilestonesStepProps = {}) {
                   type="text"
                   value={newMilestone.name}
                   onChange={(e) =>
-                    setNewMilestone({ ...newMilestone, name: e.target.value })
+                    setMilestoneDraft({ ...newMilestone, name: e.target.value })
                   }
                 />
               </div>
@@ -263,7 +292,7 @@ export function MilestonesStep({ onStepChange }: MilestonesStepProps = {}) {
                   rows={4}
                   value={newMilestone.description}
                   onChange={(e) =>
-                    setNewMilestone({
+                    setMilestoneDraft({
                       ...newMilestone,
                       description: e.target.value
                     })
@@ -297,7 +326,7 @@ export function MilestonesStep({ onStepChange }: MilestonesStepProps = {}) {
                     type="number"
                     value={newMilestone.budget || ''}
                     onChange={(e) =>
-                      setNewMilestone({
+                      setMilestoneDraft({
                         ...newMilestone,
                         budget: Number(e.target.value)
                       })
@@ -319,7 +348,7 @@ export function MilestonesStep({ onStepChange }: MilestonesStepProps = {}) {
                     type="text"
                     value={newMilestone.advantages}
                     onChange={(e) =>
-                      setNewMilestone({
+                      setMilestoneDraft({
                         ...newMilestone,
                         advantages: e.target.value
                       })
@@ -335,7 +364,7 @@ export function MilestonesStep({ onStepChange }: MilestonesStepProps = {}) {
                     type="text"
                     value={newMilestone.challenges}
                     onChange={(e) =>
-                      setNewMilestone({
+                      setMilestoneDraft({
                         ...newMilestone,
                         challenges: e.target.value
                       })
@@ -352,11 +381,25 @@ export function MilestonesStep({ onStepChange }: MilestonesStepProps = {}) {
                   <ImageUpload
                     key={resetKey}
                     maxImages={4}
-                    onImagesChange={(files) => {
-                      const urls = files.map((file) =>
-                        URL.createObjectURL(file)
+                    initialPreviews={newMilestone.images}
+                    onImagesChange={handleImageChange}
+                    onRemoveInitial={(url) => {
+                      const newCache = { ...uploadedCache }
+                      const keyToDelete = Object.keys(newCache).find(
+                        (k) => newCache[k] === url
                       )
-                      setNewMilestone({ ...newMilestone, images: urls })
+                      if (keyToDelete) {
+                        delete newCache[keyToDelete]
+                        setMilestoneCache(newCache)
+                      }
+                      mediaRequests.deleteFile(url).catch(console.error)
+
+                      setMilestoneDraft({
+                        ...newMilestone,
+                        images: newMilestone.images?.filter(
+                          (img) => img !== url
+                        )
+                      })
                     }}
                   />
                 </div>
@@ -370,7 +413,7 @@ export function MilestonesStep({ onStepChange }: MilestonesStepProps = {}) {
                       placeholder="Describe the expected results and deliverables of this milestone..."
                       value={newMilestone.expectedOutcome}
                       onChange={(val) =>
-                        setNewMilestone({
+                        setMilestoneDraft({
                           ...newMilestone,
                           expectedOutcome: val
                         })
@@ -397,18 +440,7 @@ export function MilestonesStep({ onStepChange }: MilestonesStepProps = {}) {
                     className="px-6 py-6 text-[#a9abb3] font-bold rounded-lg hover:text-white hover:bg-[#22262f] transition-all border-none"
                     onClick={() => {
                       setEditingIndex(null)
-                      setNewMilestone({
-                        images: [],
-                        name: '',
-                        description: '',
-                        durationDays: 0,
-                        startDate: '',
-                        endDate: '',
-                        budget: 0,
-                        expectedOutcome: '',
-                        advantages: '',
-                        challenges: ''
-                      })
+                      setMilestoneDraft(defaultMilestone)
                       setResetKey((prev) => prev + 1)
                     }}
                   >
@@ -416,10 +448,23 @@ export function MilestonesStep({ onStepChange }: MilestonesStepProps = {}) {
                   </Button>
                 )}
                 <Button
+                  type="button"
                   className="px-8 py-6 bg-[#8ff5ff] text-[#005d63] font-bold rounded-lg hover:brightness-110 transition-all border-none"
                   onClick={handleAddMilestone}
+                  disabled={isUploading}
                 >
-                  {editingIndex !== null ? 'Update Milestone' : 'Add Milestone'}
+                  {isUploading ? (
+                    <span className="flex items-center gap-2">
+                      <span className="animate-spin material-symbols-outlined text-sm">
+                        progress_activity
+                      </span>
+                      Uploading...
+                    </span>
+                  ) : editingIndex !== null ? (
+                    'Update Milestone'
+                  ) : (
+                    'Add Milestone'
+                  )}
                 </Button>
               </div>
             </CardContent>
@@ -497,8 +542,9 @@ export function MilestonesStep({ onStepChange }: MilestonesStepProps = {}) {
                         <CardContent className="p-l-5 relative">
                           <div className="absolute top-2 right-2 flex items-center gap-1 opacity-0 group-hover/card:opacity-100 transition-opacity">
                             <button
+                              type="button"
                               onClick={() => {
-                                setNewMilestone({
+                                setMilestoneDraft({
                                   name: milestone.name,
                                   description: milestone.description,
                                   durationDays: milestone.durationDays,
@@ -507,8 +553,14 @@ export function MilestonesStep({ onStepChange }: MilestonesStepProps = {}) {
                                   advantages: milestone.advantages || '',
                                   challenges: milestone.challenges || '',
                                   images: milestone.images || [],
-                                  startDate: '',
-                                  endDate: ''
+                                  startDate:
+                                    milestone.startDate instanceof Date
+                                      ? milestone.startDate.toISOString()
+                                      : milestone.startDate || '',
+                                  endDate:
+                                    milestone.endDate instanceof Date
+                                      ? milestone.endDate.toISOString()
+                                      : milestone.endDate || ''
                                 })
                                 setEditingIndex(milestone.index)
                                 window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -521,22 +573,19 @@ export function MilestonesStep({ onStepChange }: MilestonesStepProps = {}) {
                               </span>
                             </button>
                             <button
+                              type="button"
                               onClick={() => {
+                                milestone.images?.forEach((img) => {
+                                  if (img.startsWith('http')) {
+                                    mediaRequests
+                                      .deleteFile(img)
+                                      .catch(console.error)
+                                  }
+                                })
                                 removeMilestone(milestone.index)
                                 if (editingIndex === milestone.index) {
                                   setEditingIndex(null)
-                                  setNewMilestone({
-                                    images: [],
-                                    name: '',
-                                    description: '',
-                                    durationDays: 0,
-                                    startDate: '',
-                                    endDate: '',
-                                    budget: 0,
-                                    expectedOutcome: '',
-                                    advantages: '',
-                                    challenges: ''
-                                  })
+                                  setMilestoneDraft(defaultMilestone)
                                   setResetKey((prev) => prev + 1)
                                 }
                                 const newTotal = Math.ceil(

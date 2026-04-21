@@ -1,20 +1,33 @@
 import React, { useState, useRef, useEffect } from 'react'
 
 interface ImageUploadProps {
-  onImagesChange?: (files: File[]) => void
+  onImagesChange?: (
+    files: File[],
+    remainingInitialUrls: string[]
+  ) => void | Promise<void>
+  onRemoveInitial?: (url: string) => void
   className?: string
   maxImages?: number
+  initialPreviews?: string[]
 }
 
 export function ImageUpload({
   onImagesChange,
+  onRemoveInitial,
   className = '',
-  maxImages = 4
+  maxImages = 4,
+  initialPreviews = []
 }: ImageUploadProps) {
   const [previews, setPreviews] = useState<string[]>([])
   const [files, setFiles] = useState<File[]>([])
   const [isDragging, setIsDragging] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
+
+  useEffect(() => {
+    if (initialPreviews.length > 0) {
+      setPreviews(initialPreviews)
+    }
+  }, [initialPreviews])
 
   // Note: We use URL.createObjectURL for previews. We should revoke them to prevent memory leaks if component unmounts.
   useEffect(() => {
@@ -23,7 +36,7 @@ export function ImageUpload({
     }
   }, [previews])
 
-  const processFiles = (newFiles: FileList | File[]) => {
+  const processFiles = async (newFiles: FileList | File[]) => {
     const validFiles = Array.from(newFiles).filter((file) =>
       file.type.startsWith('image/')
     )
@@ -41,7 +54,16 @@ export function ImageUpload({
     setPreviews(updatedPreviews)
 
     if (onImagesChange) {
-      onImagesChange(updatedFiles)
+      const remainingInitial = updatedPreviews.filter((p) =>
+        p.startsWith('http')
+      )
+      try {
+        await onImagesChange(updatedFiles, remainingInitial)
+      } catch (error) {
+        // Rollback state if backend rejects the upload
+        setFiles(files)
+        setPreviews(previews)
+      }
     }
   }
 
@@ -76,21 +98,42 @@ export function ImageUpload({
   const removeImage = (index: number, e: React.MouseEvent) => {
     e.stopPropagation()
 
-    // Revoke object URL
-    URL.revokeObjectURL(previews[index])
+    const previewUrl = previews[index]
+
+    if (previewUrl.startsWith('http')) {
+      // It's an initial image from parent
+      if (onRemoveInitial) {
+        onRemoveInitial(previewUrl)
+      }
+      const newPreviews = [...previews]
+      newPreviews.splice(index, 1)
+      setPreviews(newPreviews)
+      return
+    }
+
+    // Otherwise it's a newly added file
+    URL.revokeObjectURL(previewUrl)
+
+    // We need to find its index in the 'files' array.
+    // Since previews is a mix of initialUrls and new files, the index in 'files'
+    // is (index - number of initial urls remaining).
+    const initialUrlCount = previews.filter((p) => p.startsWith('http')).length
+    const fileIndex = index - initialUrlCount
 
     const newFiles = [...files]
-    newFiles.splice(index, 1)
-
     const newPreviews = [...previews]
     newPreviews.splice(index, 1)
 
-    setFiles(newFiles)
-    setPreviews(newPreviews)
-
-    if (onImagesChange) {
-      onImagesChange(newFiles)
+    if (fileIndex >= 0) {
+      newFiles.splice(fileIndex, 1)
+      setFiles(newFiles)
+      if (onImagesChange) {
+        // Because newPreviews already has the item removed
+        const remainingInitial = newPreviews.filter((p) => p.startsWith('http'))
+        onImagesChange(newFiles, remainingInitial)
+      }
     }
+    setPreviews(newPreviews)
   }
 
   return (

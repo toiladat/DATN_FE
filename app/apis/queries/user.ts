@@ -1,6 +1,7 @@
 import { userRequests } from '@/apis/requests/user'
 import type { UserProfile } from '@/types/user'
 import { useQuery } from '@tanstack/react-query'
+import type { UserSearchResponse } from '@/schemas/userSchema'
 
 export const useGetUserProfile = (address?: string) => {
   return useQuery<UserProfile | null, Error>({
@@ -34,5 +35,17 @@ export const useGetUserProfile = (address?: string) => {
     },
     enabled: !!address,
     retry: false // Don't retry on 409 errors
+  })
+}
+
+export const useSearchUsers = (keyword: string) => {
+  return useQuery({
+    queryKey: ['users-search', keyword],
+    queryFn: async (): Promise<UserSearchResponse['users']> => {
+      const { data } = await userRequests.searchUsers(keyword)
+      return data?.users || []
+    },
+    enabled: !!keyword && keyword.length >= 2,
+    staleTime: 1000 * 60 * 5 // 5 minutes
   })
 }

@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-import { Badge } from '@/components/ui/badge'
 import { useLaunchProject } from '@/contexts/LaunchProjectContext'
 import {
   Select,
@@ -15,6 +14,9 @@ import { Label } from '@/components/ui/label'
 import { Card, CardContent } from '@/components/ui/card'
 import { ActionFooter } from './ActionFooter'
 import { toast } from 'sonner'
+import { useSearchUsers } from '@/apis/queries/user'
+import { useDebounce } from '@/hooks/useDebounce'
+import type { UserSearchProfile } from '@/schemas/userSchema'
 
 interface TeamStepProps {
   onStepChange?: (step: string) => void
@@ -37,73 +39,29 @@ export function TeamStep({ onStepChange }: TeamStepProps = {}) {
   const isFounder = newMember.role === 'Founder'
 
   const [searchQuery, setSearchQuery] = useState('')
-  const [isSearching, setIsSearching] = useState(false)
-  const [searchResults, setSearchResults] = useState<any[]>([])
-  const [showDropdown, setShowDropdown] = useState(false)
+  const debouncedSearchQuery = useDebounce(searchQuery, 400) // Debounce 400ms
 
-  // Mock DB of users
-  const MOCK_USERS = [
-    {
-      id: 'usr_001',
-      name: 'Vitalik S.',
-      email: 'vitalik@ethereum.org',
-      wallet: '0x1A2B...3C4D',
-      avatar: '',
-      initials: 'VS'
-    },
-    {
-      id: 'usr_002',
-      name: 'Satoshi N.',
-      email: 'satoshi@bitcoin.org',
-      wallet: 'bc1Q...XYZ',
-      avatar: '',
-      initials: 'SN'
-    },
-    {
-      id: 'usr_003',
-      name: 'Alex T.',
-      email: 'alex@radiant.void',
-      wallet: '0x9F8E...7D6C',
-      avatar: '',
-      initials: 'AT'
-    }
-  ]
+  const { data: searchResults = [], isLoading: isSearching } =
+    useSearchUsers(debouncedSearchQuery)
+
+  const showDropdown = !!searchQuery && searchQuery.length >= 2
 
   useEffect(() => {
     if (!searchQuery.trim()) {
-      setSearchResults([])
-      setShowDropdown(false)
-      return
+      // Logic handled by hook
     }
-
-    setIsSearching(true)
-    setShowDropdown(true)
-
-    const timer = setTimeout(() => {
-      const results = MOCK_USERS.filter(
-        (u) =>
-          u.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          u.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          u.wallet.toLowerCase().includes(searchQuery.toLowerCase())
-      )
-      setSearchResults(results)
-      setIsSearching(false)
-    }, 500)
-
-    return () => clearTimeout(timer)
   }, [searchQuery])
 
-  const selectUser = (user: any) => {
+  const selectUser = (user: UserSearchProfile) => {
     setNewMember({
       ...newMember,
       id: user.id,
-      name: user.name,
-      email: user.email,
-      wallet: user.wallet,
-      avatar: user.avatar
+      name: user.name || 'unknown',
+      email: user.email || '',
+      wallet: user.walletAddress || '',
+      avatar: user.avatar || ''
     })
     setSearchQuery('')
-    setShowDropdown(false)
   }
 
   const handleAddMember = () => {
@@ -197,12 +155,6 @@ export function TeamStep({ onStepChange }: TeamStepProps = {}) {
                       type="text"
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      onFocus={() => {
-                        if (searchQuery) setShowDropdown(true)
-                      }}
-                      onBlur={() =>
-                        setTimeout(() => setShowDropdown(false), 200)
-                      }
                     />
                   </div>
 
@@ -220,14 +172,20 @@ export function TeamStep({ onStepChange }: TeamStepProps = {}) {
                             className="p-3 hover:bg-[#8ff5ff]/10 cursor-pointer flex items-center gap-3 border-b border-white/5"
                           >
                             <div className="w-8 h-8 rounded bg-cyan-500/20 flex items-center justify-center text-[#8ff5ff] font-bold text-xs uppercase">
-                              {user.initials}
+                              {(
+                                user.name ||
+                                user.email ||
+                                user.walletAddress
+                              ).substring(0, 2)}
                             </div>
                             <div className="flex-1">
                               <div className="text-xs font-bold text-[#ecedf6]">
-                                {user.name}
+                                {user.name ||
+                                  user.email?.split('@')[0] ||
+                                  `${user.walletAddress.substring(0, 6)}...${user.walletAddress.slice(-4)}`}
                               </div>
                               <div className="text-[10px] text-slate-500">
-                                {user.email}
+                                {user.email || 'No email attached'}
                               </div>
                             </div>
                           </div>

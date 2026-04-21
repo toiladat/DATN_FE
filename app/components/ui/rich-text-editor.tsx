@@ -15,14 +15,27 @@ export function RichTextEditor({
   height = 300
 }: RichTextEditorProps) {
   const editorRef = useRef<any>(null)
+  const lastEmittedValue = useRef(value || '')
+
+  React.useEffect(() => {
+    if (editorRef.current && value !== undefined) {
+      if (value !== lastEmittedValue.current) {
+        editorRef.current.setContent(value)
+        lastEmittedValue.current = value
+      }
+    }
+  }, [value])
 
   return (
     <div className="rounded-xl overflow-hidden border border-[#45484f]/15 bg-[#161a21]">
       <Editor
         apiKey="c220ly1jvkrcbheznqkakz5o83iy0tdqp1rj73j9tlijqtdq"
-        onInit={(evt, editor) => (editorRef.current = editor)}
+        onInit={(evt, editor) => {
+          editorRef.current = editor
+        }}
         initialValue={value}
         onEditorChange={(content, editor) => {
+          lastEmittedValue.current = content
           if (onChange) {
             onChange(content)
           }
