@@ -4,7 +4,7 @@ import {
 } from '@/components/launchProjectPage/TaskCard'
 import { Button } from '@/components/ui/button'
 import { useLaunchProject } from '@/contexts/LaunchProjectContext'
-import { createProject } from '@/api/project'
+import { projectRequests } from '@/apis/requests/project'
 import { ProjectSubmissionSchema } from '@/schemas/projectSchema'
 import { toast } from 'sonner'
 import { z } from 'zod'
@@ -15,7 +15,7 @@ interface OverviewStepProps {
 }
 
 export function OverviewStep({ onStepChange }: OverviewStepProps = {}) {
-  const { project } = useLaunchProject()
+  const { project, resetProject } = useLaunchProject()
 
   const computeStatus = (step: string): TaskStatus => {
     switch (step) {
@@ -56,10 +56,15 @@ export function OverviewStep({ onStepChange }: OverviewStepProps = {}) {
       // Validate with Zod
       const validatedData = ProjectSubmissionSchema.parse(project)
 
-      // Call Mock API
-      const result = await createProject(validatedData)
-      if (result.success) {
-        toast.success('Project published successfully! (Mock)')
+      // Call Real API
+      const response = await projectRequests.createProject(validatedData as any)
+      if (response.status === 201) {
+        toast.success(
+          'Project published successfully! Admin will review and approve your project within the next 48 hours.'
+        )
+        resetProject()
+      } else {
+        toast.error('An error occurred during publishing.')
       }
     } catch (error: any) {
       console.error('Validation failed:', error)
@@ -70,6 +75,8 @@ export function OverviewStep({ onStepChange }: OverviewStepProps = {}) {
       }
     }
   }
+  const isPublishable = ProjectSubmissionSchema.safeParse(project).success
+
   return (
     <div className="max-w-5xl mx-auto w-full">
       <header className="mb-12">
@@ -111,7 +118,8 @@ export function OverviewStep({ onStepChange }: OverviewStepProps = {}) {
       {/* Action Buttons */}
       <div className="flex items-center justify-end gap-4 border-t border-[#45484f]/15 pt-8">
         <Button
-          className="bg-gradient-to-r from-[#00eefc] to-[#8ff5ff] text-[#005359] hover:shadow-[0_0_15px_rgba(143,245,255,0.4)] active:scale-95 transition-all font-bold px-8 shadow-none"
+          disabled={!isPublishable}
+          className="bg-gradient-to-r from-[#00eefc] to-[#8ff5ff] text-[#005359] hover:shadow-[0_0_15px_rgba(143,245,255,0.4)] active:scale-95 transition-all font-bold px-8 shadow-none disabled:opacity-50 disabled:grayscale"
           onClick={handlePublish}
         >
           Publish

@@ -90,6 +90,7 @@ interface LaunchProjectContextProps {
   setTeam: (team: TeamMember[]) => void
   setMilestoneDraft: (draft: Milestone) => void
   setMilestoneCache: (cache: Record<string, string>) => void
+  resetProject: () => void
 }
 
 const LaunchProjectContext = createContext<
@@ -184,6 +185,13 @@ export const LaunchProjectProvider = ({
     }))
   }
 
+  const resetProject = () => {
+    setProject(defaultProjectData)
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem(LOCAL_STORAGE_KEY)
+    }
+  }
+
   return (
     <LaunchProjectContext.Provider
       value={{
@@ -194,7 +202,8 @@ export const LaunchProjectProvider = ({
         removeMilestone,
         setTeam,
         setMilestoneDraft,
-        setMilestoneCache
+        setMilestoneCache,
+        resetProject
       }}
     >
       {children}

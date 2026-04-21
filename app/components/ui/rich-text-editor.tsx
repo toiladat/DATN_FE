@@ -15,16 +15,6 @@ export function RichTextEditor({
   height = 300
 }: RichTextEditorProps) {
   const editorRef = useRef<any>(null)
-  const lastEmittedValue = useRef(value || '')
-
-  React.useEffect(() => {
-    if (editorRef.current && value !== undefined) {
-      if (value !== lastEmittedValue.current) {
-        editorRef.current.setContent(value)
-        lastEmittedValue.current = value
-      }
-    }
-  }, [value])
 
   return (
     <div className="rounded-xl overflow-hidden border border-[#45484f]/15 bg-[#161a21]">
@@ -33,9 +23,8 @@ export function RichTextEditor({
         onInit={(evt, editor) => {
           editorRef.current = editor
         }}
-        initialValue={value}
-        onEditorChange={(content, editor) => {
-          lastEmittedValue.current = content
+        value={value} // ✅ QUAN TRỌNG NHẤT: Dùng `value` thay vì `initialValue`
+        onEditorChange={(content) => {
           if (onChange) {
             onChange(content)
           }
