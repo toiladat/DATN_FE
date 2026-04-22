@@ -45,3 +45,29 @@ export const ProjectSubmissionSchema = z.object({
 })
 
 export type ProjectSubmission = z.infer<typeof ProjectSubmissionSchema>
+
+export const ProjectStatusSchema = z.enum([
+  'pending',
+  'progress',
+  'active',
+  'success',
+  'rejected'
+])
+export type ProjectStatus = z.infer<typeof ProjectStatusSchema>
+
+export const ProjectSummarySchema = z.object({
+  id: z.string(),
+  title: z.string(),
+  description: z.string(),
+  status: ProjectStatusSchema,
+  fundingGoal: z.number(),
+  raisedAmount: z.number(),
+  image: z.string().nullable().optional(),
+  primaryCategory: z.string().optional(),
+  startDate: z.number(),
+  endDate: z.number(),
+  updatedAt: z.number(),
+  totalMilestones: z.number().optional(),
+  completedMilestones: z.number().optional()
+})
+export type ProjectSummary = z.infer<typeof ProjectSummarySchema>

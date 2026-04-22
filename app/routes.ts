@@ -10,7 +10,7 @@ export default [
     index('./routes/Home.tsx'),
     route('projects', './routes/Projects.tsx'),
     route('campaign/:id', './routes/CampaignDetail.tsx'),
-    route('my-campaigns', './routes/MyCampaigns.tsx'),
+    route('my-project', './routes/MyProject.tsx'),
     route('launch-project', './routes/LaunchProject.tsx')
   ])
 ] satisfies RouteConfig

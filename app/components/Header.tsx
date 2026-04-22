@@ -12,7 +12,7 @@ const Header = () => {
     { name: 'Home', path: '/' },
     { name: 'Projects', path: '/projects' }, // Pointing to projects page
     { name: 'Launch Your Idea', path: '/launch-project' },
-    { name: 'My Campaigns', path: '/my-campaigns' }
+    { name: 'My Projects', path: '/my-project' }
   ]
 
   return (
