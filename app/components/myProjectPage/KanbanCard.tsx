@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router'
 import { formatDistanceToNow, format, isValid } from 'date-fns'
 import { Card } from '@/components/ui/card'
 import type { ProjectSummary } from '@/schemas/projectSchema'
@@ -7,9 +8,17 @@ import {
   TooltipProvider,
   TooltipTrigger
 } from '@/components/ui/tooltip'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger
+} from '@/components/ui/dropdown-menu'
 
 export function KanbanCard({ project }: { project: ProjectSummary }) {
   const isPending = project.status === 'pending'
+  const navigate = useNavigate()
 
   const safeFormat = (
     timestamp: number | string | null | undefined,
@@ -27,7 +36,10 @@ export function KanbanCard({ project }: { project: ProjectSummary }) {
   }
 
   return (
-    <Card className="shrink-0 bg-[#161a21] border border-[#2e323b] hover:border-[#8ff5ff]/30 transition-all hover:-translate-y-0.5 hover:shadow-lg hover:shadow-[#8ff5ff]/5 group cursor-pointer p-3 rounded-lg flex flex-col gap-3">
+    <Card
+      onClick={() => navigate(`/projects/${project.id}`)}
+      className="shrink-0 bg-[#161a21] border border-[#2e323b] hover:border-[#8ff5ff]/30 transition-all hover:-translate-y-0.5 hover:shadow-lg hover:shadow-[#8ff5ff]/5 group cursor-pointer p-3 rounded-lg flex flex-col gap-3"
+    >
       {/* Header Area: Thumbnail (if any) + Title/Category */}
       <div className="flex gap-3 items-start">
         {project.image && (
@@ -147,16 +159,65 @@ export function KanbanCard({ project }: { project: ProjectSummary }) {
       ) : null}
 
       {/* Footer Area */}
-      <div className="flex items-center justify-between text-[11px] text-[#73757d] mt-1">
+      <div className="flex items-center justify-between text-[11px] text-[#73757d] mt-1 relative">
         <div className="flex items-center gap-1.5 font-medium">
           <span className="material-symbols-outlined text-[13px]">
             schedule
           </span>
           <span>{safeDistance(project.updatedAt)}</span>
         </div>
-        <button className="text-[#ac89ff] opacity-0 group-hover:opacity-100 transition-opacity font-bold uppercase tracking-widest text-[10px]">
-          View
-        </button>
+
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <button
+              onClick={(e) => e.stopPropagation()}
+              className="text-[#a9abb3] hover:text-[#8ff5ff] opacity-0 group-hover:opacity-100 transition-colors p-0.5 rounded focus:outline-none flex outline-none"
+            >
+              <span className="material-symbols-outlined text-[18px]">
+                more_horiz
+              </span>
+            </button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent
+            align="start"
+            sideOffset={8}
+            className="bg-[#1a1e26] border-[#45484f]/20 text-[#ecedf6] min-w-[140px] font-['Space_Grotesk'] text-[11px] shadow-2xl p-1 z-50"
+          >
+            <DropdownMenuItem
+              className="focus:bg-[#8ff5ff]/10 focus:text-[#8ff5ff] cursor-pointer outline-none rounded py-1.5 px-2 font-bold"
+              onSelect={(e) => {
+                e.preventDefault()
+                navigate(`/projects/${project.id}`)
+              }}
+            >
+              View Details
+            </DropdownMenuItem>
+
+            {project.status === 'pending' && (
+              <>
+                <DropdownMenuSeparator className="bg-[#45484f]/20 my-1" />
+                <DropdownMenuItem
+                  className="focus:bg-[#ff716c]/10 focus:text-[#ff716c] text-[#ff716c] cursor-pointer outline-none rounded py-1.5 px-2 font-bold"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  Delete Project
+                </DropdownMenuItem>
+              </>
+            )}
+
+            {project.status === 'active' && (
+              <>
+                <DropdownMenuSeparator className="bg-[#45484f]/20 my-1" />
+                <DropdownMenuItem
+                  className="focus:bg-[#8ff5ff]/10 focus:text-[#8ff5ff] text-[#8ff5ff] font-bold cursor-pointer outline-none rounded py-1.5 px-2"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  Update Progress
+                </DropdownMenuItem>
+              </>
+            )}
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
     </Card>
   )

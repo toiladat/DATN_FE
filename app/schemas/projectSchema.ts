@@ -71,3 +71,70 @@ export const ProjectSummarySchema = z.object({
   completedMilestones: z.number().optional()
 })
 export type ProjectSummary = z.infer<typeof ProjectSummarySchema>
+
+export const MilestoneUpdateRestSchema = z.object({
+  completed: z.string(),
+  blockers: z.string(),
+  images: z.array(z.string()),
+  demoUrl: z.string().optional(),
+  link: z.string().optional()
+})
+export type MilestoneUpdateRest = z.infer<typeof MilestoneUpdateRestSchema>
+
+export const MilestoneRestSchema = z.object({
+  id: z.string(),
+  order: z.number(),
+  title: z.string(),
+  description: z.string(),
+  amount: z.number(),
+  startDate: z.string().or(z.number()),
+  endDate: z.string().or(z.number()),
+  status: z.string(),
+  advantages: z.string().optional(),
+  challenges: z.string().optional(),
+  outcome: z.string().optional(),
+  images: z.array(z.string()),
+  video: z.string().optional(),
+  milestoneUpdates: MilestoneUpdateRestSchema.nullable()
+})
+export type MilestoneRest = z.infer<typeof MilestoneRestSchema>
+
+export const ProjectDetailSchema = z.object({
+  id: z.string(),
+  title: z.string(),
+  slug: z.string(),
+  subtitle: z.string(),
+  images: z.array(z.string()),
+  video: z.string().optional(),
+  location: z.string(),
+  description: z.string(),
+  risks: z.string(),
+  totalAmount: z.number(),
+  status: ProjectStatusSchema,
+  startDate: z.string().or(z.number()),
+  endDate: z.string().or(z.number()),
+  userId: z.string(),
+  raisedAmount: z.number(),
+  category: z
+    .object({
+      name: z.string(),
+      slug: z.string()
+    })
+    .nullable(),
+  stats: z.object({
+    likes: z.number(),
+    reviews: z.number()
+  }),
+  topInvestors: z.array(
+    z.object({
+      amount: z.number(),
+      name: z.string().optional(),
+      avatar: z.string().optional()
+    })
+  ),
+  milestones: z.array(MilestoneRestSchema),
+  projectMembers: z.array(z.any()), // Will type properly if needed for teams
+  createdAt: z.string().or(z.number()),
+  updatedAt: z.string().or(z.number())
+})
+export type ProjectDetail = z.infer<typeof ProjectDetailSchema>
