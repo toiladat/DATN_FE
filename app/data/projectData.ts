@@ -129,110 +129,116 @@ export const PROJECT_DETAIL_DATA = {
   ]
 }
 
-export const PROJECTS_DIRECTORY_DATA = [
+/**
+ * Mock data mô phỏng response từ BE — khớp với ProjectSummary schema.
+ * Khi tích hợp BE thật, chỉ cần thay thế bằng API call, không cần sửa gì ở FE.
+ */
+import type { ProjectSummary } from '@/schemas/projectSchema'
+
+const NOW = Date.now()
+const DAY = 1000 * 60 * 60 * 24
+
+export const PROJECTS_DIRECTORY_DATA: ProjectSummary[] = [
   {
     id: '1',
     title: 'NeuralNexus Core',
     description:
       'Decentralized compute layer for large-scale language model training with zero-knowledge proofs.',
+    status: 'active',
+    fundingGoal: 500,
+    raisedAmount: 410,
     image:
       'https://lh3.googleusercontent.com/aida-public/AB6AXuCiedYlpbNO-IiU-iBg-C4l1WVaNIYIZqSr-poXXkndGbrOotQhd1Dip7ZPQiGqQJfktGfhW0-nfi-4MXVjrS3PQcaUhPsSNfMO0RKmnafOrz8ID9kS8UaRCws3L4Y8WAvNBjeSHjrToqE7N5PVFhyXhS93y4cOs1lHaR90FYdqWnde-Z2tl32yOrsgSThgxm1ZgY_MmR_6Xld-9RcsL_E_2PZn4tkk3V3BUJYmVbaO-u9CtYYSpB7jRKElGyGrQT9mnGgSSt8YIds',
-    category: 'AI',
-    status: 'Funding',
-    themeColor: 'primary',
-    progress: 82,
-    raisedText: '410 / 500 ETH',
-    stats: [
-      { icon: 'schedule', text: '14 Days Left' },
-      { icon: 'group', text: '1,240 Backers' }
-    ]
+    primaryCategory: 'AI',
+    startDate: NOW - 30 * DAY,
+    endDate: NOW + 14 * DAY,
+    updatedAt: NOW - 1 * DAY,
+    totalMilestones: 4,
+    completedMilestones: 2
   },
   {
     id: '2',
     title: 'EtherLoom Protocol',
     description:
       'Next-generation cross-chain bridging infrastructure focusing on atomic swaps and sub-second finality.',
+    status: 'pending',
+    fundingGoal: 800,
+    raisedAmount: 800,
     image:
       'https://lh3.googleusercontent.com/aida-public/AB6AXuDr23fNr1CygDDOv6H7giNgw9Q0lfcwgBznflNnLRYtCfpDNX2x75xLMlM61hYNZJDbT0q2RvS8-drrekEWEZJ4YgDwKNE_oKSkLmxr8sieYPxHJlto4oqXQaZV6rje1Bnlq-P_YQ3_gVhwH0hNgkT6OltTKrD7GXtEBLSnM68eK8Xn8GUHtCcViIuORcAD2qDdhpzgRsT1oLsEbC64Z3OQcsVM02Rwsx62TzPAxXhohym2EtGCvC8UMWxlOL3OvSFBGjzF8S0Ores',
-    category: 'Infrastructure',
-    status: 'Developing',
-    themeColor: 'secondary',
-    roadmapPhase: 'Phase 3 / 5',
-    roadmapText: 'Public Testnet',
-    roadmapStages: ['completed', 'completed', 'active', 'pending', 'pending'],
-    stats: [
-      { icon: 'account_balance_wallet', text: 'Min Entry: 0.1 ETH' },
-      { icon: 'token', text: 'Governance Enabled' }
-    ]
+    primaryCategory: 'Infrastructure',
+    startDate: NOW - 90 * DAY,
+    endDate: NOW + 120 * DAY,
+    updatedAt: NOW - 3 * DAY,
+    totalMilestones: 5,
+    completedMilestones: 2
   },
   {
     id: '3',
     title: 'Neon District: Origins',
     description:
       'Massively multiplayer RPG set in a dystopian future where players own their equipment as upgradable NFTs.',
+    status: 'active',
+    fundingGoal: 2000,
+    raisedAmount: 900,
     image:
       'https://lh3.googleusercontent.com/aida-public/AB6AXuBiL1gwn_BOJEockwroLPKxvRpv5mobdZvzm3ovwUUISv0VPYBpbnHjx0s5ylg-BbAUw9-PkEqhQsfsgNZonZdO7INpnVb0c2O50gw-S6yGSJmTqfUvFt7FlwmFn4OKHIaxMq8Wh5kTUOsvpLKJI0DD_kZCvHbzrRmImEMPAF2A6cw--YFfqa-bvu3i-cpSB2STQNX37sqt3Q540mMTkpfG201YAPMIlpSgk6GEbseZ-wYyRBPX0r3ElxOhZN1D9Fq6y2JgdO_JIlY',
-    category: 'Gaming',
-    status: 'Funding',
-    themeColor: 'primary',
-    progress: 45,
-    raisedText: '900 / 2,000 ETH',
-    stats: [
-      { icon: 'schedule', text: '32 Days Left' },
-      { icon: 'group', text: '3,892 Backers' }
-    ]
+    primaryCategory: 'Gaming',
+    startDate: NOW - 10 * DAY,
+    endDate: NOW + 32 * DAY,
+    updatedAt: NOW - 2 * DAY,
+    totalMilestones: 6,
+    completedMilestones: 1
   },
   {
     id: '4',
     title: 'Vortex VR Mesh',
     description:
       'Spatial computing protocol for seamless interoperability between different VR environments.',
+    status: 'progress',
+    fundingGoal: 1200,
+    raisedAmount: 1200,
     image:
       'https://lh3.googleusercontent.com/aida-public/AB6AXuBXkBtfDW1slgNHT7JALCnLwXe2FNSnH2qsLBZZcKmSZUMSmh6merSEtTDVT215JgE9VLN9V1MzecbSd2JeOcIRfsdaYjQzjT7-GiX0Z9weOum3iy3jzDejiOTElk0sjLF29YAZzthNitu4qPWYXs2K_gzhPdb4e2cbis8K0M9QU2d0rCheCrs03iZgzhFm1UqNYxrUjuSCOOV2dEhSFVpZQlwnViAzK-Bzu9QkhV6rPcmwErIGlfvhcISYIRN32GpWBYhAkpNbquw',
-    category: 'Metaverse',
-    status: 'Developing',
-    themeColor: 'tertiary',
-    roadmapPhase: 'Phase 1 / 4',
-    roadmapText: 'Kernel Development',
-    roadmapStages: ['active', 'pending', 'pending', 'pending'],
-    stats: [
-      { icon: 'account_balance_wallet', text: 'Min Entry: 0.5 ETH' },
-      { icon: 'token', text: 'Equity Drops' }
-    ]
+    primaryCategory: 'Metaverse',
+    startDate: NOW - 60 * DAY,
+    endDate: NOW + 180 * DAY,
+    updatedAt: NOW - 5 * DAY,
+    totalMilestones: 4,
+    completedMilestones: 0
   },
   {
     id: '5',
     title: 'YieldOracle V3',
     description:
       'Autonomous algorithmic yield aggregator that optimizes portfolio distribution across 12 chains.',
+    status: 'active',
+    fundingGoal: 1000,
+    raisedAmount: 180,
     image:
       'https://lh3.googleusercontent.com/aida-public/AB6AXuDXmjOH3MVLdcT6E94axPyBlhOTKZwcEDZ2Cx1ULjGMZpXVhr8EWuFkE8uzAHpi8j6govyzQB3FsiqC1wZJ-xsYiFfogTvbc_dosyTEVRAUl-PvvUdUVHyrsEGNSURMxNhC6PjJsiv8MO8zPBeBB4onqzWXwFUDpGqIKSspFmf55s41zK3tmNUKMh1g9H41ZTMluVhzTPd5ly6XGbCz2pLY44ggBbbcH5moDcb_gyi4mTuuXc0KfkQ4htrz44oDze064H-MgdYEZJI',
-    category: 'DeFi',
-    status: 'Funding',
-    themeColor: 'primary',
-    progress: 18,
-    raisedText: '180 / 1,000 ETH',
-    stats: [
-      { icon: 'schedule', text: '45 Days Left' },
-      { icon: 'group', text: '452 Backers' }
-    ]
+    primaryCategory: 'DeFi',
+    startDate: NOW - 5 * DAY,
+    endDate: NOW + 45 * DAY,
+    updatedAt: NOW - 1 * DAY,
+    totalMilestones: 5,
+    completedMilestones: 1
   },
   {
     id: '6',
     title: 'ShadowVault ZK',
     description:
       'Anonymized transaction layer for corporate treasury management on public blockchains.',
+    status: 'pending',
+    fundingGoal: 600,
+    raisedAmount: 600,
     image:
       'https://lh3.googleusercontent.com/aida-public/AB6AXuCb6zQ7uX1897Ug-J0wAhNNhB17klFUblw5wrWMewRvmM5N5F8r4PBQy5QixHbEFgND4BqSZMXjazVKThTXJl74uz3-puF2BDdHRCeWLrTsDy9nLwhI9YpVS_RgOVhaqPa1xD0WqeEvpFnq0Se-OF4ARk__MbOej8LfwkSzRVYAMvCr9bJ-F7zErtl8xN2t0V0DxD4Ol7o-qXuCwwGWscxRq8THmjOz8UdsLArTjWVE1GG0gBntNd7e46BhIlyIejye_nuFax8NTAg',
-    category: 'Privacy',
-    status: 'Developing',
-    themeColor: 'secondary',
-    roadmapPhase: 'Phase 4 / 5',
-    roadmapText: 'Audit & Compliance',
-    roadmapStages: ['completed', 'completed', 'completed', 'active', 'pending'],
-    stats: [
-      { icon: 'account_balance_wallet', text: 'Min Entry: 1.0 ETH' },
-      { icon: 'token', text: 'Pro License' }
-    ]
+    primaryCategory: 'Privacy',
+    startDate: NOW - 120 * DAY,
+    endDate: NOW + 90 * DAY,
+    updatedAt: NOW - 7 * DAY,
+    totalMilestones: 5,
+    completedMilestones: 3
   }
 ]
