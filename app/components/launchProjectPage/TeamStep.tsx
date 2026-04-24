@@ -288,7 +288,7 @@ export function TeamStep({ onStepChange }: TeamStepProps = {}) {
                 </div>
 
                 <Button
-                  className="w-full h-14 bg-gradient-to-r from-[#8ff5ff] to-[#00eefc] text-[#005359] font-['Space_Grotesk'] font-bold rounded-full hover:shadow-[0_0_30px_rgba(143,245,255,0.4)] shadow-[0_0_20px_rgba(143,245,255,0.2)] active:scale-95 transition-all text-base mt-4 border-none"
+                  className="w-full h-12 bg-[#8ff5ff] hover:bg-[#a8f8ff] text-[#00383d] font-['Space_Grotesk'] font-bold rounded-xl shadow-[0_0_20px_rgba(143,245,255,0.2)] hover:shadow-[0_0_28px_rgba(143,245,255,0.35)] active:scale-95 transition-all text-sm mt-4 border-none"
                   type="button"
                   onClick={handleAddMember}
                 >

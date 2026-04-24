@@ -84,45 +84,48 @@ export function OverviewStep({ onStepChange }: OverviewStepProps = {}) {
           <h1 className="text-4xl md:text-5xl font-['Space_Grotesk'] font-bold text-[#ecedf6] tracking-tight">
             Project overview
           </h1>
-          <div className="flex items-center gap-2 text-[#a9abb3] text-sm hidden md:flex">
-            <span className="material-symbols-outlined text-xs">info</span>
-            <span>
-              Last edited{' '}
+          <div className="flex items-center gap-2 text-[#45484f] text-sm hidden md:flex">
+            <span className="material-symbols-outlined text-xs">schedule</span>
+            <span className="font-mono text-xs">
               {project.updatedAt
                 ? formatDistanceToNow(project.updatedAt, { addSuffix: true })
                 : 'just now'}
             </span>
           </div>
         </div>
-        <p className="text-[#a9abb3] max-w-2xl mt-4 text-lg">
-          Complete the foundational building blocks of your campaign. Each
-          section ensures your project meets the Radiant Void verification
-          standards.
+        <p className="text-[#73757d] max-w-xl mt-3 text-base leading-relaxed">
+          Three sections to complete before publishing. Each one is reviewed
+          before your project goes live.
         </p>
       </header>
 
       {/* Task List Section */}
-      <section className="space-y-4 mb-12">
-        {tasks.map((task) => (
+      <section className="space-y-3 mb-12">
+        {tasks.map((task, index) => (
           <TaskCard
             key={task.title}
             title={task.title}
             description={task.description}
             status={task.status}
             icon={task.icon}
+            stepIndex={index}
             onClick={() => onStepChange?.(task.title)}
           />
         ))}
       </section>
 
       {/* Action Buttons */}
-      <div className="flex items-center justify-end gap-4 border-t border-[#45484f]/15 pt-8">
+      <div className="flex items-center justify-between gap-4 border-t border-[#2e323b]/50 pt-8">
+        <p className="text-xs text-[#45484f]">
+          {tasks.filter((t) => t.status === 'Complete').length} / {tasks.length}{' '}
+          sections complete
+        </p>
         <Button
           disabled={!isPublishable}
-          className="bg-gradient-to-r from-[#00eefc] to-[#8ff5ff] text-[#005359] hover:shadow-[0_0_15px_rgba(143,245,255,0.4)] active:scale-95 transition-all font-bold px-8 shadow-none disabled:opacity-50 disabled:grayscale"
+          className="bg-[#8ff5ff] hover:bg-[#a8f8ff] text-[#00383d] active:scale-95 transition-all font-bold px-8 rounded-xl shadow-[0_0_20px_rgba(143,245,255,0.2)] hover:shadow-[0_0_28px_rgba(143,245,255,0.35)] disabled:opacity-40 disabled:grayscale border-none"
           onClick={handlePublish}
         >
-          Publish
+          Publish project
         </Button>
       </div>
     </div>

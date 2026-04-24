@@ -1,7 +1,6 @@
 import {
   Sidebar,
   SidebarContent,
-  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarHeader,
@@ -23,11 +22,11 @@ export function LaunchSidebar({
   const { state } = useSidebar()
   const isCollapsed = state === 'collapsed'
 
-  const steps: { id: string; label: string; icon: string; fill?: boolean }[] = [
-    { id: 'Overview', label: 'Overview', icon: 'dashboard' },
-    { id: 'Basics', label: 'Basics', icon: 'info' },
-    { id: 'Milestones', label: 'Milestones', icon: 'pending' },
-    { id: 'Team', label: 'Team', icon: 'group' }
+  const steps: { id: string; label: string; icon: string; num: string }[] = [
+    { id: 'Overview', label: 'Overview', icon: 'dashboard', num: '01' },
+    { id: 'Basics', label: 'Basics', icon: 'info', num: '02' },
+    { id: 'Milestones', label: 'Milestones', icon: 'pending', num: '03' },
+    { id: 'Team', label: 'Team', icon: 'group', num: '04' }
   ]
 
   return (
@@ -39,11 +38,11 @@ export function LaunchSidebar({
       <SidebarHeader className="py-8 px-4 h-24 mb-4">
         {!isCollapsed ? (
           <div className="px-2 transition-opacity duration-300">
-            <h3 className="text-[#8ff5ff] font-bold text-lg font-['Space_Grotesk'] truncate">
-              Project Wizard
+            <h3 className="text-[#ecedf6] font-bold text-base font-['Space_Grotesk'] truncate">
+              Launch Project
             </h3>
-            <p className="text-[#a9abb3] text-xs mt-1 truncate">
-              Create your vision
+            <p className="text-[#45484f] text-xs mt-1 truncate font-mono tracking-widest uppercase">
+              Wizard
             </p>
           </div>
         ) : (
@@ -59,7 +58,7 @@ export function LaunchSidebar({
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupContent>
-            <SidebarMenu className="gap-2">
+            <SidebarMenu className="gap-1">
               {steps.map((step) => {
                 const isActive = currentStep === step.id
                 return (
@@ -69,28 +68,28 @@ export function LaunchSidebar({
                       onClick={() => onStepChange(step.id)}
                       isActive={isActive}
                       className={`
-                        h-12 
-                        transition-all duration-200 
+                        h-11 rounded-xl
+                        transition-all duration-200
                         ${
                           isActive
-                            ? 'bg-gradient-to-r from-[#8ff5ff]/10 to-transparent text-[#8ff5ff] border-l-2 border-[#8ff5ff] font-semibold'
-                            : 'text-[#a9abb3] hover:bg-[#22262f]/80 hover:text-[#ecedf6] border-l-2 border-transparent'
+                            ? 'bg-[#1c2028] text-[#ecedf6] font-semibold'
+                            : 'text-[#73757d] hover:bg-[#161a21] hover:text-[#a9abb3]'
                         }
                       `}
                     >
                       <span
-                        className="material-symbols-outlined text-xl transition-all"
-                        style={
-                          step.fill && isActive
-                            ? { fontVariationSettings: "'FILL' 1" }
-                            : {}
-                        }
+                        className={`material-symbols-outlined text-xl shrink-0 ${
+                          isActive ? 'text-[#8ff5ff]' : ''
+                        }`}
                       >
                         {step.icon}
                       </span>
-                      <span className="font-['Inter'] text-sm">
+                      <span className="font-['Inter'] text-sm truncate">
                         {step.label}
                       </span>
+                      {isActive && !isCollapsed && (
+                        <span className="ml-auto w-1.5 h-1.5 rounded-full bg-[#8ff5ff] shadow-[0_0_6px_#8ff5ff] shrink-0" />
+                      )}
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 )

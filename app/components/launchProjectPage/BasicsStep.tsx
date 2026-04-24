@@ -192,7 +192,7 @@ export function BasicsStep({ onStepChange }: BasicsStepProps = {}) {
           </div>
           <div className="lg:col-span-8 space-y-6">
             <div className="relative">
-              <label className="block text-xs font-['Space_Grotesk'] font-bold uppercase tracking-widest text-[#8ff5ff] mb-2">
+              <label className="block text-xs font-['Space_Grotesk'] font-bold uppercase tracking-widest text-[#a9abb3] mb-2">
                 Title
               </label>
               <Input
@@ -209,7 +209,7 @@ export function BasicsStep({ onStepChange }: BasicsStepProps = {}) {
             </div>
 
             <div className="relative">
-              <label className="block text-xs font-['Space_Grotesk'] font-bold uppercase tracking-widest text-[#8ff5ff] mb-2">
+              <label className="block text-xs font-['Space_Grotesk'] font-bold uppercase tracking-widest text-[#a9abb3] mb-2">
                 Subtitle
               </label>
               <Textarea
@@ -240,7 +240,7 @@ export function BasicsStep({ onStepChange }: BasicsStepProps = {}) {
           </div>
           <div className="lg:col-span-8 grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-4">
-              <label className="block text-xs font-['Space_Grotesk'] font-bold uppercase tracking-widest text-[#8ff5ff]">
+              <label className="block text-xs font-['Space_Grotesk'] font-bold uppercase tracking-widest text-[#a9abb3]">
                 Primary Category
               </label>
               <Select
@@ -462,7 +462,7 @@ export function BasicsStep({ onStepChange }: BasicsStepProps = {}) {
           </div>
           <div className="lg:col-span-8 space-y-8">
             <div className="space-y-4">
-              <label className="block text-xs font-['Space_Grotesk'] font-bold uppercase tracking-widest text-[#8ff5ff]">
+              <label className="block text-xs font-['Space_Grotesk'] font-bold uppercase tracking-widest text-[#a9abb3]">
                 Project Description
               </label>
               <div className="rounded-2xl overflow-hidden border border-[#45484f]/30">
@@ -477,7 +477,7 @@ export function BasicsStep({ onStepChange }: BasicsStepProps = {}) {
 
             <div className="space-y-4">
               <div className="flex items-center justify-between mt-2">
-                <label className="block text-xs font-['Space_Grotesk'] font-bold uppercase tracking-widest text-[#8ff5ff]">
+                <label className="block text-xs font-['Space_Grotesk'] font-bold uppercase tracking-widest text-[#a9abb3]">
                   Risks & Challenges
                 </label>
                 <span className="text-[10px] text-[#a9abb3] bg-[#22262f] px-2 py-1 rounded-full uppercase font-bold tracking-widest">
