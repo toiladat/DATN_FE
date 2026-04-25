@@ -133,7 +133,22 @@ export const ProjectDetailSchema = z.object({
     })
   ),
   milestones: z.array(MilestoneRestSchema),
-  projectMembers: z.array(z.any()), // Will type properly if needed for teams
+  projectMembers: z.array(
+    z.object({
+      id: z.string(),
+      userId: z.string(),
+      role: z.string(),
+      user: z
+        .object({
+          id: z.string(),
+          name: z.string().nullable().optional(),
+          avatar: z.string().nullable().optional(),
+          email: z.string().nullable().optional(),
+          walletAddress: z.string()
+        })
+        .optional()
+    })
+  ),
   createdAt: z.string().or(z.number()),
   updatedAt: z.string().or(z.number())
 })

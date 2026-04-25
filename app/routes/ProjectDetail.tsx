@@ -9,6 +9,7 @@ import { TopInvestors } from '@/components/projectPage/TopInvestors'
 import { ProjectTabs } from '@/components/projectPage/ProjectTabs'
 import { ProjectContent } from '@/components/projectPage/ProjectContent'
 import { ProjectMilestones } from '@/components/projectPage/ProjectMilestones'
+import { ProjectTeam } from '@/components/projectPage/ProjectTeam'
 
 export default function ProjectDetail() {
   const { id } = useParams<{ id: string }>()
@@ -79,11 +80,7 @@ export default function ProjectDetail() {
                 Reviews Coming Soon
               </div>
             )}
-            {activeTab === 'Teams' && (
-              <div className="p-8 text-center text-muted-foreground border border-border rounded-xl">
-                Team Members Coming Soon
-              </div>
-            )}
+            {activeTab === 'Teams' && <ProjectTeam project={project} />}
           </div>
         </div>
       </main>
