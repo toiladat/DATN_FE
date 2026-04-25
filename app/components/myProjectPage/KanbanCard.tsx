@@ -1,6 +1,5 @@
 import { useNavigate } from 'react-router'
 import { formatDistanceToNow, format, isValid } from 'date-fns'
-import { Card } from '@/components/ui/card'
 import type { ProjectSummary } from '@/schemas/projectSchema'
 import {
   Tooltip,
@@ -36,56 +35,64 @@ export function KanbanCard({ project }: { project: ProjectSummary }) {
   }
 
   return (
-    <Card
+    <div
       onClick={() => navigate(`/projects/${project.id}`)}
-      className="shrink-0 bg-[#161a21] border border-[#2e323b] hover:border-[#8ff5ff]/30 transition-all hover:-translate-y-0.5 hover:shadow-lg hover:shadow-[#8ff5ff]/5 group cursor-pointer p-3 rounded-lg flex flex-col gap-3"
+      className="shrink-0 bg-[#10131a] border border-[#2e323b]/60 hover:border-[#2e323b] transition-all duration-200 hover:-translate-y-px hover:shadow-lg hover:shadow-black/30 group cursor-pointer p-3 rounded-xl flex flex-col gap-3"
     >
-      {/* Header Area: Thumbnail (if any) + Title/Category */}
+      {/* Header: Thumbnail + Title */}
       <div className="flex gap-3 items-start">
-        {project.image && (
-          <div className="shrink-0 w-14 h-14 rounded overflow-hidden bg-[#22262f] border border-[#45484f]/30">
+        {project.image ? (
+          <div className="shrink-0 w-12 h-12 rounded-lg overflow-hidden bg-[#1c2028] border border-[#2e323b]/50">
             <img
               src={project.image}
               alt={project.title}
-              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
             />
+          </div>
+        ) : (
+          <div className="shrink-0 w-12 h-12 rounded-lg bg-[#1c2028] border border-[#2e323b]/50 flex items-center justify-center">
+            <span className="material-symbols-outlined text-[#45484f] text-2xl">
+              image
+            </span>
           </div>
         )}
         <div className="flex-1 min-w-0">
           {project.primaryCategory && (
-            <span className="inline-block mb-1.5 px-1.5 py-0.5 rounded text-[9px] font-bold text-[#8ff5ff] bg-[#8ff5ff]/10 uppercase tracking-widest border border-[#8ff5ff]/20">
+            <span className="inline-block mb-1 px-1.5 py-px rounded text-[9px] font-bold text-[#a9abb3] bg-[#1c2028] uppercase tracking-widest">
               {project.primaryCategory}
             </span>
           )}
-          <h4 className="text-[#ecedf6] font-['Space_Grotesk'] font-bold text-[15px] leading-snug line-clamp-2 group-hover:text-[#8ff5ff] transition-colors">
+          <h4 className="text-[#ecedf6] font-['Space_Grotesk'] font-semibold text-[13px] leading-snug line-clamp-2 group-hover:text-white transition-colors">
             {project.title}
           </h4>
         </div>
       </div>
 
-      {/* Progress or Status Area */}
+      {/* Progress/Status Area — logic unchanged */}
       {['pending', 'success', 'rejected'].includes(project.status) ||
       (project.status === 'active' && !(project.totalMilestones ?? 0)) ? (
-        <div className="mt-1 flex items-center justify-between text-[11px] bg-[#1a1e26] border border-[#45484f]/20 rounded-md py-1.5 px-2">
-          <span className="text-[#a9abb3] font-medium tracking-wide">
-            Expected Duration:
-          </span>
-          <span className="text-[#ecedf6] font-bold">
-            {safeFormat(project.startDate, 'MMM dd')} -{' '}
-            {safeFormat(project.endDate, 'MMM dd, yyyy')}
+        <div className="flex items-center justify-between text-[11px] bg-[#0d1017] border border-[#2e323b]/40 rounded-lg py-2 px-3">
+          <span className="text-[#45484f]">Duration</span>
+          <span className="text-[#a9abb3] font-mono font-bold">
+            {safeFormat(project.startDate, 'MMM d')} –{' '}
+            {safeFormat(project.endDate, 'MMM d, yy')}
           </span>
         </div>
       ) : project.status === 'active' && (project.totalMilestones ?? 0) > 0 ? (
-        <div className="space-y-1.5 mt-1">
+        <div className="space-y-1.5">
           <TooltipProvider delayDuration={100}>
             <Tooltip>
               <TooltipTrigger asChild>
-                <div className="w-full h-1.5 flex gap-[2px] cursor-help">
+                <div className="w-full h-1 flex gap-[2px] cursor-help">
                   {Array.from({ length: project.totalMilestones! }).map(
                     (_, idx) => (
                       <div
                         key={idx}
-                        className={`flex-1 h-full rounded-[1px] transition-colors duration-500 ${idx < (project.completedMilestones ?? 0) ? 'bg-[#8ff5ff] shadow-[0_0_8px_inset_rgba(143,245,255,0.3)]' : 'bg-[#10131a] border border-[#45484f]/20'}`}
+                        className={`flex-1 h-full rounded-full transition-colors duration-500 ${
+                          idx < (project.completedMilestones ?? 0)
+                            ? 'bg-[#4ade80]'
+                            : 'bg-[#1c2028]'
+                        }`}
                       />
                     )
                   )}
@@ -94,19 +101,19 @@ export function KanbanCard({ project }: { project: ProjectSummary }) {
               <TooltipContent
                 side="top"
                 sideOffset={8}
-                className="bg-[#22262f] text-white border-[#45484f]/50 shadow-xl font-bold font-['Space_Grotesk'] text-[10px] px-2 py-1"
+                className="bg-[#1c2028] text-[#ecedf6] border-[#2e323b] shadow-xl font-bold font-['Space_Grotesk'] text-[10px] px-2 py-1"
               >
                 <p>
                   {project.completedMilestones ?? 0} / {project.totalMilestones}{' '}
-                  Milestones Completed
+                  milestones
                 </p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
 
-          <div className="flex justify-between text-[11px] font-bold font-['Space_Grotesk'] text-[#8ff5ff]">
-            <span>Execution Progress</span>
-            <span>
+          <div className="flex justify-between text-[10px] font-bold font-mono text-[#45484f]">
+            <span>Milestones</span>
+            <span className="text-[#4ade80]">
               {Math.round(
                 ((project.completedMilestones ?? 0) /
                   project.totalMilestones!) *
@@ -117,18 +124,19 @@ export function KanbanCard({ project }: { project: ProjectSummary }) {
           </div>
         </div>
       ) : project.status === 'progress' && project.fundingGoal > 0 ? (
-        <div className="space-y-1.5 mt-1">
+        <div className="space-y-1.5">
           <TooltipProvider delayDuration={100}>
             <Tooltip>
               <TooltipTrigger asChild>
-                <div className="h-1.5 w-full bg-[#10131a] rounded-full overflow-hidden border border-[#45484f]/20 cursor-help">
+                <div className="h-1 w-full bg-[#0d1017] rounded-full overflow-hidden border border-[#2e323b]/40 cursor-help">
                   <div
-                    className="h-full bg-gradient-to-r from-[#8ff5ff] to-[#ac89ff] transition-all duration-500 rounded-full"
+                    className="h-full bg-[#8ff5ff] transition-all duration-500 rounded-full"
                     style={{
                       width: `${Math.min(
                         100,
                         (project.raisedAmount / project.fundingGoal) * 100
-                      )}%`
+                      )}%`,
+                      boxShadow: '0 0 8px rgba(143,245,255,0.4)'
                     }}
                   />
                 </div>
@@ -136,32 +144,32 @@ export function KanbanCard({ project }: { project: ProjectSummary }) {
               <TooltipContent
                 side="top"
                 sideOffset={8}
-                className="bg-[#22262f] text-white border-[#45484f]/50 shadow-xl font-bold font-['Space_Grotesk'] text-[10px] px-2 py-1"
+                className="bg-[#1c2028] text-[#ecedf6] border-[#2e323b] shadow-xl font-bold font-['Space_Grotesk'] text-[10px] px-2 py-1"
               >
                 <p>
                   {Math.round(
                     (project.raisedAmount / project.fundingGoal) * 100
                   )}
-                  % Funded
+                  % funded
                 </p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
-          <div className="flex justify-between text-[11px] font-bold font-['Space_Grotesk']">
+          <div className="flex justify-between text-[10px] font-mono font-bold">
             <span className="text-[#8ff5ff]">
               ${project.raisedAmount.toLocaleString()}
             </span>
-            <span className="text-[#73757d]">
+            <span className="text-[#45484f]">
               ${project.fundingGoal.toLocaleString()}
             </span>
           </div>
         </div>
       ) : null}
 
-      {/* Footer Area */}
-      <div className="flex items-center justify-between text-[11px] text-[#73757d] mt-1 relative">
-        <div className="flex items-center gap-1.5 font-medium">
-          <span className="material-symbols-outlined text-[13px]">
+      {/* Footer */}
+      <div className="flex items-center justify-between text-[10px] text-[#45484f] mt-0.5">
+        <div className="flex items-center gap-1">
+          <span className="material-symbols-outlined text-[12px]">
             schedule
           </span>
           <span>{safeDistance(project.updatedAt)}</span>
@@ -171,54 +179,54 @@ export function KanbanCard({ project }: { project: ProjectSummary }) {
           <DropdownMenuTrigger asChild>
             <button
               onClick={(e) => e.stopPropagation()}
-              className="text-[#a9abb3] hover:text-[#8ff5ff] opacity-0 group-hover:opacity-100 transition-colors p-0.5 rounded focus:outline-none flex outline-none"
+              className="text-[#45484f] hover:text-[#a9abb3] opacity-0 group-hover:opacity-100 transition-all p-0.5 rounded focus:outline-none flex outline-none"
             >
-              <span className="material-symbols-outlined text-[18px]">
+              <span className="material-symbols-outlined text-[16px]">
                 more_horiz
               </span>
             </button>
           </DropdownMenuTrigger>
           <DropdownMenuContent
-            align="start"
+            align="end"
             sideOffset={8}
-            className="bg-[#1a1e26] border-[#45484f]/20 text-[#ecedf6] min-w-[140px] font-['Space_Grotesk'] text-[11px] shadow-2xl p-1 z-50"
+            className="bg-[#10131a] border-[#2e323b] text-[#ecedf6] min-w-[140px] font-['Space_Grotesk'] text-[12px] shadow-2xl p-1 z-50"
           >
             <DropdownMenuItem
-              className="focus:bg-[#8ff5ff]/10 focus:text-[#8ff5ff] cursor-pointer outline-none rounded py-1.5 px-2 font-bold"
+              className="focus:bg-[#1c2028] focus:text-[#ecedf6] cursor-pointer outline-none rounded py-1.5 px-2.5 font-medium"
               onSelect={(e) => {
                 e.preventDefault()
                 navigate(`/projects/${project.id}`)
               }}
             >
-              View Details
+              View details
             </DropdownMenuItem>
 
-            {project.status === 'pending' && (
+            {isPending && (
               <>
-                <DropdownMenuSeparator className="bg-[#45484f]/20 my-1" />
+                <DropdownMenuSeparator className="bg-[#2e323b] my-1" />
                 <DropdownMenuItem
-                  className="focus:bg-[#ff716c]/10 focus:text-[#ff716c] text-[#ff716c] cursor-pointer outline-none rounded py-1.5 px-2 font-bold"
+                  className="focus:bg-[#ff716c]/10 focus:text-[#ff716c] text-[#ff716c] cursor-pointer outline-none rounded py-1.5 px-2.5 font-medium"
                   onClick={(e) => e.stopPropagation()}
                 >
-                  Delete Project
+                  Delete project
                 </DropdownMenuItem>
               </>
             )}
 
             {project.status === 'active' && (
               <>
-                <DropdownMenuSeparator className="bg-[#45484f]/20 my-1" />
+                <DropdownMenuSeparator className="bg-[#2e323b] my-1" />
                 <DropdownMenuItem
-                  className="focus:bg-[#8ff5ff]/10 focus:text-[#8ff5ff] text-[#8ff5ff] font-bold cursor-pointer outline-none rounded py-1.5 px-2"
+                  className="focus:bg-[#4ade80]/10 focus:text-[#4ade80] text-[#4ade80] cursor-pointer outline-none rounded py-1.5 px-2.5 font-medium"
                   onClick={(e) => e.stopPropagation()}
                 >
-                  Update Progress
+                  Update progress
                 </DropdownMenuItem>
               </>
             )}
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-    </Card>
+    </div>
   )
 }

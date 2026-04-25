@@ -1,53 +1,25 @@
 import type { ProjectSummary } from '@/schemas/projectSchema'
+import { Link } from 'react-router'
 
 export function MyProjectsHeader({ projects }: { projects: ProjectSummary[] }) {
-  const totalRaised = projects.reduce((sum, p) => sum + p.raisedAmount, 0)
-  const activeProjects = projects.filter((p) => p.status === 'active').length
-
-  const completedProjects = projects.filter(
-    (p) => p.status === 'success' || p.status === 'rejected'
-  )
-  const successProjects = projects.filter((p) => p.status === 'success')
-  const successRate =
-    completedProjects.length > 0
-      ? Math.round((successProjects.length / completedProjects.length) * 100)
-      : 0
-
   return (
-    <header className="mb-6 shrink-0 flex items-center justify-start border-b border-[#45484f]/15 pb-4">
-      {/* Dashboard Stats */}
-      <div className="flex gap-6 lg:gap-8 bg-[#161a21]/40 border border-[#2e323b] rounded-xl px-4 py-2.5 backdrop-blur-sm">
-        <div className="flex flex-col">
-          <p className="text-[#73757d] text-[10px] font-bold uppercase tracking-widest mb-0.5">
-            Total Raised
-          </p>
-          <p className="text-xl font-['Space_Grotesk'] font-bold text-[#8ff5ff] leading-none">
-            ${totalRaised.toLocaleString()}
-          </p>
-        </div>
-
-        <div className="w-[1px] bg-[#45484f]/30 self-stretch" />
-
-        <div className="flex flex-col">
-          <p className="text-[#73757d] text-[10px] font-bold uppercase tracking-widest mb-0.5">
-            Active
-          </p>
-          <p className="text-xl font-['Space_Grotesk'] font-bold text-[#ecedf6] leading-none">
-            {activeProjects}
-          </p>
-        </div>
-
-        <div className="w-[1px] bg-[#45484f]/30 self-stretch" />
-
-        <div className="flex flex-col">
-          <p className="text-[#73757d] text-[10px] font-bold uppercase tracking-widest mb-0.5">
-            Success Rate
-          </p>
-          <p className="text-xl font-['Space_Grotesk'] font-bold text-[#ac89ff] leading-none">
-            {successRate}%
-          </p>
-        </div>
+    <header className="mb-6 shrink-0 flex items-center justify-between border-b border-[#2e323b]/50 pb-5">
+      <div>
+        <p className="text-[10px] font-bold tracking-[0.25em] text-[#45484f] uppercase font-mono mb-1">
+          RadiantVoid / My Projects
+        </p>
+        <h1 className="text-2xl font-['Space_Grotesk'] font-bold text-[#ecedf6] tracking-tight">
+          Project Board
+        </h1>
       </div>
+
+      <Link
+        to="/launch"
+        className="hidden md:flex items-center gap-2 px-4 py-2 bg-[#8ff5ff] hover:bg-[#a8f8ff] text-[#00383d] rounded-xl text-xs font-bold transition-all duration-200 active:scale-95 shadow-[0_0_16px_rgba(143,245,255,0.2)]"
+      >
+        <span className="material-symbols-outlined text-base">add</span>
+        New project
+      </Link>
     </header>
   )
 }

@@ -4,12 +4,12 @@ import { KanbanColumn } from '@/components/myProjectPage/KanbanColumn'
 import type { ProjectSummary, ProjectStatus } from '@/schemas/projectSchema'
 import { projectRequests } from '@/apis/requests/project'
 
-const COLUMNS: { id: ProjectStatus; title: string; color: string }[] = [
-  { id: 'pending', title: 'Pending Approval', color: 'text-[#a9abb3]' },
-  { id: 'progress', title: 'Funding in Progress', color: 'text-[#8ff5ff]' },
-  { id: 'active', title: 'Active (Executing)', color: 'text-[#4ade80]' },
-  { id: 'success', title: 'Success', color: 'text-[#ac89ff]' },
-  { id: 'rejected', title: 'Rejected', color: 'text-[#ff716c]' }
+const COLUMNS: { id: ProjectStatus; title: string }[] = [
+  { id: 'pending', title: 'Pending Approval' },
+  { id: 'progress', title: 'Funding in Progress' },
+  { id: 'active', title: 'Active' },
+  { id: 'success', title: 'Success' },
+  { id: 'rejected', title: 'Rejected' }
 ]
 
 export default function MyProject() {
@@ -59,8 +59,8 @@ export default function MyProject() {
           {COLUMNS.map((column) => (
             <KanbanColumn
               key={column.id}
+              id={column.id}
               title={column.title}
-              color={column.color}
               projects={getProjectsByStatus(column.id)}
             />
           ))}
