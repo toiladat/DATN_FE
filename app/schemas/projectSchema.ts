@@ -76,8 +76,9 @@ export const MilestoneUpdateRestSchema = z.object({
   completed: z.string(),
   blockers: z.string(),
   images: z.array(z.string()),
-  demoUrl: z.string().optional(),
-  link: z.string().optional()
+  video: z.string(),
+  link: z.string().optional(),
+  isLate: z.boolean().optional()
 })
 export type MilestoneUpdateRest = z.infer<typeof MilestoneUpdateRestSchema>
 

@@ -220,12 +220,12 @@ export function ProjectMilestones({ project }: { project: ProjectDetail }) {
                             </div>
 
                             {(m.milestoneUpdates.images?.length > 0 ||
-                              m.milestoneUpdates.demoUrl ||
+                              m.milestoneUpdates.video ||
                               m.milestoneUpdates.link) && (
                               <div className="mt-4 pt-4 border-t border-[#8ff5ff]/10 flex flex-wrap gap-3">
-                                {m.milestoneUpdates.demoUrl && (
+                                {m.milestoneUpdates.video && (
                                   <a
-                                    href={m.milestoneUpdates.demoUrl}
+                                    href={m.milestoneUpdates.video}
                                     target="_blank"
                                     rel="noreferrer"
                                     className="inline-flex px-3 py-1.5 rounded bg-[#8ff5ff]/20 text-xs font-bold text-[#8ff5ff] hover:bg-[#8ff5ff]/30 transition-colors items-center gap-1.5"

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router'
 import { ArrowLeft, Loader2 } from 'lucide-react'
 import { useGetProjectById } from '@/apis/queries/project'
@@ -10,10 +10,19 @@ import { ProjectTabs } from '@/components/projectPage/ProjectTabs'
 import { ProjectContent } from '@/components/projectPage/ProjectContent'
 import { ProjectMilestones } from '@/components/projectPage/ProjectMilestones'
 import { ProjectTeam } from '@/components/projectPage/ProjectTeam'
+import { ProjectUpdates } from '@/components/projectPage/ProjectUpdates'
+import { getCurrentUserId } from '@/lib/auth'
 
 export default function ProjectDetail() {
   const { id } = useParams<{ id: string }>()
   const [activeTab, setActiveTab] = useState('Story')
+  const [currentUserId, setCurrentUserId] = useState<string | null>(() =>
+    getCurrentUserId()
+  )
+
+  useEffect(() => {
+    setCurrentUserId(getCurrentUserId())
+  }, [])
 
   const { data: project, isLoading, isError } = useGetProjectById(id || '')
 
@@ -71,9 +80,7 @@ export default function ProjectDetail() {
               <ProjectMilestones project={project} />
             )}
             {activeTab === 'Updates' && (
-              <div className="p-8 text-center text-muted-foreground border border-border rounded-xl">
-                Updates Coming Soon
-              </div>
+              <ProjectUpdates project={project} currentUserId={currentUserId} />
             )}
             {activeTab === 'Review' && (
               <div className="p-8 text-center text-muted-foreground border border-border rounded-xl">

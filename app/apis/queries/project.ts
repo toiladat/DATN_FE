@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { projectRequests } from '../requests/project'
 import type { ProjectDetail } from '@/schemas/projectSchema'
+import type { MilestoneUpdatePayload } from '../requests/project'
 
 export const projectKeys = {
   all: ['projects'] as const,
@@ -19,5 +20,16 @@ export function useGetProjectById(id: string) {
     },
     enabled: !!id,
     staleTime: 5 * 60 * 1000 // 5 minutes
+  })
+}
+
+export function useUpdateMilestone(projectId: string) {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: (payload: MilestoneUpdatePayload) =>
+      projectRequests.updateMilestone(payload),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: projectKeys.detail(projectId) })
+    }
   })
 }
