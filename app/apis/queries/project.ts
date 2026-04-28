@@ -14,18 +14,22 @@ import type { MilestoneUpdatePayload } from '../requests/project'
 
 export const projectKeys = {
   all: ['projects'] as const,
-  lists: (page: number, limit: number) =>
-    [...projectKeys.all, 'list', page, limit] as const,
+  lists: (page: number, limit: number, search?: string) =>
+    [...projectKeys.all, 'list', page, limit, search] as const,
   myProjects: () => [...projectKeys.all, 'my-projects'] as const,
   details: () => [...projectKeys.all, 'detail'] as const,
   detail: (id: string) => [...projectKeys.details(), id] as const
 }
 
-export function useGetProjects(page: number = 1, limit: number = 6) {
+export function useGetProjects(
+  page: number = 1,
+  limit: number = 6,
+  search: string = ''
+) {
   return useQuery({
-    queryKey: projectKeys.lists(page, limit),
+    queryKey: projectKeys.lists(page, limit, search),
     queryFn: async (): Promise<PaginatedProjectSummary> => {
-      const { data } = await projectRequests.getAllProjects(page, limit)
+      const { data } = await projectRequests.getAllProjects(page, limit, search)
       return data
     },
     placeholderData: keepPreviousData

@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useState } from 'react'
 import { SearchFilter } from '@/components/projectsPage/SearchFilter'
 import { ProjectGrid } from '@/components/projectsPage/ProjectGrid'
 import { Pagination } from '@/components/projectsPage/Pagination'
@@ -9,6 +9,7 @@ const ITEMS_PER_PAGE = 6
 
 export default function Projects() {
   const [currentPage, setCurrentPage] = useState(1)
+
   const { data, isLoading, isError } = useGetProjects(
     currentPage,
     ITEMS_PER_PAGE
@@ -16,8 +17,6 @@ export default function Projects() {
 
   const projects = data?.projects || []
   const totalPages = data?.totalPages || 0
-
-  // Reset page when search is added later
 
   return (
     <div className="bg-[#0a0c10] text-[#ecedf6] min-h-screen relative overflow-hidden font-['Space_Grotesk']">

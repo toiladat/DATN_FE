@@ -14,8 +14,18 @@ export type MilestoneUpdatePayload = {
 export const projectRequests = {
   createProject: (data: ProjectSubmission) => apiClient.post('/projects', data),
   getMyProjects: () => apiClient.get('/projects/me'),
-  getAllProjects: (page: number = 1, limit: number = 6) =>
-    apiClient.get(`/projects?page=${page}&limit=${limit}`),
+  getAllProjects: (
+    page: number = 1,
+    limit: number = 6,
+    search: string = ''
+  ) => {
+    const params = new URLSearchParams({
+      page: String(page),
+      limit: String(limit)
+    })
+    if (search.trim()) params.set('search', search.trim())
+    return apiClient.get(`/projects?${params.toString()}`)
+  },
   deleteProject: (id: string) => apiClient.delete(`/projects/${id}`),
   getProjectById: (id: string) => apiClient.get(`/projects/${id}`),
   updateMilestone: (payload: MilestoneUpdatePayload) =>
