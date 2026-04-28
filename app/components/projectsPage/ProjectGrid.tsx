@@ -15,6 +15,7 @@ export function ProjectGrid({ projects }: { projects: ProjectSummary[] }) {
 
   return (
     <motion.section
+      key={projects.map((p) => p.id).join('-')}
       variants={containerVariants}
       initial="hidden"
       animate="show"

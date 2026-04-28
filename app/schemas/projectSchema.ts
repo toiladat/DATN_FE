@@ -72,6 +72,17 @@ export const ProjectSummarySchema = z.object({
 })
 export type ProjectSummary = z.infer<typeof ProjectSummarySchema>
 
+export const PaginatedProjectSummarySchema = z.object({
+  projects: z.array(ProjectSummarySchema),
+  total: z.number(),
+  page: z.number(),
+  limit: z.number(),
+  totalPages: z.number()
+})
+export type PaginatedProjectSummary = z.infer<
+  typeof PaginatedProjectSummarySchema
+>
+
 export const MilestoneUpdateRestSchema = z.object({
   completed: z.string(),
   blockers: z.string(),

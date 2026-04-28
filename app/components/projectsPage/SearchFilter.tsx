@@ -1,6 +1,7 @@
 import { Search, SlidersHorizontal, TrendingUp, Clock, Zap } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { useState } from 'react'
+import { useGetCategories } from '@/apis/queries/category'
 
 const SORT_OPTIONS = [
   { value: 'trending', label: 'Trending', icon: TrendingUp },
@@ -8,18 +9,15 @@ const SORT_OPTIONS = [
   { value: 'most_funded', label: 'Most funded', icon: Zap }
 ]
 
-const CATEGORY_FILTERS = [
-  { value: 'ALL', label: 'All' },
-  { value: 'DEFI', label: 'DeFi' },
-  { value: 'AI', label: 'AI' },
-  { value: 'GAMING', label: 'Gaming' },
-  { value: 'INFRASTRUCTURE', label: 'Infrastructure' },
-  { value: 'METAVERSE', label: 'Metaverse' }
-]
-
 export function SearchFilter() {
-  const [activeFilter, setActiveFilter] = useState('ALL')
+  const [activeFilter, setActiveFilter] = useState('all')
   const [activeSort, setActiveSort] = useState('trending')
+  const { data: categories = [] } = useGetCategories()
+
+  const categoryFilters = [
+    { value: 'all', label: 'All' },
+    ...categories.map((c) => ({ value: c.slug, label: c.name }))
+  ]
 
   return (
     <motion.section
@@ -81,7 +79,7 @@ export function SearchFilter() {
 
       {/* Category filter — pill row */}
       <div className="flex items-center gap-2 mt-4 overflow-x-auto pb-0.5 scrollbar-hide">
-        {CATEGORY_FILTERS.map(({ value, label }) => (
+        {categoryFilters.map(({ value, label }) => (
           <button
             key={value}
             onClick={() => setActiveFilter(value)}

@@ -21,9 +21,10 @@ function getAccentColor(category: string | undefined, index: number): string {
 }
 
 // ─── Status: BE dùng 'active' | 'progress' | 'pending' | 'success' | 'rejected'
-// FE coi 'active' và 'progress' là đang gọi vốn (FUNDING)
+// 'progress' = đang gây quỹ (FUNDING) → hiển thị thanh tiến độ funding
+// 'active'   = đang thực thi (ACTIVE)  → hiển thị thanh milestone stages
 function isFundingStatus(status: ProjectSummary['status']): boolean {
-  return status === 'active' || status === 'progress'
+  return status === 'progress'
 }
 
 // ─── Props ───────────────────────────────────────────────────────────────────
@@ -98,8 +99,8 @@ export function ProjectDirectoryCard({ project, index = 0 }: Props) {
           />
           <div className="absolute inset-0 bg-gradient-to-t from-[#10131a] via-[#10131a]/50 to-transparent" />
 
-          {/* Badges */}
-          <div className="absolute top-3 left-3 flex gap-1.5 z-10">
+          {/* Category Badge (Top Left) */}
+          <div className="absolute top-3 left-3 z-10">
             {project.primaryCategory && (
               <span
                 className="bg-[#0a0c10]/90 backdrop-blur-md px-2.5 py-1 rounded-full border border-[#2e323b] text-[9px] font-bold uppercase tracking-[0.15em] shadow-lg"
@@ -108,15 +109,24 @@ export function ProjectDirectoryCard({ project, index = 0 }: Props) {
                 {project.primaryCategory}
               </span>
             )}
+          </div>
+
+          {/* Status Badge (Top Right) */}
+          <div className="absolute top-3 right-3 z-10">
             {isFunding ? (
               <span className="bg-[#0a0c10]/90 backdrop-blur-md text-[#8ff5ff] px-2.5 py-1 rounded-full text-[9px] font-bold border border-[#8ff5ff]/30 uppercase tracking-[0.15em] flex items-center gap-1.5 shadow-lg">
                 <span className="w-1.5 h-1.5 rounded-full bg-[#8ff5ff] animate-pulse shadow-[0_0_8px_#8ff5ff]"></span>
                 FUNDING
               </span>
+            ) : project.status === 'active' ? (
+              <span className="bg-[#0a0c10]/90 backdrop-blur-md text-[#ac89ff] px-2.5 py-1 rounded-full text-[9px] font-bold border border-[#ac89ff]/30 uppercase tracking-[0.15em] flex items-center gap-1.5 shadow-lg">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#ac89ff] animate-pulse shadow-[0_0_8px_#ac89ff]"></span>
+                ACTIVE
+              </span>
             ) : (
               <span className="bg-[#0a0c10]/90 backdrop-blur-md text-[#a9abb3] px-2.5 py-1 rounded-full text-[9px] font-bold border border-[#2e323b] uppercase tracking-[0.15em] flex items-center gap-1.5 shadow-lg">
                 <Activity className="w-3 h-3" />
-                DEVELOPING
+                {project.status?.toUpperCase() ?? 'PENDING'}
               </span>
             )}
           </div>
@@ -200,7 +210,7 @@ export function ProjectDirectoryCard({ project, index = 0 }: Props) {
                   ) : (
                     <div className="h-1 w-full bg-[#161a21] rounded-full border border-[#2e323b]/50" />
                   )}
-                  <div className="flex justify-between text-[11px] font-mono text-[#a9abb3] h-[16px] items-center">
+                  <div className="flex gap-2 text-[11px] font-mono text-[#a9abb3] h-[16px] items-center">
                     <span>UPDATED</span>
                     <span>
                       {new Date(project.updatedAt).toLocaleDateString()}
