@@ -18,7 +18,8 @@ export const projectRequests = {
     page: number = 1,
     limit: number = 6,
     search: string = '',
-    categorySlug: string = ''
+    categorySlug: string = '',
+    sort: string = 'newest'
   ) => {
     const params = new URLSearchParams({
       page: String(page),
@@ -26,6 +27,7 @@ export const projectRequests = {
     })
     if (search.trim()) params.set('search', search.trim())
     if (categorySlug) params.set('categorySlug', categorySlug)
+    if (sort && sort !== 'trending') params.set('sort', sort)
     return apiClient.get(`/projects?${params.toString()}`)
   },
   deleteProject: (id: string) => apiClient.delete(`/projects/${id}`),

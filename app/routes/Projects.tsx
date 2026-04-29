@@ -10,9 +10,15 @@ const ITEMS_PER_PAGE = 6
 export default function Projects() {
   const [currentPage, setCurrentPage] = useState(1)
   const [selectedCategory, setSelectedCategory] = useState('')
+  const [selectedSort, setSelectedSort] = useState('trending')
 
   const handleCategoryChange = (slug: string) => {
     setSelectedCategory(slug)
+    setCurrentPage(1)
+  }
+
+  const handleSortChange = (sort: string) => {
+    setSelectedSort(sort)
     setCurrentPage(1)
   }
 
@@ -20,7 +26,8 @@ export default function Projects() {
     currentPage,
     ITEMS_PER_PAGE,
     '',
-    selectedCategory
+    selectedCategory,
+    selectedSort
   )
 
   const projects = data?.projects || []
@@ -36,6 +43,8 @@ export default function Projects() {
         <SearchFilter
           selectedCategory={selectedCategory}
           onCategoryChange={handleCategoryChange}
+          selectedSort={selectedSort}
+          onSortChange={handleSortChange}
         />
 
         {isLoading ? (

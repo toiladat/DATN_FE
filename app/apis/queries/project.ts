@@ -18,8 +18,18 @@ export const projectKeys = {
     page: number,
     limit: number,
     search?: string,
-    categorySlug?: string
-  ) => [...projectKeys.all, 'list', page, limit, search, categorySlug] as const,
+    categorySlug?: string,
+    sort?: string
+  ) =>
+    [
+      ...projectKeys.all,
+      'list',
+      page,
+      limit,
+      search,
+      categorySlug,
+      sort
+    ] as const,
   myProjects: () => [...projectKeys.all, 'my-projects'] as const,
   details: () => [...projectKeys.all, 'detail'] as const,
   detail: (id: string) => [...projectKeys.details(), id] as const
@@ -29,16 +39,18 @@ export function useGetProjects(
   page: number = 1,
   limit: number = 6,
   search: string = '',
-  categorySlug: string = ''
+  categorySlug: string = '',
+  sort: string = 'newest'
 ) {
   return useQuery({
-    queryKey: projectKeys.lists(page, limit, search, categorySlug),
+    queryKey: projectKeys.lists(page, limit, search, categorySlug, sort),
     queryFn: async (): Promise<PaginatedProjectSummary> => {
       const { data } = await projectRequests.getAllProjects(
         page,
         limit,
         search,
-        categorySlug
+        categorySlug,
+        sort
       )
       return data
     },

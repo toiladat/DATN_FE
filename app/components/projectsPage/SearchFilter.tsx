@@ -22,13 +22,16 @@ const SORT_OPTIONS = [
 interface SearchFilterProps {
   selectedCategory?: string
   onCategoryChange?: (slug: string) => void
+  selectedSort?: string
+  onSortChange?: (sort: string) => void
 }
 
 export function SearchFilter({
   selectedCategory = '',
-  onCategoryChange
+  onCategoryChange,
+  selectedSort = 'newest',
+  onSortChange
 }: SearchFilterProps) {
-  const [activeSort, setActiveSort] = useState('trending')
   const [searchInput, setSearchInput] = useState('')
   const [isFocused, setIsFocused] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
@@ -165,14 +168,14 @@ export function SearchFilter({
           {SORT_OPTIONS.map(({ value, label, icon: Icon }) => (
             <button
               key={value}
-              onClick={() => setActiveSort(value)}
+              onClick={() => onSortChange?.(value)}
               className={`relative flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-xs font-semibold transition-all duration-200 ${
-                activeSort === value
+                selectedSort === value
                   ? 'bg-[#1a1f2a] text-[#ecedf6]'
                   : 'text-[#73757d] hover:text-[#a9abb3]'
               }`}
             >
-              {activeSort === value && (
+              {selectedSort === value && (
                 <motion.span
                   layoutId="sort-active"
                   className="absolute inset-0 rounded-lg border border-[#2e323b]"
@@ -180,7 +183,7 @@ export function SearchFilter({
                 />
               )}
               <Icon
-                className={`w-3 h-3 relative z-10 ${activeSort === value ? 'text-[#8ff5ff]' : ''}`}
+                className={`w-3 h-3 relative z-10 ${selectedSort === value ? 'text-[#8ff5ff]' : ''}`}
               />
               <span className="relative z-10">{label}</span>
             </button>
