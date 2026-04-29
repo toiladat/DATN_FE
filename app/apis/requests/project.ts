@@ -35,5 +35,12 @@ export const projectRequests = {
   updateMilestone: (payload: MilestoneUpdatePayload) =>
     apiClient.post('/projects/milestone', payload),
   likeProject: (id: string) => apiClient.post(`/projects/${id}/like`),
-  unlikeProject: (id: string) => apiClient.delete(`/projects/${id}/like`)
+  unlikeProject: (id: string) => apiClient.delete(`/projects/${id}/like`),
+  getReviews: (id: string) => apiClient.get(`/projects/${id}/reviews`),
+  createReview: (id: string, payload: { content: string; parentId?: string }) =>
+    apiClient.post(`/projects/${id}/reviews`, payload),
+  updateReview: (id: string, reviewId: string, payload: { content: string }) =>
+    apiClient.put(`/projects/${id}/reviews/${reviewId}`, payload),
+  deleteReview: (id: string, reviewId: string) =>
+    apiClient.delete(`/projects/${id}/reviews/${reviewId}`)
 }

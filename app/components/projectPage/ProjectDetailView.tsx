@@ -10,6 +10,7 @@ import { ProjectContent } from '@/components/projectPage/ProjectContent'
 import { ProjectMilestones } from '@/components/projectPage/ProjectMilestones'
 import { ProjectTeam } from '@/components/projectPage/ProjectTeam'
 import { ProjectUpdates } from '@/components/projectPage/ProjectUpdates'
+import { ProjectReviews } from '@/components/projectPage/ProjectReviews'
 import type { ProjectDetail } from '@/schemas/projectSchema'
 
 // ─── Tabs theo status ────────────────────────────────────────────────────────
@@ -174,9 +175,14 @@ export function ProjectDetailView({
             <ProjectUpdates project={project} currentUserId={currentUserId} />
           )}
           {safeTab === 'Review' && (
-            <div className="p-8 text-center text-[#73757d] border border-[#2e323b]/50 rounded-xl">
-              Reviews Coming Soon
-            </div>
+            <ProjectReviews
+              projectId={project.id}
+              currentUserId={currentUserId}
+              ownerId={project.userId}
+              memberUserIds={(project.projectMembers || []).map(
+                (m) => m.userId
+              )}
+            />
           )}
           {safeTab === 'Teams' && <ProjectTeam project={project} />}
         </div>

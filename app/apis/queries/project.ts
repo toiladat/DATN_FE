@@ -8,7 +8,8 @@ import { projectRequests } from '../requests/project'
 import type {
   ProjectDetail,
   ProjectSummary,
-  PaginatedProjectSummary
+  PaginatedProjectSummary,
+  Review
 } from '@/schemas/projectSchema'
 import type { MilestoneUpdatePayload } from '../requests/project'
 
@@ -90,6 +91,61 @@ export function useToggleLike() {
         : projectRequests.likeProject(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: projectKeys.all })
+    }
+  })
+}
+
+export function useGetProjectReviews(projectId: string) {
+  return useQuery({
+    queryKey: [...projectKeys.detail(projectId), 'reviews'],
+    queryFn: async (): Promise<Review[]> => {
+      const { data } = await projectRequests.getReviews(projectId)
+      return data
+    },
+    enabled: !!projectId
+  })
+}
+
+export function useAddReview(projectId: string) {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: (payload: { content: string; parentId?: string }) =>
+      projectRequests.createReview(projectId, payload),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [...projectKeys.detail(projectId), 'reviews']
+      })
+    }
+  })
+}
+
+export function useUpdateReview(projectId: string) {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: ({
+      reviewId,
+      content
+    }: {
+      reviewId: string
+      content: string
+    }) => projectRequests.updateReview(projectId, reviewId, { content }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [...projectKeys.detail(projectId), 'reviews']
+      })
+    }
+  })
+}
+
+export function useDeleteReview(projectId: string) {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: (reviewId: string) =>
+      projectRequests.deleteReview(projectId, reviewId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [...projectKeys.detail(projectId), 'reviews']
+      })
     }
   })
 }

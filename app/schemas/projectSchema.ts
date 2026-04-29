@@ -169,3 +169,21 @@ export const ProjectDetailSchema = z.object({
   updatedAt: z.string().or(z.number())
 })
 export type ProjectDetail = z.infer<typeof ProjectDetailSchema>
+
+export const UserBasicInfoSchema = z.object({
+  id: z.string(),
+  name: z.string().nullable().optional(),
+  avatar: z.string().nullable().optional(),
+  walletAddress: z.string()
+})
+export type UserBasicInfo = z.infer<typeof UserBasicInfoSchema>
+
+export type Review = {
+  id: string
+  content: string
+  projectId: string
+  userId: string
+  createdAt: number
+  user?: UserBasicInfo
+  replies?: Review[]
+}
