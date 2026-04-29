@@ -80,3 +80,16 @@ export function useUpdateMilestone(projectId: string) {
     }
   })
 }
+
+export function useToggleLike() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: ({ id, isLiked }: { id: string; isLiked: boolean }) =>
+      isLiked
+        ? projectRequests.unlikeProject(id)
+        : projectRequests.likeProject(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: projectKeys.all })
+    }
+  })
+}

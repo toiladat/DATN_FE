@@ -1,7 +1,9 @@
-import { Terminal, Activity, Shield, ArrowRight } from 'lucide-react'
+import { Terminal, Activity, Shield, ArrowRight, Heart } from 'lucide-react'
 import { Link } from 'react-router'
 import { motion } from 'framer-motion'
+import { useState, useEffect } from 'react'
 import type { ProjectSummary } from '@/schemas/projectSchema'
+import { useToggleLike } from '@/apis/queries/project'
 
 // ─── Màu accent tự động từ category ─────────────────────────────────────────
 const CATEGORY_COLORS: Record<string, string> = {
@@ -45,6 +47,20 @@ const itemVariant = {
 export function ProjectDirectoryCard({ project, index = 0 }: Props) {
   const isFunding = isFundingStatus(project.status)
   const accentColor = getAccentColor(project.primaryCategory, index)
+
+  const [isLiked, setIsLiked] = useState(project.isLiked ?? false)
+  const { mutate: toggleLike } = useToggleLike()
+
+  useEffect(() => {
+    setIsLiked(project.isLiked ?? false)
+  }, [project.isLiked])
+
+  const handleLike = (e: React.MouseEvent) => {
+    e.preventDefault() // prevent navigating to project detail
+    // Optimistic UI update
+    setIsLiked(!isLiked)
+    toggleLike({ id: project.id, isLiked })
+  }
 
   // ── Funding: tính % progress từ raisedAmount / fundingGoal ───────────────
   const progress =
@@ -287,9 +303,9 @@ export function ProjectDirectoryCard({ project, index = 0 }: Props) {
           </div>
 
           {/* ── CTA ─────────────────────────────────────────────────────── */}
-          <div className="pt-3">
+          <div className="pt-3 flex gap-3">
             <button
-              className="w-full py-2.5 bg-[#161a21] hover:bg-[#1a1f28] border border-[#2e323b] rounded-xl font-['Space_Grotesk'] font-bold transition-all duration-500 ease-out text-[10px] uppercase tracking-widest flex justify-center items-center gap-2"
+              className="flex-1 py-2.5 bg-[#161a21] hover:bg-[#1a1f28] border border-[#2e323b] rounded-xl font-['Space_Grotesk'] font-bold transition-all duration-500 ease-out text-[10px] uppercase tracking-widest flex justify-center items-center gap-2"
               style={{ boxShadow: '0 4px 20px rgba(0,0,0,0.3)' }}
             >
               <span style={{ color: accentColor }}>
@@ -298,6 +314,21 @@ export function ProjectDirectoryCard({ project, index = 0 }: Props) {
               <ArrowRight
                 className="w-3.5 h-3.5"
                 style={{ color: accentColor }}
+              />
+            </button>
+
+            <button
+              onClick={handleLike}
+              className={`w-10 flex items-center justify-center rounded-xl border transition-all duration-500 hover:scale-105 active:scale-95 ${
+                isLiked
+                  ? 'bg-[#ff2a5f]/10 border-[#ff2a5f] shadow-[0_0_15px_rgba(255,42,95,0.3)]'
+                  : 'bg-[#161a21] border-[#2e323b] hover:border-[#4d5363] hover:bg-[#1a1f28]'
+              }`}
+            >
+              <Heart
+                className={`w-4 h-4 transition-all duration-500 ${
+                  isLiked ? 'text-[#ff2a5f] fill-[#ff2a5f]' : 'text-[#73757d]'
+                }`}
               />
             </button>
           </div>

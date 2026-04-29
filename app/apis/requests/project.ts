@@ -33,5 +33,7 @@ export const projectRequests = {
   deleteProject: (id: string) => apiClient.delete(`/projects/${id}`),
   getProjectById: (id: string) => apiClient.get(`/projects/${id}`),
   updateMilestone: (payload: MilestoneUpdatePayload) =>
-    apiClient.post('/projects/milestone', payload)
+    apiClient.post('/projects/milestone', payload),
+  likeProject: (id: string) => apiClient.post(`/projects/${id}/like`),
+  unlikeProject: (id: string) => apiClient.delete(`/projects/${id}/like`)
 }
