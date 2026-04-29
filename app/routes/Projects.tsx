@@ -9,10 +9,18 @@ const ITEMS_PER_PAGE = 6
 
 export default function Projects() {
   const [currentPage, setCurrentPage] = useState(1)
+  const [selectedCategory, setSelectedCategory] = useState('')
+
+  const handleCategoryChange = (slug: string) => {
+    setSelectedCategory(slug)
+    setCurrentPage(1)
+  }
 
   const { data, isLoading, isError } = useGetProjects(
     currentPage,
-    ITEMS_PER_PAGE
+    ITEMS_PER_PAGE,
+    '',
+    selectedCategory
   )
 
   const projects = data?.projects || []
@@ -25,7 +33,10 @@ export default function Projects() {
       <div className="absolute bottom-1/4 left-1/4 w-[500px] h-[500px] bg-[#ac89ff]/5 rounded-[100%] blur-[150px] pointer-events-none mix-blend-screen" />
 
       <main className="pt-32 pb-24 px-4 md:px-8 lg:px-12 xl:px-24 max-w-[1600px] mx-auto w-full relative z-10">
-        <SearchFilter />
+        <SearchFilter
+          selectedCategory={selectedCategory}
+          onCategoryChange={handleCategoryChange}
+        />
 
         {isLoading ? (
           <div className="flex flex-col items-center justify-center py-20">

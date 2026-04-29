@@ -19,8 +19,15 @@ const SORT_OPTIONS = [
   { value: 'most_funded', label: 'Most funded', icon: Zap }
 ]
 
-export function SearchFilter() {
-  const [activeFilter, setActiveFilter] = useState('all')
+interface SearchFilterProps {
+  selectedCategory?: string
+  onCategoryChange?: (slug: string) => void
+}
+
+export function SearchFilter({
+  selectedCategory = '',
+  onCategoryChange
+}: SearchFilterProps) {
   const [activeSort, setActiveSort] = useState('trending')
   const [searchInput, setSearchInput] = useState('')
   const [isFocused, setIsFocused] = useState(false)
@@ -186,9 +193,13 @@ export function SearchFilter() {
         {categoryFilters.map(({ value, label }) => (
           <button
             key={value}
-            onClick={() => setActiveFilter(value)}
+            onClick={() => onCategoryChange?.(value === 'all' ? '' : value)}
             className={`shrink-0 px-4 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 border ${
-              activeFilter === value
+              (
+                value === 'all'
+                  ? selectedCategory === ''
+                  : selectedCategory === value
+              )
                 ? 'border-[#8ff5ff]/40 text-[#8ff5ff] bg-[#8ff5ff]/8'
                 : 'border-[#2e323b] text-[#73757d] hover:text-[#a9abb3] hover:border-[#45484f] bg-transparent'
             }`}

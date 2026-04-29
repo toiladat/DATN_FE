@@ -17,13 +17,15 @@ export const projectRequests = {
   getAllProjects: (
     page: number = 1,
     limit: number = 6,
-    search: string = ''
+    search: string = '',
+    categorySlug: string = ''
   ) => {
     const params = new URLSearchParams({
       page: String(page),
       limit: String(limit)
     })
     if (search.trim()) params.set('search', search.trim())
+    if (categorySlug) params.set('categorySlug', categorySlug)
     return apiClient.get(`/projects?${params.toString()}`)
   },
   deleteProject: (id: string) => apiClient.delete(`/projects/${id}`),
