@@ -1,11 +1,16 @@
+const DEFAULT_TABS = ['Story', 'Milestone', 'Updates', 'Review', 'Teams']
+
 interface ProjectTabsProps {
   activeTab: string
   onTabChange: (tab: string) => void
+  tabs?: string[]
 }
 
-export function ProjectTabs({ activeTab, onTabChange }: ProjectTabsProps) {
-  const tabs = ['Story', 'Milestone', 'Updates', 'Review', 'Teams']
-
+export function ProjectTabs({
+  activeTab,
+  onTabChange,
+  tabs = DEFAULT_TABS
+}: ProjectTabsProps) {
   return (
     <nav className="sticky top-20 z-40 bg-[#10131a]/80 backdrop-blur-xl border-b border-[#2e323b]/50 mb-12 flex gap-10 overflow-x-auto no-scrollbar px-2">
       {tabs.map((tab, i) => (

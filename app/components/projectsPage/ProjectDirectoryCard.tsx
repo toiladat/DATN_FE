@@ -76,7 +76,7 @@ export function ProjectDirectoryCard({ project, index = 0 }: Props) {
   return (
     <motion.div variants={itemVariant} className="h-full">
       <Link
-        to={`/campaign/${project.id}`}
+        to={`/projects/${project.id}`}
         className="group bg-[#10131a] rounded-2xl overflow-hidden border border-[#2e323b]/50 hover:border-[#2e323b] transition-all duration-500 ease-out flex flex-col relative h-full shadow-[0_8px_20px_rgba(0,0,0,0.4)]"
       >
         {/* Hover Glow */}
@@ -135,12 +135,34 @@ export function ProjectDirectoryCard({ project, index = 0 }: Props) {
         {/* ── Content Body ─────────────────────────────────────────────── */}
         <div className="p-4 pt-3 flex-1 flex flex-col justify-between relative z-10">
           <div>
-            <h3 className="text-base font-['Space_Grotesk'] font-bold text-[#ecedf6] mb-1.5 group-hover:text-white transition-colors leading-snug">
-              {project.title}
-            </h3>
-            <p className="text-[#73757d] text-[12px] mb-4 line-clamp-2 h-[32px] font-light leading-4">
-              {project.description}
-            </p>
+            <div className="flex justify-between gap-3 mb-4 min-h-[58px]">
+              <div className="flex-1">
+                <h3 className="text-base font-['Space_Grotesk'] font-bold text-[#ecedf6] mb-1.5 group-hover:text-white transition-colors leading-snug line-clamp-1">
+                  {project.title}
+                </h3>
+                <p className="text-[#73757d] text-[12px] line-clamp-2 leading-4 font-light">
+                  {project.description}
+                </p>
+              </div>
+              {/* Investors Avatars Section */}
+              {(project.investorsCount ?? 0) > 0 && (
+                <div className="flex flex-col items-end shrink-0 pt-0.5">
+                  <div className="flex -space-x-1.5">
+                    {(project.topInvestorsAvatars ?? []).map((avatar, idx) => (
+                      <img
+                        key={idx}
+                        src={avatar}
+                        className="w-[22px] h-[22px] rounded-full border border-[#10131a] object-cover"
+                        alt="Investor"
+                      />
+                    ))}
+                  </div>
+                  <span className="text-[9px] text-[#73757d] uppercase tracking-widest mt-1.5 font-bold">
+                    {project.investorsCount} backers
+                  </span>
+                </div>
+              )}
+            </div>
 
             {/* ── Status Section (chiều cao cố định = 52px) ─────────────── */}
             <div className="space-y-1.5 mb-4 h-[52px]">

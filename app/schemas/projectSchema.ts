@@ -64,6 +64,8 @@ export const ProjectSummarySchema = z.object({
   raisedAmount: z.number(),
   image: z.string().nullable().optional(),
   primaryCategory: z.string().optional(),
+  investorsCount: z.number().optional(),
+  topInvestorsAvatars: z.array(z.string()).optional(),
   startDate: z.number(),
   endDate: z.number(),
   updatedAt: z.number(),

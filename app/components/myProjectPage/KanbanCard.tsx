@@ -36,7 +36,7 @@ export function KanbanCard({ project }: { project: ProjectSummary }) {
 
   return (
     <div
-      onClick={() => navigate(`/projects/${project.id}`)}
+      onClick={() => navigate(`/my-project/${project.id}`)}
       className="shrink-0 bg-[#10131a] border border-[#2e323b]/60 hover:border-[#2e323b] transition-all duration-200 hover:-translate-y-px hover:shadow-lg hover:shadow-black/30 group cursor-pointer p-3 rounded-xl flex flex-col gap-3"
     >
       {/* Header: Thumbnail + Title */}
@@ -195,7 +195,7 @@ export function KanbanCard({ project }: { project: ProjectSummary }) {
               className="focus:bg-[#1c2028] focus:text-[#ecedf6] cursor-pointer outline-none rounded py-1.5 px-2.5 font-medium"
               onSelect={(e) => {
                 e.preventDefault()
-                navigate(`/projects/${project.id}`)
+                navigate(`/my-project/${project.id}`)
               }}
             >
               View details

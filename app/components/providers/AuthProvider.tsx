@@ -2,18 +2,24 @@ import { useGetNonce, useLogin } from '@/apis/queries/auth'
 import React, { createContext, useContext, useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import { useAccount, useDisconnect, useSignMessage } from 'wagmi'
+import { useQueryClient } from '@tanstack/react-query'
+
+import { getCurrentUserId } from '@/lib/auth'
 
 interface AuthContextType {
   isAuthenticated: boolean
+  currentUserId: string | null
   logout: () => void
 }
 
 const AuthContext = createContext<AuthContextType>({
   isAuthenticated: false,
+  currentUserId: null,
   logout: () => {}
 })
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
+  const queryClient = useQueryClient()
   const { address, isConnected, status } = useAccount()
   const { disconnect } = useDisconnect()
   const { signMessageAsync } = useSignMessage()
@@ -22,6 +28,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false)
   const [isAuthenticating, setIsAuthenticating] = useState<boolean>(false)
+  const [currentUserId, setCurrentUserId] = useState<string | null>(null)
 
   // Initialize auth state
   useEffect(() => {
@@ -29,6 +36,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       typeof window !== 'undefined' ? localStorage.getItem('accessToken') : null
     if (token) {
       setIsAuthenticated(true)
+      setCurrentUserId(getCurrentUserId())
     }
   }, [])
 
@@ -36,6 +44,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     localStorage.removeItem('accessToken')
     localStorage.removeItem('refreshToken')
     setIsAuthenticated(false)
+    setCurrentUserId(null)
+    queryClient.clear()
     disconnect()
   }
 
@@ -79,6 +89,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
               localStorage.setItem('refreshToken', loginRes.refreshToken)
             }
             setIsAuthenticated(true)
+            setCurrentUserId(getCurrentUserId())
             toast.success('Wallet authenticated successfully!')
           } else {
             throw new Error('Invalid login response')
@@ -110,7 +121,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, [status, isAuthenticated])
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, currentUserId, logout }}>
       {children}
     </AuthContext.Provider>
   )
