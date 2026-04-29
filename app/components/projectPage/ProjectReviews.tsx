@@ -4,6 +4,7 @@ import { Send, Loader2, MessageSquare } from 'lucide-react'
 import { useGetProjectReviews, useAddReview } from '@/apis/queries/project'
 import { useAuth } from '../providers/AuthProvider'
 import { ReviewCard } from './ReviewCard'
+import { toast } from 'sonner'
 
 // Avatar color + initial helper (shared logic for the current user avatar)
 const AVATAR_COLORS = [
@@ -125,10 +126,21 @@ export function ProjectReviews({
           </div>
         </form>
       ) : (
-        <div className="flex items-center gap-3 bg-[#161b25] border border-[#2e323b] rounded-2xl px-4 py-3">
-          <div className="w-9 h-9 rounded-full bg-[#1f2530] border border-[#2e323b]" />
-          <p className="text-sm text-[#545760]">
-            Connect your wallet to join the discussion.
+        // ── Unauthenticated: fake input that triggers toast on click ──
+        <div
+          className="flex items-center gap-3 bg-[#161b25] border border-[#2e323b] rounded-2xl px-4 py-3 cursor-text"
+          onClick={() =>
+            toast.warning(
+              'Please connect your wallet to comment on this project',
+              {
+                duration: 3000
+              }
+            )
+          }
+        >
+          <div className="w-9 h-9 rounded-full bg-[#1f2530] border border-[#2e323b] shrink-0" />
+          <p className="text-sm text-[#545760] select-none">
+            Write a comment...
           </p>
         </div>
       )}

@@ -15,6 +15,8 @@ import {
   useUpdateReview,
   useDeleteReview
 } from '@/apis/queries/project'
+import { useAuth } from '../providers/AuthProvider'
+import { toast } from 'sonner'
 import { formatDistanceToNow } from 'date-fns'
 
 // ─── Avatar with colored initials fallback ────────────────────────────────────
@@ -137,6 +139,7 @@ export function ReviewCard({
     !isProjectOwner && memberUserIds.includes(review.userId)
 
   const isOwner = currentUserId === review.userId
+  const { isAuthenticated } = useAuth()
   const [isReplying, setIsReplying] = useState(false)
   const [isEditing, setIsEditing] = useState(false)
   const [showMenu, setShowMenu] = useState(false)
@@ -336,7 +339,18 @@ export function ReviewCard({
           <div className="flex items-center gap-4 mt-1.5 px-1">
             {!isReply && (
               <button
-                onClick={() => setIsReplying((v) => !v)}
+                onClick={() => {
+                  if (!isAuthenticated) {
+                    toast.warning(
+                      'Please connect your wallet to comment on this project',
+                      {
+                        duration: 3000
+                      }
+                    )
+                    return
+                  }
+                  setIsReplying((v) => !v)
+                }}
                 className="text-xs font-semibold text-[#8ff5ff] hover:underline transition-colors"
               >
                 Reply

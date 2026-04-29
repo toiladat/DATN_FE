@@ -4,6 +4,8 @@ import { motion } from 'framer-motion'
 import { useState, useEffect } from 'react'
 import type { ProjectSummary } from '@/schemas/projectSchema'
 import { useToggleLike } from '@/apis/queries/project'
+import { useAuth } from '@/components/providers/AuthProvider'
+import { toast } from 'sonner'
 
 // ─── Màu accent tự động từ category ─────────────────────────────────────────
 const CATEGORY_COLORS: Record<string, string> = {
@@ -49,6 +51,7 @@ export function ProjectDirectoryCard({ project, index = 0 }: Props) {
   const accentColor = getAccentColor(project.primaryCategory, index)
 
   const [isLiked, setIsLiked] = useState(project.isLiked ?? false)
+  const { isAuthenticated } = useAuth()
   const { mutate: toggleLike } = useToggleLike()
 
   useEffect(() => {
@@ -57,6 +60,12 @@ export function ProjectDirectoryCard({ project, index = 0 }: Props) {
 
   const handleLike = (e: React.MouseEvent) => {
     e.preventDefault() // prevent navigating to project detail
+    if (!isAuthenticated) {
+      toast.warning('Please connect your wallet to like this project', {
+        duration: 3000
+      })
+      return
+    }
     // Optimistic UI update
     setIsLiked(!isLiked)
     toggleLike({ id: project.id, isLiked })
