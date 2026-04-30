@@ -1,5 +1,11 @@
 import { useGetNonce, useLogin } from '@/apis/queries/auth'
-import React, { createContext, useContext, useEffect, useState } from 'react'
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useRef,
+  useState
+} from 'react'
 import { toast } from 'sonner'
 import { useAccount, useDisconnect, useSignMessage } from 'wagmi'
 import { useQueryClient } from '@tanstack/react-query'
@@ -21,7 +27,9 @@ const AuthContext = createContext<AuthContextType>({
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const queryClient = useQueryClient()
   const { address, isConnected, status } = useAccount()
-  const { disconnect } = useDisconnect()
+  const { disconnect } = useDisconnect({
+    mutation: { onError: () => {} } // suppress "Connector not connected" error
+  })
   const { signMessageAsync } = useSignMessage()
   const { mutateAsync: getNonce } = useGetNonce()
   const { mutateAsync: login } = useLogin()
@@ -29,6 +37,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false)
   const [isAuthenticating, setIsAuthenticating] = useState<boolean>(false)
   const [currentUserId, setCurrentUserId] = useState<string | null>(null)
+  const isLoggingOut = useRef(false) // prevents re-auth during logout
 
   // Initialize auth state
   useEffect(() => {
@@ -41,12 +50,22 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, [])
 
   const logout = () => {
+    isLoggingOut.current = true
     localStorage.removeItem('accessToken')
     localStorage.removeItem('refreshToken')
     setIsAuthenticated(false)
     setCurrentUserId(null)
     queryClient.clear()
-    disconnect()
+    try {
+      disconnect()
+    } catch (_) {
+      /* already disconnected */
+    }
+    toast.success('Wallet disconnected')
+    // Reset flag after wagmi settles
+    setTimeout(() => {
+      isLoggingOut.current = false
+    }, 1000)
   }
 
   // Handle Wallet Connection Authentication Flow
@@ -64,7 +83,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         address &&
         !isAuthenticated &&
         !isAuthenticating &&
-        !hasToken
+        !hasToken &&
+        !isLoggingOut.current // skip if we just logged out
       ) {
         setIsAuthenticating(true)
         try {
@@ -95,12 +115,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             throw new Error('Invalid login response')
           }
         } catch (error: any) {
+          // Ignore errors caused by mid-logout connector state
+          if (
+            error?.name === 'ConnectorNotConnectedError' ||
+            isLoggingOut.current
+          )
+            return
           console.error('Wallet authentication error:', error)
           toast.error(
             error?.message || 'Failed to authenticate wallet. Please try again.'
           )
           // Clean state and disconnect on failure or cancel
-          disconnect()
+          try {
+            disconnect()
+          } catch (_) {}
         } finally {
           setIsAuthenticating(false)
         }
