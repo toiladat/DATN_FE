@@ -5,9 +5,19 @@ import {
   Clock,
   Zap,
   PenLine,
-  ChevronRight
+  ChevronRight,
+  ChevronLeft,
+  ExternalLink,
+  ImageIcon,
+  AlertTriangle,
+  CheckCheck,
+  Film
 } from 'lucide-react'
-import type { ProjectDetail, MilestoneRest } from '@/schemas/projectSchema'
+import type {
+  ProjectDetail,
+  MilestoneRest,
+  MilestoneUpdateRest
+} from '@/schemas/projectSchema'
 import {
   getMilestoneUpdateStatus,
   type MilestoneUpdateStatus
@@ -71,6 +81,153 @@ function getStepAppearance(
   }
 }
 
+// ─── Read-only update card (visible to all users) ─────────────────────────
+function MilestoneUpdateCard({ update }: { update: MilestoneUpdateRest }) {
+  const hasImages = !!(update.images && update.images.length > 0)
+  const hasVideo = !!update.video
+  const hasMedia = hasImages || hasVideo
+
+  const [mediaTab, setMediaTab] = useState<'images' | 'video'>(
+    hasImages ? 'images' : 'video'
+  )
+  const [imgIdx, setImgIdx] = useState(0)
+  const images = update.images || []
+
+  const prev = () => setImgIdx((i) => (i - 1 + images.length) % images.length)
+  const next = () => setImgIdx((i) => (i + 1) % images.length)
+
+  return (
+    <div className="mt-3 rounded-xl border border-[#1e2330] bg-[#0c0f16] overflow-hidden">
+      {update.isLate && (
+        <div className="flex items-center gap-1.5 px-4 py-2 border-b border-[#181c27] bg-[#ff716c]/5">
+          <AlertTriangle className="w-3 h-3 text-[#ff716c]" />
+          <span className="text-[10px] font-semibold text-[#ff716c]">
+            Submitted late
+          </span>
+        </div>
+      )}
+      <div className="divide-y divide-[#181c27]">
+        {update.completed && (
+          <div className="flex gap-4 px-5 py-4">
+            <CheckCheck className="w-4 h-4 text-[#6bcb77] mt-0.5 shrink-0" />
+            <div>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#6bcb77] mb-1.5">
+                Progress
+              </p>
+              <p className="text-[13px] text-[#bbbdca] leading-relaxed whitespace-pre-wrap">
+                {update.completed}
+              </p>
+            </div>
+          </div>
+        )}
+        {update.blockers && (
+          <div className="flex gap-4 px-5 py-4">
+            <AlertTriangle className="w-4 h-4 text-[#e8a838] mt-0.5 shrink-0" />
+            <div>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#e8a838] mb-1.5">
+                Blockers
+              </p>
+              <p className="text-[13px] text-[#bbbdca] leading-relaxed whitespace-pre-wrap">
+                {update.blockers}
+              </p>
+            </div>
+          </div>
+        )}
+        {hasMedia && (
+          <div>
+            <div className="flex border-b border-[#181c27]">
+              {hasImages && (
+                <button
+                  onClick={() => setMediaTab('images')}
+                  className={`flex items-center gap-1.5 px-5 py-2.5 text-[11px] font-semibold transition-colors border-b-2 -mb-px ${mediaTab === 'images' ? 'text-[#ecedf6] border-[#8ff5ff]' : 'text-[#545760] border-transparent hover:text-[#a9abb3]'}`}
+                >
+                  <ImageIcon className="w-3 h-3" />
+                  Images
+                  <span className="text-[10px] font-mono opacity-60">
+                    ({images.length})
+                  </span>
+                </button>
+              )}
+              {hasVideo && (
+                <button
+                  onClick={() => setMediaTab('video')}
+                  className={`flex items-center gap-1.5 px-5 py-2.5 text-[11px] font-semibold transition-colors border-b-2 -mb-px ${mediaTab === 'video' ? 'text-[#ecedf6] border-[#8ff5ff]' : 'text-[#545760] border-transparent hover:text-[#a9abb3]'}`}
+                >
+                  <Film className="w-3 h-3" />
+                  Video
+                </button>
+              )}
+            </div>
+            {mediaTab === 'images' && hasImages && (
+              <div className="relative bg-black">
+                <a
+                  href={images[imgIdx]}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <img
+                    key={imgIdx}
+                    src={images[imgIdx]}
+                    alt={`Attachment ${imgIdx + 1}`}
+                    className="w-full h-52 object-cover"
+                  />
+                </a>
+                {images.length > 1 && (
+                  <>
+                    <button
+                      onClick={prev}
+                      className="absolute left-2 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full bg-black/60 hover:bg-black/80 flex items-center justify-center text-white transition-colors"
+                    >
+                      <ChevronLeft className="w-4 h-4" />
+                    </button>
+                    <button
+                      onClick={next}
+                      className="absolute right-2 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full bg-black/60 hover:bg-black/80 flex items-center justify-center text-white transition-colors"
+                    >
+                      <ChevronRight className="w-4 h-4" />
+                    </button>
+                    <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1.5">
+                      {images.map((_, i) => (
+                        <button
+                          key={i}
+                          onClick={() => setImgIdx(i)}
+                          className={`w-1.5 h-1.5 rounded-full transition-all ${i === imgIdx ? 'bg-white scale-125' : 'bg-white/40'}`}
+                        />
+                      ))}
+                    </div>
+                  </>
+                )}
+              </div>
+            )}
+            {mediaTab === 'video' && hasVideo && (
+              <video
+                src={update.video}
+                controls
+                className="w-full max-h-52 bg-black"
+              />
+            )}
+          </div>
+        )}
+        {update.link && (
+          <div className="px-5 py-3.5">
+            <a
+              href={update.link}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 text-xs text-[#8ff5ff]/80 hover:text-[#8ff5ff] transition-colors group"
+            >
+              <ExternalLink className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
+              <span className="truncate max-w-xs underline underline-offset-2 decoration-dashed">
+                {update.link}
+              </span>
+            </a>
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
+
 // ─── single step ───────────────────────────────────────────────────────────
 
 function MilestoneStep({
@@ -85,6 +242,7 @@ function MilestoneStep({
   isLast: boolean
 }) {
   const [showForm, setShowForm] = useState(false)
+  const [showUpdate, setShowUpdate] = useState(false) // inline update viewer
 
   const canUpdate = updateStatus === 'unlocked' || updateStatus === 'late'
   const appearance = getStepAppearance(updateStatus, milestone.status)
@@ -169,6 +327,18 @@ function MilestoneStep({
                 {appearance.icon}
                 {appearance.label}
               </span>
+              {/* View update pill — inline toggle */}
+              {hasExisting && !showForm && (
+                <button
+                  onClick={() => setShowUpdate((v) => !v)}
+                  className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full border text-[9px] font-bold uppercase tracking-wider border-[#8ff5ff]/20 text-[#8ff5ff]/60 hover:text-[#8ff5ff] hover:border-[#8ff5ff]/40 transition-colors"
+                >
+                  <ChevronRight
+                    className={`w-2.5 h-2.5 transition-transform duration-150 ${showUpdate ? 'rotate-90' : ''}`}
+                  />
+                  {showUpdate ? 'Hide' : 'View update'}
+                </button>
+              )}
             </div>
             <p className="text-[#73757d] text-[11px] mt-1 font-mono flex items-center gap-2 flex-wrap">
               {startLabel} → {endLabel}
@@ -213,7 +383,12 @@ function MilestoneStep({
           )}
         </div>
 
-        {/* Inline form — chỉ show khi click nút Update/Edit */}
+        {/* ── Inline update viewer — visible to ALL users when update exists ── */}
+        {hasExisting && showUpdate && !showForm && (
+          <MilestoneUpdateCard update={milestone.milestoneUpdates!} />
+        )}
+
+        {/* Inline form — chỉ show khi owner click nút Update/Edit */}
         {showForm && (
           <div className="rounded-2xl bg-[#161a21] border border-[#2e323b]/60 p-5 mt-3">
             <MilestoneUpdateForm
