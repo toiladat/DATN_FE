@@ -19,6 +19,7 @@ import { ConnectButton } from '@rainbow-me/rainbowkit'
 import { useBalance, useAccount } from 'wagmi'
 import { useTheme } from '@/components/providers/ThemeProvider'
 import { useAuth } from '@/components/providers/AuthProvider'
+import { useMe } from '@/apis/queries/user'
 
 const MUSDT_ADDRESS = import.meta.env.VITE_MUSDT_ADDRESS as
   | `0x${string}`
@@ -33,6 +34,10 @@ function WalletProfileButton() {
   const [open, setOpen] = useState(false)
   const [copied, setCopied] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
+
+  // Fetch current user avatar
+  const { data: me } = useMe(isAuthenticated)
+  const userAvatar = me?.avatar
 
   // mUSDT balance
   const { data: musdtData } = useBalance({
@@ -103,28 +108,33 @@ function WalletProfileButton() {
 
         // ── Connected — single dropdown trigger ──
         return (
-          <div className="relative" ref={ref}>
+          <div className="relative flex items-center gap-2" ref={ref}>
+            {/* Avatar — standalone, clicks toggle dropdown */}
+            <div
+              onClick={() => setOpen((v) => !v)}
+              className="w-10 h-10 rounded-full overflow-hidden cursor-pointer shrink-0 hover:opacity-90 transition-opacity"
+            >
+              {userAvatar ? (
+                <img
+                  src={userAvatar}
+                  alt="avatar"
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <div className="w-full h-full bg-[#1e222a] flex items-center justify-center">
+                  <User className="w-5 h-5 text-[#8ff5ff]/60" />
+                </div>
+              )}
+            </div>
+
+            {/* Address + balance pill */}
             <button
               onClick={() => setOpen((v) => !v)}
               className="flex items-center gap-2 h-9 px-3 rounded-xl border border-[#2e323b] bg-[#10131a] hover:border-[#8ff5ff]/30 hover:bg-[#0d1018] transition-all group"
             >
-              {/* Chain icon */}
-              {chain?.hasIcon && chain.iconUrl ? (
-                <img
-                  src={chain.iconUrl}
-                  alt={chain.name ?? ''}
-                  className="w-4 h-4 rounded-full"
-                />
-              ) : (
-                <div className="w-5 h-5 rounded-full bg-primary/15 border border-primary/30 flex items-center justify-center">
-                  <User className="w-3 h-3 text-primary" />
-                </div>
-              )}
-              {/* Address */}
               <span className="text-[11px] font-mono text-[#a9abb3] group-hover:text-[#ecedf6] transition-colors">
                 {account.displayName}
               </span>
-              {/* mUSDT balance only */}
               {musdtBalance && (
                 <span className="text-[10px] font-mono text-[#8ff5ff]/80 border-l border-[#2e323b] pl-2">
                   {musdtBalance}

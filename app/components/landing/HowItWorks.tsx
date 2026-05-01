@@ -1,9 +1,27 @@
-import { LANDING_PAGE_DATA } from '../../data/mockData'
 import { motion } from 'framer-motion'
 
-export function HowItWorks() {
-  const { howItWorks } = LANDING_PAGE_DATA
+const howItWorks = [
+  {
+    icon: 'rocket_launch',
+    title: 'Submit Your Project',
+    description:
+      'Complete our streamlined onboarding process. Define your vision, tokenomics, and milestones.'
+  },
+  {
+    icon: 'verified_user',
+    title: 'Community Vetting',
+    description:
+      'Our decentralized council and community review your project for viability and integrity.'
+  },
+  {
+    icon: 'currency_exchange',
+    title: 'Launch & Fund',
+    description:
+      'Go live on-chain. Backers commit funds secured in smart contracts tied to milestone completion.'
+  }
+]
 
+export function HowItWorks() {
   return (
     <section className="py-32 bg-[#0a0c10] border-y border-[#2e323b]/30 relative overflow-hidden">
       <div className="absolute top-0 right-1/4 w-[500px] h-[500px] bg-[#ac89ff]/5 rounded-[100%] blur-[120px] pointer-events-none" />

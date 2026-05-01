@@ -3,6 +3,23 @@ import type { UserProfile } from '@/types/user'
 import { useQuery } from '@tanstack/react-query'
 import type { UserSearchResponse } from '@/schemas/userSchema'
 
+export const useMe = (enabled = true) => {
+  return useQuery({
+    queryKey: ['me'],
+    queryFn: async () => {
+      const { data } = await userRequests.getMe()
+      return data as {
+        avatar?: string | null
+        name?: string | null
+        status?: string
+      }
+    },
+    enabled,
+    staleTime: 1000 * 60 * 5,
+    retry: false
+  })
+}
+
 export const useGetUserProfile = (address?: string) => {
   return useQuery<UserProfile | null, Error>({
     queryKey: ['user-profile', address],
@@ -12,7 +29,7 @@ export const useGetUserProfile = (address?: string) => {
       }
 
       try {
-        const { data } = await userRequests.getMe(address)
+        const { data } = await userRequests.getMe()
 
         if (data instanceof Error) {
           throw data

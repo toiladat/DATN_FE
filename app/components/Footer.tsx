@@ -1,9 +1,6 @@
 import { Globe, Shield, Activity } from 'lucide-react'
-import { LANDING_PAGE_DATA } from '../data/mockData'
 
 const Footer = () => {
-  const { footer } = LANDING_PAGE_DATA
-
   return (
     <footer className="bg-background w-full py-16 px-4 border-t border-border mt-auto z-10 relative">
       <div className="grid grid-cols-1 md:grid-cols-4 gap-12 max-w-7xl mx-auto">
@@ -12,7 +9,8 @@ const Footer = () => {
             RadiantVoid
           </span>
           <p className="font-['Inter'] text-sm text-slate-400 leading-relaxed">
-            {footer.description}
+            A decentralized launchpad empowering the next generation of
+            blockchain projects with transparency and community governance.
           </p>
         </div>
 
@@ -131,7 +129,7 @@ const Footer = () => {
 
       <div className="max-w-7xl mx-auto px-4 mt-16 pt-8 border-t border-border flex flex-col md:flex-row justify-between items-center gap-4">
         <p className="font-['Inter'] text-sm text-slate-400">
-          {footer.copyright}
+          © {new Date().getFullYear()} VaultPrime. All rights reserved.
         </p>
         <div className="flex gap-6">
           <Globe className="text-muted-foreground hover:text-foreground cursor-pointer transition-colors w-5 h-5" />

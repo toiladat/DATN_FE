@@ -1,11 +1,23 @@
 import { Button } from '@/components/ui/button'
 import { ArrowRight, Rocket } from 'lucide-react'
-import { LANDING_PAGE_DATA } from '../../data/mockData'
 import { motion } from 'framer-motion'
 
-export function Hero() {
-  const { hero } = LANDING_PAGE_DATA
+const hero = {
+  badge: 'Web3 Launchpad — Now Live',
+  titleMain: 'The Future of',
+  titleHighlight: 'Decentralized',
+  titleEnd: 'Funding.',
+  subtitle:
+    'Launch, discover, and invest in the most promising blockchain projects. Fully on-chain. Zero middlemen. Built for the new era.',
+  stats: {
+    poolValue: '$42M+',
+    poolLabel: 'Total Pool Value Locked',
+    title: 'Fully On-Chain',
+    tag: 'Zero Custodial Risk'
+  }
+}
 
+export function Hero() {
   return (
     <section className="relative min-h-screen flex items-center justify-center pt-40 pb-24 overflow-hidden bg-[#0a0c10]">
       {/* Absolute Drenched Glows */}

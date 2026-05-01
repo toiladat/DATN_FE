@@ -1,10 +1,38 @@
 import { CheckCircle } from 'lucide-react'
-import { LANDING_PAGE_DATA } from '../../data/mockData'
 import { motion } from 'framer-motion'
 
-export function Features() {
-  const { features } = LANDING_PAGE_DATA
+const features = [
+  {
+    icon: 'lock',
+    title: 'Non-Custodial Escrow',
+    description:
+      'Funds are held in audited smart contracts. No team can access capital before milestones are approved.',
+    iconColor: 'cyan'
+  },
+  {
+    icon: 'groups',
+    title: 'DAO Governance',
+    description:
+      'Token holders vote on project approvals, fund releases, and protocol upgrades.',
+    iconColor: 'purple'
+  },
+  {
+    icon: 'query_stats',
+    title: 'Real-Time Analytics',
+    description:
+      'Track funding progress, token distribution, and on-chain activity with live dashboards.',
+    iconColor: 'cyan'
+  },
+  {
+    icon: 'security',
+    title: 'Multi-Audit Security',
+    description:
+      'Every smart contract undergoes multiple independent security audits before deployment.',
+    iconColor: 'purple'
+  }
+]
 
+export function Features() {
   return (
     <section className="py-32 px-4 max-w-7xl mx-auto relative">
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-[500px] bg-[#8ff5ff]/5 rounded-[100%] blur-[120px] pointer-events-none" />

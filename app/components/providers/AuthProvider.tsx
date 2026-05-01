@@ -35,7 +35,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const { mutateAsync: login } = useLogin()
 
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false)
-  const [isAuthenticating, setIsAuthenticating] = useState<boolean>(false)
+  const isAuthenticating = useRef<boolean>(false)
   const [currentUserId, setCurrentUserId] = useState<string | null>(null)
   const isLoggingOut = useRef(false) // prevents re-auth during logout
 
@@ -82,11 +82,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         isConnected &&
         address &&
         !isAuthenticated &&
-        !isAuthenticating &&
+        !isAuthenticating.current &&
         !hasToken &&
         !isLoggingOut.current // skip if we just logged out
       ) {
-        setIsAuthenticating(true)
+        isAuthenticating.current = true
         try {
           // 1. Fetch nonce from BE
           const nonceRes: any = await getNonce(address)
@@ -121,6 +121,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             isLoggingOut.current
           )
             return
+
+          // User cancelled the sign request — disconnect silently
+          if (
+            error?.name === 'UserRejectedRequestError' ||
+            error?.code === 4001 ||
+            error?.message?.toLowerCase().includes('rejected')
+          ) {
+            try {
+              disconnect()
+            } catch (_) {}
+            return
+          }
+
           console.error('Wallet authentication error:', error)
           toast.error(
             error?.message || 'Failed to authenticate wallet. Please try again.'
@@ -130,7 +143,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             disconnect()
           } catch (_) {}
         } finally {
-          setIsAuthenticating(false)
+          isAuthenticating.current = false
         }
       }
     }
@@ -142,11 +155,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   // Sync state if user manually disconnects from wallet extension side
   // Avoid race conditions during Wagmi page-load re-hydration where isConnected is momentarily false
   useEffect(() => {
-    if (status === 'disconnected' && isAuthenticated) {
+    // Only auto-logout if we were fully authenticated and the wallet abruptly disconnects
+    // !isLoggingOut.current prevents infinite loops/double disconnects when we initiate the logout
+    if (status === 'disconnected' && isAuthenticated && !isLoggingOut.current) {
       logout()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [status, isAuthenticated])
+  }, [status])
 
   return (
     <AuthContext.Provider value={{ isAuthenticated, currentUserId, logout }}>
