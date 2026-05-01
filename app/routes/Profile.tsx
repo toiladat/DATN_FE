@@ -26,8 +26,10 @@ import {
 } from 'lucide-react'
 import { userRequests } from '@/apis/requests/user'
 import mediaRequests from '@/apis/requests/media'
+import { authRequests } from '@/apis/requests/auth'
 import { useQueryClient } from '@tanstack/react-query'
 import { UpdateProfileSchema } from '@/schemas/userSchema'
+import { getErrorMessage } from '@/lib/utils'
 
 const PLATFORMS = [
   { value: 'facebook', label: 'Facebook' },
@@ -64,6 +66,8 @@ export default function Profile() {
   const [isLoading, setIsLoading] = useState(true)
   const [isSaving, setIsSaving] = useState(false)
   const [isAvatarUploading, setIsAvatarUploading] = useState(false)
+  const [isSendingOtp, setIsSendingOtp] = useState(false)
+  const [isVerifyingOtp, setIsVerifyingOtp] = useState(false)
   const avatarInputRef = useRef<HTMLInputElement>(null)
 
   // User info
@@ -134,26 +138,53 @@ export default function Profile() {
       queryClient.invalidateQueries({ queryKey: ['me'] })
       toast.success('Lưu thành công!')
     } catch (err: any) {
-      const msg =
-        err?.response?.data?.errors?.[0]?.message ??
-        err?.response?.data?.message ??
-        'Đã xảy ra lỗi khi lưu.'
-      toast.error(msg)
+      toast.error(getErrorMessage(err, 'Đã xảy ra lỗi khi lưu.'))
     } finally {
       setIsSaving(false)
     }
   }
 
-  const handleSendCode = () => {
-    setIsVerifyMode(true)
+  const handleSendCode = async () => {
+    if (!email) {
+      toast.error('Vui lòng nhập email trước khi xác thực.')
+      return
+    }
+    setIsSendingOtp(true)
+    try {
+      await authRequests.requestEmailVerification(email)
+      setIsVerifyMode(true)
+      toast.success('Đã gửi mã xác thực đến email của bạn.')
+    } catch (err: any) {
+      toast.error(getErrorMessage(err, 'Gửi mã xác thực thất bại.'))
+    } finally {
+      setIsSendingOtp(false)
+    }
   }
 
-  // KYC verify – logic sẽ hoàn thiện sau
-  const handleVerifyOTP = () => {
-    console.log('Verifying OTP:', otp)
-    setStatus('ACTIVE')
-    setIsVerifyMode(false)
-    setOtp('')
+  // KYC verify
+  const handleVerifyOTP = async () => {
+    if (!otp || otp.length !== 6) {
+      toast.error('Vui lòng nhập đủ 6 số OTP.')
+      return
+    }
+    setIsVerifyingOtp(true)
+    try {
+      await authRequests.verifyEmail({ email, code: otp })
+      setStatus('ACTIVE')
+      setIsVerifyMode(false)
+      setOtp('')
+      queryClient.invalidateQueries({ queryKey: ['me'] })
+      toast.success('Xác thực email thành công!')
+    } catch (err: any) {
+      toast.error(
+        getErrorMessage(
+          err,
+          'Xác thực thất bại, mã OTP không đúng hoặc đã hết hạn.'
+        )
+      )
+    } finally {
+      setIsVerifyingOtp(false)
+    }
   }
 
   const handleAvatarSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -231,15 +262,20 @@ export default function Profile() {
                       placeholder="alex@example.com"
                       type="email"
                       value={email}
-                      readOnly
-                      className="bg-[#10131a] border-[#2e323b] text-[#ecedf6] flex-1 cursor-default"
+                      readOnly={!isKycPending}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="bg-[#10131a] border-[#2e323b] text-[#ecedf6] flex-1 disabled:opacity-50"
                     />
                     {isKycPending && !isVerifyMode && (
                       <Button
                         type="button"
                         onClick={handleSendCode}
+                        disabled={isSendingOtp}
                         className="bg-[#ffb020] text-[#10131a] hover:bg-[#ffb020]/90 font-semibold px-4"
                       >
+                        {isSendingOtp ? (
+                          <div className="w-4 h-4 border-2 border-[#10131a]/30 border-t-[#10131a] rounded-full animate-spin mr-2" />
+                        ) : null}
                         Verify
                       </Button>
                     )}
@@ -275,10 +311,14 @@ export default function Profile() {
                     <Button
                       type="button"
                       onClick={handleVerifyOTP}
-                      disabled={otp.length !== 6}
-                      className="bg-[#8ff5ff] text-[#10131a] hover:bg-[#8ff5ff]/90 font-semibold px-4 h-9"
+                      disabled={otp.length !== 6 || isVerifyingOtp}
+                      className="bg-[#8ff5ff] text-[#10131a] hover:bg-[#8ff5ff]/90 font-semibold px-4 h-9 min-w-[90px]"
                     >
-                      Confirm
+                      {isVerifyingOtp ? (
+                        <div className="w-4 h-4 border-2 border-[#10131a]/30 border-t-[#10131a] rounded-full animate-spin" />
+                      ) : (
+                        'Confirm'
+                      )}
                     </Button>
                   </div>
                 )}

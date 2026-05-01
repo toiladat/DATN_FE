@@ -20,6 +20,12 @@ import { useBalance, useAccount } from 'wagmi'
 import { useTheme } from '@/components/providers/ThemeProvider'
 import { useAuth } from '@/components/providers/AuthProvider'
 import { useMe } from '@/apis/queries/user'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger
+} from '@/components/ui/tooltip'
 
 const MUSDT_ADDRESS = import.meta.env.VITE_MUSDT_ADDRESS as
   | `0x${string}`
@@ -110,20 +116,44 @@ function WalletProfileButton() {
         return (
           <div className="relative flex items-center gap-2" ref={ref}>
             {/* Avatar — standalone, clicks toggle dropdown */}
-            <div
-              onClick={() => setOpen((v) => !v)}
-              className="w-10 h-10 rounded-full overflow-hidden cursor-pointer shrink-0 hover:opacity-90 transition-opacity"
-            >
-              {userAvatar ? (
-                <img
-                  src={userAvatar}
-                  alt="avatar"
-                  className="w-full h-full object-cover"
-                />
-              ) : (
-                <div className="w-full h-full bg-[#1e222a] flex items-center justify-center">
-                  <User className="w-5 h-5 text-[#8ff5ff]/60" />
-                </div>
+            <div className="relative shrink-0">
+              <div
+                onClick={() => setOpen((v) => !v)}
+                className="w-10 h-10 rounded-full overflow-hidden cursor-pointer hover:opacity-90 transition-opacity"
+              >
+                {userAvatar ? (
+                  <img
+                    src={userAvatar}
+                    alt="avatar"
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <div className="w-full h-full bg-[#1e222a] flex items-center justify-center">
+                    <User className="w-5 h-5 text-[#8ff5ff]/60" />
+                  </div>
+                )}
+              </div>
+
+              {/* KYC PENDING Indicator */}
+              {me?.status === 'KYC_PENDING' && (
+                <TooltipProvider>
+                  <Tooltip delayDuration={100}>
+                    <TooltipTrigger asChild>
+                      <div className="absolute -top-1 -right-1 w-4 h-4 bg-amber-500 rounded-full border-2 border-[#10131a] flex items-center justify-center shadow-sm z-10">
+                        <span className="text-[10px] font-bold text-white leading-none">
+                          !
+                        </span>
+                      </div>
+                    </TooltipTrigger>
+                    <TooltipContent
+                      side="bottom"
+                      sideOffset={8}
+                      className="bg-[#1e222a] text-[#ecedf6] border-[#2e323b]"
+                    >
+                      <p className="text-xs">Vui lòng xác thực tài khoản</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
               )}
             </div>
 
