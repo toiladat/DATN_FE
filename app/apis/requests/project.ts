@@ -42,5 +42,9 @@ export const projectRequests = {
   updateReview: (id: string, reviewId: string, payload: { content: string }) =>
     apiClient.put(`/projects/${id}/reviews/${reviewId}`, payload),
   deleteReview: (id: string, reviewId: string) =>
-    apiClient.delete(`/projects/${id}/reviews/${reviewId}`)
+    apiClient.delete(`/projects/${id}/reviews/${reviewId}`),
+  invest: (
+    id: string,
+    payload: { amount: number; txHash: string; content?: string }
+  ) => apiClient.post(`/projects/${id}/invest`, payload)
 }

@@ -48,6 +48,7 @@ export type ProjectSubmission = z.infer<typeof ProjectSubmissionSchema>
 
 export const ProjectStatusSchema = z.enum([
   'pending',
+  'approved',
   'progress',
   'active',
   'success',
@@ -145,7 +146,18 @@ export const ProjectDetailSchema = z.object({
     z.object({
       amount: z.number(),
       name: z.string().optional(),
-      avatar: z.string().optional()
+      avatar: z.string().optional(),
+      content: z.string().nullable().optional(),
+      createdAt: z.string().optional()
+    })
+  ),
+  recentInvestors: z.array(
+    z.object({
+      amount: z.number(),
+      name: z.string().optional(),
+      avatar: z.string().optional(),
+      content: z.string().nullable().optional(),
+      createdAt: z.string().optional()
     })
   ),
   milestones: z.array(MilestoneRestSchema),

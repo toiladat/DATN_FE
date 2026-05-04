@@ -56,6 +56,19 @@ export function OverviewStep({ onStepChange }: OverviewStepProps = {}) {
       // Validate with Zod
       const validatedData = ProjectSubmissionSchema.parse(project)
 
+      // Advanced validation
+      const goal = project.basics.fundingGoal || 0
+      const totalMilestoneBudget = project.milestones.reduce(
+        (acc, m) => acc + (m.budget || 0),
+        0
+      )
+      if (totalMilestoneBudget !== goal) {
+        toast.error('Budget Mismatch', {
+          description: `Total milestone budget (€${totalMilestoneBudget.toLocaleString()}) must exactly equal your funding goal (€${goal.toLocaleString()}).`
+        })
+        return
+      }
+
       // Call Real API
       const response = await projectRequests.createProject(validatedData as any)
       if (response.status === 201) {

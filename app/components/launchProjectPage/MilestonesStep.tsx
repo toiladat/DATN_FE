@@ -49,26 +49,14 @@ export function MilestonesStep({ onStepChange }: MilestonesStepProps = {}) {
   )
 
   const remainingBudget = (project.basics.fundingGoal || 0) - totalBudget
-  const projectTotalDurationDays =
-    project.basics.startDate && project.basics.endDate
-      ? Math.max(
-          0,
-          Math.ceil(
-            (new Date(project.basics.endDate).getTime() -
-              new Date(project.basics.startDate).getTime()) /
-              (1000 * 60 * 60 * 24)
-          )
-        )
-      : 0
-  const remainingDuration =
-    projectTotalDurationDays > 0
-      ? projectTotalDurationDays - totalDuration
-      : Infinity
-
   const handleDurationChange = (val: number) => {
-    let baseStartDate = project.basics.startDate
-      ? new Date(project.basics.startDate)
+    // Milestones must start AFTER the funding campaign ends
+    let baseStartDate = project.basics.endDate
+      ? new Date(project.basics.endDate)
       : new Date()
+
+    // Start the day after funding ends
+    baseStartDate.setDate(baseStartDate.getDate() + 1)
 
     if (editingIndex !== null) {
       if (editingIndex > 0 && milestones[editingIndex - 1]?.endDate) {
@@ -119,16 +107,6 @@ export function MilestonesStep({ onStepChange }: MilestonesStepProps = {}) {
     if (newMilestone.budget - originalBudget > remainingBudget) {
       toast.error('Budget Exceeded', {
         description: `This milestone exceeds the remaining budget of €${remainingBudget.toLocaleString()}.`
-      })
-      return
-    }
-
-    if (
-      projectTotalDurationDays > 0 &&
-      newMilestone.durationDays - originalDuration > remainingDuration
-    ) {
-      toast.error('Duration Exceeded', {
-        description: `This milestone exceeds your remaining project timeline of ${remainingDuration} days.`
       })
       return
     }
@@ -242,7 +220,7 @@ export function MilestonesStep({ onStepChange }: MilestonesStepProps = {}) {
             <Card className="bg-[#22262f]/40 backdrop-blur-xl border-[#8ff5ff]/10 rounded-xl relative overflow-hidden shadow-none">
               <CardContent className="p-6">
                 <div className="flex justify-between items-center mb-4">
-                  <span className="text-[#a9abb3] text-sm">Total Duration</span>
+                  <span className="text-[#a9abb3] text-sm">Execution Time</span>
                   <span className="text-[#8ff5ff] font-bold font-['Space_Grotesk'] text-lg">
                     {totalDuration} Days
                   </span>
@@ -251,14 +229,12 @@ export function MilestonesStep({ onStepChange }: MilestonesStepProps = {}) {
                   <div
                     className="h-full bg-gradient-to-r from-[#8ff5ff] to-[#7d98ff] shadow-[0_0_10px_rgba(143,245,255,0.4)] transition-all duration-500"
                     style={{
-                      width: `${projectTotalDurationDays > 0 ? Math.min(100, (totalDuration / projectTotalDurationDays) * 100) : 0}%`
+                      width: `${Math.min(100, (totalDuration / 365) * 100)}%`
                     }}
                   ></div>
                 </div>
                 <p className="mt-3 text-xs text-[#a9abb3] italic">
-                  {remainingDuration !== Infinity
-                    ? `Remaining timeline: ${remainingDuration} Days`
-                    : `Total project phases: ${milestones.length}`}
+                  {`Total project phases: ${milestones.length}`}
                 </p>
               </CardContent>
             </Card>
@@ -314,7 +290,7 @@ export function MilestonesStep({ onStepChange }: MilestonesStepProps = {}) {
                     }
                   />
                   <p className="mt-2 text-[10px] text-[#a9abb3] uppercase tracking-wider">
-                    Cannot exceed total project duration.
+                    Estimated time to complete this phase.
                   </p>
                 </div>
                 <div>
@@ -485,9 +461,10 @@ export function MilestonesStep({ onStepChange }: MilestonesStepProps = {}) {
             <div className="absolute left-[27px] top-4 bottom-10 w-[2px] bg-gradient-to-b from-[#8ff5ff] to-[#22262f]/20 z-0"></div>
 
             {(() => {
-              let currentDate = project.basics.startDate
-                ? new Date(project.basics.startDate)
+              let currentDate = project.basics.endDate
+                ? new Date(project.basics.endDate)
                 : new Date()
+              currentDate.setDate(currentDate.getDate() + 1)
 
               const computed = milestones.map((milestone, index) => {
                 // Calculate dates

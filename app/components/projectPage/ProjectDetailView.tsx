@@ -1,6 +1,9 @@
 import { useState } from 'react'
 import { Link } from 'react-router'
 import { ArrowLeft, ExternalLink, Zap } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { InvestModal } from './InvestModal'
+import { PublishModal } from './PublishModal'
 import { ProjectHero } from '@/components/projectPage/ProjectHero'
 import { ProjectMedia } from '@/components/projectPage/ProjectMedia'
 import { ProjectStats } from '@/components/projectPage/ProjectStats'
@@ -19,10 +22,41 @@ const TABS_ACTIVE = ['Story', 'Milestone', 'Updates', 'Review', 'Teams']
 const TABS_DEFAULT = ['Story', 'Milestone', 'Updates', 'Review', 'Teams']
 
 // ─── InvestCTA — placeholder, disabled ───────────────────────────────────────
+function PublishCTA({ project }: { project: ProjectDetail }) {
+  return (
+    <div className="p-6 rounded-2xl bg-[#10131a] border border-[#8ff5ff]/50 flex flex-col gap-5 relative overflow-hidden group">
+      <div className="absolute -right-10 -top-10 w-32 h-32 bg-[#8ff5ff]/5 rounded-full blur-3xl group-hover:bg-[#8ff5ff]/10 transition-colors duration-700 ease-out" />
+      <div className="flex items-center gap-2 relative z-10">
+        <Zap className="w-4 h-4 text-[#8ff5ff]" />
+        <span className="text-[11px] font-bold uppercase tracking-widest text-[#8ff5ff]">
+          Ready to Launch
+        </span>
+      </div>
+      <div className="space-y-2 relative z-10">
+        <p className="text-[#a9abb3] text-sm">
+          Dự án của bạn đã được duyệt! Đã đến lúc đưa nó lên Blockchain.
+        </p>
+      </div>
+      <div className="relative z-10">
+        <PublishModal project={project}>
+          <Button
+            className="w-full font-['Space_Grotesk'] font-bold uppercase tracking-widest text-[11px]"
+            size="lg"
+          >
+            Publish to Blockchain
+          </Button>
+        </PublishModal>
+      </div>
+    </div>
+  )
+}
+
 function InvestCTA({
+  projectId,
   raisedAmount,
   fundingGoal
 }: {
+  projectId: string
   raisedAmount: number
   fundingGoal: number
 }) {
@@ -35,7 +69,7 @@ function InvestCTA({
       <div className="flex items-center gap-2">
         <Zap className="w-4 h-4 text-[#8ff5ff]" />
         <span className="text-[11px] font-bold uppercase tracking-widest text-[#73757d]">
-          Back this project
+          Funding Progress
         </span>
       </div>
       <div className="space-y-2">
@@ -55,17 +89,16 @@ function InvestCTA({
           Goal: {fundingGoal.toLocaleString()} USDT
         </div>
       </div>
-      <button
-        disabled
-        title="Investment feature coming soon"
-        className="w-full py-3 rounded-xl border border-[#2e323b] bg-[#161a21] text-[11px] font-bold uppercase tracking-widest flex items-center justify-center gap-2 cursor-not-allowed opacity-60 font-['Space_Grotesk']"
+      <InvestModal
+        projectId={projectId}
+        raisedAmount={raisedAmount}
+        fundingGoal={fundingGoal}
       >
-        <Zap className="w-3.5 h-3.5 text-[#8ff5ff]" />
-        <span className="text-[#8ff5ff]">Fund This Project</span>
-        <span className="text-[#45484f] normal-case tracking-normal font-normal">
-          · Coming Soon
-        </span>
-      </button>
+        <button className="w-full py-3 rounded-xl border border-[#8ff5ff] bg-[#161a21] text-[11px] font-bold uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-[#8ff5ff]/10 transition-colors opacity-100 font-['Space_Grotesk']">
+          <Zap className="w-3.5 h-3.5 text-[#8ff5ff]" />
+          <span className="text-[#8ff5ff]">Fund This Project</span>
+        </button>
+      </InvestModal>
     </div>
   )
 }
@@ -92,6 +125,7 @@ export function ProjectDetailView({
   const isOwner = project.userId === currentUserId
   const isProgress = project.status === 'progress'
   const isActive = project.status === 'active'
+  const isApproved = project.status === 'approved'
 
   const tabs = isProgress
     ? TABS_PROGRESS
@@ -103,7 +137,7 @@ export function ProjectDetailView({
 
   return (
     <div className="bg-[#0a0c10] text-[#ecedf6] min-h-screen font-['Space_Grotesk']">
-      <main className="pt-10 pb-20 px-4 md:px-12 lg:px-24 max-w-7xl mx-auto">
+      <main className="pt-28 pb-20 px-4 md:px-12 lg:px-24 max-w-7xl mx-auto">
         {/* ── Back + Owner shortcut ────────────────────────────────────── */}
         <div className="flex items-center justify-between mb-10">
           <Link
@@ -113,17 +147,6 @@ export function ProjectDetailView({
             <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
             {backLink.label}
           </Link>
-
-          {/* Nếu owner đang xem trang public → link sang trang quản lý */}
-          {isPublicView && isOwner && (
-            <Link
-              to={`/my-project/${project.id}`}
-              className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-widest text-[#ac89ff] hover:text-[#c4adff] transition-colors border border-[#ac89ff]/30 hover:border-[#ac89ff]/60 px-4 py-2 rounded-lg"
-            >
-              <ExternalLink className="w-3.5 h-3.5" />
-              Manage Project
-            </Link>
-          )}
         </div>
 
         {/* ── Hero ────────────────────────────────────────────────────── */}
@@ -140,9 +163,15 @@ export function ProjectDetailView({
             {/* InvestCTA: chỉ trên public view, khi PROGRESS, và không phải owner */}
             {isPublicView && isProgress && !isOwner && (
               <InvestCTA
+                projectId={project.id}
                 raisedAmount={project.raisedAmount}
                 fundingGoal={project.totalAmount}
               />
+            )}
+
+            {/* PublishCTA: cho owner khi đang APPROVED */}
+            {!isPublicView && isApproved && isOwner && (
+              <PublishCTA project={project} />
             )}
 
             {/* Active status note (public view) */}
