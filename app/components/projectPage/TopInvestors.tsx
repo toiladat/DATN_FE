@@ -52,7 +52,7 @@ export function TopInvestors({ project }: { project: ProjectDetail }) {
                 <div className="w-full h-full rounded-full bg-[#161a21] overflow-hidden">
                   <img
                     alt={investor.name || 'Anonymous'}
-                    className="w-full h-full object-cover grayscale opacity-80 group-hover/item:grayscale-0 group-hover/item:opacity-100 transition-all duration-300"
+                    className="w-full h-full object-cover transition-all duration-300"
                     src={investor.avatar || 'https://via.placeholder.com/150'}
                   />
                 </div>

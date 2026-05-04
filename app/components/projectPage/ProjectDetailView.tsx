@@ -17,7 +17,7 @@ import { ProjectReviews } from '@/components/projectPage/ProjectReviews'
 import type { ProjectDetail } from '@/schemas/projectSchema'
 
 // ─── Tabs theo status ────────────────────────────────────────────────────────
-const TABS_PROGRESS = ['Story', 'Review', 'Teams']
+const TABS_PROGRESS = ['Story', 'Milestone', 'Review', 'Teams']
 const TABS_ACTIVE = ['Story', 'Milestone', 'Updates', 'Review', 'Teams']
 const TABS_DEFAULT = ['Story', 'Milestone', 'Updates', 'Review', 'Teams']
 

@@ -131,6 +131,15 @@ export const ProjectDetailSchema = z.object({
   startDate: z.string().or(z.number()),
   endDate: z.string().or(z.number()),
   userId: z.string(),
+  user: z
+    .object({
+      id: z.string(),
+      name: z.string().nullable().optional(),
+      avatar: z.string().nullable().optional(),
+      email: z.string().nullable().optional(),
+      walletAddress: z.string()
+    })
+    .optional(),
   raisedAmount: z.number(),
   category: z
     .object({
@@ -166,6 +175,7 @@ export const ProjectDetailSchema = z.object({
       id: z.string(),
       userId: z.string(),
       role: z.string(),
+      description: z.string().optional(),
       user: z
         .object({
           id: z.string(),

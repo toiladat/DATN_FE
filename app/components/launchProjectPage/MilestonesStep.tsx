@@ -49,6 +49,18 @@ export function MilestonesStep({ onStepChange }: MilestonesStepProps = {}) {
   )
 
   const remainingBudget = (project.basics.fundingGoal || 0) - totalBudget
+  const maxDuration =
+    project.basics.startDate && project.basics.endDate
+      ? Math.max(
+          0,
+          Math.round(
+            (new Date(project.basics.endDate).getTime() -
+              new Date(project.basics.startDate).getTime()) /
+              (1000 * 60 * 60 * 24)
+          )
+        )
+      : 0
+  const remainingDuration = maxDuration > 0 ? maxDuration - totalDuration : 0
   const handleDurationChange = (val: number) => {
     // Milestones must start AFTER the funding campaign ends
     let baseStartDate = project.basics.endDate
@@ -229,12 +241,17 @@ export function MilestonesStep({ onStepChange }: MilestonesStepProps = {}) {
                   <div
                     className="h-full bg-gradient-to-r from-[#8ff5ff] to-[#7d98ff] shadow-[0_0_10px_rgba(143,245,255,0.4)] transition-all duration-500"
                     style={{
-                      width: `${Math.min(100, (totalDuration / 365) * 100)}%`
+                      width:
+                        maxDuration > 0
+                          ? `${Math.min(100, (totalDuration / maxDuration) * 100)}%`
+                          : '100%'
                     }}
                   ></div>
                 </div>
                 <p className="mt-3 text-xs text-[#a9abb3] italic">
-                  {`Total project phases: ${milestones.length}`}
+                  {maxDuration > 0
+                    ? `Remaining: ${remainingDuration} Days`
+                    : `Total project phases: ${milestones.length} (No max duration set)`}
                 </p>
               </CardContent>
             </Card>

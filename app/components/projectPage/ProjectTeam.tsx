@@ -1,5 +1,10 @@
-import { Users, Wallet, Copy, CheckCheck } from 'lucide-react'
+import { Users, Wallet, Copy, CheckCheck, Mail } from 'lucide-react'
 import { useState } from 'react'
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger
+} from '@/components/ui/popover'
 import type { ProjectDetail } from '@/schemas/projectSchema'
 
 type Member = ProjectDetail['projectMembers'][number]
@@ -47,75 +52,139 @@ function WalletCell({ address }: { address: string }) {
   )
 }
 
-function MemberRow({ member, index }: { member: Member; index: number }) {
+function MemberCard({
+  member,
+  isOwner = false
+}: {
+  member: Member
+  isOwner?: boolean
+}) {
   const user = member.user
   const name = user?.name || 'Unknown Member'
   const avatar = user?.avatar
-  const email = user?.email
+  const role = member.role
   const wallet = user?.walletAddress || member.userId
+  const email = user?.email
+  const description = member.description
 
   return (
-    <div className="flex items-center gap-5 py-4 border-b border-[#2e323b]/40 last:border-0 group hover:bg-[#161a21]/50 -mx-4 px-4 rounded-xl transition-colors duration-200">
-      {/* Index */}
-      <span className="text-[#3a3e4a] font-mono text-[11px] w-5 text-right shrink-0 tabular-nums select-none">
-        {String(index + 1).padStart(2, '0')}
-      </span>
-
-      {/* Avatar */}
-      <div className="shrink-0">
-        {avatar ? (
-          <img
-            src={avatar}
-            alt={name}
-            className="w-10 h-10 rounded-full object-cover border border-[#2e323b]/60 group-hover:border-[#ac89ff]/30 transition-colors duration-300"
-          />
-        ) : (
-          <div className="w-10 h-10 rounded-full bg-[#1c1f28] border border-[#2e323b]/60 group-hover:border-[#ac89ff]/30 flex items-center justify-center transition-colors duration-300">
-            <span className="text-[#ac89ff] font-semibold text-xs font-['Space_Grotesk']">
-              {getInitials(name)}
-            </span>
+    <Popover>
+      <PopoverTrigger asChild>
+        <button
+          className={`flex flex-col items-center gap-3 text-center group cursor-pointer focus:outline-none ${isOwner ? 'w-40' : 'w-28'}`}
+        >
+          <div
+            className={`rounded-full bg-gradient-to-br from-[#8ff5ff] to-[#ac89ff] p-[2px] transition-transform duration-300 ease-out group-hover:scale-110 ${isOwner ? 'w-20 h-20' : 'w-16 h-16'}`}
+          >
+            <div className="w-full h-full rounded-full bg-[#161a21] overflow-hidden flex items-center justify-center">
+              {avatar ? (
+                <img
+                  src={avatar}
+                  alt={name}
+                  className="w-full h-full object-cover transition-all duration-300"
+                />
+              ) : (
+                <span className="text-[#ac89ff] font-semibold text-lg font-['Space_Grotesk']">
+                  {getInitials(name)}
+                </span>
+              )}
+            </div>
           </div>
-        )}
-      </div>
-
-      {/* Name + Role + Email */}
-      <div className="flex-1 min-w-0">
-        <p className="text-[#ecedf6] font-['Space_Grotesk'] font-semibold text-[14px] leading-snug truncate">
-          {name}
-        </p>
-        <p className="text-[#ac89ff] text-[11px] font-medium uppercase tracking-widest mt-0.5">
-          {member.role}
-        </p>
-        {email && (
-          <p className="text-[#73757d] text-[11px] mt-1 truncate">{email}</p>
-        )}
-      </div>
-
-      {/* Wallet — right, secondary */}
-      <div className="shrink-0 hidden sm:block">
-        <WalletCell address={wallet} />
-      </div>
-    </div>
+          <div>
+            <p
+              className={`text-[#ecedf6] font-['Space_Grotesk'] font-bold leading-snug line-clamp-2 group-hover:text-[#8ff5ff] transition-colors ${isOwner ? 'text-[14px]' : 'text-[12px]'}`}
+            >
+              {name}
+            </p>
+            <p
+              className={`text-[#8ff5ff] font-medium uppercase tracking-widest mt-1 ${isOwner ? 'text-[10px]' : 'text-[9px]'}`}
+            >
+              {role}
+            </p>
+          </div>
+        </button>
+      </PopoverTrigger>
+      <PopoverContent
+        side="bottom"
+        align="center"
+        className="bg-[#10131a]/95 backdrop-blur-md border-[#2e323b]/50 text-[#ecedf6] w-64 p-4 shadow-2xl"
+      >
+        <div className="flex flex-col gap-3 text-xs">
+          <div className="flex flex-col gap-2 border-b border-[#2e323b]/40 pb-3">
+            <div className="flex items-center gap-2">
+              <Wallet className="w-3.5 h-3.5 text-[#73757d]" />
+              <WalletCell address={wallet} />
+            </div>
+            {email && (
+              <div className="flex items-center gap-2 text-[#a9abb3]">
+                <Mail className="w-3.5 h-3.5 text-[#73757d]" />
+                <span className="truncate">{email}</span>
+              </div>
+            )}
+          </div>
+          {description ? (
+            <div className="text-[#ecedf6]/80 leading-relaxed">
+              {description}
+            </div>
+          ) : (
+            <div className="text-[#73757d] italic">
+              No description provided.
+            </div>
+          )}
+        </div>
+      </PopoverContent>
+    </Popover>
   )
 }
 
 export function ProjectTeam({ project }: { project: ProjectDetail }) {
   const members = project.projectMembers ?? []
 
-  return (
-    <div className="max-w-2xl">
-      {/* Section label */}
-      <div className="flex items-center gap-3 mb-8">
-        <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#73757d] font-['Space_Grotesk']">
-          Team
-        </span>
-        <div className="flex-1 h-px bg-[#2e323b]/40" />
-        <span className="text-[11px] font-mono text-[#3a3e4a]">
-          {members.length} {members.length === 1 ? 'member' : 'members'}
-        </span>
-      </div>
+  const creator = project.user
+  let ownerIndex = members.findIndex((m) => m.userId === project.userId)
 
-      {members.length === 0 ? (
+  let displayOwner: Member | null = null
+  let otherMembers = members
+
+  if (ownerIndex !== -1) {
+    displayOwner = { ...members[ownerIndex], role: 'OWNER' }
+    otherMembers = members.filter((_, i) => i !== ownerIndex)
+  } else if (creator) {
+    // Inject creator if not in members
+    displayOwner = {
+      id: creator.id,
+      userId: creator.id,
+      role: 'OWNER',
+      user: {
+        id: creator.id,
+        name: creator.name,
+        avatar: creator.avatar,
+        email: creator.email,
+        walletAddress: creator.walletAddress
+      }
+    }
+  } else {
+    // Fallback if no creator available (shouldn't happen)
+    ownerIndex = members.findIndex(
+      (m) =>
+        m.role.toLowerCase() === 'owner' ||
+        m.role.toLowerCase() === 'founder' ||
+        m.role.toLowerCase() === 'chủ dự án'
+    )
+    if (ownerIndex !== -1) {
+      displayOwner = { ...members[ownerIndex], role: 'OWNER' }
+      otherMembers = members.filter((_, i) => i !== ownerIndex)
+    } else if (members.length > 0) {
+      displayOwner = { ...members[0], role: 'OWNER' }
+      otherMembers = members.slice(1)
+    }
+  }
+
+  const isEmpty = !displayOwner && otherMembers.length === 0
+
+  return (
+    <div className="max-w-4xl mx-auto">
+      {isEmpty ? (
         /* Empty state */
         <div className="flex flex-col items-center justify-center py-20 gap-5 text-center">
           <div className="w-14 h-14 rounded-full bg-[#161a21] border border-[#2e323b]/50 flex items-center justify-center">
@@ -131,11 +200,21 @@ export function ProjectTeam({ project }: { project: ProjectDetail }) {
           </div>
         </div>
       ) : (
-        /* Roster list */
-        <div>
-          {members.map((member, i) => (
-            <MemberRow key={member.id} member={member} index={i} />
-          ))}
+        /* Hierarchy Roster */
+        <div className="flex flex-col items-center gap-8">
+          {displayOwner && (
+            <div className="flex justify-center w-full">
+              <MemberCard member={displayOwner} isOwner={true} />
+            </div>
+          )}
+
+          {otherMembers.length > 0 && (
+            <div className="flex flex-wrap justify-center gap-x-8 gap-y-8 max-w-3xl">
+              {otherMembers.map((member) => (
+                <MemberCard key={member.id} member={member} />
+              ))}
+            </div>
+          )}
         </div>
       )}
     </div>
