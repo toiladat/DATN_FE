@@ -112,7 +112,16 @@ export const MilestoneRestSchema = z.object({
   outcome: z.string().optional(),
   images: z.array(z.string()),
   video: z.string().optional(),
-  milestoneUpdates: MilestoneUpdateRestSchema.nullable()
+  milestoneUpdates: MilestoneUpdateRestSchema.nullable(),
+  withdrawalRecord: z
+    .object({
+      id: z.string(),
+      status: z.enum(['PENDING', 'SUCCESS', 'FAILED']),
+      txHash: z.string().nullable().optional(),
+      amount: z.number().optional()
+    })
+    .nullable()
+    .optional()
 })
 export type MilestoneRest = z.infer<typeof MilestoneRestSchema>
 

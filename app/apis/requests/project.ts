@@ -46,5 +46,15 @@ export const projectRequests = {
   invest: (
     id: string,
     payload: { amount: number; txHash: string; content?: string }
-  ) => apiClient.post(`/projects/${id}/invest`, payload)
+  ) => apiClient.post(`/projects/${id}/invest`, payload),
+
+  withdrawMilestone: (
+    projectId: string,
+    milestoneId: string,
+    payload: { txHash: string }
+  ) =>
+    apiClient.post(
+      `/projects/${projectId}/milestones/${milestoneId}/withdraw`,
+      payload
+    )
 }

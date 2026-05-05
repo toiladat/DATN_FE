@@ -154,12 +154,38 @@ export function BasicsStep({ onStepChange }: BasicsStepProps = {}) {
   const startDate = basics.startDate ? new Date(basics.startDate) : undefined
   const endDate = basics.endDate ? new Date(basics.endDate) : undefined
 
+  // Tính số ngày campaign hiện tại từ startDate + endDate (để controlled input)
+  const campaignDays =
+    startDate && endDate
+      ? Math.round(
+          (endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)
+        )
+      : undefined
+
   const handleDateSelect = (
     date: Date | undefined,
     field: 'startDate' | 'endDate'
   ) => {
     if (date) {
-      setBasics({ [field]: date.toISOString() })
+      // Ép thời gian về cuối ngày (23:59:59) để nếu user chọn "Hôm nay", thời gian vẫn là ở tương lai
+      const adjustedDate = new Date(date)
+      adjustedDate.setHours(23, 59, 59, 999)
+
+      if (field === 'startDate') {
+        // Khi đổi startDate: nếu đã có campaign duration thì tự recalculate endDate
+        if (campaignDays && campaignDays > 0) {
+          const newEndDate = new Date(adjustedDate)
+          newEndDate.setDate(newEndDate.getDate() + campaignDays)
+          setBasics({
+            startDate: adjustedDate.toISOString(),
+            endDate: newEndDate.toISOString()
+          })
+        } else {
+          setBasics({ startDate: adjustedDate.toISOString() })
+        }
+      } else {
+        setBasics({ [field]: adjustedDate.toISOString() })
+      }
     } else {
       setBasics({ [field]: '' })
     }
@@ -551,38 +577,40 @@ export function BasicsStep({ onStepChange }: BasicsStepProps = {}) {
               <label className="text-[10px] uppercase tracking-tighter text-[#a9abb3] font-bold block mb-2">
                 Select Date
               </label>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant="outline"
-                    className={cn(
-                      'w-full md:w-[280px] justify-start text-left font-normal bg-[#10131a] border-[#45484f]/30 rounded-xl px-4 py-6 focus:ring-1 focus:ring-[#8ff5ff] hover:bg-[#161a21] text-[#ecedf6] border-solid shadow-none',
-                      !startDate && 'text-[#45484f]'
-                    )}
+              <div className="flex flex-wrap items-center gap-3">
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      className={cn(
+                        'w-full md:w-[280px] justify-start text-left font-normal bg-[#10131a] border-[#45484f]/30 rounded-xl px-4 py-6 focus:ring-1 focus:ring-[#8ff5ff] hover:bg-[#161a21] text-[#ecedf6] border-solid shadow-none',
+                        !startDate && 'text-[#45484f]'
+                      )}
+                    >
+                      <span className="material-symbols-outlined text-[#8ff5ff] mr-2 text-xl">
+                        calendar_month
+                      </span>
+                      {startDate ? (
+                        format(startDate, 'PPP')
+                      ) : (
+                        <span>Pick a target launch date</span>
+                      )}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent
+                    className="w-auto p-0 bg-[#161a21] border-[#45484f]/20 text-[#ecedf6]"
+                    align="start"
                   >
-                    <span className="material-symbols-outlined text-[#8ff5ff] mr-2 text-xl">
-                      calendar_month
-                    </span>
-                    {startDate ? (
-                      format(startDate, 'PPP')
-                    ) : (
-                      <span>Pick a target launch date</span>
-                    )}
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent
-                  className="w-auto p-0 bg-[#161a21] border-[#45484f]/20 text-[#ecedf6]"
-                  align="start"
-                >
-                  <Calendar
-                    mode="single"
-                    selected={startDate}
-                    onSelect={(date) => handleDateSelect(date, 'startDate')}
-                    initialFocus
-                    className="bg-[#161a21] rounded-xl text-[#ecedf6]"
-                  />
-                </PopoverContent>
-              </Popover>
+                    <Calendar
+                      mode="single"
+                      selected={startDate}
+                      onSelect={(date) => handleDateSelect(date, 'startDate')}
+                      initialFocus
+                      className="bg-[#161a21] rounded-xl text-[#ecedf6]"
+                    />
+                  </PopoverContent>
+                </Popover>
+              </div>
             </div>
 
             <div className="p-5 bg-[#22262f]/40 backdrop-blur-xl border border-[#8ff5ff]/5 rounded-2xl flex items-center gap-6">
@@ -646,12 +674,15 @@ export function BasicsStep({ onStepChange }: BasicsStepProps = {}) {
                     className="w-full bg-[#161a21]/50 border border-[#45484f]/20 rounded-lg px-3 py-2 text-sm focus-visible:ring-1 focus-visible:ring-[#8ff5ff] h-10 pointer-events-auto"
                     placeholder="30"
                     type="number"
+                    value={campaignDays || ''}
                     onChange={(e) => {
                       const days = Number(e.target.value)
                       if (days > 0 && startDate) {
                         const newEndDate = new Date(startDate)
                         newEndDate.setDate(newEndDate.getDate() + days)
                         setBasics({ endDate: newEndDate.toISOString() })
+                      } else if (days === 0 || !e.target.value) {
+                        setBasics({ endDate: '' })
                       }
                     }}
                   />

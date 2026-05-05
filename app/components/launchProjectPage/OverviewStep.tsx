@@ -53,8 +53,36 @@ export function OverviewStep({ onStepChange }: OverviewStepProps = {}) {
 
   const handlePublish = async () => {
     try {
+      // Fix state desync: Recalculate all milestone dates based on the LATEST basics.startDate
+      let currentDate = project.basics.startDate
+        ? new Date(project.basics.startDate)
+        : new Date()
+
+      const recalculatedMilestones = project.milestones.map((m) => {
+        const startDate = new Date(currentDate)
+        const endDate = new Date(currentDate)
+        endDate.setDate(
+          endDate.getDate() + (m.durationDays > 0 ? m.durationDays - 1 : 0)
+        )
+
+        // Next milestone starts 1 day after this one ends
+        currentDate = new Date(endDate)
+        currentDate.setDate(currentDate.getDate() + 1)
+
+        return {
+          ...m,
+          startDate: startDate.toISOString(),
+          endDate: endDate.toISOString()
+        }
+      })
+
+      const payloadData = {
+        ...project,
+        milestones: recalculatedMilestones
+      }
+
       // Validate with Zod
-      const validatedData = ProjectSubmissionSchema.parse(project)
+      const validatedData = ProjectSubmissionSchema.parse(payloadData)
 
       // Advanced validation
       const goal = project.basics.fundingGoal || 0

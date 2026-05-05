@@ -199,7 +199,9 @@ export function ProjectDetailView({
         {/* ── Tab content ─────────────────────────────────────────────── */}
         <div>
           {safeTab === 'Story' && <ProjectContent project={project} />}
-          {safeTab === 'Milestone' && <ProjectMilestones project={project} />}
+          {safeTab === 'Milestone' && (
+            <ProjectMilestones project={project} isOwner={isOwner} />
+          )}
           {safeTab === 'Updates' && (
             <ProjectUpdates project={project} currentUserId={currentUserId} />
           )}

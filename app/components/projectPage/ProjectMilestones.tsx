@@ -8,12 +8,22 @@ import {
   AlertTriangle,
   Target,
   Play,
-  ChevronDown
+  ChevronDown,
+  Banknote,
+  Clock,
+  CheckCircle2
 } from 'lucide-react'
 import type { ProjectDetail } from '@/schemas/projectSchema'
 import { ImageSlider } from '@/components/ui/ImageSlider'
+import { WithdrawMilestoneModal } from './WithdrawMilestoneModal'
 
-export function ProjectMilestones({ project }: { project: ProjectDetail }) {
+export function ProjectMilestones({
+  project,
+  isOwner = false
+}: {
+  project: ProjectDetail
+  isOwner?: boolean
+}) {
   const { milestones } = project
   const [expandedId, setExpandedId] = useState<string | null>(
     milestones?.[0]?.id || null
@@ -88,9 +98,15 @@ export function ProjectMilestones({ project }: { project: ProjectDetail }) {
                         </h4>
                         <span
                           className={`px-2.5 py-0.5 text-[9px] font-bold uppercase tracking-widest rounded-sm border 
-                          ${isActiveOrDone ? 'bg-[#8ff5ff]/10 text-[#8ff5ff] border-[#8ff5ff]/30' : 'bg-[#22262f] text-[#a9abb3] border-[#45484f]/30'}`}
+                          ${
+                            m.status === 'WITHDRAWN'
+                              ? 'bg-[#ac89ff]/10 text-[#ac89ff] border-[#ac89ff]/30'
+                              : isActiveOrDone
+                                ? 'bg-[#8ff5ff]/10 text-[#8ff5ff] border-[#8ff5ff]/30'
+                                : 'bg-[#22262f] text-[#a9abb3] border-[#45484f]/30'
+                          }`}
                         >
-                          {m.status}
+                          {m.status === 'WITHDRAWN' ? '✓ WITHDRAWN' : m.status}
                         </span>
                       </div>
                       <div className="flex items-center gap-5 text-[13px] font-bold text-[#73757d] font-['Space_Grotesk'] tracking-wide">
@@ -104,12 +120,47 @@ export function ProjectMilestones({ project }: { project: ProjectDetail }) {
                         </span>
                       </div>
                     </div>
-                    <div
-                      className={`shrink-0 flex items-center justify-center w-8 h-8 rounded-full transition-colors duration-500 ease-out ${isExpanded ? 'bg-[#8ff5ff]/10 text-[#8ff5ff]' : 'bg-[#22262f] text-[#a9abb3]'}`}
-                    >
-                      <ChevronDown
-                        className={`w-4 h-4 transition-transform duration-500 ease-out ${isExpanded ? 'rotate-180' : ''}`}
-                      />
+
+                    {/* Withdraw Controls (chỉ Owner mới thấy) */}
+                    <div className="flex items-center gap-3 shrink-0">
+                      {isOwner &&
+                        m.status === 'APPROVED' &&
+                        !m.withdrawalRecord && (
+                          <WithdrawMilestoneModal
+                            projectId={project.id}
+                            milestone={m}
+                          >
+                            <button
+                              id={`withdraw-trigger-${m.id}`}
+                              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gradient-to-r from-[#8ff5ff]/20 to-[#ac89ff]/20 border border-[#8ff5ff]/30 text-[10px] font-bold uppercase tracking-widest text-[#8ff5ff] hover:from-[#8ff5ff]/30 hover:to-[#ac89ff]/30 transition-all"
+                            >
+                              <Banknote className="w-3.5 h-3.5" />
+                              Withdraw
+                            </button>
+                          </WithdrawMilestoneModal>
+                        )}
+
+                      {isOwner && m.withdrawalRecord?.status === 'PENDING' && (
+                        <span className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#f59e0b]/10 border border-[#f59e0b]/30 text-[10px] font-bold uppercase tracking-widest text-[#f59e0b]">
+                          <Clock className="w-3 h-3 animate-pulse" />
+                          Pending...
+                        </span>
+                      )}
+
+                      {m.status === 'WITHDRAWN' && (
+                        <span className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#ac89ff]/10 border border-[#ac89ff]/30 text-[10px] font-bold uppercase tracking-widest text-[#ac89ff]">
+                          <CheckCircle2 className="w-3 h-3" />
+                          Funds Withdrawn
+                        </span>
+                      )}
+
+                      <div
+                        className={`shrink-0 flex items-center justify-center w-8 h-8 rounded-full transition-colors duration-500 ease-out ${isExpanded ? 'bg-[#8ff5ff]/10 text-[#8ff5ff]' : 'bg-[#22262f] text-[#a9abb3]'}`}
+                      >
+                        <ChevronDown
+                          className={`w-4 h-4 transition-transform duration-500 ease-out ${isExpanded ? 'rotate-180' : ''}`}
+                        />
+                      </div>
                     </div>
                   </div>
 

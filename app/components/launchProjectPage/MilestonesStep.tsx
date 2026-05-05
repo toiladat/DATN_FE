@@ -62,13 +62,10 @@ export function MilestonesStep({ onStepChange }: MilestonesStepProps = {}) {
       : 0
   const remainingDuration = maxDuration > 0 ? maxDuration - totalDuration : 0
   const handleDurationChange = (val: number) => {
-    // Milestones must start AFTER the funding campaign ends
-    let baseStartDate = project.basics.endDate
-      ? new Date(project.basics.endDate)
+    // Milestone 1 starts exactly on the Target Launch Date
+    let baseStartDate = project.basics.startDate
+      ? new Date(project.basics.startDate)
       : new Date()
-
-    // Start the day after funding ends
-    baseStartDate.setDate(baseStartDate.getDate() + 1)
 
     if (editingIndex !== null) {
       if (editingIndex > 0 && milestones[editingIndex - 1]?.endDate) {
@@ -478,10 +475,9 @@ export function MilestonesStep({ onStepChange }: MilestonesStepProps = {}) {
             <div className="absolute left-[27px] top-4 bottom-10 w-[2px] bg-gradient-to-b from-[#8ff5ff] to-[#22262f]/20 z-0"></div>
 
             {(() => {
-              let currentDate = project.basics.endDate
-                ? new Date(project.basics.endDate)
+              let currentDate = project.basics.startDate
+                ? new Date(project.basics.startDate)
                 : new Date()
-              currentDate.setDate(currentDate.getDate() + 1)
 
               const computed = milestones.map((milestone, index) => {
                 // Calculate dates

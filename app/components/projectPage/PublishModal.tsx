@@ -6,7 +6,7 @@ import {
   DialogTrigger
 } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
-import { Zap, Loader2, Rocket } from 'lucide-react'
+import { Loader2, Rocket, Zap } from 'lucide-react'
 import { useState } from 'react'
 import { useAccount, useWriteContract, usePublicClient } from 'wagmi'
 import { parseEther } from 'viem'
@@ -23,6 +23,7 @@ interface PublishModalProps {
 export function PublishModal({ project, children }: PublishModalProps) {
   const [open, setOpen] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isDemoMode, setIsDemoMode] = useState(false)
   const { address } = useAccount()
   const publicClient = usePublicClient()
 
@@ -38,19 +39,36 @@ export function PublishModal({ project, children }: PublishModalProps) {
     try {
       const campaignIdUint256 = BigInt('0x' + project.id)
       const goal = parseEther(project.totalAmount.toString())
-      const fundDeadline = Math.floor(
-        new Date(project.endDate).getTime() / 1000
-      )
 
-      // Prepare milestone arrays
-      const milestoneTimes = project.milestones.map((m) =>
-        Math.floor(new Date(m.endDate).getTime() / 1000)
-      )
+      // Demo Mode: override fundDeadline = now + 2 phút (rút tiền ngay sau 2 phút)
+      // Normal Mode: dùng Target Launch Date của dự án
+      const fundDeadline = isDemoMode
+        ? Math.floor(Date.now() / 1000) + 2 * 60
+        : Math.floor(new Date(project.startDate).getTime() / 1000)
+
+      // Prepare milestone arrays: Thời gian giải ngân là đầu ngày bắt đầu giai đoạn
+      // Nhưng phải >= fundDeadline (yêu cầu của Smart Contract)
+      // → dùng max(startOfDay, fundDeadline) để đảm bảo cả hai điều kiện
+      const milestoneTimes = project.milestones.map((m) => {
+        const d = new Date(m.startDate)
+        d.setHours(0, 0, 0, 0)
+        const startOfDay = Math.floor(d.getTime() / 1000)
+        return Math.max(startOfDay, fundDeadline)
+      })
       const milestoneAmounts = project.milestones.map((m) =>
         parseEther(m.amount.toString())
       )
 
       // --- PRE-VALIDATION CHECK ---
+      const currentTime = Math.floor(Date.now() / 1000)
+      if (fundDeadline <= currentTime) {
+        toast.error(
+          'Ngày Target Launch Date đã qua! Vui lòng chọn ngày bắt đầu dự án ở tương lai hoặc bật Demo Mode.'
+        )
+        setIsSubmitting(false)
+        return
+      }
+
       let totalMilestoneAmount = BigInt(0)
       let lastTime = BigInt(fundDeadline)
 
@@ -140,6 +158,27 @@ export function PublishModal({ project, children }: PublishModalProps) {
               </span>
             </div>
           </div>
+
+          {/* Demo Mode Toggle */}
+          <button
+            type="button"
+            onClick={() => setIsDemoMode((v) => !v)}
+            className={`w-full flex items-center gap-2 px-4 py-3 rounded-xl border text-[11px] font-bold uppercase tracking-widest transition-all ${
+              isDemoMode
+                ? 'bg-[#f59e0b]/15 border-[#f59e0b]/50 text-[#f59e0b]'
+                : 'bg-[#22262f]/50 border-[#2e323b] text-[#73757d] hover:border-[#f59e0b]/30 hover:text-[#f59e0b]/70'
+            }`}
+          >
+            <Zap className="w-3.5 h-3.5" />
+            <span className="flex-1 text-left">Demo Mode</span>
+            <span
+              className={`text-[10px] px-2 py-0.5 rounded-full ${isDemoMode ? 'bg-[#f59e0b]/20' : 'bg-[#2e323b]'}`}
+            >
+              {isDemoMode
+                ? 'BẬT — Rút tiền sau 2 phút'
+                : 'TẮT — Dùng Launch Date thực'}
+            </span>
+          </button>
 
           <Button
             onClick={handlePublish}

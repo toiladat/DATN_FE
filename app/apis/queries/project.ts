@@ -149,3 +149,19 @@ export function useDeleteReview(projectId: string) {
     }
   })
 }
+
+export function useWithdrawMilestone(projectId: string) {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: ({
+      milestoneId,
+      txHash
+    }: {
+      milestoneId: string
+      txHash: string
+    }) => projectRequests.withdrawMilestone(projectId, milestoneId, { txHash }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: projectKeys.detail(projectId) })
+    }
+  })
+}
