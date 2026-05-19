@@ -14,12 +14,27 @@ import { ProjectMilestones } from '@/components/projectPage/ProjectMilestones'
 import { ProjectTeam } from '@/components/projectPage/ProjectTeam'
 import { ProjectUpdates } from '@/components/projectPage/ProjectUpdates'
 import { ProjectReviews } from '@/components/projectPage/ProjectReviews'
+import { ProjectAttachments } from '@/components/projectPage/ProjectAttachments'
 import type { ProjectDetail } from '@/schemas/projectSchema'
 
 // ─── Tabs theo status ────────────────────────────────────────────────────────
-const TABS_PROGRESS = ['Story', 'Milestone', 'Review', 'Teams']
-const TABS_ACTIVE = ['Story', 'Milestone', 'Updates', 'Review', 'Teams']
-const TABS_DEFAULT = ['Story', 'Milestone', 'Updates', 'Review', 'Teams']
+const TABS_PROGRESS = ['Story', 'Milestone', 'Review', 'Attachments', 'Teams']
+const TABS_ACTIVE = [
+  'Story',
+  'Milestone',
+  'Updates',
+  'Review',
+  'Attachments',
+  'Teams'
+]
+const TABS_DEFAULT = [
+  'Story',
+  'Milestone',
+  'Updates',
+  'Review',
+  'Attachments',
+  'Teams'
+]
 
 // ─── InvestCTA — placeholder, disabled ───────────────────────────────────────
 function PublishCTA({ project }: { project: ProjectDetail }) {
@@ -214,6 +229,9 @@ export function ProjectDetailView({
                 (m) => m.userId
               )}
             />
+          )}
+          {safeTab === 'Attachments' && (
+            <ProjectAttachments project={project} />
           )}
           {safeTab === 'Teams' && <ProjectTeam project={project} />}
         </div>

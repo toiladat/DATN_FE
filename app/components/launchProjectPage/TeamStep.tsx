@@ -392,8 +392,8 @@ export function TeamStep({ onStepChange }: TeamStepProps = {}) {
       </div>
 
       <ActionFooter
-        onContinue={() => onStepChange?.('Overview')}
-        continueText="Complete Setup"
+        onContinue={() => onStepChange?.('Attachments')}
+        continueText="Continue to Attachments"
       />
     </div>
   )

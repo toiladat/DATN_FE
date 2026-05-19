@@ -4,6 +4,7 @@ import type { ProjectSummary, ProjectStatus } from '@/schemas/projectSchema'
 // Column accent colors — defined once, used consistently
 const STATUS_ACCENT: Record<ProjectStatus, string> = {
   pending: '#a9abb3',
+  approved: '#fbbf24',
   progress: '#8ff5ff',
   active: '#4ade80',
   success: '#ac89ff',
@@ -14,9 +15,15 @@ interface KanbanColumnProps {
   id: ProjectStatus
   title: string
   projects: ProjectSummary[]
+  onDeleteProject?: (id: string) => void
 }
 
-export function KanbanColumn({ id, title, projects }: KanbanColumnProps) {
+export function KanbanColumn({
+  id,
+  title,
+  projects,
+  onDeleteProject
+}: KanbanColumnProps) {
   const accent = STATUS_ACCENT[id]
   const isEmpty = projects.length === 0
 
@@ -54,7 +61,11 @@ export function KanbanColumn({ id, title, projects }: KanbanColumnProps) {
           </div>
         ) : (
           projects.map((project) => (
-            <KanbanCard key={project.id} project={project} />
+            <KanbanCard
+              key={project.id}
+              project={project}
+              onDeleteProject={onDeleteProject}
+            />
           ))
         )}
       </div>

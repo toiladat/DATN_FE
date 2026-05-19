@@ -26,7 +26,8 @@ export function LaunchSidebar({
     { id: 'Overview', label: 'Overview', icon: 'dashboard', num: '01' },
     { id: 'Basics', label: 'Basics', icon: 'info', num: '02' },
     { id: 'Milestones', label: 'Milestones', icon: 'pending', num: '03' },
-    { id: 'Team', label: 'Team', icon: 'group', num: '04' }
+    { id: 'Team', label: 'Team', icon: 'group', num: '04' },
+    { id: 'Attachments', label: 'Attachments', icon: 'attach_file', num: '05' }
   ]
 
   return (

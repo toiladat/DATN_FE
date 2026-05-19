@@ -37,6 +37,21 @@ export default function MyProject() {
   const getProjectsByStatus = (status: ProjectStatus) =>
     projects.filter((p) => p.status === status)
 
+  const handleDeleteProject = async (id: string) => {
+    if (!window.confirm('Are you sure you want to delete this project?')) return
+    try {
+      await projectRequests.deleteProject(id)
+      setProjects((prev) => prev.filter((p) => p.id !== id))
+      import('sonner').then(({ toast }) =>
+        toast.success('Project deleted successfully')
+      )
+    } catch (error) {
+      import('sonner').then(({ toast }) =>
+        toast.error('Failed to delete project')
+      )
+    }
+  }
+
   return (
     <div className="pt-24 px-6 md:px-12 pb-24 w-full h-screen flex flex-col bg-[#0b0e14]">
       <MyProjectsHeader projects={projects} />
@@ -62,6 +77,7 @@ export default function MyProject() {
               id={column.id}
               title={column.title}
               projects={getProjectsByStatus(column.id)}
+              onDeleteProject={handleDeleteProject}
             />
           ))}
         </div>

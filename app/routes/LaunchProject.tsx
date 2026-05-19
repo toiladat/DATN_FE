@@ -9,6 +9,7 @@ import { OverviewStep } from '@/components/launchProjectPage/OverviewStep'
 import { BasicsStep } from '@/components/launchProjectPage/BasicsStep'
 import { MilestonesStep } from '@/components/launchProjectPage/MilestonesStep'
 import { TeamStep } from '@/components/launchProjectPage/TeamStep'
+import { AttachmentsStep } from '@/components/launchProjectPage/AttachmentsStep'
 
 export default function LaunchProject() {
   const [currentStep, setCurrentStep] = useState<string>('Overview')
@@ -24,6 +25,8 @@ export default function LaunchProject() {
         return <MilestonesStep onStepChange={setCurrentStep} />
       case 'Team':
         return <TeamStep onStepChange={setCurrentStep} />
+      case 'Attachments':
+        return <AttachmentsStep onStepChange={setCurrentStep} />
       // Tương tự cho các bước khác (Basics, Funding, Team...)
       // Tạm thời render rỗng nếu chưa có component
       default:

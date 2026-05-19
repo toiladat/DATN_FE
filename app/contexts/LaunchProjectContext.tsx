@@ -38,10 +38,26 @@ export interface TeamMember {
   avatar: string
 }
 
+export type AttachmentCategory =
+  | 'Certificate'
+  | 'Portfolio'
+  | 'Resume'
+  | 'Business Plan'
+  | 'Patent'
+  | 'Other'
+
+export interface Attachment {
+  url: string
+  category: AttachmentCategory
+  customCategoryName?: string // used when category === 'Other'
+  description?: string
+}
+
 export interface ProjectData {
   basics: BasicsData
   milestones: Milestone[]
   team: TeamMember[]
+  attachments: Attachment[]
   milestoneDraft: Milestone
   milestoneCache: Record<string, string>
   updatedAt?: number
@@ -76,6 +92,7 @@ const defaultProjectData: ProjectData = {
   },
   milestones: [],
   team: [],
+  attachments: [],
   milestoneDraft: defaultMilestone,
   milestoneCache: {},
   updatedAt: Date.now()
@@ -88,6 +105,7 @@ interface LaunchProjectContextProps {
   updateMilestone: (index: number, milestone: Milestone) => void
   removeMilestone: (index: number) => void
   setTeam: (team: TeamMember[]) => void
+  setAttachments: (attachments: Attachment[]) => void
   setMilestoneDraft: (draft: Milestone) => void
   setMilestoneCache: (cache: Record<string, string>) => void
   resetProject: () => void
@@ -115,7 +133,8 @@ export const LaunchProjectProvider = ({
             milestoneDraft:
               parsed.milestoneDraft || defaultProjectData.milestoneDraft,
             milestoneCache:
-              parsed.milestoneCache || defaultProjectData.milestoneCache
+              parsed.milestoneCache || defaultProjectData.milestoneCache,
+            attachments: parsed.attachments || defaultProjectData.attachments
           }
         }
         return defaultProjectData
@@ -169,6 +188,10 @@ export const LaunchProjectProvider = ({
     setProject((prev) => ({ ...prev, team, updatedAt: Date.now() }))
   }
 
+  const setAttachments = (attachments: Attachment[]) => {
+    setProject((prev) => ({ ...prev, attachments, updatedAt: Date.now() }))
+  }
+
   const setMilestoneDraft = (draft: Milestone) => {
     setProject((prev) => ({
       ...prev,
@@ -201,6 +224,7 @@ export const LaunchProjectProvider = ({
         updateMilestone,
         removeMilestone,
         setTeam,
+        setAttachments,
         setMilestoneDraft,
         setMilestoneCache,
         resetProject

@@ -1,9 +1,9 @@
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 
-export type TaskStatus = 'Complete' | 'In Progress' | 'Not Started'
+export type TaskStatus = 'Complete' | 'In Progress' | 'Not Started' | 'Optional'
 
-const STEP_NUMBERS = ['01', '02', '03']
+const STEP_NUMBERS = ['01', '02', '03', '04']
 
 interface TaskCardProps {
   title: string
@@ -23,6 +23,7 @@ export function TaskCard({
 }: TaskCardProps) {
   const isComplete = status === 'Complete'
   const isInProgress = status === 'In Progress'
+  const isOptional = status === 'Optional'
   const stepNum = STEP_NUMBERS[stepIndex] ?? '0' + (stepIndex + 1)
 
   const containerClass = `p-5 flex flex-col md:flex-row md:items-center justify-between group transition-all duration-300 gap-4 bg-[#10131a] ${
@@ -84,6 +85,10 @@ export function TaskCard({
           ) : isComplete ? (
             <span className="material-symbols-outlined text-[#ac89ff] text-xl">
               check_circle
+            </span>
+          ) : isOptional ? (
+            <span className="material-symbols-outlined text-[#45484f] group-hover:text-[#8ff5ff] transition-colors text-xl">
+              add_circle
             </span>
           ) : (
             <span className="material-symbols-outlined text-[#45484f] group-hover:text-[#8ff5ff] transition-colors text-xl">

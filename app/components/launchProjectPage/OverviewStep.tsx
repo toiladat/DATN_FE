@@ -24,7 +24,9 @@ export function OverviewStep({ onStepChange }: OverviewStepProps = {}) {
       case 'Milestones':
         return project.milestones.length > 0 ? 'Complete' : 'Not Started'
       case 'Team':
-        return project.team.length > 0 ? 'Complete' : 'Not Started'
+        return project.team.length > 0 ? 'Complete' : 'Optional'
+      case 'Attachments':
+        return project.attachments.length > 0 ? 'Complete' : 'Optional'
       default:
         return 'Not Started'
     }
@@ -48,6 +50,12 @@ export function OverviewStep({ onStepChange }: OverviewStepProps = {}) {
       description: 'Edit your profile and add collaborators.',
       status: computeStatus('Team'),
       icon: 'group'
+    },
+    {
+      title: 'Attachments',
+      description: 'Upload certificates, portfolios, CVs or business plans.',
+      status: computeStatus('Attachments'),
+      icon: 'attach_file'
     }
   ]
 
@@ -81,8 +89,14 @@ export function OverviewStep({ onStepChange }: OverviewStepProps = {}) {
         milestones: recalculatedMilestones
       }
 
+      console.log(
+        'PAYLOAD DATA BEFORE VALIDATION:',
+        JSON.stringify(payloadData, null, 2)
+      )
+
       // Validate with Zod
       const validatedData = ProjectSubmissionSchema.parse(payloadData)
+      console.log('VALIDATED DATA:', JSON.stringify(validatedData, null, 2))
 
       // Advanced validation
       const goal = project.basics.fundingGoal || 0
@@ -135,8 +149,8 @@ export function OverviewStep({ onStepChange }: OverviewStepProps = {}) {
           </div>
         </div>
         <p className="text-[#73757d] max-w-xl mt-3 text-base leading-relaxed">
-          Three sections to complete before publishing. Each one is reviewed
-          before your project goes live.
+          Complete the required sections before publishing. Attachments are
+          optional but greatly improve investor confidence.
         </p>
       </header>
 

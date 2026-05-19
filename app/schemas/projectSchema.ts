@@ -38,10 +38,18 @@ export const TeamMemberSchema = z.object({
   avatar: z.string().optional()
 })
 
+export const AttachmentSchema = z.object({
+  url: z.string().url(),
+  category: z.string(),
+  customCategoryName: z.string().optional(),
+  description: z.string().optional()
+})
+
 export const ProjectSubmissionSchema = z.object({
   basics: BasicsSchema,
   milestones: z.array(MilestoneSchema),
-  team: z.array(TeamMemberSchema)
+  team: z.array(TeamMemberSchema),
+  attachments: z.array(AttachmentSchema).optional()
 })
 
 export type ProjectSubmission = z.infer<typeof ProjectSubmissionSchema>
@@ -196,6 +204,17 @@ export const ProjectDetailSchema = z.object({
         .optional()
     })
   ),
+  projectAttachments: z
+    .array(
+      z.object({
+        id: z.string(),
+        url: z.string(),
+        category: z.string(),
+        customCategoryName: z.string().nullable().optional(),
+        description: z.string().nullable().optional()
+      })
+    )
+    .optional(),
   createdAt: z.string().or(z.number()),
   updatedAt: z.string().or(z.number())
 })

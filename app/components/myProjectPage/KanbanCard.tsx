@@ -15,7 +15,13 @@ import {
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
 
-export function KanbanCard({ project }: { project: ProjectSummary }) {
+export function KanbanCard({
+  project,
+  onDeleteProject
+}: {
+  project: ProjectSummary
+  onDeleteProject?: (id: string) => void
+}) {
   const isPending = project.status === 'pending'
   const navigate = useNavigate()
 
@@ -206,7 +212,10 @@ export function KanbanCard({ project }: { project: ProjectSummary }) {
                 <DropdownMenuSeparator className="bg-[#2e323b] my-1" />
                 <DropdownMenuItem
                   className="focus:bg-[#ff716c]/10 focus:text-[#ff716c] text-[#ff716c] cursor-pointer outline-none rounded py-1.5 px-2.5 font-medium"
-                  onClick={(e) => e.stopPropagation()}
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    if (onDeleteProject) onDeleteProject(project.id)
+                  }}
                 >
                   Delete project
                 </DropdownMenuItem>

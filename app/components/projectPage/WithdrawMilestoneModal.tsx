@@ -67,13 +67,8 @@ export function WithdrawMilestoneModal({
         args: [projectIdUint256]
       })
 
-      toast.info('Đang chờ xác nhận giao dịch...')
-
-      if (publicClient) {
-        await publicClient.waitForTransactionReceipt({ hash: tx })
-      }
-
       // 2. Ghi nhận lên BE
+
       await withdrawMilestone({ milestoneId: milestone.id, txHash: tx })
 
       toast.success(
