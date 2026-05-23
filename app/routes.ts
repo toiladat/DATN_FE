@@ -12,6 +12,7 @@ export default [
     route('projects/:id', './routes/PublicProjectDetail.tsx'),
     route('my-project', './routes/MyProject.tsx'),
     route('my-project/:id', './routes/ProjectDetail.tsx'),
+    route('invested', './routes/Invested.tsx'),
     route('launch-project', './routes/LaunchProject.tsx'),
     route('profile', './routes/Profile.tsx')
   ])

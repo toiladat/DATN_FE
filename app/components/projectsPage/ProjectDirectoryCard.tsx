@@ -148,6 +148,11 @@ export function ProjectDirectoryCard({ project, index = 0 }: Props) {
                 <span className="w-1.5 h-1.5 rounded-full bg-[#ac89ff] animate-pulse shadow-[0_0_8px_#ac89ff]"></span>
                 ACTIVE
               </span>
+            ) : project.status === 'success' ? (
+              <span className="bg-[#0a0c10]/90 backdrop-blur-md text-[#8ff5ff] px-2.5 py-1 rounded-full text-[9px] font-bold border border-[#8ff5ff]/30 uppercase tracking-[0.15em] flex items-center gap-1.5 shadow-lg">
+                <Shield className="w-3 h-3 text-[#8ff5ff]" />
+                COMPLETED
+              </span>
             ) : (
               <span className="bg-[#0a0c10]/90 backdrop-blur-md text-[#a9abb3] px-2.5 py-1 rounded-full text-[9px] font-bold border border-[#2e323b] uppercase tracking-[0.15em] flex items-center gap-1.5 shadow-lg">
                 <Activity className="w-3 h-3" />

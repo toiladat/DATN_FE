@@ -50,8 +50,12 @@ export function ProjectMilestones({
 
       <div className="relative flex flex-col gap-8 before:absolute before:inset-y-0 before:left-[19px] before:w-[2px] before:bg-gradient-to-b before:from-[#2e323b] before:via-[#2e323b]/50 before:to-transparent">
         {sortedMilestones.map((m) => {
-          const isActiveOrDone =
-            m.status === 'COMPLETED' || m.status === 'PROGRESS'
+          const isActiveOrDone = [
+            'COMPLETED',
+            'PROGRESS',
+            'APPROVED',
+            'WITHDRAWN'
+          ].includes(m.status)
           const isExpanded = expandedId === m.id
 
           const mediaItems = []
@@ -144,13 +148,6 @@ export function ProjectMilestones({
                         <span className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#f59e0b]/10 border border-[#f59e0b]/30 text-[10px] font-bold uppercase tracking-widest text-[#f59e0b]">
                           <Clock className="w-3 h-3 animate-pulse" />
                           Pending...
-                        </span>
-                      )}
-
-                      {m.status === 'WITHDRAWN' && (
-                        <span className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#ac89ff]/10 border border-[#ac89ff]/30 text-[10px] font-bold uppercase tracking-widest text-[#ac89ff]">
-                          <CheckCircle2 className="w-3 h-3" />
-                          Funds Withdrawn
                         </span>
                       )}
 

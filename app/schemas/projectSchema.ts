@@ -81,7 +81,12 @@ export const ProjectSummarySchema = z.object({
   endDate: z.number(),
   updatedAt: z.number(),
   totalMilestones: z.number().optional(),
-  completedMilestones: z.number().optional()
+  completedMilestones: z.number().optional(),
+  myInvestmentAmount: z.number().optional(),
+  investedAt: z.number().optional(),
+  hasRefunded: z.boolean().optional(),
+  refundAmount: z.number().optional(),
+  rejectReason: z.string().optional()
 })
 export type ProjectSummary = z.infer<typeof ProjectSummarySchema>
 

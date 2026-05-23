@@ -22,15 +22,16 @@ export function FeaturedProjects() {
       >
         <div>
           <h2 className="text-4xl md:text-5xl font-['Space_Grotesk'] font-bold mb-4 text-[#ecedf6] tracking-tight">
-            Active Funding Pools
+            Featured Pools
           </h2>
           <p className="text-[#a9abb3] text-lg max-w-lg font-light leading-relaxed">
-            Vetted decentralized projects ready for capital injection. Governed
-            by smart contracts, transparent to the world.
+            Vetted decentralized projects ready for capital injection or
+            successfully built. Governed by smart contracts, transparent to the
+            world.
           </p>
         </div>
         <button className="flex items-center gap-2 text-[#8ff5ff] font-bold hover:text-[#a6fcff] transition-colors uppercase tracking-widest text-sm group">
-          View All Active Pools
+          View All Pools
           <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
         </button>
       </motion.div>

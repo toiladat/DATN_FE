@@ -13,7 +13,8 @@ import {
   Wallet,
   AlertTriangle,
   Copy,
-  Check
+  Check,
+  PieChart
 } from 'lucide-react'
 import { ConnectButton } from '@rainbow-me/rainbowkit'
 import { useBalance, useAccount } from 'wagmi'
@@ -229,6 +230,16 @@ function WalletProfileButton() {
                     >
                       <FolderKanban className="w-4 h-4" />
                       My Projects
+                    </button>
+                    <button
+                      onClick={() => {
+                        navigate('/invested')
+                        setOpen(false)
+                      }}
+                      className="w-full flex items-center gap-3 px-4 py-2.5 text-[13px] text-muted-foreground hover:text-foreground hover:bg-surface-variant transition-colors"
+                    >
+                      <PieChart className="w-4 h-4" />
+                      Invested
                     </button>
                     <button
                       onClick={() => {

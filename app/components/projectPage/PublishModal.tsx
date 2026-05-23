@@ -40,10 +40,10 @@ export function PublishModal({ project, children }: PublishModalProps) {
       const campaignIdUint256 = BigInt('0x' + project.id)
       const goal = parseEther(project.totalAmount.toString())
 
-      // Demo Mode: override fundDeadline = now + 2 phút (rút tiền ngay sau 2 phút)
+      // Demo Mode: override fundDeadline = now + 5 phút (rút tiền ngay sau 5 phút)
       // Normal Mode: dùng Target Launch Date của dự án
       const fundDeadline = isDemoMode
-        ? Math.floor(Date.now() / 1000) + 2 * 60
+        ? Math.floor(Date.now() / 1000) + 5 * 60
         : Math.floor(new Date(project.startDate).getTime() / 1000)
 
       // Prepare milestone arrays: Thời gian giải ngân là đầu ngày bắt đầu giai đoạn
@@ -175,7 +175,7 @@ export function PublishModal({ project, children }: PublishModalProps) {
               className={`text-[10px] px-2 py-0.5 rounded-full ${isDemoMode ? 'bg-[#f59e0b]/20' : 'bg-[#2e323b]'}`}
             >
               {isDemoMode
-                ? 'BẬT — Rút tiền sau 2 phút'
+                ? 'BẬT — Rút tiền sau 5 phút'
                 : 'TẮT — Dùng Launch Date thực'}
             </span>
           </button>

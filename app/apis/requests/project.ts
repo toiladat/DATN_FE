@@ -14,6 +14,7 @@ export type MilestoneUpdatePayload = {
 export const projectRequests = {
   createProject: (data: ProjectSubmission) => apiClient.post('/projects', data),
   getMyProjects: () => apiClient.get('/projects/me'),
+  getInvestedProjects: () => apiClient.get('/projects/invested'),
   getAllProjects: (
     page: number = 1,
     limit: number = 6,

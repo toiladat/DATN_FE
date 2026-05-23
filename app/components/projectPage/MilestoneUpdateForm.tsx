@@ -355,8 +355,12 @@ export function MilestoneUpdateForm({
       {isError && (
         <p className="text-[#ff716c] text-xs flex items-center gap-1.5">
           <AlertTriangle className="w-3.5 h-3.5 shrink-0" />
-          {(error as any)?.response?.data?.message ??
-            'Failed to submit update. Please try again.'}
+          {(() => {
+            const msg = (error as any)?.response?.data?.message
+            if (typeof msg === 'string') return msg
+            if (Array.isArray(msg) && msg[0]?.message) return msg[0].message
+            return 'Failed to submit update. Please try again.'
+          })()}
         </p>
       )}
 

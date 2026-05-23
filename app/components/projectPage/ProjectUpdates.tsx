@@ -30,12 +30,16 @@ function getStepAppearance(
   status: MilestoneUpdateStatus | null,
   milestoneStatus: string
 ) {
-  if (milestoneStatus === 'COMPLETED' || milestoneStatus === 'APPROVED') {
+  if (
+    milestoneStatus === 'COMPLETED' ||
+    milestoneStatus === 'APPROVED' ||
+    milestoneStatus === 'WITHDRAWN'
+  ) {
     return {
       ring: 'border-[#8ff5ff] bg-[#8ff5ff]/10',
       nodeText: 'text-[#8ff5ff]',
       glow: 'shadow-[0_0_18px_rgba(143,245,255,0.35)]',
-      label: 'DONE',
+      label: milestoneStatus === 'WITHDRAWN' ? 'WITHDRAWN' : 'DONE',
       labelColor: 'text-[#8ff5ff] bg-[#8ff5ff]/10 border-[#8ff5ff]/30',
       icon: <CheckCircle2 className="w-3 h-3" />
     }
@@ -45,7 +49,7 @@ function getStepAppearance(
       ring: 'border-[#ac89ff] bg-[#ac89ff]/10',
       nodeText: 'text-[#ac89ff]',
       glow: 'shadow-[0_0_18px_rgba(172,137,255,0.4)]',
-      label: 'ACTIVE',
+      label: 'PROGRESS',
       labelColor: 'text-[#ac89ff] bg-[#ac89ff]/10 border-[#ac89ff]/30',
       icon: <Zap className="w-3 h-3" />
     }
@@ -234,17 +238,20 @@ function MilestoneStep({
   milestone,
   updateStatus,
   projectId,
-  isLast
+  isLast,
+  isOwner
 }: {
   milestone: MilestoneRest
   updateStatus: MilestoneUpdateStatus | null
   projectId: string
   isLast: boolean
+  isOwner: boolean
 }) {
   const [showForm, setShowForm] = useState(false)
   const [showUpdate, setShowUpdate] = useState(false) // inline update viewer
 
-  const canUpdate = updateStatus === 'unlocked' || updateStatus === 'late'
+  const canUpdate =
+    isOwner && (updateStatus === 'unlocked' || updateStatus === 'late')
   const appearance = getStepAppearance(updateStatus, milestone.status)
   const hasExisting = !!milestone.milestoneUpdates
 
@@ -274,7 +281,9 @@ function MilestoneStep({
     const daysPastEnd = Math.ceil((now.getTime() - end.getTime()) / msDay)
 
     const isDone =
-      milestone.status === 'COMPLETED' || milestone.status === 'APPROVED'
+      milestone.status === 'COMPLETED' ||
+      milestone.status === 'APPROVED' ||
+      milestone.status === 'WITHDRAWN'
 
     if (isDone) return null // đã xong, không cần label
     if (daysToStart > 0)
@@ -473,9 +482,7 @@ export function ProjectUpdates({
       {/* Stepper */}
       <div>
         {sorted.map((m, i) => {
-          const status = isOwner
-            ? getMilestoneUpdateStatus(m, sorted, project.status)
-            : null
+          const status = getMilestoneUpdateStatus(m, sorted, project.status)
 
           return (
             <MilestoneStep
@@ -484,6 +491,7 @@ export function ProjectUpdates({
               updateStatus={status}
               projectId={project.id}
               isLast={i === sorted.length - 1}
+              isOwner={isOwner}
             />
           )
         })}

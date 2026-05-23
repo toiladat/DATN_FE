@@ -201,6 +201,21 @@ export function ProjectDetailView({
                 </p>
               </div>
             )}
+
+            {/* Success status note (both public and owner view) */}
+            {project.status === 'success' && (
+              <div className="p-5 rounded-2xl bg-[#10131a] border border-[#8ff5ff]/30 text-center shadow-[0_0_24px_rgba(143,245,255,0.15)] relative overflow-hidden group">
+                <div className="absolute -right-10 -top-10 w-32 h-32 bg-[#8ff5ff]/5 rounded-full blur-3xl group-hover:bg-[#8ff5ff]/10 transition-colors duration-700 ease-out" />
+                <p className="text-[11px] font-bold uppercase tracking-widest text-[#8ff5ff] mb-2 relative z-10 flex items-center justify-center gap-1.5 font-['Space_Grotesk']">
+                  <Zap className="w-3.5 h-3.5 text-[#8ff5ff]" />
+                  Project Completed
+                </p>
+                <p className="text-[#a9abb3] text-xs relative z-10">
+                  This project has successfully completed all its milestones and
+                  all funds have been disbursed!
+                </p>
+              </div>
+            )}
           </div>
         </section>
 
