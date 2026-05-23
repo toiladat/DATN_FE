@@ -155,7 +155,7 @@ export function InvestModal({
                 type="number"
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
-                placeholder="Nhập số tiền USDT"
+                placeholder="Nhập số tiền USDT (Tối thiểu 1)"
                 className="w-full bg-[#161a21] border border-[#2e323b] rounded-xl px-4 py-3 text-white placeholder:text-[#45484f] focus:outline-none focus:border-[#8ff5ff] focus:ring-1 focus:ring-[#8ff5ff]/50 transition-all font-mono"
                 disabled={isPending}
               />
@@ -172,6 +172,11 @@ export function InvestModal({
                 Max
               </button>
             </div>
+            {amount && Number(amount) < 1 && (
+              <p className="text-xs text-[#ff716c] font-mono mt-1">
+                * Số tiền đầu tư tối thiểu là 1 USDT
+              </p>
+            )}
           </div>
 
           <div className="space-y-2">
@@ -191,7 +196,7 @@ export function InvestModal({
 
           <button
             onClick={handleInvest}
-            disabled={isPending || !amount || Number(amount) <= 0}
+            disabled={isPending || !amount || Number(amount) < 1}
             className="w-full py-3.5 rounded-xl bg-gradient-to-r from-[#8ff5ff] to-[#ac89ff] text-[#10131a] font-bold uppercase tracking-widest hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2 font-['Space_Grotesk'] shadow-[0_0_20px_rgba(143,245,255,0.3)]"
           >
             {isPending ? (
