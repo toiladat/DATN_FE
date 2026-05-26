@@ -3,16 +3,18 @@ import { MyProjectsHeader } from '@/components/myProjectPage/MyProjectsHeader'
 import { KanbanColumn } from '@/components/myProjectPage/KanbanColumn'
 import type { ProjectSummary, ProjectStatus } from '@/schemas/projectSchema'
 import { projectRequests } from '@/apis/requests/project'
+import { useTranslation } from 'react-i18next'
 
-const COLUMNS: { id: ProjectStatus; title: string }[] = [
-  { id: 'pending', title: 'Pending Approval' },
-  { id: 'progress', title: 'Funding in Progress' },
-  { id: 'active', title: 'Active' },
-  { id: 'success', title: 'Success' },
-  { id: 'rejected', title: 'Rejected' }
+const COLUMNS: { id: ProjectStatus; titleKey: string }[] = [
+  { id: 'pending', titleKey: 'status.pending' },
+  { id: 'progress', titleKey: 'status.progress' },
+  { id: 'active', titleKey: 'status.active' },
+  { id: 'success', titleKey: 'status.success' },
+  { id: 'rejected', titleKey: 'status.rejected' }
 ]
 
 export default function MyProject() {
+  const { t } = useTranslation()
   const [projects, setProjects] = useState<ProjectSummary[]>([])
   const [isLoading, setIsLoading] = useState(true)
 
@@ -38,16 +40,16 @@ export default function MyProject() {
     projects.filter((p) => p.status === status)
 
   const handleDeleteProject = async (id: string) => {
-    if (!window.confirm('Are you sure you want to delete this project?')) return
+    if (!window.confirm(t('my_project.confirm_delete'))) return
     try {
       await projectRequests.deleteProject(id)
       setProjects((prev) => prev.filter((p) => p.id !== id))
       import('sonner').then(({ toast }) =>
-        toast.success('Project deleted successfully')
+        toast.success(t('my_project.delete_success'))
       )
     } catch (error) {
       import('sonner').then(({ toast }) =>
-        toast.error('Failed to delete project')
+        toast.error(t('my_project.delete_error'))
       )
     }
   }
@@ -65,7 +67,7 @@ export default function MyProject() {
                 sync
               </span>
               <span className="font-['Space_Grotesk'] font-bold tracking-widest uppercase">
-                Syncing...
+                {t('my_project.syncing')}
               </span>
             </div>
           </div>
@@ -75,7 +77,7 @@ export default function MyProject() {
             <KanbanColumn
               key={column.id}
               id={column.id}
-              title={column.title}
+              title={t(column.titleKey)}
               projects={getProjectsByStatus(column.id)}
               onDeleteProject={handleDeleteProject}
             />

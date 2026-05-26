@@ -1,5 +1,6 @@
 import { Button } from '@/components/ui/button'
 import { useSidebar } from '@/components/ui/sidebar'
+import { useTranslation } from 'react-i18next'
 
 interface ActionFooterProps {
   onDiscard?: () => void
@@ -10,9 +11,10 @@ interface ActionFooterProps {
 export function ActionFooter({
   onDiscard,
   onContinue,
-  continueText = 'Continue'
+  continueText
 }: ActionFooterProps) {
   const { state, isMobile } = useSidebar()
+  const { t } = useTranslation()
   const isCollapsed = state === 'collapsed'
 
   const leftOffset = isMobile
@@ -20,6 +22,8 @@ export function ActionFooter({
     : isCollapsed
       ? 'var(--sidebar-width-icon)'
       : 'var(--sidebar-width)'
+
+  const displayContinueText = continueText || t('btn.continue')
 
   return (
     <div
@@ -31,14 +35,14 @@ export function ActionFooter({
         onClick={onDiscard}
         className="text-[#45484f] hover:text-[#a9abb3] transition-colors text-sm font-['Space_Grotesk']"
       >
-        Discard changes
+        {t('btn.discard_changes')}
       </button>
 
       <Button
         onClick={onContinue}
         className="bg-[#8ff5ff] hover:bg-[#a8f8ff] text-[#00383d] px-8 py-2 h-10 rounded-xl font-['Space_Grotesk'] font-bold text-sm shadow-[0_0_20px_rgba(143,245,255,0.25)] hover:shadow-[0_0_28px_rgba(143,245,255,0.4)] transition-all active:scale-95 border-none"
       >
-        {continueText}
+        {displayContinueText}
       </Button>
     </div>
   )

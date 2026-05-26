@@ -1,27 +1,27 @@
 import { motion } from 'framer-motion'
-
-const howItWorks = [
-  {
-    icon: 'rocket_launch',
-    title: 'Submit Your Project',
-    description:
-      'Complete our streamlined onboarding process. Define your vision, tokenomics, and milestones.'
-  },
-  {
-    icon: 'verified_user',
-    title: 'Community Vetting',
-    description:
-      'Our decentralized council and community review your project for viability and integrity.'
-  },
-  {
-    icon: 'currency_exchange',
-    title: 'Launch & Fund',
-    description:
-      'Go live on-chain. Backers commit funds secured in smart contracts tied to milestone completion.'
-  }
-]
+import { useTranslation } from 'react-i18next'
 
 export function HowItWorks() {
+  const { t } = useTranslation()
+
+  const howItWorks = [
+    {
+      icon: 'rocket_launch',
+      title: t('landing.step1_title'),
+      description: t('landing.step1_desc')
+    },
+    {
+      icon: 'verified_user',
+      title: t('landing.step2_title'),
+      description: t('landing.step2_desc')
+    },
+    {
+      icon: 'currency_exchange',
+      title: t('landing.step3_title'),
+      description: t('landing.step3_desc')
+    }
+  ]
+
   return (
     <section className="py-32 bg-[#0a0c10] border-y border-[#2e323b]/30 relative overflow-hidden">
       <div className="absolute top-0 right-1/4 w-[500px] h-[500px] bg-[#ac89ff]/5 rounded-[100%] blur-[120px] pointer-events-none" />
@@ -35,11 +35,10 @@ export function HowItWorks() {
           className="text-center max-w-3xl mx-auto mb-24"
         >
           <h2 className="text-5xl md:text-6xl font-['Space_Grotesk'] font-bold mb-6 text-[#ecedf6] tracking-tight">
-            How It Works
+            {t('landing.how_it_works')}
           </h2>
           <p className="text-[#a9abb3] text-xl font-light leading-relaxed">
-            Enter the future of decentralized capital in three simple steps.
-            Secure, transparent, and direct.
+            {t('landing.how_it_works_desc')}
           </p>
         </motion.div>
 
@@ -48,7 +47,6 @@ export function HowItWorks() {
           <div className="hidden md:block absolute top-[4rem] left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-[#8ff5ff]/30 to-transparent z-0" />
 
           {howItWorks.map((step, index) => {
-            const stepNumber = `0${index + 1}`
             const accentColor = index === 1 ? '#ac89ff' : '#8ff5ff'
 
             return (

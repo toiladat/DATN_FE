@@ -11,6 +11,7 @@ import { useAccount, useDisconnect, useSignMessage } from 'wagmi'
 import { useQueryClient } from '@tanstack/react-query'
 
 import { getCurrentUserId } from '@/lib/auth'
+import { getErrorMessage } from '@/lib/utils'
 
 interface AuthContextType {
   isAuthenticated: boolean
@@ -136,7 +137,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
           console.error('Wallet authentication error:', error)
           toast.error(
-            error?.message || 'Failed to authenticate wallet. Please try again.'
+            getErrorMessage(
+              error,
+              'Failed to authenticate wallet. Please try again.'
+            )
           )
           // Clean state and disconnect on failure or cancel
           try {

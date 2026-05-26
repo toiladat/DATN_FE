@@ -9,13 +9,18 @@ import { ProjectSubmissionSchema } from '@/schemas/projectSchema'
 import { toast } from 'sonner'
 import { z } from 'zod'
 import { formatDistanceToNow } from 'date-fns'
+import { vi, enUS } from 'date-fns/locale'
+import { useTranslation } from 'react-i18next'
 
 interface OverviewStepProps {
   onStepChange?: (step: string) => void
 }
 
 export function OverviewStep({ onStepChange }: OverviewStepProps = {}) {
+  const { t, i18n } = useTranslation()
   const { project, resetProject } = useLaunchProject()
+
+  const currentLocale = i18n.language === 'vi' ? vi : enUS
 
   const computeStatus = (step: string): TaskStatus => {
     switch (step) {
@@ -35,25 +40,29 @@ export function OverviewStep({ onStepChange }: OverviewStepProps = {}) {
   const tasks = [
     {
       title: 'Basics',
-      description: 'Name your project, upload an image or video...',
+      titleKey: 'step.basics',
+      description: t('overview.stepBasicsDesc'),
       status: computeStatus('Basics'),
       icon: 'check_circle'
     },
     {
       title: 'Milestones',
-      description: 'Define your milestones...',
+      titleKey: 'step.milestones',
+      description: t('overview.stepMilestonesDesc'),
       status: computeStatus('Milestones'),
       icon: 'pending'
     },
     {
       title: 'Team',
-      description: 'Edit your profile and add collaborators.',
+      titleKey: 'step.team',
+      description: t('overview.stepTeamDesc'),
       status: computeStatus('Team'),
       icon: 'group'
     },
     {
       title: 'Attachments',
-      description: 'Upload certificates, portfolios, CVs or business plans.',
+      titleKey: 'step.attachments',
+      description: t('overview.stepAttachmentsDesc'),
       status: computeStatus('Attachments'),
       icon: 'attach_file'
     }
@@ -105,8 +114,11 @@ export function OverviewStep({ onStepChange }: OverviewStepProps = {}) {
         0
       )
       if (totalMilestoneBudget !== goal) {
-        toast.error('Budget Mismatch', {
-          description: `Total milestone budget (€${totalMilestoneBudget.toLocaleString()}) must exactly equal your funding goal (€${goal.toLocaleString()}).`
+        toast.error(t('validation.budget_mismatch'), {
+          description: t('toast.budget_mismatch_desc', {
+            total: totalMilestoneBudget.toLocaleString(),
+            goal: goal.toLocaleString()
+          })
         })
         return
       }
@@ -114,19 +126,17 @@ export function OverviewStep({ onStepChange }: OverviewStepProps = {}) {
       // Call Real API
       const response = await projectRequests.createProject(validatedData as any)
       if (response.status === 201) {
-        toast.success(
-          'Project published successfully! Admin will review and approve your project within the next 48 hours.'
-        )
+        toast.success(t('toast.publish_success'))
         resetProject()
       } else {
-        toast.error('An error occurred during publishing.')
+        toast.error(t('toast.publish_error'))
       }
     } catch (error: any) {
       console.error('Validation failed:', error)
       if (error instanceof z.ZodError) {
-        toast.error('Please complete all required fields before publishing.')
+        toast.error(t('toast.complete_required_fields'))
       } else {
-        toast.error('An error occurred during publishing.')
+        toast.error(t('toast.publish_error'))
       }
     }
   }
@@ -137,20 +147,19 @@ export function OverviewStep({ onStepChange }: OverviewStepProps = {}) {
       <header className="mb-12">
         <div className="flex items-center justify-between mb-2">
           <h1 className="text-4xl md:text-5xl font-['Space_Grotesk'] font-bold text-[#ecedf6] tracking-tight">
-            Project overview
+            {t('overview.projectOverview')}
           </h1>
           <div className="flex items-center gap-2 text-[#45484f] text-sm hidden md:flex">
             <span className="material-symbols-outlined text-xs">schedule</span>
             <span className="font-mono text-xs">
               {project.updatedAt
-                ? formatDistanceToNow(project.updatedAt, { addSuffix: true })
-                : 'just now'}
+                ? `${t('overview.lastUpdated')} ${formatDistanceToNow(project.updatedAt, { addSuffix: true, locale: currentLocale })}`
+                : t('overview.justNow')}
             </span>
           </div>
         </div>
         <p className="text-[#73757d] max-w-xl mt-3 text-base leading-relaxed">
-          Complete the required sections before publishing. Attachments are
-          optional but greatly improve investor confidence.
+          {t('overview.completeRequiredSections')}
         </p>
       </header>
 
@@ -159,7 +168,7 @@ export function OverviewStep({ onStepChange }: OverviewStepProps = {}) {
         {tasks.map((task, index) => (
           <TaskCard
             key={task.title}
-            title={task.title}
+            title={t(task.titleKey)}
             description={task.description}
             status={task.status}
             icon={task.icon}
@@ -173,14 +182,14 @@ export function OverviewStep({ onStepChange }: OverviewStepProps = {}) {
       <div className="flex items-center justify-between gap-4 border-t border-[#2e323b]/50 pt-8">
         <p className="text-xs text-[#45484f]">
           {tasks.filter((t) => t.status === 'Complete').length} / {tasks.length}{' '}
-          sections complete
+          {t('overview.sectionsComplete')}
         </p>
         <Button
           disabled={!isPublishable}
           className="bg-[#8ff5ff] hover:bg-[#a8f8ff] text-[#00383d] active:scale-95 transition-all font-bold px-8 rounded-xl shadow-[0_0_20px_rgba(143,245,255,0.2)] hover:shadow-[0_0_28px_rgba(143,245,255,0.35)] disabled:opacity-40 disabled:grayscale border-none"
           onClick={handlePublish}
         >
-          Publish project
+          {t('overview.publishProject')}
         </Button>
       </div>
     </div>

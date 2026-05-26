@@ -1,5 +1,6 @@
 import { KanbanCard } from './KanbanCard'
 import type { ProjectSummary, ProjectStatus } from '@/schemas/projectSchema'
+import { useTranslation } from 'react-i18next'
 
 // Column accent colors — defined once, used consistently
 const STATUS_ACCENT: Record<ProjectStatus, string> = {
@@ -24,6 +25,7 @@ export function KanbanColumn({
   projects,
   onDeleteProject
 }: KanbanColumnProps) {
+  const { t } = useTranslation()
   const accent = STATUS_ACCENT[id]
   const isEmpty = projects.length === 0
 
@@ -56,7 +58,7 @@ export function KanbanColumn({
               className="text-[11px] font-medium"
               style={{ color: `${accent}60` }}
             >
-              Empty
+              {t('my_project.empty')}
             </span>
           </div>
         ) : (

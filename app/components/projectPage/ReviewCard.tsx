@@ -18,6 +18,7 @@ import {
 import { useAuth } from '../providers/AuthProvider'
 import { toast } from 'sonner'
 import { formatDistanceToNow } from 'date-fns'
+import { getErrorMessage } from '@/lib/utils'
 
 // ─── Avatar with colored initials fallback ────────────────────────────────────
 const AVATAR_COLORS = [
@@ -174,6 +175,9 @@ export function ReviewCard({
         onSuccess: () => {
           setReplyContent('')
           setIsReplying(false)
+        },
+        onError: (err) => {
+          toast.error(getErrorMessage(err, 'Không thể gửi phản hồi.'))
         }
       }
     )
@@ -184,13 +188,25 @@ export function ReviewCard({
     if (!editContent.trim() || isUpdating) return
     updateReview(
       { reviewId: review.id, content: editContent.trim() },
-      { onSuccess: () => setIsEditing(false) }
+      {
+        onSuccess: () => setIsEditing(false),
+        onError: (err) => {
+          toast.error(getErrorMessage(err, 'Không thể sửa bình luận.'))
+        }
+      }
     )
   }
 
   const handleDelete = () => {
     if (window.confirm('Delete this comment? Replies will also be removed.'))
-      deleteReview(review.id)
+      deleteReview(review.id, {
+        onSuccess: () => {
+          toast.success('Xóa bình luận thành công!')
+        },
+        onError: (err) => {
+          toast.error(getErrorMessage(err, 'Không thể xóa bình luận.'))
+        }
+      })
   }
 
   return (

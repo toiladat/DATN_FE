@@ -8,8 +8,11 @@ import {
   Legend
 } from 'recharts'
 import type { ProjectSummary } from '@/schemas/projectSchema'
+import { useTranslation } from 'react-i18next'
 
 export function InvestedStats({ projects }: { projects: ProjectSummary[] }) {
+  const { t } = useTranslation()
+
   const stats = useMemo(() => {
     let totalInvested = 0
     let progress = 0
@@ -37,10 +40,30 @@ export function InvestedStats({ projects }: { projects: ProjectSummary[] }) {
     })
 
     const chartData = [
-      { name: 'Funding', value: progress, color: '#8ff5ff' },
-      { name: 'Active', value: active, color: '#ac89ff' },
-      { name: 'Success', value: success, color: '#6bcb77' },
-      { name: 'Failed', value: failed, color: '#ff716c' }
+      {
+        name: 'Funding',
+        labelKey: 'stats.funding',
+        value: progress,
+        color: '#8ff5ff'
+      },
+      {
+        name: 'Active',
+        labelKey: 'status.active',
+        value: active,
+        color: '#ac89ff'
+      },
+      {
+        name: 'Success',
+        labelKey: 'status.success',
+        value: success,
+        color: '#6bcb77'
+      },
+      {
+        name: 'Failed',
+        labelKey: 'stats.failed',
+        value: failed,
+        color: '#ff716c'
+      }
     ].filter((d) => d.value > 0) // Only show statuses that have projects
 
     return { totalInvested, chartData, totalProjects: projects.length }
@@ -57,7 +80,7 @@ export function InvestedStats({ projects }: { projects: ProjectSummary[] }) {
 
         <div>
           <h3 className="text-[#a9abb3] text-xs uppercase tracking-widest font-semibold mb-1">
-            Total Invested
+            {t('stats.total_invested')}
           </h3>
           <p className="text-3xl font-bold font-mono text-[#ecedf6]">
             {stats.totalInvested.toLocaleString()}{' '}
@@ -69,11 +92,13 @@ export function InvestedStats({ projects }: { projects: ProjectSummary[] }) {
 
         <div>
           <h3 className="text-[#a9abb3] text-xs uppercase tracking-widest font-semibold mb-1">
-            Projects Backed
+            {t('stats.projects_backed')}
           </h3>
           <p className="text-3xl font-bold font-mono text-[#ecedf6]">
             {stats.totalProjects}{' '}
-            <span className="text-sm text-[#ac89ff]">projects</span>
+            <span className="text-sm text-[#ac89ff]">
+              {t('stats.projects_plural')}
+            </span>
           </p>
         </div>
       </div>
@@ -99,6 +124,10 @@ export function InvestedStats({ projects }: { projects: ProjectSummary[] }) {
                   ))}
                 </Pie>
                 <RechartsTooltip
+                  formatter={(value, name) => {
+                    const entry = stats.chartData.find((d) => d.name === name)
+                    return [value, entry ? t(entry.labelKey) : name]
+                  }}
                   contentStyle={{
                     backgroundColor: '#10131a',
                     borderColor: '#2e323b',
@@ -110,7 +139,7 @@ export function InvestedStats({ projects }: { projects: ProjectSummary[] }) {
             </ResponsiveContainer>
           ) : (
             <div className="w-full h-full flex items-center justify-center text-[#73757d]">
-              No data to display
+              {t('stats.no_data')}
             </div>
           )}
         </div>
@@ -124,7 +153,9 @@ export function InvestedStats({ projects }: { projects: ProjectSummary[] }) {
                   className="w-3 h-3 rounded-full"
                   style={{ backgroundColor: item.color }}
                 />
-                <span className="text-[#ecedf6] text-sm">{item.name}</span>
+                <span className="text-[#ecedf6] text-sm">
+                  {t(item.labelKey)}
+                </span>
               </div>
               <span className="font-mono text-[#a9abb3]">{item.value}</span>
             </div>

@@ -28,12 +28,14 @@ import { toast } from 'sonner'
 import { BasicsSchema } from '@/schemas/projectSchema'
 import mediaRequests from '@/apis/requests/media'
 import { useGetCategories } from '@/apis/queries/category'
+import { useTranslation } from 'react-i18next'
 
 interface BasicsStepProps {
   onStepChange?: (step: string) => void
 }
 
 export function BasicsStep({ onStepChange }: BasicsStepProps = {}) {
+  const { t } = useTranslation()
   const { project, setBasics } = useLaunchProject()
   const { basics } = project
   const videoInputRef = useRef<HTMLInputElement>(null)
@@ -76,8 +78,8 @@ export function BasicsStep({ onStepChange }: BasicsStepProps = {}) {
           newCache[f.name + f.size] = urls[idx]
         })
       } catch (error) {
-        toast.error('Upload Failed', {
-          description: 'Failed to upload some images.'
+        toast.error(t('toast.upload_failed'), {
+          description: t('toast.upload_failed_desc')
         })
         throw error
       } finally {
@@ -96,7 +98,9 @@ export function BasicsStep({ onStepChange }: BasicsStepProps = {}) {
     if (e.target.files && e.target.files.length > 0) {
       const file = e.target.files[0]
       if (file.size > 100 * 1024 * 1024) {
-        toast.error('Video too large', { description: 'Max size is 100MB.' })
+        toast.error(t('toast.video_too_large'), {
+          description: t('toast.video_too_large_desc')
+        })
         return
       }
 
@@ -111,18 +115,18 @@ export function BasicsStep({ onStepChange }: BasicsStepProps = {}) {
         const uploadUrl = data[0].uploadUrl
         const finalUrl = data[0].fileUrl
 
-        toast.info('Uploading video...')
+        toast.info(t('toast.uploading_video'))
         await mediaRequests.uploadToPresignedUrl(file, uploadUrl)
 
         if (basics.video && basics.video.startsWith('http')) {
           mediaRequests.deleteFile(basics.video).catch(console.error)
         }
         setBasics({ video: finalUrl })
-        toast.success('Video uploaded successfully!')
+        toast.success(t('toast.video_uploaded_success'))
       } catch (error) {
         console.error(error)
-        toast.error('Video upload failed', {
-          description: 'Please try again with a different format.'
+        toast.error(t('toast.video_upload_failed'), {
+          description: t('toast.video_upload_failed_desc')
         })
       } finally {
         setIsUploadingVideo(false)
@@ -137,12 +141,17 @@ export function BasicsStep({ onStepChange }: BasicsStepProps = {}) {
     const result = BasicsSchema.safeParse(basics)
 
     if (!result.success) {
-      // Collect the first error message from Zod
-      const errorMessages = result.error.issues
-        .map((err: any) => err.message)
-        .join(', ')
-      toast.error('Missing Required Fields', {
-        description: errorMessages
+      toast.error(t('validation.missing_required_fields'), {
+        description: (
+          <div className="flex flex-col gap-1 text-xs mt-1 text-[#ff716c]">
+            {result.error.issues.map((err: any, idx: number) => (
+              <div key={idx} className="flex items-start gap-1">
+                <span className="shrink-0">•</span>
+                <span>{t(err.message)}</span>
+              </div>
+            ))}
+          </div>
+        )
       })
       return
     }
@@ -196,11 +205,10 @@ export function BasicsStep({ onStepChange }: BasicsStepProps = {}) {
       {/* Header Section */}
       <header className="mb-16">
         <h1 className="text-5xl font-bold font-['Space_Grotesk'] text-on-surface mb-4 tracking-tight">
-          Start with the basics
+          {t('basics.title')}
         </h1>
         <p className="text-on-surface-variant text-lg max-w-2xl leading-relaxed">
-          Make it easy for people to learn about your project. This information
-          will appear on your project page and in search results.
+          {t('basics.desc')}
         </p>
       </header>
 
@@ -209,22 +217,21 @@ export function BasicsStep({ onStepChange }: BasicsStepProps = {}) {
         <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           <div className="lg:col-span-4">
             <h3 className="text-xl font-['Space_Grotesk'] font-bold mb-2">
-              Project title
+              {t('basics.projectTitle')}
             </h3>
             <p className="text-[#a9abb3] text-sm">
-              Create a clear, concise title and subtitle that explains what
-              you're creating.
+              {t('basics.projectTitleDesc')}
             </p>
           </div>
           <div className="lg:col-span-8 space-y-6">
             <div className="relative">
               <label className="block text-xs font-['Space_Grotesk'] font-bold uppercase tracking-widest text-[#a9abb3] mb-2">
-                Title
+                {t('basics.fieldTitle')}
               </label>
               <Input
                 className="w-full bg-[#10131a] border-[#45484f]/30 rounded-xl px-4 py-6 focus-visible:ring-1 focus-visible:ring-[#8ff5ff] transition-all text-[#ecedf6]"
                 maxLength={60}
-                placeholder="The Eternal Vault: A Cinematic Web3 Experience"
+                placeholder={t('basics.titlePlaceholder')}
                 type="text"
                 value={basics.title}
                 onChange={(e) => setBasics({ title: e.target.value })}
@@ -236,12 +243,12 @@ export function BasicsStep({ onStepChange }: BasicsStepProps = {}) {
 
             <div className="relative">
               <label className="block text-xs font-['Space_Grotesk'] font-bold uppercase tracking-widest text-[#a9abb3] mb-2">
-                Subtitle
+                {t('basics.fieldSubtitle')}
               </label>
               <Textarea
                 className="w-full bg-[#10131a] border-[#45484f]/30 rounded-xl px-4 py-4 focus-visible:ring-1 focus-visible:ring-[#8ff5ff] transition-all text-[#ecedf6] resize-none"
                 maxLength={135}
-                placeholder="An immersive journey through the Radiant Void, leveraging multi-dimensional UI and smart contract security."
+                placeholder={t('basics.subtitlePlaceholder')}
                 rows={3}
                 value={basics.subtitle}
                 onChange={(e) => setBasics({ subtitle: e.target.value })}
@@ -257,29 +264,28 @@ export function BasicsStep({ onStepChange }: BasicsStepProps = {}) {
         <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           <div className="lg:col-span-4">
             <h3 className="text-xl font-['Space_Grotesk'] font-bold mb-2">
-              Project category
+              {t('basics.projectCategory')}
             </h3>
             <p className="text-[#a9abb3] text-sm">
-              Select categories that best describe your project to help backers
-              find you.
+              {t('basics.projectCategoryDesc')}
             </p>
           </div>
           <div className="lg:col-span-8 grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-4">
               <label className="block text-xs font-['Space_Grotesk'] font-bold uppercase tracking-widest text-[#a9abb3]">
-                Primary Category
+                {t('basics.primaryCategory')}
               </label>
               <Select
                 value={basics.primaryCategory}
                 onValueChange={(val) => setBasics({ primaryCategory: val })}
               >
                 <SelectTrigger className="w-full bg-[#10131a] border-[#45484f]/30 rounded-xl px-4 py-6 focus:ring-1 focus:ring-[#8ff5ff]">
-                  <SelectValue placeholder="Select Category" />
+                  <SelectValue placeholder={t('basics.selectCategory')} />
                 </SelectTrigger>
                 <SelectContent className="bg-[#161a21] border-[#45484f]/20">
                   {isLoadingCategories ? (
                     <SelectItem value="loading" disabled>
-                      Loading categories...
+                      {t('basics.loadingCategories')}
                     </SelectItem>
                   ) : categories.length > 0 ? (
                     categories.map((cat) => (
@@ -289,7 +295,7 @@ export function BasicsStep({ onStepChange }: BasicsStepProps = {}) {
                     ))
                   ) : (
                     <SelectItem value="empty" disabled>
-                      No categories found
+                      {t('basics.noCategories')}
                     </SelectItem>
                   )}
                 </SelectContent>
@@ -298,19 +304,19 @@ export function BasicsStep({ onStepChange }: BasicsStepProps = {}) {
 
             <div className="space-y-4">
               <label className="block text-xs font-['Space_Grotesk'] font-bold uppercase tracking-widest text-[#a9abb3]/60">
-                Secondary Category (Optional)
+                {t('basics.secondaryCategory')}
               </label>
               <Select
                 value={basics.secondaryCategory}
                 onValueChange={(val) => setBasics({ secondaryCategory: val })}
               >
                 <SelectTrigger className="w-full bg-[#10131a] border-[#45484f]/30 rounded-xl px-4 py-6 focus:ring-1 focus:ring-[#8ff5ff]">
-                  <SelectValue placeholder="Select Category" />
+                  <SelectValue placeholder={t('basics.selectCategory')} />
                 </SelectTrigger>
                 <SelectContent className="bg-[#161a21] border-[#45484f]/20">
                   {isLoadingCategories ? (
                     <SelectItem value="loading" disabled>
-                      Loading categories...
+                      {t('basics.loadingCategories')}
                     </SelectItem>
                   ) : categories.length > 0 ? (
                     categories.map((cat) => (
@@ -320,7 +326,7 @@ export function BasicsStep({ onStepChange }: BasicsStepProps = {}) {
                     ))
                   ) : (
                     <SelectItem value="empty" disabled>
-                      No categories found
+                      {t('basics.noCategories')}
                     </SelectItem>
                   )}
                 </SelectContent>
@@ -333,11 +339,10 @@ export function BasicsStep({ onStepChange }: BasicsStepProps = {}) {
         <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           <div className="lg:col-span-4">
             <h3 className="text-xl font-['Space_Grotesk'] font-bold mb-2">
-              Project location
+              {t('basics.projectLocation')}
             </h3>
             <p className="text-[#a9abb3] text-sm">
-              Where are you based? This helps us localized your project for
-              potential backers.
+              {t('basics.projectLocationDesc')}
             </p>
           </div>
           <div className="lg:col-span-8">
@@ -347,7 +352,7 @@ export function BasicsStep({ onStepChange }: BasicsStepProps = {}) {
               </span>
               <Input
                 className="w-full bg-[#10131a] border-[#45484f]/30 rounded-xl pl-12 pr-4 py-6 focus-visible:ring-1 focus-visible:ring-[#8ff5ff] transition-all text-[#ecedf6]"
-                placeholder="Search for city or country"
+                placeholder={t('basics.searchLocationPlaceholder')}
                 type="text"
                 value={basics.location}
                 onChange={(e) => setBasics({ location: e.target.value })}
@@ -360,18 +365,17 @@ export function BasicsStep({ onStepChange }: BasicsStepProps = {}) {
         <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           <div className="lg:col-span-4">
             <h3 className="text-xl font-['Space_Grotesk'] font-bold mb-2">
-              Project media
+              {t('basics.projectMedia')}
             </h3>
             <p className="text-[#a9abb3] text-sm">
-              Visuals are the most important part of your project presentation.
-              High-quality imagery increases conversion by 80%.
+              {t('basics.projectMediaDesc')}
             </p>
           </div>
           <div className="lg:col-span-8 space-y-8">
             {/* Image Upload */}
             <div>
               <Label className="block text-sm font-medium text-[#a9abb3] mb-2">
-                Reference Image (Required)
+                {t('basics.referenceImage')}
               </Label>
               <ImageUpload
                 maxImages={4}
@@ -394,7 +398,7 @@ export function BasicsStep({ onStepChange }: BasicsStepProps = {}) {
               />
               {isUploadingImage && (
                 <p className="text-sm text-[#8ff5ff] mt-2">
-                  Uploading images...
+                  {t('basics.uploadingImages')}
                 </p>
               )}
             </div>
@@ -418,13 +422,13 @@ export function BasicsStep({ onStepChange }: BasicsStepProps = {}) {
                   </span>
                 </div>
                 <div className="flex-1">
-                  <h4 className="font-bold">Project Video (Optional)</h4>
+                  <h4 className="font-bold">{t('basics.projectVideo')}</h4>
                   <p className="text-sm text-[#a9abb3]">
                     {isUploadingVideo
-                      ? 'Uploading video, please wait...'
+                      ? t('basics.uploadingVideo')
                       : basics.video
-                        ? 'Video selected. Click to change.'
-                        : 'Up to 100MB. MP4, WEBM, or MOV format. High definition recommended.'}
+                        ? t('basics.videoSelected')
+                        : t('basics.videoHelper')}
                   </p>
                 </div>
                 <button
@@ -433,10 +437,10 @@ export function BasicsStep({ onStepChange }: BasicsStepProps = {}) {
                   className="text-xs font-bold uppercase tracking-widest text-[#8ff5ff] border border-[#8ff5ff]/20 px-4 py-2 rounded-lg group-hover/video:bg-[#8ff5ff]/10 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {isUploadingVideo
-                    ? 'Uploading...'
+                    ? t('basics.videoUploading')
                     : basics.video
-                      ? 'Change'
-                      : 'Upload'}
+                      ? t('basics.videoChange')
+                      : t('basics.videoUpload')}
                 </button>
               </div>
 
@@ -447,7 +451,7 @@ export function BasicsStep({ onStepChange }: BasicsStepProps = {}) {
                     controls
                     className="w-full h-full object-contain bg-black"
                   >
-                    Your browser does not support the video tag.
+                    {t('basics.videoNotSupported')}
                   </video>
                   <button
                     type="button"
@@ -463,7 +467,7 @@ export function BasicsStep({ onStepChange }: BasicsStepProps = {}) {
                         videoInputRef.current.value = ''
                     }}
                     className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center bg-black/60 hover:bg-[#ff716c]/80 text-white rounded-full transition-colors backdrop-blur-md"
-                    title="Remove Video"
+                    title={t('basics.removeVideo')}
                   >
                     <span className="material-symbols-outlined text-sm">
                       close
@@ -479,22 +483,21 @@ export function BasicsStep({ onStepChange }: BasicsStepProps = {}) {
         <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           <div className="lg:col-span-4">
             <h3 className="text-xl font-['Space_Grotesk'] font-bold mb-2">
-              Project story
+              {t('basics.projectStory')}
             </h3>
             <p className="text-[#a9abb3] text-sm">
-              Tell the world about what you're building. Be transparent about
-              risks and challenges.
+              {t('basics.projectStoryDesc')}
             </p>
           </div>
           <div className="lg:col-span-8 space-y-8">
             <div className="space-y-4">
               <label className="block text-xs font-['Space_Grotesk'] font-bold uppercase tracking-widest text-[#a9abb3]">
-                Project Description
+                {t('basics.projectDescription')}
               </label>
               <div className="rounded-2xl overflow-hidden border border-[#45484f]/30">
                 <RichTextEditor
                   height={450}
-                  placeholder="Start typing your project's story here..."
+                  placeholder={t('basics.projectDescriptionPlaceholder')}
                   value={basics.description || ''}
                   onChange={(val) => setBasics({ description: val })}
                 />
@@ -504,16 +507,16 @@ export function BasicsStep({ onStepChange }: BasicsStepProps = {}) {
             <div className="space-y-4">
               <div className="flex items-center justify-between mt-2">
                 <label className="block text-xs font-['Space_Grotesk'] font-bold uppercase tracking-widest text-[#a9abb3]">
-                  Risks & Challenges
+                  {t('basics.risks')}
                 </label>
                 <span className="text-[10px] text-[#a9abb3] bg-[#22262f] px-2 py-1 rounded-full uppercase font-bold tracking-widest">
-                  Required
+                  {t('common.required')}
                 </span>
               </div>
               <div className="rounded-2xl border border-[#45484f]/30 bg-[#10131a] relative">
                 <Textarea
                   className="w-full bg-transparent border-none focus-visible:ring-0 text-[#ecedf6] px-4 py-4 min-h-[120px] resize-none shadow-none"
-                  placeholder="Be transparent about potential technical hurdles, market risks, or regulatory challenges..."
+                  placeholder={t('basics.risksPlaceholder')}
                   value={basics.risks || ''}
                   onChange={(e) => setBasics({ risks: e.target.value })}
                 />
@@ -525,11 +528,10 @@ export function BasicsStep({ onStepChange }: BasicsStepProps = {}) {
         <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           <div className="lg:col-span-4">
             <h3 className="text-xl font-['Space_Grotesk'] font-bold mb-2">
-              Funding goal
+              {t('basics.fundingGoal')}
             </h3>
             <p className="text-[#a9abb3] text-sm">
-              Set a goal that's both ambitious and realistic. Remember our
-              'all-or-nothing' policy.
+              {t('basics.fundingGoalDesc')}
             </p>
           </div>
           <div className="lg:col-span-8">
@@ -552,10 +554,10 @@ export function BasicsStep({ onStepChange }: BasicsStepProps = {}) {
                 warning
               </span>
               <p className="text-sm text-[#a9abb3] leading-relaxed">
-                <strong className="text-[#d7383b]">All-or-nothing:</strong> If
-                you don't reach your funding goal by the deadline, all
-                contributions will be automatically refunded and you will
-                receive no funds.
+                <strong className="text-[#d7383b]">
+                  {t('basics.allOrNothing')}:
+                </strong>{' '}
+                {t('basics.allOrNothingDesc')}
               </p>
             </div>
           </div>
@@ -565,17 +567,16 @@ export function BasicsStep({ onStepChange }: BasicsStepProps = {}) {
         <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           <div className="lg:col-span-4">
             <h3 className="text-xl font-['Space_Grotesk'] font-bold mb-2">
-              Target launch date
+              {t('basics.targetLaunchDate')}
             </h3>
             <p className="text-[#a9abb3] text-sm">
-              Optional. Set a target date to stay on track. This can be changed
-              later.
+              {t('basics.targetLaunchDateDesc')}
             </p>
           </div>
           <div className="lg:col-span-8">
             <div className="mb-6">
               <label className="text-[10px] uppercase tracking-tighter text-[#a9abb3] font-bold block mb-2">
-                Select Date
+                {t('basics.selectDate')}
               </label>
               <div className="flex flex-wrap items-center gap-3">
                 <Popover>
@@ -593,7 +594,7 @@ export function BasicsStep({ onStepChange }: BasicsStepProps = {}) {
                       {startDate ? (
                         format(startDate, 'PPP')
                       ) : (
-                        <span>Pick a target launch date</span>
+                        <span>{t('basics.pickDate')}</span>
                       )}
                     </Button>
                   </PopoverTrigger>
@@ -618,10 +619,11 @@ export function BasicsStep({ onStepChange }: BasicsStepProps = {}) {
                 <span className="material-symbols-outlined">timeline</span>
               </div>
               <div>
-                <h5 className="font-bold text-sm">Recommended Timeline</h5>
+                <h5 className="font-bold text-sm">
+                  {t('basics.recommendedTimeline')}
+                </h5>
                 <p className="text-xs text-[#a9abb3]">
-                  We recommend a 3-week pre-launch phase to build hype before
-                  your live campaign.
+                  {t('basics.recommendedTimelineDesc')}
                 </p>
               </div>
             </div>
@@ -632,10 +634,10 @@ export function BasicsStep({ onStepChange }: BasicsStepProps = {}) {
         <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           <div className="lg:col-span-4">
             <h3 className="text-xl font-['Space_Grotesk'] font-bold mb-2">
-              Campaign duration
+              {t('basics.campaignDuration')}
             </h3>
             <p className="text-[#a9abb3] text-sm">
-              Most successful campaigns last between 30 and 45 days.
+              {t('basics.campaignDurationDesc')}
             </p>
           </div>
           <div className="lg:col-span-8">
@@ -665,10 +667,10 @@ export function BasicsStep({ onStepChange }: BasicsStepProps = {}) {
                     </div>
                   </div>
                   <h4 className="font-bold mb-1 pointer-events-auto">
-                    Fixed number of days
+                    {t('basics.fixedDays')}
                   </h4>
                   <p className="text-xs text-[#a9abb3] mb-4 pointer-events-auto">
-                    Set a specific length (1-60 days)
+                    {t('basics.fixedDaysDesc')}
                   </p>
                   <Input
                     className="w-full bg-[#161a21]/50 border border-[#45484f]/20 rounded-lg px-3 py-2 text-sm focus-visible:ring-1 focus-visible:ring-[#8ff5ff] h-10 pointer-events-auto"
@@ -710,10 +712,10 @@ export function BasicsStep({ onStepChange }: BasicsStepProps = {}) {
                     </div>
                   </div>
                   <h4 className="font-bold mb-1 pointer-events-auto">
-                    End on a specific date
+                    {t('basics.endSpecificDate')}
                   </h4>
                   <p className="text-xs text-[#a9abb3] mb-4 pointer-events-auto">
-                    Choose a specific calendar day
+                    {t('basics.endSpecificDateDesc')}
                   </p>
 
                   <div className="mt-2 pointer-events-auto">
@@ -732,7 +734,7 @@ export function BasicsStep({ onStepChange }: BasicsStepProps = {}) {
                           {endDate ? (
                             format(endDate, 'PPP')
                           ) : (
-                            <span>Select end date</span>
+                            <span>{t('basics.selectEndDate')}</span>
                           )}
                         </Button>
                       </PopoverTrigger>
@@ -759,7 +761,7 @@ export function BasicsStep({ onStepChange }: BasicsStepProps = {}) {
 
       <ActionFooter
         onContinue={handleContinue}
-        continueText="Continue to Milestones"
+        continueText={t('basics.continueToMilestones')}
       />
     </div>
   )

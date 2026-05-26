@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { toast } from 'sonner'
+import { useTranslation } from 'react-i18next'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
@@ -62,6 +63,7 @@ function serializeSocialLink(link: { platform: string; url: string }): string {
 type LinkItem = { id: number; platform: string; url: string }
 
 export default function Profile() {
+  const { t } = useTranslation()
   const queryClient = useQueryClient()
   const [isLoading, setIsLoading] = useState(true)
   const [isSaving, setIsSaving] = useState(false)
@@ -136,9 +138,9 @@ export default function Profile() {
       }
       await userRequests.updateMe(payload)
       queryClient.invalidateQueries({ queryKey: ['me'] })
-      toast.success('Lưu thành công!')
+      toast.success(t('toast.save_success'))
     } catch (err: any) {
-      toast.error(getErrorMessage(err, 'Đã xảy ra lỗi khi lưu.'))
+      toast.error(getErrorMessage(err, t('toast.save_error')))
     } finally {
       setIsSaving(false)
     }
@@ -146,16 +148,16 @@ export default function Profile() {
 
   const handleSendCode = async () => {
     if (!email) {
-      toast.error('Vui lòng nhập email trước khi xác thực.')
+      toast.error(t('toast.email_required'))
       return
     }
     setIsSendingOtp(true)
     try {
       await authRequests.requestEmailVerification(email)
       setIsVerifyMode(true)
-      toast.success('Đã gửi mã xác thực đến email của bạn.')
+      toast.success(t('toast.otp_sent_success'))
     } catch (err: any) {
-      toast.error(getErrorMessage(err, 'Gửi mã xác thực thất bại.'))
+      toast.error(getErrorMessage(err, t('toast.otp_sent_failed')))
     } finally {
       setIsSendingOtp(false)
     }
@@ -164,7 +166,7 @@ export default function Profile() {
   // KYC verify
   const handleVerifyOTP = async () => {
     if (!otp || otp.length !== 6) {
-      toast.error('Vui lòng nhập đủ 6 số OTP.')
+      toast.error(t('toast.otp_length_error'))
       return
     }
     setIsVerifyingOtp(true)
@@ -174,14 +176,9 @@ export default function Profile() {
       setIsVerifyMode(false)
       setOtp('')
       queryClient.invalidateQueries({ queryKey: ['me'] })
-      toast.success('Xác thực email thành công!')
+      toast.success(t('toast.kyc_verified_success'))
     } catch (err: any) {
-      toast.error(
-        getErrorMessage(
-          err,
-          'Xác thực thất bại, mã OTP không đúng hoặc đã hết hạn.'
-        )
-      )
+      toast.error(getErrorMessage(err, t('toast.kyc_verified_failed')))
     } finally {
       setIsVerifyingOtp(false)
     }

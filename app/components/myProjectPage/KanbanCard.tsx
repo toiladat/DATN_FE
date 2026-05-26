@@ -1,6 +1,8 @@
 import { useNavigate } from 'react-router'
 import { formatDistanceToNow, format, isValid } from 'date-fns'
+import { vi, enUS } from 'date-fns/locale'
 import type { ProjectSummary } from '@/schemas/projectSchema'
+import { useTranslation } from 'react-i18next'
 import {
   Tooltip,
   TooltipContent,
@@ -22,6 +24,7 @@ export function KanbanCard({
   project: ProjectSummary
   onDeleteProject?: (id: string) => void
 }) {
+  const { t, i18n } = useTranslation()
   const isPending = project.status === 'pending'
   const navigate = useNavigate()
 
@@ -35,9 +38,12 @@ export function KanbanCard({
   }
 
   const safeDistance = (timestamp: number | string | null | undefined) => {
-    if (!timestamp) return 'Just now'
+    if (!timestamp) return t('overview.justNow')
     const d = new Date(timestamp)
-    return isValid(d) ? formatDistanceToNow(d, { addSuffix: true }) : 'Just now'
+    const currentLocale = i18n.language === 'vi' ? vi : enUS
+    return isValid(d)
+      ? formatDistanceToNow(d, { addSuffix: true, locale: currentLocale })
+      : t('overview.justNow')
   }
 
   return (
@@ -78,7 +84,7 @@ export function KanbanCard({
       {['pending', 'success', 'rejected'].includes(project.status) ||
       (project.status === 'active' && !(project.totalMilestones ?? 0)) ? (
         <div className="flex items-center justify-between text-[11px] bg-[#0d1017] border border-[#2e323b]/40 rounded-lg py-2 px-3">
-          <span className="text-[#45484f]">Duration</span>
+          <span className="text-[#45484f]">{t('kanban.duration')}</span>
           <span className="text-[#a9abb3] font-mono font-bold">
             {safeFormat(project.startDate, 'MMM d')} –{' '}
             {safeFormat(project.endDate, 'MMM d, yy')}
@@ -111,14 +117,14 @@ export function KanbanCard({
               >
                 <p>
                   {project.completedMilestones ?? 0} / {project.totalMilestones}{' '}
-                  milestones
+                  {t('kanban.milestones')}
                 </p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
 
           <div className="flex justify-between text-[10px] font-bold font-mono text-[#45484f]">
-            <span>Milestones</span>
+            <span>{t('kanban.Milestones')}</span>
             <span className="text-[#4ade80]">
               {Math.round(
                 ((project.completedMilestones ?? 0) /
@@ -156,7 +162,7 @@ export function KanbanCard({
                   {Math.round(
                     (project.raisedAmount / project.fundingGoal) * 100
                   )}
-                  % funded
+                  % {t('kanban.funded')}
                 </p>
               </TooltipContent>
             </Tooltip>
@@ -204,7 +210,7 @@ export function KanbanCard({
                 navigate(`/my-project/${project.id}`)
               }}
             >
-              View details
+              {t('kanban.view_details')}
             </DropdownMenuItem>
 
             {isPending && (
@@ -217,7 +223,7 @@ export function KanbanCard({
                     if (onDeleteProject) onDeleteProject(project.id)
                   }}
                 >
-                  Delete project
+                  {t('kanban.delete_project')}
                 </DropdownMenuItem>
               </>
             )}
@@ -229,7 +235,7 @@ export function KanbanCard({
                   className="focus:bg-[#4ade80]/10 focus:text-[#4ade80] text-[#4ade80] cursor-pointer outline-none rounded py-1.5 px-2.5 font-medium"
                   onClick={(e) => e.stopPropagation()}
                 >
-                  Update progress
+                  {t('kanban.update_progress')}
                 </DropdownMenuItem>
               </>
             )}

@@ -9,6 +9,7 @@ import {
   SidebarMenuItem,
   useSidebar
 } from '@/components/ui/sidebar'
+import { useTranslation } from 'react-i18next'
 
 interface LaunchSidebarProps {
   currentStep: string
@@ -20,14 +21,25 @@ export function LaunchSidebar({
   onStepChange
 }: LaunchSidebarProps) {
   const { state } = useSidebar()
+  const { t } = useTranslation()
   const isCollapsed = state === 'collapsed'
 
   const steps: { id: string; label: string; icon: string; num: string }[] = [
-    { id: 'Overview', label: 'Overview', icon: 'dashboard', num: '01' },
-    { id: 'Basics', label: 'Basics', icon: 'info', num: '02' },
-    { id: 'Milestones', label: 'Milestones', icon: 'pending', num: '03' },
-    { id: 'Team', label: 'Team', icon: 'group', num: '04' },
-    { id: 'Attachments', label: 'Attachments', icon: 'attach_file', num: '05' }
+    { id: 'Overview', label: t('step.overview'), icon: 'dashboard', num: '01' },
+    { id: 'Basics', label: t('step.basics'), icon: 'info', num: '02' },
+    {
+      id: 'Milestones',
+      label: t('step.milestones'),
+      icon: 'pending',
+      num: '03'
+    },
+    { id: 'Team', label: t('step.team'), icon: 'group', num: '04' },
+    {
+      id: 'Attachments',
+      label: t('step.attachments'),
+      icon: 'attach_file',
+      num: '05'
+    }
   ]
 
   return (
@@ -40,10 +52,10 @@ export function LaunchSidebar({
         {!isCollapsed ? (
           <div className="px-2 transition-opacity duration-300">
             <h3 className="text-[#ecedf6] font-bold text-base font-['Space_Grotesk'] truncate">
-              Launch Project
+              {t('nav.launch_idea')}
             </h3>
             <p className="text-[#45484f] text-xs mt-1 truncate font-mono tracking-widest uppercase">
-              Wizard
+              {t('common.wizard')}
             </p>
           </div>
         ) : (

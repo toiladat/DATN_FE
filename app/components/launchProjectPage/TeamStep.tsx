@@ -17,12 +17,14 @@ import { toast } from 'sonner'
 import { useSearchUsers } from '@/apis/queries/user'
 import { useDebounce } from '@/hooks/useDebounce'
 import type { UserSearchProfile } from '@/schemas/userSchema'
+import { useTranslation } from 'react-i18next'
 
 interface TeamStepProps {
   onStepChange?: (step: string) => void
 }
 
 export function TeamStep({ onStepChange }: TeamStepProps = {}) {
+  const { t } = useTranslation()
   const { project, setTeam } = useLaunchProject()
   const { team } = project
 
@@ -66,17 +68,15 @@ export function TeamStep({ onStepChange }: TeamStepProps = {}) {
 
   const handleAddMember = () => {
     if (!newMember.name || !newMember.email || !newMember.wallet) {
-      toast.error('Missing Information', {
-        description:
-          'Please search and select a platform member to fill in the required details.'
+      toast.error(t('validation.missing_information'), {
+        description: t('toast.select_member_desc')
       })
       return
     }
 
     if (!newMember.roleDescription.trim()) {
-      toast.error('Missing Role Description', {
-        description:
-          "Please provide a brief description of this member's responsibilities."
+      toast.error(t('validation.missing_role_description'), {
+        description: t('toast.role_desc_required')
       })
       return
     }
@@ -86,8 +86,8 @@ export function TeamStep({ onStepChange }: TeamStepProps = {}) {
         member.email === newMember.email || member.wallet === newMember.wallet
     )
     if (isDuplicate) {
-      toast.error('Member Already Added', {
-        description: 'This user is already part of your team roster.'
+      toast.error(t('validation.member_already_added'), {
+        description: t('toast.member_exists_desc')
       })
       return
     }
@@ -102,8 +102,8 @@ export function TeamStep({ onStepChange }: TeamStepProps = {}) {
       wallet: '',
       avatar: ''
     })
-    toast.success('Member Added', {
-      description: `${newMember.name} is now part of the team.`
+    toast.success(t('validation.member_added'), {
+      description: t('toast.member_added_success', { name: newMember.name })
     })
   }
 
@@ -117,12 +117,9 @@ export function TeamStep({ onStepChange }: TeamStepProps = {}) {
       {/* Header */}
       <header className="mb-12">
         <h1 className="text-5xl font-['Space_Grotesk'] font-bold tracking-tight text-[#ecedf6] mb-4">
-          Build Your Team
+          {t('team.title')}
         </h1>
-        <p className="text-[#a9abb3] text-lg max-w-2xl">
-          Add core contributors to build trust with your backers. Transparent
-          team structures lead to 40% higher funding success.
-        </p>
+        <p className="text-[#a9abb3] text-lg max-w-2xl">{t('team.desc')}</p>
       </header>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
@@ -134,7 +131,7 @@ export function TeamStep({ onStepChange }: TeamStepProps = {}) {
             <CardContent>
               <h2 className="text-xl font-['Space_Grotesk'] font-semibold text-[#8ff5ff] mb-6 flex items-center gap-2">
                 <span className="material-symbols-outlined">person_add</span>
-                Contributor Details
+                {t('team.contributorDetails')}
               </h2>
 
               <form className="space-y-5">
@@ -143,7 +140,7 @@ export function TeamStep({ onStepChange }: TeamStepProps = {}) {
                   className={`relative group transition-all ${isFounder ? 'opacity-30 pointer-events-none' : ''}`}
                 >
                   <Label className="block text-xs font-['Inter'] uppercase tracking-widest text-[#8ff5ff]/70 mb-2">
-                    Search for platform members
+                    {t('team.searchLabel')}
                   </Label>
                   <div className="relative focus-within:text-[#00eefc]">
                     <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-lg transition-colors">
@@ -151,7 +148,7 @@ export function TeamStep({ onStepChange }: TeamStepProps = {}) {
                     </span>
                     <Input
                       className="w-full bg-[#1c2028] border border-white/5 rounded-lg text-[#ecedf6] focus-visible:ring-1 focus-visible:ring-[#8ff5ff]/50 placeholder:text-slate-600 transition-all h-12 pl-10 pr-4"
-                      placeholder="Username, wallet, or email..."
+                      placeholder={t('team.searchPlaceholder')}
                       type="text"
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
@@ -162,7 +159,7 @@ export function TeamStep({ onStepChange }: TeamStepProps = {}) {
                     <div className="absolute z-20 w-full mt-1 bg-[#22262f] border border-[#8ff5ff]/20 rounded-xl overflow-hidden shadow-[0_10px_40px_rgba(0,0,0,0.8)]">
                       {isSearching ? (
                         <div className="p-4 text-center text-xs text-[#a9abb3]">
-                          Searching database...
+                          {t('team.searching')}
                         </div>
                       ) : searchResults.length > 0 ? (
                         searchResults.map((user, i) => (
@@ -185,14 +182,14 @@ export function TeamStep({ onStepChange }: TeamStepProps = {}) {
                                   `${user.walletAddress.substring(0, 6)}...${user.walletAddress.slice(-4)}`}
                               </div>
                               <div className="text-[10px] text-slate-500">
-                                {user.email || 'No email attached'}
+                                {user.email || t('team.noEmail')}
                               </div>
                             </div>
                           </div>
                         ))
                       ) : (
                         <div className="p-4 text-center text-xs text-[#a9abb3]">
-                          No users found on Radiant Void.
+                          {t('team.noUserFound')}
                         </div>
                       )}
                     </div>
@@ -202,11 +199,11 @@ export function TeamStep({ onStepChange }: TeamStepProps = {}) {
 
                 <div>
                   <Label className="block text-xs font-['Inter'] uppercase tracking-widest text-[#a9abb3] mb-2">
-                    Full Name
+                    {t('team.fullName')}
                   </Label>
                   <Input
                     className="w-full bg-[#161920] border-none rounded-lg text-[#656975] h-12 px-4 shadow-none opacity-60 cursor-not-allowed focus-visible:ring-0"
-                    placeholder="Search above to populate..."
+                    placeholder={t('team.populatePlaceholder')}
                     type="text"
                     readOnly
                     value={newMember.name}
@@ -215,11 +212,11 @@ export function TeamStep({ onStepChange }: TeamStepProps = {}) {
 
                 <div>
                   <Label className="block text-xs font-['Inter'] uppercase tracking-widest text-[#a9abb3] mb-2">
-                    Email Address
+                    {t('team.emailAddress')}
                   </Label>
                   <Input
                     className="w-full bg-[#161920] border-none rounded-lg text-[#656975] h-12 px-4 shadow-none opacity-60 cursor-not-allowed focus-visible:ring-0"
-                    placeholder="Search above to populate..."
+                    placeholder={t('team.populatePlaceholder')}
                     type="email"
                     readOnly
                     value={newMember.email}
@@ -228,7 +225,7 @@ export function TeamStep({ onStepChange }: TeamStepProps = {}) {
 
                 <div>
                   <Label className="block text-xs font-['Inter'] uppercase tracking-widest text-[#a9abb3] mb-2">
-                    Wallet Address
+                    {t('team.walletAddress')}
                   </Label>
                   <div className="relative">
                     <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[#8ff5ff]/60 text-lg">
@@ -236,7 +233,7 @@ export function TeamStep({ onStepChange }: TeamStepProps = {}) {
                     </span>
                     <Input
                       className="w-full bg-[#161920] border-none rounded-lg text-[#656975] h-12 pl-10 pr-4 shadow-none opacity-60 cursor-not-allowed focus-visible:ring-0"
-                      placeholder="Search above to populate..."
+                      placeholder={t('team.populatePlaceholder')}
                       type="text"
                       readOnly
                       value={newMember.wallet}
@@ -246,7 +243,7 @@ export function TeamStep({ onStepChange }: TeamStepProps = {}) {
 
                 <div>
                   <Label className="block text-xs font-['Inter'] uppercase tracking-widest text-[#a9abb3] mb-2">
-                    Role
+                    {t('team.role')}
                   </Label>
                   <Select
                     value={newMember.role}
@@ -255,27 +252,35 @@ export function TeamStep({ onStepChange }: TeamStepProps = {}) {
                     }
                   >
                     <SelectTrigger className="w-full bg-[#1c2028] border-none rounded-lg text-[#ecedf6] focus:ring-1 focus:ring-[#8ff5ff]/50 transition-all h-12 px-4 shadow-none">
-                      <SelectValue placeholder="Select a role" />
+                      <SelectValue placeholder={t('team.selectRole')} />
                     </SelectTrigger>
                     <SelectContent className="bg-[#22262f] border-[#45484f]/30 text-[#ecedf6]">
-                      <SelectItem value="Founder">Founder</SelectItem>
-                      <SelectItem value="Lead Developer">
-                        Lead Developer
+                      <SelectItem value="Founder">
+                        {t('team.role.founder')}
                       </SelectItem>
-                      <SelectItem value="Designer">Designer</SelectItem>
-                      <SelectItem value="Marketing">Marketing</SelectItem>
-                      <SelectItem value="Advisor">Advisor</SelectItem>
+                      <SelectItem value="Lead Developer">
+                        {t('team.role.leaddeveloper')}
+                      </SelectItem>
+                      <SelectItem value="Designer">
+                        {t('team.role.designer')}
+                      </SelectItem>
+                      <SelectItem value="Marketing">
+                        {t('team.role.marketing')}
+                      </SelectItem>
+                      <SelectItem value="Advisor">
+                        {t('team.role.advisor')}
+                      </SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
 
                 <div>
                   <Label className="block text-xs font-['Inter'] uppercase tracking-widest text-[#a9abb3] mb-2">
-                    Role Description
+                    {t('team.roleDesc')}
                   </Label>
                   <Textarea
                     className="w-full bg-[#1c2028] border-none rounded-lg text-[#ecedf6] focus-visible:ring-1 focus-visible:ring-[#8ff5ff]/50 placeholder:text-slate-600 transition-all py-3 px-4 resize-none shadow-none"
-                    placeholder="Briefly describe their responsibilities..."
+                    placeholder={t('team.roleDescPlaceholder')}
                     rows={3}
                     value={newMember.roleDescription}
                     onChange={(e) =>
@@ -295,7 +300,7 @@ export function TeamStep({ onStepChange }: TeamStepProps = {}) {
                   <span className="material-symbols-outlined mr-2">
                     group_add
                   </span>
-                  Add Member
+                  {t('team.addMember')}
                 </Button>
               </form>
             </CardContent>
@@ -306,9 +311,9 @@ export function TeamStep({ onStepChange }: TeamStepProps = {}) {
         <div className="lg:col-span-7">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-xl font-['Space_Grotesk'] font-semibold text-[#ecedf6]">
-              Active Roster{' '}
+              {t('team.activeRoster')}{' '}
               <span className="text-sm text-[#a9abb3] font-normal ml-2">
-                ({team.length} members)
+                {t('team.membersCount', { count: team.length })}
               </span>
             </h2>
             <div className="h-[1px] flex-1 bg-gradient-to-r from-[#45484f]/30 to-transparent ml-6"></div>
@@ -338,7 +343,10 @@ export function TeamStep({ onStepChange }: TeamStepProps = {}) {
                         {member.name}
                       </h3>
                       <span className="px-2 py-0.5 rounded-full bg-[#8ff5ff]/10 border border-[#8ff5ff]/20 text-[9px] uppercase font-bold text-[#8ff5ff] tracking-widest">
-                        {member.role}
+                        {t(
+                          `team.role.${member.role.replace(/\s+/g, '').toLowerCase()}`,
+                          member.role
+                        )}
                       </span>
                     </div>
                     <div className="flex flex-wrap items-center gap-2 sm:gap-4">
@@ -383,7 +391,7 @@ export function TeamStep({ onStepChange }: TeamStepProps = {}) {
                   group
                 </span>
                 <p className="text-[#a9abb3] text-sm italic">
-                  No team members added yet.
+                  {t('team.empty')}
                 </p>
               </div>
             )}
@@ -393,7 +401,7 @@ export function TeamStep({ onStepChange }: TeamStepProps = {}) {
 
       <ActionFooter
         onContinue={() => onStepChange?.('Attachments')}
-        continueText="Continue to Attachments"
+        continueText={t('team.continueToAttachments')}
       />
     </div>
   )

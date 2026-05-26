@@ -18,6 +18,7 @@ import { useWriteContract, usePublicClient } from 'wagmi'
 import { contractAbi, contractAddress } from '@/contract/ContractClient'
 import { useWithdrawMilestone } from '@/apis/queries/project'
 import { toast } from 'sonner'
+import { getErrorMessage } from '@/lib/utils'
 import type { MilestoneRest } from '@/schemas/projectSchema'
 
 interface WithdrawMilestoneModalProps {
@@ -77,7 +78,7 @@ export function WithdrawMilestoneModal({
       setOpen(false)
     } catch (error: any) {
       console.error('Withdrawal error:', error)
-      toast.error(error?.shortMessage || error?.message || 'Đã có lỗi xảy ra')
+      toast.error(getErrorMessage(error, 'Đã có lỗi xảy ra'))
     } finally {
       setIsProcessing(false)
     }

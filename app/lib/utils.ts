@@ -13,8 +13,12 @@ export const getErrorMessage = (err: any, defaultMsg: string) => {
 
   if (data?.errors?.[0]?.message) {
     msg = data.errors[0].message
-  } else if (Array.isArray(data?.message) && data.message[0]?.message) {
-    msg = data.message[0].message
+  } else if (Array.isArray(data?.message) && data.message.length > 0) {
+    const firstMsg = data.message[0]
+    msg =
+      typeof firstMsg === 'object' && firstMsg !== null
+        ? firstMsg.message || defaultMsg
+        : firstMsg || defaultMsg
   } else if (typeof data?.message === 'string') {
     msg = data.message
   }

@@ -3,8 +3,10 @@ import { ArrowRight, Terminal, Loader2 } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { useGetProjects } from '@/apis/queries/project'
 import { ProjectDirectoryCard } from '@/components/projectsPage/ProjectDirectoryCard'
+import { useTranslation } from 'react-i18next'
 
 export function FeaturedProjects() {
+  const { t } = useTranslation()
   const { data, isLoading } = useGetProjects(1, 6, '', '', 'trending')
   const projects = data?.projects || []
 
@@ -22,18 +24,18 @@ export function FeaturedProjects() {
       >
         <div>
           <h2 className="text-4xl md:text-5xl font-['Space_Grotesk'] font-bold mb-4 text-[#ecedf6] tracking-tight">
-            Featured Pools
+            {t('landing.featured_pools')}
           </h2>
           <p className="text-[#a9abb3] text-lg max-w-lg font-light leading-relaxed">
-            Vetted decentralized projects ready for capital injection or
-            successfully built. Governed by smart contracts, transparent to the
-            world.
+            {t('landing.featured_pools_desc')}
           </p>
         </div>
-        <button className="flex items-center gap-2 text-[#8ff5ff] font-bold hover:text-[#a6fcff] transition-colors uppercase tracking-widest text-sm group">
-          View All Pools
-          <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-        </button>
+        <Link to="/projects">
+          <button className="flex items-center gap-2 text-[#8ff5ff] font-bold hover:text-[#a6fcff] transition-colors uppercase tracking-widest text-sm group cursor-pointer">
+            {t('landing.view_all_pools')}
+            <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+          </button>
+        </Link>
       </motion.div>
 
       {/* Slider Container */}
@@ -43,7 +45,7 @@ export function FeaturedProjects() {
         </div>
       ) : projects.length === 0 ? (
         <div className="text-center py-20 text-[#73757d]">
-          No active projects found.
+          {t('landing.no_active_projects')}
         </div>
       ) : (
         <div className="flex overflow-x-auto snap-x snap-mandatory gap-8 pb-8 no-scrollbar items-stretch">

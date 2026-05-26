@@ -5,6 +5,7 @@ import { useGetProjectReviews, useAddReview } from '@/apis/queries/project'
 import { useAuth } from '../providers/AuthProvider'
 import { ReviewCard } from './ReviewCard'
 import { toast } from 'sonner'
+import { getErrorMessage } from '@/lib/utils'
 
 // Avatar color + initial helper (shared logic for the current user avatar)
 const AVATAR_COLORS = [
@@ -51,6 +52,9 @@ export function ProjectReviews({
         onSuccess: () => {
           setContent('')
           setFocused(false)
+        },
+        onError: (err) => {
+          toast.error(getErrorMessage(err, 'Không thể gửi bình luận.'))
         }
       }
     )

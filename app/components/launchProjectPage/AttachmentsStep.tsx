@@ -1,5 +1,6 @@
 import { useState, useRef, useCallback } from 'react'
 import { useLaunchProject } from '@/contexts/LaunchProjectContext'
+import { useTranslation } from 'react-i18next'
 import type {
   Attachment,
   AttachmentCategory
@@ -91,6 +92,7 @@ interface UploadingFile {
 }
 
 export function AttachmentsStep({ onStepChange }: AttachmentsStepProps = {}) {
+  const { t, i18n } = useTranslation()
   const { project, setAttachments } = useLaunchProject()
   const { attachments } = project
 
@@ -111,13 +113,13 @@ export function AttachmentsStep({ onStepChange }: AttachmentsStepProps = {}) {
   const validateFiles = (files: File[]): File[] => {
     return files.filter((file) => {
       if (!ACCEPTED_TYPES.includes(file.type)) {
-        toast.error(
-          `${file.name}: Unsupported file type. Use JPG, PNG, WEBP, GIF, or PDF.`
-        )
+        toast.error(t('toast.unsupported_file', { name: file.name }))
         return false
       }
       if (file.size > MAX_SIZE_MB * 1024 * 1024) {
-        toast.error(`${file.name}: File exceeds ${MAX_SIZE_MB}MB limit.`)
+        toast.error(
+          t('toast.file_size_exceeded', { name: file.name, max: MAX_SIZE_MB })
+        )
         return false
       }
       return true
@@ -133,7 +135,7 @@ export function AttachmentsStep({ onStepChange }: AttachmentsStepProps = {}) {
 
       const remaining = MAX_FILES - attachments.length - uploadingFiles.length
       if (valid.length > remaining) {
-        toast.error(`You can only upload ${MAX_FILES} files total.`)
+        toast.error(t('toast.max_files_exceeded', { max: MAX_FILES }))
         return
       }
 
@@ -161,7 +163,7 @@ export function AttachmentsStep({ onStepChange }: AttachmentsStepProps = {}) {
         })
         presignedData = result.data
       } catch {
-        toast.error('Failed to get upload URLs. Please try again.')
+        toast.error(t('toast.presign_failed'))
         setUploadingFiles((prev) =>
           prev.filter((u) => !newUploading.find((n) => n.id === u.id))
         )
@@ -199,7 +201,7 @@ export function AttachmentsStep({ onStepChange }: AttachmentsStepProps = {}) {
                   : u
               )
             )
-            toast.error(`Failed to upload ${file.name}.`)
+            toast.error(t('toast.upload_single_failed', { name: file.name }))
           }
         })
       )
@@ -210,9 +212,20 @@ export function AttachmentsStep({ onStepChange }: AttachmentsStepProps = {}) {
       )
       if (uploadedAttachments.length > 0) {
         setAttachments([...attachments, ...uploadedAttachments])
-        toast.success(
-          `${uploadedAttachments.length} file${uploadedAttachments.length > 1 ? 's' : ''} uploaded successfully.`
-        )
+        const count = uploadedAttachments.length
+        let successMsg = ''
+        if (i18n.language === 'vi') {
+          successMsg =
+            count === 1
+              ? t('toast.upload_success_vi_1')
+              : t('toast.upload_success_vi_many', { count })
+        } else {
+          successMsg =
+            count === 1
+              ? t('toast.upload_success_en_1')
+              : t('toast.upload_success_en_many', { count })
+        }
+        toast.success(successMsg)
       }
     },
     [
@@ -263,7 +276,7 @@ export function AttachmentsStep({ onStepChange }: AttachmentsStepProps = {}) {
   const saveEdit = () => {
     if (editingIndex === null) return
     if (editCategory === 'Other' && !editCustomName.trim()) {
-      toast.error('Please enter a name for this attachment type.')
+      toast.error(t('attachments.editTypeNameRequired'))
       return
     }
     const updated = attachments.map((a, i) =>
@@ -290,12 +303,10 @@ export function AttachmentsStep({ onStepChange }: AttachmentsStepProps = {}) {
       {/* Header */}
       <header className="mb-12">
         <h1 className="text-5xl font-['Space_Grotesk'] font-bold tracking-tight text-[#ecedf6] mb-4">
-          Credentials & Proof
+          {t('attachments.title')}
         </h1>
         <p className="text-[#a9abb3] text-lg max-w-2xl">
-          Upload supporting documents — certificates, portfolios, CVs, or
-          business plans. These attachments help investors verify your team's
-          expertise and build confidence.
+          {t('attachments.desc')}
         </p>
       </header>
 
@@ -306,7 +317,7 @@ export function AttachmentsStep({ onStepChange }: AttachmentsStepProps = {}) {
           <div className="bg-[#10131a] border border-[#45484f]/20 rounded-xl p-5 space-y-4">
             <div>
               <Label className="block text-xs font-['Inter'] uppercase tracking-widest text-[#a9abb3] mb-2">
-                Category
+                {t('attachments.category')}
               </Label>
               <Select
                 value={pendingCategory}
@@ -339,7 +350,7 @@ export function AttachmentsStep({ onStepChange }: AttachmentsStepProps = {}) {
             {pendingCategory === 'Other' && (
               <div>
                 <Label className="block text-xs font-['Inter'] uppercase tracking-widest text-[#a9abb3] mb-2">
-                  Type Name{' '}
+                  {t('attachments.typeName')}{' '}
                   <span className="normal-case tracking-normal text-[#ff716c]">
                     *
                   </span>
@@ -350,7 +361,7 @@ export function AttachmentsStep({ onStepChange }: AttachmentsStepProps = {}) {
                   </span>
                   <Input
                     className="w-full bg-[#1c2028] border-none rounded-lg text-[#ecedf6] placeholder:text-slate-600 h-11 pl-9 pr-4 focus-visible:ring-1 focus-visible:ring-[#8ff5ff]/50 shadow-none"
-                    placeholder="e.g. Award, Press Coverage, Demo..."
+                    placeholder={t('attachments.typeNamePlaceholder')}
                     value={pendingCustomName}
                     onChange={(e) => setPendingCustomName(e.target.value)}
                     autoFocus
@@ -361,14 +372,14 @@ export function AttachmentsStep({ onStepChange }: AttachmentsStepProps = {}) {
 
             <div>
               <Label className="block text-xs font-['Inter'] uppercase tracking-widest text-[#a9abb3] mb-2">
-                Description{' '}
+                {t('attachments.description')}{' '}
                 <span className="normal-case tracking-normal text-[#45484f]">
-                  (optional)
+                  ({t('common.optional')})
                 </span>
               </Label>
               <Input
                 className="w-full bg-[#1c2028] border-none rounded-lg text-[#ecedf6] placeholder:text-slate-600 h-11 px-4 focus-visible:ring-1 focus-visible:ring-[#8ff5ff]/50 shadow-none"
-                placeholder="e.g. AWS Solutions Architect 2024..."
+                placeholder={t('attachments.descriptionPlaceholder')}
                 value={pendingDescription}
                 onChange={(e) => setPendingDescription(e.target.value)}
               />
@@ -414,17 +425,21 @@ export function AttachmentsStep({ onStepChange }: AttachmentsStepProps = {}) {
                 </span>
               </div>
               <p className="text-[#ecedf6] font-['Space_Grotesk'] font-semibold mb-1">
-                {isDragging ? 'Drop files here' : 'Drag & drop files'}
+                {isDragging
+                  ? t('attachments.dropHere')
+                  : t('attachments.dragDrop')}
               </p>
               <p className="text-[#45484f] text-sm">
-                or <span className="text-[#8ff5ff]">browse</span> to upload
+                {t('attachments.orBrowse', { browse: t('attachments.browse') })}
               </p>
               <p className="text-[#45484f] text-xs mt-4">
-                JPG · PNG · WEBP · GIF · PDF · DOC · DOCX — max {MAX_SIZE_MB}MB
-                each
+                {t('attachments.constraints', { max: MAX_SIZE_MB })}
               </p>
               <div className="mt-3 px-3 py-1 rounded-full bg-[#1c2028] text-[10px] text-[#a9abb3] font-mono">
-                {totalFiles}/{MAX_FILES} files used
+                {t('attachments.filesUsed', {
+                  count: totalFiles,
+                  max: MAX_FILES
+                })}
               </div>
             </div>
           </div>
@@ -507,7 +522,7 @@ export function AttachmentsStep({ onStepChange }: AttachmentsStepProps = {}) {
                           </span>
                           <Input
                             className="w-full bg-[#1c2028] border-none rounded-lg text-[#ecedf6] placeholder:text-slate-600 h-10 pl-9 pr-4 focus-visible:ring-1 focus-visible:ring-[#8ff5ff]/50 shadow-none text-sm"
-                            placeholder="Type name (required)..."
+                            placeholder={t('attachments.typeNamePlaceholder')}
                             value={editCustomName}
                             onChange={(e) => setEditCustomName(e.target.value)}
                             autoFocus
@@ -516,7 +531,7 @@ export function AttachmentsStep({ onStepChange }: AttachmentsStepProps = {}) {
                       )}
                       <Input
                         className="w-full bg-[#1c2028] border-none rounded-lg text-[#ecedf6] placeholder:text-slate-600 h-10 px-4 focus-visible:ring-1 focus-visible:ring-[#8ff5ff]/50 shadow-none"
-                        placeholder="Description..."
+                        placeholder={t('attachments.descriptionPlaceholder')}
                         value={editDescription}
                         onChange={(e) => setEditDescription(e.target.value)}
                       />
@@ -526,7 +541,7 @@ export function AttachmentsStep({ onStepChange }: AttachmentsStepProps = {}) {
                           onClick={saveEdit}
                           className="flex-1 h-8 bg-[#8ff5ff] hover:bg-[#a8f8ff] text-[#00383d] font-bold rounded-lg border-none text-xs"
                         >
-                          Save
+                          {t('btn.save')}
                         </Button>
                         <Button
                           size="sm"
@@ -534,7 +549,7 @@ export function AttachmentsStep({ onStepChange }: AttachmentsStepProps = {}) {
                           onClick={() => setEditingIndex(null)}
                           className="flex-1 h-8 text-[#a9abb3] hover:text-[#ecedf6] rounded-lg text-xs"
                         >
-                          Cancel
+                          {t('btn.cancel')}
                         </Button>
                       </div>
                     </div>
@@ -608,10 +623,10 @@ export function AttachmentsStep({ onStepChange }: AttachmentsStepProps = {}) {
                   folder_open
                 </span>
                 <p className="text-[#a9abb3] text-sm italic">
-                  No files uploaded yet.
+                  {t('attachments.empty')}
                 </p>
                 <p className="text-[#45484f] text-xs mt-1">
-                  This step is optional — but recommended.
+                  {t('attachments.emptySub')}
                 </p>
               </div>
             )}
@@ -654,7 +669,7 @@ export function AttachmentsStep({ onStepChange }: AttachmentsStepProps = {}) {
 
       <ActionFooter
         onContinue={() => onStepChange?.('Overview')}
-        continueText="Complete Setup"
+        continueText={t('attachments.completeSetup')}
       />
     </div>
   )

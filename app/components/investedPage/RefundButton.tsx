@@ -7,6 +7,8 @@ import { toast } from 'sonner'
 import { apiClient } from '@/apis/axios'
 import { useQueryClient } from '@tanstack/react-query'
 import { projectKeys } from '@/apis/queries/project'
+import { getErrorMessage } from '@/lib/utils'
+import { useTranslation } from 'react-i18next'
 
 export function RefundButton({
   projectId,
@@ -15,6 +17,7 @@ export function RefundButton({
   projectId: string
   amount?: number
 }) {
+  const { t } = useTranslation()
   const [isProcessing, setIsProcessing] = useState(false)
   const queryClient = useQueryClient()
 
@@ -41,7 +44,7 @@ export function RefundButton({
       // Chuyển MongoDB ObjectId (24 char hex) sang uint256 BigInt
       const projectIdUint256 = BigInt('0x' + projectId)
 
-      toast.info('Vui lòng xác nhận giao dịch trên ví...')
+      toast.info(t('refund.confirm_tx'))
 
       const txHash = await writeContractAsync({
         address: contractAddress as `0x${string}`,
@@ -50,7 +53,7 @@ export function RefundButton({
         args: [projectIdUint256]
       })
 
-      toast.info('Giao dịch đã được gửi, đang chờ mạng lưới xác nhận...')
+      toast.info(t('refund.tx_sent'))
 
       // Gửi txHash cho Backend ngay lập tức
       await apiClient.post(`/project/${projectId}/refund`, { txHash })
@@ -58,13 +61,10 @@ export function RefundButton({
       // Invalidate cache
       queryClient.invalidateQueries({ queryKey: projectKeys.all })
 
-      toast.success('Rút tiền hoàn trả thành công!')
+      toast.success(t('refund.success'))
     } catch (error: any) {
       console.error(error)
-      toast.error(
-        'Lỗi giao dịch: ' +
-          (error.shortMessage || error.message || 'Không xác định')
-      )
+      toast.error(getErrorMessage(error, t('refund.error')))
     } finally {
       setIsProcessing(false)
     }
@@ -80,7 +80,7 @@ export function RefundButton({
         disabled
         className="h-8 text-xs font-semibold uppercase tracking-wider text-green-500 border-green-500/30 bg-green-500/10"
       >
-        Refunded
+        {t('compact.refunded')}
       </Button>
     )
   }
@@ -96,12 +96,12 @@ export function RefundButton({
       {isLoading ? (
         <>
           <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-          Processing...
+          {t('refund.processing')}
         </>
       ) : (
         <>
           <Coins className="mr-2 h-4 w-4" />
-          Claim Refund {amount ? `(${amount} mUSDT)` : ''}
+          {t('refund.claim')} {amount ? `(${amount} mUSDT)` : ''}
         </>
       )}
     </Button>

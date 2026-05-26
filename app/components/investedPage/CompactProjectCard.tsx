@@ -3,38 +3,40 @@ import type { ProjectSummary } from '@/schemas/projectSchema'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { RefundButton } from './RefundButton'
+import { useTranslation } from 'react-i18next'
 
 const getStatusConfig = (status: string) => {
   switch (status.toLowerCase()) {
     case 'progress':
       return {
-        label: 'Funding',
+        labelKey: 'stats.funding',
         color: 'text-[#8ff5ff] border-[#8ff5ff]/30 bg-[#8ff5ff]/10'
       }
     case 'active':
       return {
-        label: 'Active',
+        labelKey: 'status.active',
         color: 'text-[#ac89ff] border-[#ac89ff]/30 bg-[#ac89ff]/10'
       }
     case 'success':
       return {
-        label: 'Success',
+        labelKey: 'status.success',
         color: 'text-[#6bcb77] border-[#6bcb77]/30 bg-[#6bcb77]/10'
       }
     case 'rejected':
       return {
-        label: 'Failed',
+        labelKey: 'stats.failed',
         color: 'text-[#ff716c] border-[#ff716c]/30 bg-[#ff716c]/10'
       }
     default:
       return {
-        label: 'Pending',
+        labelKey: 'status.pending',
         color: 'text-[#a9abb3] border-[#2e323b] bg-[#161a21]'
       }
   }
 }
 
 export function CompactProjectCard({ project }: { project: ProjectSummary }) {
+  const { t, i18n } = useTranslation()
   const statusConfig = getStatusConfig(project.status)
 
   return (
@@ -68,7 +70,7 @@ export function CompactProjectCard({ project }: { project: ProjectSummary }) {
                 className="text-xs text-[#ff716c]/90 mt-2 bg-[#ff716c]/10 px-2.5 py-1.5 rounded-md max-w-sm border border-[#ff716c]/20"
                 title={project.rejectReason}
               >
-                <span className="font-semibold">Reason:</span>{' '}
+                <span className="font-semibold">{t('compact.reason')}</span>{' '}
                 {project.rejectReason}
               </p>
             )}
@@ -79,11 +81,14 @@ export function CompactProjectCard({ project }: { project: ProjectSummary }) {
           <div className="hidden sm:block">
             <p className="text-xs text-[#73757d] uppercase tracking-wider mb-1">
               {project.investedAt
-                ? new Intl.DateTimeFormat('en-US', {
-                    month: 'short',
-                    day: 'numeric',
-                    year: 'numeric'
-                  }).format(new Date(project.investedAt))
+                ? new Intl.DateTimeFormat(
+                    i18n.language === 'vi' ? 'vi-VN' : 'en-US',
+                    {
+                      month: 'short',
+                      day: 'numeric',
+                      year: 'numeric'
+                    }
+                  ).format(new Date(project.investedAt))
                 : 'N/A'}
             </p>
             <p className="font-mono text-sm font-semibold text-[#ecedf6]">
@@ -101,7 +106,7 @@ export function CompactProjectCard({ project }: { project: ProjectSummary }) {
                   disabled
                   className="h-8 text-xs font-semibold uppercase tracking-wider text-green-500 border-green-500/30 bg-green-500/10"
                 >
-                  Refunded
+                  {t('compact.refunded')}
                 </Button>
               ) : (
                 <RefundButton
@@ -116,7 +121,7 @@ export function CompactProjectCard({ project }: { project: ProjectSummary }) {
               variant="outline"
               className={`${statusConfig.color} px-2 py-0.5 text-[10px] uppercase font-bold tracking-widest`}
             >
-              {statusConfig.label}
+              {t(statusConfig.labelKey)}
             </Badge>
           </div>
           <div className="hidden md:flex shrink-0 w-8 h-8 rounded-full border border-[#2e323b] group-hover:border-[#8ff5ff]/50 bg-[#10131a] items-center justify-center transition-colors">

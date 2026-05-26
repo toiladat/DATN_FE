@@ -15,12 +15,14 @@ import { useState, useEffect } from 'react'
 import { toast } from 'sonner'
 import { MilestoneSchema } from '@/schemas/projectSchema'
 import mediaRequests from '@/apis/requests/media'
+import { useTranslation } from 'react-i18next'
 
 interface MilestonesStepProps {
   onStepChange?: (step: string) => void
 }
 
 export function MilestonesStep({ onStepChange }: MilestonesStepProps = {}) {
+  const { t, i18n } = useTranslation()
   const {
     project,
     addMilestone,
@@ -97,11 +99,17 @@ export function MilestonesStep({ onStepChange }: MilestonesStepProps = {}) {
     const result = MilestoneSchema.safeParse(newMilestone)
 
     if (!result.success) {
-      const errorMessages = result.error.issues
-        .map((err: any) => err.message)
-        .join(', ')
-      toast.error('Missing Required Fields', {
-        description: errorMessages
+      toast.error(t('validation.missing_required_fields'), {
+        description: (
+          <div className="flex flex-col gap-1 text-xs mt-1 text-[#ff716c]">
+            {result.error.issues.map((err: any, idx: number) => (
+              <div key={idx} className="flex items-start gap-1">
+                <span className="shrink-0">•</span>
+                <span>{t(err.message)}</span>
+              </div>
+            ))}
+          </div>
+        )
       })
       return
     }
@@ -114,8 +122,10 @@ export function MilestonesStep({ onStepChange }: MilestonesStepProps = {}) {
       editingIndex !== null ? milestones[editingIndex].durationDays : 0
 
     if (newMilestone.budget - originalBudget > remainingBudget) {
-      toast.error('Budget Exceeded', {
-        description: `This milestone exceeds the remaining budget of €${remainingBudget.toLocaleString()}.`
+      toast.error(t('validation.budget_exceeded'), {
+        description: t('toast.milestone_budget_exceeded_desc', {
+          remaining: remainingBudget.toLocaleString()
+        })
       })
       return
     }
@@ -127,7 +137,7 @@ export function MilestonesStep({ onStepChange }: MilestonesStepProps = {}) {
         images: finalImages
       })
       setEditingIndex(null)
-      toast.success('Milestone Updated')
+      toast.success(t('toast.milestone_updated'))
     } else {
       addMilestone({
         ...newMilestone,
@@ -136,7 +146,7 @@ export function MilestonesStep({ onStepChange }: MilestonesStepProps = {}) {
       })
       const newTotalPages = Math.ceil((milestones.length + 1) / itemsPerPage)
       setCurrentPage(newTotalPages)
-      toast.success('Milestone Added')
+      toast.success(t('toast.milestone_added'))
     }
     setMilestoneDraft(defaultMilestone)
     setMilestoneCache({})
@@ -168,8 +178,8 @@ export function MilestonesStep({ onStepChange }: MilestonesStepProps = {}) {
           newCache[f.name + f.size] = urls[idx]
         })
       } catch (error) {
-        toast.error('Upload Failed', {
-          description: 'Failed to upload some images.'
+        toast.error(t('toast.upload_failed'), {
+          description: t('toast.upload_failed_desc')
         })
       } finally {
         setIsUploading(false)
@@ -191,11 +201,10 @@ export function MilestonesStep({ onStepChange }: MilestonesStepProps = {}) {
       {/* Header Section */}
       <header className="mb-12">
         <h1 className="text-4xl md:text-5xl font-bold font-['Space_Grotesk'] tracking-tighter text-[#ecedf6] mb-3">
-          Define Project Milestones
+          {t('milestones.title')}
         </h1>
         <p className="text-[#a9abb3] text-lg max-w-2xl">
-          Break your project into manageable phases for transparency and
-          accountability.
+          {t('milestones.desc')}
         </p>
       </header>
 
@@ -207,7 +216,9 @@ export function MilestonesStep({ onStepChange }: MilestonesStepProps = {}) {
             <Card className="bg-[#22262f]/40 backdrop-blur-xl border-[#8ff5ff]/10 rounded-xl relative overflow-hidden shadow-none">
               <CardContent className="p-6">
                 <div className="flex justify-between items-center mb-4">
-                  <span className="text-[#a9abb3] text-sm">Total Budget</span>
+                  <span className="text-[#a9abb3] text-sm">
+                    {t('milestones.totalBudget')}
+                  </span>
                   <span className="text-[#8ff5ff] font-bold font-['Space_Grotesk'] text-lg">
                     €{totalBudget.toLocaleString()}
                   </span>
@@ -221,7 +232,9 @@ export function MilestonesStep({ onStepChange }: MilestonesStepProps = {}) {
                   ></div>
                 </div>
                 <p className="mt-3 text-xs text-[#a9abb3] italic">
-                  Remaining: €{remainingBudget.toLocaleString()}
+                  {t('milestones.remainingBudget', {
+                    remaining: remainingBudget.toLocaleString()
+                  })}
                 </p>
               </CardContent>
             </Card>
@@ -229,9 +242,11 @@ export function MilestonesStep({ onStepChange }: MilestonesStepProps = {}) {
             <Card className="bg-[#22262f]/40 backdrop-blur-xl border-[#8ff5ff]/10 rounded-xl relative overflow-hidden shadow-none">
               <CardContent className="p-6">
                 <div className="flex justify-between items-center mb-4">
-                  <span className="text-[#a9abb3] text-sm">Execution Time</span>
+                  <span className="text-[#a9abb3] text-sm">
+                    {t('milestones.executionTime')}
+                  </span>
                   <span className="text-[#8ff5ff] font-bold font-['Space_Grotesk'] text-lg">
-                    {totalDuration} Days
+                    {t('milestones.totalDuration', { duration: totalDuration })}
                   </span>
                 </div>
                 <div className="h-2 bg-[#22262f] rounded-full overflow-hidden">
@@ -247,8 +262,12 @@ export function MilestonesStep({ onStepChange }: MilestonesStepProps = {}) {
                 </div>
                 <p className="mt-3 text-xs text-[#a9abb3] italic">
                   {maxDuration > 0
-                    ? `Remaining: ${remainingDuration} Days`
-                    : `Total project phases: ${milestones.length} (No max duration set)`}
+                    ? t('milestones.remainingDuration', {
+                        remaining: remainingDuration
+                      })
+                    : t('milestones.noMaxDuration', {
+                        count: milestones.length
+                      })}
                 </p>
               </CardContent>
             </Card>
@@ -259,11 +278,11 @@ export function MilestonesStep({ onStepChange }: MilestonesStepProps = {}) {
             <CardContent className="p-8 space-y-6">
               <div>
                 <Label className="block text-sm font-medium text-[#a9abb3] mb-2">
-                  Milestone Name
+                  {t('milestones.name')}
                 </Label>
                 <Input
                   className="w-full bg-[#1c2028] border-none text-[#ecedf6] rounded-lg focus-visible:ring-1 focus-visible:ring-[#8ff5ff] py-6 px-4"
-                  placeholder="e.g., Phase 1: MVP Development"
+                  placeholder={t('milestones.namePlaceholder')}
                   type="text"
                   value={newMilestone.name}
                   onChange={(e) =>
@@ -274,11 +293,11 @@ export function MilestonesStep({ onStepChange }: MilestonesStepProps = {}) {
 
               <div>
                 <Label className="block text-sm font-medium text-[#a9abb3] mb-2">
-                  Description
+                  {t('milestones.description')}
                 </Label>
                 <Textarea
                   className="w-full bg-[#1c2028] border-none text-[#ecedf6] rounded-lg focus-visible:ring-1 focus-visible:ring-[#8ff5ff] p-4 resize-none shadow-none"
-                  placeholder="Detail the specific tasks and technical requirements..."
+                  placeholder={t('milestones.descriptionPlaceholder')}
                   rows={4}
                   value={newMilestone.description}
                   onChange={(e) =>
@@ -293,7 +312,7 @@ export function MilestonesStep({ onStepChange }: MilestonesStepProps = {}) {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div>
                   <Label className="block text-sm font-medium text-[#a9abb3] mb-1">
-                    Duration (Days)
+                    {t('milestones.duration')}
                   </Label>
                   <Input
                     className="w-full bg-[#1c2028] border-none text-[#ecedf6] rounded-lg focus-visible:ring-1 focus-visible:ring-[#8ff5ff] py-6 px-4 shadow-none"
@@ -304,12 +323,12 @@ export function MilestonesStep({ onStepChange }: MilestonesStepProps = {}) {
                     }
                   />
                   <p className="mt-2 text-[10px] text-[#a9abb3] uppercase tracking-wider">
-                    Estimated time to complete this phase.
+                    {t('milestones.durationHelper')}
                   </p>
                 </div>
                 <div>
                   <Label className="block text-sm font-medium text-[#a9abb3] mb-1">
-                    Budget Allocation (€)
+                    {t('milestones.budget')}
                   </Label>
                   <Input
                     className="w-full bg-[#1c2028] border-none text-[#ecedf6] rounded-lg focus-visible:ring-1 focus-visible:ring-[#8ff5ff] py-6 px-4 shadow-none"
@@ -323,7 +342,7 @@ export function MilestonesStep({ onStepChange }: MilestonesStepProps = {}) {
                     }
                   />
                   <p className="mt-2 text-[10px] text-[#a9abb3] uppercase tracking-wider">
-                    Cannot exceed total funding goal.
+                    {t('milestones.budgetHelper')}
                   </p>
                 </div>
               </div>
@@ -331,7 +350,7 @@ export function MilestonesStep({ onStepChange }: MilestonesStepProps = {}) {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div>
                   <Label className="block text-sm font-medium text-[#a9abb3] mb-2">
-                    Advantages (Optional)
+                    {t('milestones.advantages')}
                   </Label>
                   <Input
                     className="w-full bg-[#1c2028] border-none text-[#ecedf6] rounded-lg focus-visible:ring-1 focus-visible:ring-[#8ff5ff] py-6 px-4 shadow-none"
@@ -347,7 +366,7 @@ export function MilestonesStep({ onStepChange }: MilestonesStepProps = {}) {
                 </div>
                 <div>
                   <Label className="block text-sm font-medium text-[#a9abb3] mb-2">
-                    Challenges (Optional)
+                    {t('milestones.challenges')}
                   </Label>
                   <Input
                     className="w-full bg-[#1c2028] border-none text-[#ecedf6] rounded-lg focus-visible:ring-1 focus-visible:ring-[#8ff5ff] py-6 px-4 shadow-none"
@@ -366,7 +385,7 @@ export function MilestonesStep({ onStepChange }: MilestonesStepProps = {}) {
               <div className="space-y-6">
                 <div>
                   <Label className="block text-sm font-medium text-[#a9abb3] mb-2">
-                    Reference Image
+                    {t('milestones.referenceImage')}
                   </Label>
                   <ImageUpload
                     key={resetKey}
@@ -396,11 +415,11 @@ export function MilestonesStep({ onStepChange }: MilestonesStepProps = {}) {
 
                 <div>
                   <Label className="block text-sm font-medium text-[#a9abb3] mb-2">
-                    Expected Outcome
+                    {t('milestones.expectedOutcome')}
                   </Label>
                   <div className="mb-6 shadow-[0_4px_24px_rgba(0,0,0,0.15)] rounded-xl relative z-10">
                     <RichTextEditor
-                      placeholder="Describe the expected results and deliverables of this milestone..."
+                      placeholder={t('milestones.expectedOutcomePlaceholder')}
                       value={newMilestone.expectedOutcome}
                       onChange={(val) =>
                         setMilestoneDraft({
@@ -415,9 +434,7 @@ export function MilestonesStep({ onStepChange }: MilestonesStepProps = {}) {
                       gavel
                     </span>
                     <p className="text-sm text-[#7d98ff]/90 leading-relaxed font-medium">
-                      Đội ngũ admin sẽ kiểm duyệt khi đến deadline và sẽ approve
-                      hay deny dựa theo kết quả hoàn thành theo từng giai đoạn,
-                      do đó cần xác định kỹ thông tin này.
+                      {t('milestones.adminWarning')}
                     </p>
                   </div>
                 </div>
@@ -434,7 +451,7 @@ export function MilestonesStep({ onStepChange }: MilestonesStepProps = {}) {
                       setResetKey((prev) => prev + 1)
                     }}
                   >
-                    Cancel Edit
+                    {t('milestones.cancelEdit')}
                   </Button>
                 )}
                 <Button
@@ -448,12 +465,12 @@ export function MilestonesStep({ onStepChange }: MilestonesStepProps = {}) {
                       <span className="animate-spin material-symbols-outlined text-sm">
                         progress_activity
                       </span>
-                      Uploading...
+                      {t('milestones.uploading')}
                     </span>
                   ) : editingIndex !== null ? (
-                    'Update Milestone'
+                    t('milestones.update')
                   ) : (
-                    'Add Milestone'
+                    t('milestones.add')
                   )}
                 </Button>
               </div>
@@ -467,7 +484,7 @@ export function MilestonesStep({ onStepChange }: MilestonesStepProps = {}) {
             <span className="material-symbols-outlined text-[#8ff5ff]">
               analytics
             </span>
-            Milestone Pipeline
+            {t('milestones.pipeline')}
           </h3>
 
           <div className="space-y-2.5 relative">
@@ -505,11 +522,12 @@ export function MilestonesStep({ onStepChange }: MilestonesStepProps = {}) {
               )
 
               const formatRange = (start: Date, end: Date) => {
-                const startStr = start.toLocaleDateString('en-US', {
+                const locale = i18n.language === 'vi' ? 'vi-VN' : 'en-US'
+                const startStr = start.toLocaleDateString(locale, {
                   month: 'short',
                   day: 'numeric'
                 })
-                const endStr = end.toLocaleDateString('en-US', {
+                const endStr = end.toLocaleDateString(locale, {
                   month: 'short',
                   day: 'numeric',
                   year: 'numeric'
@@ -556,7 +574,7 @@ export function MilestonesStep({ onStepChange }: MilestonesStepProps = {}) {
                                 window.scrollTo({ top: 0, behavior: 'smooth' })
                               }}
                               className="p-1 text-[#8ff5ff] hover:text-white transition-colors"
-                              title="Edit"
+                              title={t('btn.edit')}
                             >
                               <span className="material-symbols-outlined text-sm">
                                 edit
@@ -585,7 +603,7 @@ export function MilestonesStep({ onStepChange }: MilestonesStepProps = {}) {
                                   setCurrentPage(newTotal)
                               }}
                               className="p-1 text-[#ff716c] hover:text-white transition-colors"
-                              title="Delete"
+                              title={t('btn.delete')}
                             >
                               <span className="material-symbols-outlined text-sm">
                                 delete
@@ -650,10 +668,13 @@ export function MilestonesStep({ onStepChange }: MilestonesStepProps = {}) {
                         <span className="material-symbols-outlined text-sm mr-1">
                           chevron_left
                         </span>
-                        Prev
+                        {t('common.prev')}
                       </Button>
                       <span className="text-xs text-[#a9abb3] font-medium tracking-wider">
-                        Page {currentPage} of {totalPages}
+                        {t('common.pageOf', {
+                          current: currentPage,
+                          total: totalPages
+                        })}
                       </span>
                       <Button
                         variant="ghost"
@@ -664,7 +685,7 @@ export function MilestonesStep({ onStepChange }: MilestonesStepProps = {}) {
                         disabled={currentPage === totalPages}
                         className="text-[#a9abb3] hover:text-[#ecedf6]"
                       >
-                        Next
+                        {t('common.next')}
                         <span className="material-symbols-outlined text-sm ml-1">
                           chevron_right
                         </span>
@@ -677,14 +698,14 @@ export function MilestonesStep({ onStepChange }: MilestonesStepProps = {}) {
 
             {milestones.length === 0 && (
               <p className="text-[#a9abb3] text-sm italic pl-14">
-                No milestones added yet.
+                {t('milestones.empty')}
               </p>
             )}
 
             {/* Empty state hint */}
             <div className="relative z-10 pl-14 pt-4">
               <div className="w-full aspect-[4/1] rounded-xl border-2 border-dashed border-[#45484f]/30 flex items-center justify-center text-[#45484f] text-xs">
-                Fill the form to add a milestone
+                {t('milestones.emptyHint')}
               </div>
             </div>
           </div>
@@ -692,7 +713,7 @@ export function MilestonesStep({ onStepChange }: MilestonesStepProps = {}) {
       </div>
       <ActionFooter
         onContinue={() => onStepChange?.('Team')}
-        continueText="Continue to Team"
+        continueText={t('milestones.continueToTeam')}
       />
     </div>
   )

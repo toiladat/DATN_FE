@@ -4,6 +4,7 @@ import type { ProjectSummary } from '@/schemas/projectSchema'
 import { Loader2, Filter } from 'lucide-react'
 import { InvestedStats } from '@/components/investedPage/InvestedStats'
 import { CompactProjectCard } from '@/components/investedPage/CompactProjectCard'
+import { useTranslation } from 'react-i18next'
 import {
   Select,
   SelectContent,
@@ -13,6 +14,7 @@ import {
 } from '@/components/ui/select'
 
 export default function Invested() {
+  const { t, i18n } = useTranslation()
   const [projects, setProjects] = useState<ProjectSummary[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [isError, setIsError] = useState(false)
@@ -65,14 +67,24 @@ export default function Invested() {
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
           <div>
             <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-4">
-              My{' '}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#8ff5ff] to-[#ac89ff]">
-                Investments
-              </span>
+              {i18n.language === 'vi' ? (
+                <>
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#8ff5ff] to-[#ac89ff]">
+                    {t('invested.title_main')}
+                  </span>{' '}
+                  {t('invested.title_my')}
+                </>
+              ) : (
+                <>
+                  {t('invested.title_my')}{' '}
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#8ff5ff] to-[#ac89ff]">
+                    {t('invested.title_main')}
+                  </span>
+                </>
+              )}
             </h1>
             <p className="text-[#a9abb3] text-base max-w-xl">
-              Track and manage the projects you've backed. Monitor their
-              progress, funding goals, and active milestones.
+              {t('invested.desc')}
             </p>
           </div>
 
@@ -83,12 +95,16 @@ export default function Invested() {
             </div>
             <Select value={timeFilter} onValueChange={setTimeFilter}>
               <SelectTrigger className="w-[160px] bg-[#161a21] border-[#2e323b] text-[#ecedf6] focus:ring-[#8ff5ff]">
-                <SelectValue placeholder="Time Range" />
+                <SelectValue placeholder={t('invested.time_range')} />
               </SelectTrigger>
               <SelectContent className="bg-[#161a21] border-[#2e323b] text-[#ecedf6]">
-                <SelectItem value="all">All Time</SelectItem>
-                <SelectItem value="30days">Last 30 Days</SelectItem>
-                <SelectItem value="thisYear">This Year</SelectItem>
+                <SelectItem value="all">{t('invested.all_time')}</SelectItem>
+                <SelectItem value="30days">
+                  {t('invested.last_30_days')}
+                </SelectItem>
+                <SelectItem value="thisYear">
+                  {t('invested.this_year')}
+                </SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -98,12 +114,12 @@ export default function Invested() {
           <div className="flex flex-col items-center justify-center py-32">
             <Loader2 className="w-12 h-12 animate-spin text-[#8ff5ff] mb-6" />
             <p className="text-[#a9abb3] animate-pulse">
-              Syncing investment data...
+              {t('invested.syncing')}
             </p>
           </div>
         ) : isError ? (
           <div className="text-center py-20 text-red-400 border border-red-500/20 bg-red-500/5 rounded-2xl">
-            Failed to load your investment portfolio. Please try again later.
+            {t('invested.error')}
           </div>
         ) : projects.length === 0 ? (
           <div className="text-center py-32 bg-[#161a21] border border-[#2e323b] rounded-2xl">
@@ -113,11 +129,10 @@ export default function Invested() {
               </span>
             </div>
             <h3 className="text-2xl font-semibold mb-3 text-[#ecedf6]">
-              No Investments Yet
+              {t('invested.no_investments_yet')}
             </h3>
             <p className="text-[#a9abb3] max-w-md mx-auto">
-              You haven't backed any projects. Discover innovative ideas and
-              start building your portfolio today.
+              {t('invested.no_investments_desc')}
             </p>
           </div>
         ) : (
@@ -126,9 +141,11 @@ export default function Invested() {
 
             <div className="space-y-4">
               <h2 className="text-lg font-semibold tracking-wider text-[#ecedf6] mb-6 border-b border-[#2e323b] pb-2 flex items-center justify-between">
-                <span>Investment History</span>
+                <span>{t('invested.history')}</span>
                 <span className="text-sm font-mono text-[#a9abb3] bg-[#161a21] px-3 py-1 rounded-full border border-[#2e323b]">
-                  {filteredProjects.length} Projects
+                  {t('invested.projects_counter', {
+                    count: filteredProjects.length
+                  })}
                 </span>
               </h2>
 
@@ -149,7 +166,7 @@ export default function Invested() {
                 </div>
               ) : (
                 <div className="text-center py-16 text-[#73757d]">
-                  No investments found in this time range.
+                  {t('invested.no_projects_found')}
                 </div>
               )}
             </div>

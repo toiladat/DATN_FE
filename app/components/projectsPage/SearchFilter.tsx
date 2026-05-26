@@ -12,11 +12,20 @@ import { Link } from 'react-router'
 import { useGetCategories } from '@/apis/queries/category'
 import { useGetProjects } from '@/apis/queries/project'
 import { useDebounce } from '@/hooks/useDebounce'
+import { useTranslation } from 'react-i18next'
 
 const SORT_OPTIONS = [
-  { value: 'trending', label: 'Trending', icon: TrendingUp },
-  { value: 'newest', label: 'Newest', icon: Clock },
-  { value: 'most_funded', label: 'Most funded', icon: Zap }
+  {
+    value: 'trending',
+    labelKey: 'search.sort.trending' as const,
+    icon: TrendingUp
+  },
+  { value: 'newest', labelKey: 'search.sort.newest' as const, icon: Clock },
+  {
+    value: 'most_funded',
+    labelKey: 'search.sort.most_funded' as const,
+    icon: Zap
+  }
 ]
 
 interface SearchFilterProps {
@@ -32,6 +41,7 @@ export function SearchFilter({
   selectedSort = 'newest',
   onSortChange
 }: SearchFilterProps) {
+  const { t } = useTranslation()
   const [searchInput, setSearchInput] = useState('')
   const [isFocused, setIsFocused] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
@@ -39,9 +49,22 @@ export function SearchFilter({
   const { data: categories = [] } = useGetCategories()
 
   const categoryFilters = [
-    { value: 'all', label: 'All' },
-    ...categories.map((c) => ({ value: c.slug, label: c.name }))
+    { value: 'all', label: t('search.category.all') },
+    ...categories.map((c) => ({
+      value: c.slug,
+      label: t(`category.${c.slug}`, c.name)
+    }))
   ]
+
+  const getCategoryTranslation = (
+    name: string | null | undefined,
+    fallback = 'Uncategorized'
+  ) => {
+    if (!name) return t('basics.selectCategory', fallback)
+    const slug = name.toLowerCase().replace(/ & /g, '-').replace(/ /g, '-')
+    const key = `category.${slug}`
+    return t(key, name)
+  }
 
   // Debounce 400ms trước khi gọi API
   const debouncedSearch = useDebounce(searchInput, 400)
@@ -60,10 +83,10 @@ export function SearchFilter({
       {/* Page heading */}
       <div className="mb-8">
         <p className="text-[11px] font-bold tracking-[0.3em] text-[#8ff5ff] uppercase mb-2">
-          RadiantVoid / Projects
+          {t('search.badge')}
         </p>
         <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-[#ecedf6]">
-          Ecosystem Ventures
+          {t('search.title')}
         </h1>
       </div>
 
@@ -78,7 +101,7 @@ export function SearchFilter({
           <input
             ref={inputRef}
             className="w-full bg-[#10131a] border border-[#2e323b] rounded-xl py-3 pl-11 pr-10 focus:ring-1 focus:ring-[#8ff5ff]/60 focus:border-[#8ff5ff]/60 text-[#ecedf6] text-sm placeholder:text-[#45484f] transition-all duration-300 outline-none"
-            placeholder="Search projects…"
+            placeholder={t('search.placeholder')}
             type="text"
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
@@ -99,7 +122,7 @@ export function SearchFilter({
                 {isFetching ? (
                   <div className="flex items-center justify-center gap-2 py-5 text-xs text-[#a9abb3]">
                     <Loader2 className="w-3.5 h-3.5 animate-spin text-[#8ff5ff]" />
-                    Searching...
+                    {t('search.searching')}
                   </div>
                 ) : searchResults.length > 0 ? (
                   <div>
@@ -134,7 +157,7 @@ export function SearchFilter({
                             {project.title}
                           </p>
                           <p className="text-[10px] text-[#73757d] truncate mt-0.5">
-                            {project.primaryCategory ?? 'Uncategorized'}
+                            {getCategoryTranslation(project.primaryCategory)}
                           </p>
                         </div>
 
@@ -146,14 +169,16 @@ export function SearchFilter({
                               : 'text-[#ac89ff] border-[#ac89ff]/30 bg-[#ac89ff]/8'
                           }`}
                         >
-                          {project.status === 'progress' ? 'FUNDING' : 'ACTIVE'}
+                          {project.status === 'progress'
+                            ? t('search.status.funding')
+                            : t('search.status.active')}
                         </span>
                       </Link>
                     ))}
                   </div>
                 ) : (
                   <div className="py-5 text-center text-xs text-[#73757d]">
-                    No projects found for{' '}
+                    {t('search.no_results')}{' '}
                     <span className="text-[#8ff5ff]">"{debouncedSearch}"</span>
                   </div>
                 )}
@@ -165,7 +190,7 @@ export function SearchFilter({
         {/* Sort — segmented control */}
         <div className="flex items-center gap-1 bg-[#10131a] border border-[#2e323b] rounded-xl p-1 shrink-0">
           <SlidersHorizontal className="w-3.5 h-3.5 text-[#45484f] ml-2 mr-1 shrink-0" />
-          {SORT_OPTIONS.map(({ value, label, icon: Icon }) => (
+          {SORT_OPTIONS.map(({ value, labelKey, icon: Icon }) => (
             <button
               key={value}
               onClick={() => onSortChange?.(value)}
@@ -185,7 +210,7 @@ export function SearchFilter({
               <Icon
                 className={`w-3 h-3 relative z-10 ${selectedSort === value ? 'text-[#8ff5ff]' : ''}`}
               />
-              <span className="relative z-10">{label}</span>
+              <span className="relative z-10">{t(labelKey)}</span>
             </button>
           ))}
         </div>

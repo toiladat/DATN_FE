@@ -1,9 +1,17 @@
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
+import { useTranslation } from 'react-i18next'
 
 export type TaskStatus = 'Complete' | 'In Progress' | 'Not Started' | 'Optional'
 
 const STEP_NUMBERS = ['01', '02', '03', '04']
+
+const statusKeyMap: Record<TaskStatus, string> = {
+  Complete: 'status.complete',
+  'In Progress': 'status.in_progress',
+  'Not Started': 'status.not_started',
+  Optional: 'status.optional'
+}
 
 interface TaskCardProps {
   title: string
@@ -21,6 +29,7 @@ export function TaskCard({
   stepIndex = 0,
   onClick
 }: TaskCardProps) {
+  const { t } = useTranslation()
   const isComplete = status === 'Complete'
   const isInProgress = status === 'In Progress'
   const isOptional = status === 'Optional'
@@ -74,13 +83,13 @@ export function TaskCard({
                   : 'text-[#45484f]'
             }`}
           >
-            {status}
+            {t(statusKeyMap[status])}
           </span>
 
           {/* CTA */}
           {isInProgress ? (
             <Button className="bg-[#8ff5ff] text-[#00383d] hover:bg-[#a8f8ff] px-5 h-9 text-sm font-medium rounded-lg shadow-none">
-              Continue
+              {t('btn.continue')}
             </Button>
           ) : isComplete ? (
             <span className="material-symbols-outlined text-[#ac89ff] text-xl">

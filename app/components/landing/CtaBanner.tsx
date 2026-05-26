@@ -1,8 +1,15 @@
 import { Button } from '@/components/ui/button'
 import { Wallet } from 'lucide-react'
 import { motion } from 'framer-motion'
+import { useTranslation } from 'react-i18next'
+import { useConnectModal } from '@rainbow-me/rainbowkit'
+import { useAccount } from 'wagmi'
 
 export function CtaBanner() {
+  const { t } = useTranslation()
+  const { openConnectModal } = useConnectModal()
+  const { isConnected } = useAccount()
+
   return (
     <section className="py-24 px-4 max-w-7xl mx-auto relative">
       <div className="absolute inset-0 bg-[#8ff5ff]/5 blur-3xl rounded-full pointer-events-none" />
@@ -20,23 +27,27 @@ export function CtaBanner() {
 
         <div className="relative z-10">
           <h2 className="text-5xl md:text-7xl font-['Space_Grotesk'] font-bold mb-8 max-w-4xl mx-auto text-[#ecedf6] tracking-tight leading-[1.1]">
-            Ready to Start Your Journey?
+            {t('landing.cta_title')}
           </h2>
           <p className="text-xl md:text-2xl text-[#a9abb3] mb-16 max-w-2xl mx-auto font-light leading-relaxed">
-            Connect Your Wallet and join the revolution of decentralized
-            innovation today.
+            {t('landing.cta_desc')}
           </p>
 
           <div className="flex flex-col sm:flex-row justify-center gap-6 items-center">
-            <Button className="h-16 bg-[#8ff5ff] text-[#0a0c10] font-['Space_Grotesk'] font-bold px-12 rounded-full hover:bg-[#a6fcff] hover:-translate-y-1 transition-all duration-500 ease-out shadow-[0_0_30px_rgba(143,245,255,0.3)] hover:shadow-[0_0_50px_rgba(143,245,255,0.5)] flex items-center justify-center gap-3 text-[15px] uppercase tracking-[0.1em]">
-              <Wallet className="w-5 h-5" />
-              Connect Wallet Now
-            </Button>
+            {!isConnected && openConnectModal && (
+              <Button
+                onClick={openConnectModal}
+                className="h-16 bg-[#8ff5ff] text-[#0a0c10] font-['Space_Grotesk'] font-bold px-12 rounded-full hover:bg-[#a6fcff] hover:-translate-y-1 transition-all duration-500 ease-out shadow-[0_0_30px_rgba(143,245,255,0.3)] hover:shadow-[0_0_50px_rgba(143,245,255,0.5)] flex items-center justify-center gap-3 text-[15px] uppercase tracking-[0.1em] cursor-pointer"
+              >
+                <Wallet className="w-5 h-5" />
+                {t('landing.cta_btn_connect')}
+              </Button>
+            )}
             <Button
               variant="outline"
-              className="h-16 bg-transparent text-[#ecedf6] border border-[#2e323b]/80 font-['Space_Grotesk'] font-bold px-12 rounded-full hover:bg-[#ecedf6]/5 hover:border-[#ecedf6]/30 transition-all duration-500 ease-out text-[15px] uppercase tracking-[0.1em]"
+              className="h-16 bg-transparent text-[#ecedf6] border border-[#2e323b]/80 font-['Space_Grotesk'] font-bold px-12 rounded-full hover:bg-[#ecedf6]/5 hover:border-[#ecedf6]/30 transition-all duration-500 ease-out text-[15px] uppercase tracking-[0.1em] cursor-pointer"
             >
-              Contact Sales
+              {t('landing.cta_btn_contact')}
             </Button>
           </div>
         </div>

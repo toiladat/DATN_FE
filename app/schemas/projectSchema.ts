@@ -1,40 +1,43 @@
 import { z } from 'zod'
 
 export const BasicsSchema = z.object({
-  title: z.string().min(1, 'Project Title is required'),
-  subtitle: z.string().min(1, 'Subtitle is required'),
-  primaryCategory: z.string().min(1, 'Primary Category is required'),
+  title: z.string().min(1, 'title_required'),
+  subtitle: z.string().min(1, 'subtitle_required'),
+  primaryCategory: z.string().min(1, 'primary_category_required'),
   secondaryCategory: z.string().optional(),
-  location: z.string().min(1, 'Location is required'),
-  image: z.array(z.string()).min(1, 'At least 1 Reference Image is required'),
+  location: z.string().min(1, 'location_required'),
+  image: z.array(z.string()).min(1, 'image_required'),
   video: z.string().optional(),
-  fundingGoal: z.number().positive('Funding goal must be a positive number'),
-  startDate: z.string().min(1, 'Start Date is required'),
-  endDate: z.string().min(1, 'End Date is required'),
-  description: z.string().min(1, 'Project Description is required'),
-  risks: z.string().min(1, 'Risks & Challenges are required')
+  fundingGoal: z.number().positive('funding_goal_positive'),
+  startDate: z.string().min(1, 'start_date_required'),
+  endDate: z.string().min(1, 'end_date_required'),
+  description: z.string().min(1, 'description_required'),
+  risks: z.string().min(1, 'risks_required')
 })
 
 export const MilestoneSchema = z.object({
-  name: z.string().min(1, 'Milestone Name is required'),
-  description: z.string().min(1, 'Description is required'),
-  durationDays: z.number().int().positive('Duration must be greater than 0'),
-  startDate: z.string().min(1, 'Start Date is required'),
-  endDate: z.string().min(1, 'End Date is required'),
-  budget: z.number().positive('Budget Allocation must be greater than 0'),
+  name: z.string().min(1, 'milestone_name_required'),
+  description: z.string().min(1, 'milestone_description_required'),
+  durationDays: z.number().int().positive('milestone_duration_positive'),
+  startDate: z.string().min(1, 'start_date_required'),
+  endDate: z.string().min(1, 'end_date_required'),
+  budget: z.number().positive('milestone_budget_positive'),
   advantages: z.string().optional(),
   challenges: z.string().optional(),
-  images: z.array(z.string()).min(1, 'Reference Image is required'),
-  expectedOutcome: z.string().min(1, 'Expected Outcome is required')
+  images: z.array(z.string()).min(1, 'milestone_images_required'),
+  expectedOutcome: z.string().min(1, 'milestone_outcome_required')
 })
 
 export const TeamMemberSchema = z.object({
-  id: z.string().min(1, 'ID required'),
-  name: z.string().min(1, 'Name required'),
-  email: z.string().email('Invalid email').min(1, 'Email required'),
+  id: z.string().min(1, 'member_id_required'),
+  name: z.string().min(1, 'member_name_required'),
+  email: z
+    .string()
+    .email('member_email_invalid')
+    .min(1, 'member_email_required'),
   role: z.string().optional(),
   roleDescription: z.string().optional(),
-  wallet: z.string().min(1, 'Wallet required'),
+  wallet: z.string().min(1, 'member_wallet_required'),
   avatar: z.string().optional()
 })
 

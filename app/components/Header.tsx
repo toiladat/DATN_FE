@@ -27,6 +27,7 @@ import {
   TooltipProvider,
   TooltipTrigger
 } from '@/components/ui/tooltip'
+import { useTranslation } from 'react-i18next'
 
 const MUSDT_ADDRESS = import.meta.env.VITE_MUSDT_ADDRESS as
   | `0x${string}`
@@ -35,6 +36,7 @@ const MUSDT_ADDRESS = import.meta.env.VITE_MUSDT_ADDRESS as
 // ─── Unified Wallet + Profile Button ─────────────────────────────────────────
 function WalletProfileButton() {
   const { setTheme, theme } = useTheme()
+  const { t, i18n } = useTranslation()
   const { logout, isAuthenticated } = useAuth()
   const { address } = useAccount()
   const navigate = useNavigate()
@@ -66,17 +68,17 @@ function WalletProfileButton() {
 
   const themeOptions = [
     {
-      label: 'Light',
+      label: t('nav.appearance.light'),
       value: 'light' as const,
       icon: <Sun className="w-3.5 h-3.5" />
     },
     {
-      label: 'Dark',
+      label: t('nav.appearance.dark'),
       value: 'dark' as const,
       icon: <Moon className="w-3.5 h-3.5" />
     },
     {
-      label: 'System',
+      label: t('nav.appearance.system'),
       value: 'system' as const,
       icon: <Monitor className="w-3.5 h-3.5" />
     }
@@ -95,7 +97,7 @@ function WalletProfileButton() {
               className="inline-flex items-center gap-2 h-9 px-4 rounded-xl text-[11px] font-bold uppercase tracking-widest border border-[#8ff5ff]/30 bg-[#8ff5ff]/5 text-[#8ff5ff] hover:bg-[#8ff5ff]/10 hover:border-[#8ff5ff]/60 hover:shadow-[0_0_12px_rgba(143,245,255,0.15)] transition-all duration-200"
             >
               <Wallet className="w-3.5 h-3.5" />
-              Connect Wallet
+              {t('nav.connect_wallet')}
             </button>
           )
         }
@@ -108,7 +110,7 @@ function WalletProfileButton() {
               className="inline-flex items-center gap-2 h-9 px-4 rounded-xl text-[11px] font-bold uppercase tracking-widest border border-[#ff716c]/30 bg-[#ff716c]/5 text-[#ff716c] hover:bg-[#ff716c]/10 transition-all"
             >
               <AlertTriangle className="w-3.5 h-3.5" />
-              Wrong Network
+              {t('nav.wrong_network')}
             </button>
           )
         }
@@ -151,7 +153,9 @@ function WalletProfileButton() {
                       sideOffset={8}
                       className="bg-[#1e222a] text-[#ecedf6] border-[#2e323b]"
                     >
-                      <p className="text-xs">Vui lòng xác thực tài khoản</p>
+                      <p className="text-xs">
+                        {t('nav.verify_account_tooltip')}
+                      </p>
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
@@ -229,7 +233,7 @@ function WalletProfileButton() {
                       className="w-full flex items-center gap-3 px-4 py-2.5 text-[13px] text-muted-foreground hover:text-foreground hover:bg-surface-variant transition-colors"
                     >
                       <FolderKanban className="w-4 h-4" />
-                      My Projects
+                      {t('nav.my_projects')}
                     </button>
                     <button
                       onClick={() => {
@@ -239,7 +243,7 @@ function WalletProfileButton() {
                       className="w-full flex items-center gap-3 px-4 py-2.5 text-[13px] text-muted-foreground hover:text-foreground hover:bg-surface-variant transition-colors"
                     >
                       <PieChart className="w-4 h-4" />
-                      Invested
+                      {t('nav.my_investments')}
                     </button>
                     <button
                       onClick={() => {
@@ -249,7 +253,7 @@ function WalletProfileButton() {
                       className="w-full flex items-center gap-3 px-4 py-2.5 text-[13px] text-muted-foreground hover:text-foreground hover:bg-surface-variant transition-colors"
                     >
                       <User className="w-4 h-4" />
-                      Profile
+                      {t('nav.profile')}
                     </button>
                   </div>
                 )}
@@ -257,7 +261,7 @@ function WalletProfileButton() {
                 {/* Theme */}
                 <div className="px-4 pt-2.5 pb-2">
                   <p className="text-[10px] font-mono text-muted-foreground/50 uppercase tracking-widest mb-1.5">
-                    Appearance
+                    {t('nav.appearance')}
                   </p>
                   <div className="flex gap-1">
                     {themeOptions.map((opt) => (
@@ -278,6 +282,31 @@ function WalletProfileButton() {
                   </div>
                 </div>
 
+                {/* Language */}
+                <div className="px-4 pt-1 pb-3 border-t border-border/40">
+                  <p className="text-[10px] font-mono text-muted-foreground/50 uppercase tracking-widest mb-1.5 mt-1.5">
+                    {t('nav.language')}
+                  </p>
+                  <div className="flex gap-1">
+                    {[
+                      { label: 'Tiếng Việt', value: 'vi' },
+                      { label: 'English', value: 'en' }
+                    ].map((opt) => (
+                      <button
+                        key={opt.value}
+                        onClick={() => i18n.changeLanguage(opt.value)}
+                        className={`flex-1 py-1.5 rounded-lg text-[11px] transition-all font-bold ${
+                          i18n.language === opt.value
+                            ? 'bg-primary/20 text-primary border border-primary/30'
+                            : 'text-muted-foreground hover:bg-surface-variant hover:text-foreground border border-transparent'
+                        }`}
+                      >
+                        {opt.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
                 {/* Disconnect */}
                 <div className="py-1 border-t border-border/40">
                   <button
@@ -288,7 +317,7 @@ function WalletProfileButton() {
                     className="w-full flex items-center gap-3 px-4 py-2.5 text-[13px] text-red-400/80 hover:text-red-400 hover:bg-red-500/5 transition-colors"
                   >
                     <LogOut className="w-4 h-4" />
-                    Disconnect
+                    {t('nav.disconnect')}
                   </button>
                 </div>
               </div>
@@ -302,13 +331,14 @@ function WalletProfileButton() {
 
 // ─── Main Header ──────────────────────────────────────────────────────────────
 const Header = () => {
+  const { t } = useTranslation()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   const navLinks = [
-    { name: 'Home', path: '/' },
-    { name: 'Projects', path: '/projects' },
-    { name: 'Launch Your Idea', path: '/launch-project' },
-    { name: 'My Projects', path: '/my-project' }
+    { name: t('nav.home'), path: '/' },
+    { name: t('nav.projects'), path: '/projects' },
+    { name: t('nav.launch_idea'), path: '/launch-project' },
+    { name: t('nav.my_projects'), path: '/my-project' }
   ]
 
   return (

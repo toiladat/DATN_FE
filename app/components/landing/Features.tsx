@@ -1,38 +1,37 @@
 import { CheckCircle } from 'lucide-react'
 import { motion } from 'framer-motion'
-
-const features = [
-  {
-    icon: 'lock',
-    title: 'Non-Custodial Escrow',
-    description:
-      'Funds are held in audited smart contracts. No team can access capital before milestones are approved.',
-    iconColor: 'cyan'
-  },
-  {
-    icon: 'groups',
-    title: 'DAO Governance',
-    description:
-      'Token holders vote on project approvals, fund releases, and protocol upgrades.',
-    iconColor: 'purple'
-  },
-  {
-    icon: 'query_stats',
-    title: 'Real-Time Analytics',
-    description:
-      'Track funding progress, token distribution, and on-chain activity with live dashboards.',
-    iconColor: 'cyan'
-  },
-  {
-    icon: 'security',
-    title: 'Multi-Audit Security',
-    description:
-      'Every smart contract undergoes multiple independent security audits before deployment.',
-    iconColor: 'purple'
-  }
-]
+import { useTranslation } from 'react-i18next'
 
 export function Features() {
+  const { t } = useTranslation()
+
+  const features = [
+    {
+      icon: 'lock',
+      title: t('landing.feature1_title'),
+      description: t('landing.feature1_desc'),
+      iconColor: 'cyan'
+    },
+    {
+      icon: 'groups',
+      title: t('landing.feature2_title'),
+      description: t('landing.feature2_desc'),
+      iconColor: 'purple'
+    },
+    {
+      icon: 'query_stats',
+      title: t('landing.feature3_title'),
+      description: t('landing.feature3_desc'),
+      iconColor: 'cyan'
+    },
+    {
+      icon: 'security',
+      title: t('landing.feature4_title'),
+      description: t('landing.feature4_desc'),
+      iconColor: 'purple'
+    }
+  ]
+
   return (
     <section className="py-32 px-4 max-w-7xl mx-auto relative">
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-[500px] bg-[#8ff5ff]/5 rounded-[100%] blur-[120px] pointer-events-none" />
@@ -46,18 +45,15 @@ export function Features() {
       >
         <div className="flex-1 space-y-6">
           <h2 className="text-5xl md:text-6xl font-['Space_Grotesk'] font-bold leading-[1.1] text-[#ecedf6] tracking-tight">
-            Trust Built into the <br />
+            {t('landing.features_title')} <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#8ff5ff] to-[#ac89ff]">
-              Source Code.
+              {t('landing.features_title_highlight')}
             </span>
           </h2>
         </div>
         <div className="flex-1 space-y-8">
           <p className="text-xl text-[#a9abb3] leading-relaxed font-light">
-            Unlike traditional crowdfunding, RadiantVoid eliminates the "blind
-            trust" factor. Every commitment is governed by immutable code,
-            audited by leading security firms, and transparent to the entire
-            world.
+            {t('landing.features_desc')}
           </p>
           <div className="flex gap-6">
             <div className="flex items-center gap-2 text-[#8ff5ff] text-sm font-bold uppercase tracking-widest">

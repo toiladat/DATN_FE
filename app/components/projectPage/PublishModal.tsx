@@ -14,6 +14,7 @@ import { contractAbi, contractAddress } from '@/contract/ContractClient'
 import { toast } from 'sonner'
 import type { ProjectDetail } from '@/schemas/projectSchema'
 import { apiClient } from '@/apis/axios'
+import { useTranslation } from 'react-i18next'
 
 interface PublishModalProps {
   project: ProjectDetail
@@ -21,6 +22,7 @@ interface PublishModalProps {
 }
 
 export function PublishModal({ project, children }: PublishModalProps) {
+  const { t } = useTranslation()
   const [open, setOpen] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isDemoMode, setIsDemoMode] = useState(false)
@@ -31,7 +33,7 @@ export function PublishModal({ project, children }: PublishModalProps) {
 
   const handlePublish = async () => {
     if (!address) {
-      toast.error('Vui lòng kết nối ví trước')
+      toast.error(t('toast.connect_wallet_required'))
       return
     }
 
@@ -62,9 +64,7 @@ export function PublishModal({ project, children }: PublishModalProps) {
       // --- PRE-VALIDATION CHECK ---
       const currentTime = Math.floor(Date.now() / 1000)
       if (fundDeadline <= currentTime) {
-        toast.error(
-          'Ngày Target Launch Date đã qua! Vui lòng chọn ngày bắt đầu dự án ở tương lai hoặc bật Demo Mode.'
-        )
+        toast.error(t('toast.target_launch_date_past'))
         setIsSubmitting(false)
         return
       }
@@ -74,9 +74,7 @@ export function PublishModal({ project, children }: PublishModalProps) {
 
       for (let i = 0; i < milestoneTimes.length; i++) {
         if (BigInt(milestoneTimes[i]) < lastTime) {
-          toast.error(
-            `Thời gian Milestone ${i + 1} không hợp lệ (phải sau ngày kết thúc gọi vốn và sau Milestone trước đó)`
-          )
+          toast.error(t('toast.milestone_time_invalid', { order: i + 1 }))
           setIsSubmitting(false)
           return
         }
@@ -85,13 +83,13 @@ export function PublishModal({ project, children }: PublishModalProps) {
       }
 
       if (totalMilestoneAmount !== goal) {
-        toast.error(`Tổng tiền các Milestones không khớp với Mục tiêu gọi vốn!`)
+        toast.error(t('toast.milestone_total_mismatch'))
         setIsSubmitting(false)
         return
       }
       // --- END PRE-VALIDATION ---
 
-      toast.info('Vui lòng xác nhận giao dịch trên ví...')
+      toast.info(t('toast.confirm_tx_wallet'))
 
       const txHash = await createProjectAsync({
         address: contractAddress,
@@ -106,7 +104,7 @@ export function PublishModal({ project, children }: PublishModalProps) {
         ]
       })
 
-      toast.info('Đang chờ transaction được mined...')
+      toast.info(t('toast.waiting_tx_mined'))
 
       if (publicClient) {
         await publicClient.waitForTransactionReceipt({ hash: txHash })
@@ -115,14 +113,14 @@ export function PublishModal({ project, children }: PublishModalProps) {
       // Lên BE báo cáo
       await apiClient.put(`/projects/${project.id}/launch`, { txHash })
 
-      toast.success('Dự án đã được Launch lên Blockchain thành công!')
+      toast.success(t('toast.launch_blockchain_success'))
       setOpen(false)
       setTimeout(() => {
         window.location.reload()
       }, 2000)
     } catch (error: any) {
       console.error(error)
-      toast.error(error.message || 'Có lỗi xảy ra khi gọi contract')
+      toast.error(error.message || t('toast.contract_call_error'))
     } finally {
       setIsSubmitting(false)
     }
