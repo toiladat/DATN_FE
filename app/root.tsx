@@ -17,6 +17,7 @@ import React from 'react'
 import type { Route } from './+types/root'
 import './app.css'
 import { LaunchProjectProvider } from '@/contexts/LaunchProjectContext'
+import AiAssistant from '@/components/ai/AiAssistant'
 
 import '@/lib/locales/i18n'
 
@@ -56,6 +57,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
             <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
               <LaunchProjectProvider>{children}</LaunchProjectProvider>
               <Toaster position="top-right" />
+              <AiAssistant />
             </ThemeProvider>
           </Web3ClientProvider>
         </TanstackProvider>

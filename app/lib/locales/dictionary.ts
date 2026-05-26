@@ -116,7 +116,7 @@ export const dictionary = {
     'basics.fieldSubtitle': 'Phụ đề',
     'basics.titlePlaceholder': 'Vùng đất vĩnh hằng: Trải nghiệm điện ảnh Web3',
     'basics.subtitlePlaceholder':
-      'Một cuộc hành trình đắm chìm qua Radiant Void, tận dụng giao diện đa chiều và tính bảo mật của hợp đồng thông minh.',
+      'Một cuộc hành trình đắm chìm qua FundHive, tận dụng giao diện đa chiều và tính bảo mật của hợp đồng thông minh.',
     'basics.projectCategory': 'Danh mục dự án',
     'basics.projectCategoryDesc':
       'Chọn các danh mục mô tả tốt nhất dự án của bạn để giúp nhà đầu tư dễ dàng tìm thấy.',
@@ -427,7 +427,7 @@ export const dictionary = {
     'landing.features_title': 'Sự tin cậy nằm trong',
     'landing.features_title_highlight': 'Mã nguồn.',
     'landing.features_desc':
-      "Không giống như gọi vốn truyền thống, RadiantVoid loại bỏ yếu tố 'tin tưởng mù quáng'. Mọi cam kết được điều hành bởi mã nguồn bất biến, được kiểm toán bởi các hãng bảo mật hàng đầu.",
+      "Không giống như gọi vốn truyền thống, FundHive loại bỏ yếu tố 'tin tưởng mù quáng'. Mọi cam kết được điều hành bởi mã nguồn bất biến, được kiểm toán bởi các hãng bảo mật hàng đầu.",
     'landing.feature1_title': 'Hợp đồng ký quỹ phi lưu ký',
     'landing.feature1_desc':
       'Vốn được giữ trong hợp đồng thông minh đã kiểm toán. Không đội ngũ nào có thể rút vốn trước khi các giai đoạn được phê duyệt.',
@@ -457,7 +457,7 @@ export const dictionary = {
     'footer.rights': 'Mọi quyền được bảo lưu.',
 
     // Search Filter
-    'search.badge': 'RadiantVoid / Dự án',
+    'search.badge': 'FundHive / Dự án',
     'search.title': 'Dự án Hệ sinh thái',
     'search.placeholder': 'Tìm kiếm dự án...',
     'search.sort.trending': 'Xu hướng',
@@ -600,7 +600,7 @@ export const dictionary = {
     'basics.fieldSubtitle': 'Subtitle',
     'basics.titlePlaceholder': 'The Eternal Vault: A Cinematic Web3 Experience',
     'basics.subtitlePlaceholder':
-      'An immersive journey through the Radiant Void, leveraging multi-dimensional UI and smart contract security.',
+      'An immersive journey through FundHive, leveraging multi-dimensional UI and smart contract security.',
     'basics.projectCategory': 'Project category',
     'basics.projectCategoryDesc':
       'Select categories that best describe your project to help backers find you.',
@@ -670,7 +670,7 @@ export const dictionary = {
     'team.searchPlaceholder': 'Username, wallet, or email...',
     'team.searching': 'Searching database...',
     'team.noEmail': 'No email attached',
-    'team.noUserFound': 'No users found on Radiant Void.',
+    'team.noUserFound': 'No users found on FundHive.',
     'team.fullName': 'Full Name',
     'team.populatePlaceholder': 'Search above to populate...',
     'team.emailAddress': 'Email Address',
@@ -910,7 +910,7 @@ export const dictionary = {
     'landing.features_title': 'Trust Built into the',
     'landing.features_title_highlight': 'Source Code.',
     'landing.features_desc':
-      "Unlike traditional crowdfunding, RadiantVoid eliminates the 'blind trust' factor. Every commitment is governed by immutable code, audited by leading security firms, and transparent to the world.",
+      "Unlike traditional crowdfunding, FundHive eliminates the 'blind trust' factor. Every commitment is governed by immutable code, audited by leading security firms, and transparent to the world.",
     'landing.feature1_title': 'Non-Custodial Escrow',
     'landing.feature1_desc':
       'Funds are held in audited smart contracts. No team can access capital before milestones are approved.',
@@ -940,7 +940,7 @@ export const dictionary = {
     'footer.rights': 'All rights reserved.',
 
     // Search Filter
-    'search.badge': 'RadiantVoid / Projects',
+    'search.badge': 'FundHive / Projects',
     'search.title': 'Ecosystem Ventures',
     'search.placeholder': 'Search projects...',
     'search.sort.trending': 'Trending',

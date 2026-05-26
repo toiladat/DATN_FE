@@ -7,7 +7,7 @@ product
 Investors, crypto enthusiasts, and project creators on a Web3 crowdfunding platform. They are data-driven, looking for promising projects, clear roadmaps, and funding status.
 
 ## Product Purpose
-A high-end, cyberpunk-themed Web3 crowdfunding platform (RadiantVoid). It provides detailed project pages, interactive data logs, and funding tracking.
+A high-end, cyberpunk-themed Web3 crowdfunding platform (FundHive). It provides detailed project pages, interactive data logs, and funding tracking.
 
 ## Brand Personality
 Cyberpunk, Neon, Futuristic, High-tech, Professional.

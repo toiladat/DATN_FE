@@ -10,7 +10,7 @@ const Footer = () => {
       <div className="grid grid-cols-1 md:grid-cols-4 gap-12 max-w-7xl mx-auto">
         <div className="col-span-1 md:col-span-1">
           <span className="text-xl font-bold text-cyan-400 mb-4 block font-headline">
-            RadiantVoid
+            FundHive
           </span>
           <p className="font-['Inter'] text-sm text-slate-400 leading-relaxed">
             {t('footer.desc')}

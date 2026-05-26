@@ -9,7 +9,7 @@ export function MyProjectsHeader({ projects }: { projects: ProjectSummary[] }) {
     <header className="mb-6 shrink-0 flex items-center justify-between border-b border-[#2e323b]/50 pb-5">
       <div>
         <p className="text-[10px] font-bold tracking-[0.25em] text-[#45484f] uppercase font-mono mb-1">
-          RadiantVoid / {t('my_project.my_projects')}
+          FundHive / {t('my_project.my_projects')}
         </p>
         <h1 className="text-2xl font-['Space_Grotesk'] font-bold text-[#ecedf6] tracking-tight">
           {t('my_project.board_title')}
