@@ -111,12 +111,12 @@ const Footer = () => {
               </a>
             </li>
             <li>
-              <a
+              <Link
                 className="font-['Inter'] text-sm text-slate-500 hover:text-cyan-400 transition-colors"
-                href="#"
+                to="/how-it-works"
               >
-                Terms of Service
-              </a>
+                {t('nav.how_it_works')}
+              </Link>
             </li>
             <li>
               <a

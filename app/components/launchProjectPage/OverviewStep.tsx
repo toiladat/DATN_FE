@@ -11,6 +11,8 @@ import { z } from 'zod'
 import { formatDistanceToNow } from 'date-fns'
 import { vi, enUS } from 'date-fns/locale'
 import { useTranslation } from 'react-i18next'
+import { useMe } from '@/apis/queries/user'
+import { useNavigate } from 'react-router'
 
 interface OverviewStepProps {
   onStepChange?: (step: string) => void
@@ -19,7 +21,10 @@ interface OverviewStepProps {
 export function OverviewStep({ onStepChange }: OverviewStepProps = {}) {
   const { t, i18n } = useTranslation()
   const { project, resetProject } = useLaunchProject()
+  const { data: userProfile, isLoading: isUserLoading } = useMe()
+  const navigate = useNavigate()
 
+  const isKycVerified = userProfile?.status === 'ACTIVE'
   const currentLocale = i18n.language === 'vi' ? vi : enUS
 
   const computeStatus = (step: string): TaskStatus => {
@@ -70,6 +75,11 @@ export function OverviewStep({ onStepChange }: OverviewStepProps = {}) {
 
   const handlePublish = async () => {
     try {
+      if (!isKycVerified) {
+        toast.error(t('overview.kyc_warning_desc'))
+        return
+      }
+
       // Fix state desync: Recalculate all milestone dates based on the LATEST basics.startDate
       let currentDate = project.basics.startDate
         ? new Date(project.basics.startDate)
@@ -163,6 +173,32 @@ export function OverviewStep({ onStepChange }: OverviewStepProps = {}) {
         </p>
       </header>
 
+      {/* KYC Warning Banner */}
+      {!isUserLoading && !isKycVerified && (
+        <div className="mb-8 p-5 bg-[#ffb020]/10 border border-[#ffb020]/30 rounded-2xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4 shadow-[0_0_24px_rgba(255,176,32,0.06)] animate-in fade-in slide-in-from-top-4 duration-300">
+          <div className="flex gap-4 items-start">
+            <span className="material-symbols-outlined text-[#ffb020] text-3xl shrink-0 mt-0.5 animate-pulse">
+              warning
+            </span>
+            <div className="space-y-1">
+              <h3 className="text-base font-semibold text-[#ffb020]">
+                {t('overview.kyc_warning_title')}
+              </h3>
+              <p className="text-sm text-[#ecedf6]/80 max-w-2xl leading-relaxed">
+                {t('overview.kyc_warning_desc')}
+              </p>
+            </div>
+          </div>
+          <Button
+            type="button"
+            onClick={() => navigate('/profile')}
+            className="bg-[#ffb020] text-[#10131a] hover:bg-[#ffb020]/90 font-bold px-5 py-2 rounded-xl shrink-0 transition-all duration-200 active:scale-95 shadow-[0_0_12px_rgba(255,176,32,0.2)]"
+          >
+            {t('overview.kyc_warning_btn')}
+          </Button>
+        </div>
+      )}
+
       {/* Task List Section */}
       <section className="space-y-3 mb-12">
         {tasks.map((task, index) => (
@@ -185,7 +221,7 @@ export function OverviewStep({ onStepChange }: OverviewStepProps = {}) {
           {t('overview.sectionsComplete')}
         </p>
         <Button
-          disabled={!isPublishable}
+          disabled={!isPublishable || isUserLoading || !isKycVerified}
           className="bg-[#8ff5ff] hover:bg-[#a8f8ff] text-[#00383d] active:scale-95 transition-all font-bold px-8 rounded-xl shadow-[0_0_20px_rgba(143,245,255,0.2)] hover:shadow-[0_0_28px_rgba(143,245,255,0.35)] disabled:opacity-40 disabled:grayscale border-none"
           onClick={handlePublish}
         >

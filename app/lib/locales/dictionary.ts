@@ -1,3 +1,6 @@
+import { errorsVi } from './vi/errors.vi'
+import { errorsEn } from './en/errors.en'
+
 export const dictionary = {
   vi: {
     // Navigation / Header
@@ -275,6 +278,40 @@ export const dictionary = {
     'toast.milestone_updated': 'Đã cập nhật giai đoạn thành công!',
     'toast.milestone_added': 'Đã thêm giai đoạn thành công!',
     'toast.save_success': 'Lưu cài đặt thành công!',
+
+    // Profile Translations
+    'profile.identity_details': 'Thông tin cá nhân',
+    'profile.display_name': 'Tên hiển thị',
+    'profile.display_name_placeholder': 'Tên công khai của bạn',
+    'profile.email_address': 'Địa chỉ email',
+    'profile.email_placeholder': 'tenb@example.com',
+    'profile.btn_verify': 'Xác thực',
+    'profile.btn_verified': 'Đã xác thực',
+    'profile.btn_confirm': 'Xác nhận',
+    'profile.phone_number': 'Số điện thoại',
+    'profile.phone_placeholder': '+84 900-000-000',
+    'profile.location': 'Vị trí địa lý',
+    'profile.location_placeholder': 'Tìm kiếm thành phố hoặc quốc gia',
+    'profile.biography': 'Tiểu sử',
+    'profile.biography_placeholder': 'Hãy giới thiệu bản thân với cộng đồng...',
+    'profile.biography_desc':
+      'Mô tả ngắn gọn về kinh nghiệm hoặc sở thích của bạn.',
+    'profile.presence_links': 'Sự hiện diện & Liên kết',
+    'profile.website': 'Trang web cá nhân',
+    'profile.platform': 'Nền tảng',
+    'profile.social_links': 'Liên kết mạng xã hội',
+    'profile.btn_add_link': 'Thêm liên kết',
+    'profile.social_url_placeholder': 'Đường dẫn liên kết https://',
+    'profile.remove_link': 'Xóa liên kết',
+    'profile.avatar_title': 'Ảnh đại diện',
+    'profile.avatar_formats': 'JPEG, PNG, hoặc WebP. Kích thước tối đa: 15MB.',
+    'profile.btn_uploading': 'Đang tải lên...',
+    'profile.btn_select_file': 'Chọn tệp ảnh',
+    'profile.unsaved_changes': 'Thay đổi chưa lưu',
+    'profile.unsaved_changes_desc':
+      'Xem lại thông tin trước khi cập nhật lên mạng lưới.',
+    'profile.btn_saving': 'Đang lưu...',
+    'profile.btn_save_settings': 'Lưu cài đặt',
     'toast.save_error': 'Đã xảy ra lỗi khi lưu cài đặt.',
     'toast.email_required': 'Vui lòng nhập địa chỉ email trước khi xác thực.',
     'toast.otp_sent_success': 'Đã gửi mã OTP đến email của bạn thành công!',
@@ -305,6 +342,10 @@ export const dictionary = {
 
     // Overview
     'overview.projectOverview': 'Tổng quan dự án',
+    'overview.kyc_warning_title': 'Yêu Cầu Xác Thực Email (KYC)',
+    'overview.kyc_warning_desc':
+      'Bạn cần hoàn tất xác thực địa chỉ email trong trang Cá nhân của mình trước khi có thể xuất bản dự án kêu gọi vốn.',
+    'overview.kyc_warning_btn': 'Xác thực ngay',
     'overview.completeRequiredSections':
       'Hoàn thành các mục bắt buộc trước khi xuất bản. Tài liệu đính kèm là không bắt buộc nhưng giúp tăng lòng tin của nhà đầu tư.',
     'overview.sectionsComplete': 'phần hoàn thành',
@@ -483,7 +524,171 @@ export const dictionary = {
     'nav.appearance.light': 'Sáng',
     'nav.appearance.dark': 'Tối',
     'nav.appearance.system': 'Hệ thống',
-    'nav.language': 'Ngôn ngữ'
+    'nav.language': 'Ngôn ngữ',
+
+    // AI Assistant
+    'ai.assistant_title': 'Trợ Lý Ảo FundHive',
+    'ai.online': 'Trực tuyến',
+    'ai.greeting':
+      'Xin chào! Tôi là Trợ Lý Ảo FundHive.\n\nTôi sẵn sàng giải đáp mọi thắc mắc của bạn về quy tắc đầu tư mUSDT, cơ chế hoàn tiền (Refund) khi dự án gọi vốn thất bại, và quy trình giải ngân Milestone an toàn trên nền tảng.\n\nHôm nay bạn cần tôi hỗ trợ thông tin gì?',
+    'ai.clear_confirm':
+      'Bạn có chắc chắn muốn làm mới cuộc hội thoại này không?',
+    'ai.clear_success':
+      'Lịch sử cuộc trò chuyện đã được làm mới. Tôi sẵn sàng hỗ trợ những câu hỏi tiếp theo của bạn!',
+    'ai.placeholder': 'Hỏi Trợ Lý FundHive...',
+    'ai.thinking': 'Trợ lý đang suy nghĩ...',
+    'ai.footnote': 'Hỗ trợ giải đáp thông tin FundHive trực tuyến',
+    'ai.faq_usdt_label': '⚡ Nạp mUSDT',
+    'ai.faq_usdt_q': 'Đồng mUSDT là gì? Cách lấy mUSDT thử nghiệm để đầu tư?',
+    'ai.faq_refund_label': '🛡️ Luật Hoàn Tiền',
+    'ai.faq_refund_q':
+      'Nếu dự án gọi vốn thất bại thì tiền đầu tư của tôi có được hoàn lại không?',
+    'ai.faq_milestone_label': '📦 Giải ngân Milestone',
+    'ai.faq_milestone_q':
+      'Cơ chế giải ngân Milestone bảo vệ nhà đầu tư như thế nào?',
+    'ai.faq_about_label': '🌐 FundHive là gì?',
+    'ai.faq_about_q': 'Giới thiệu tổng quan về FundHive',
+    'ai.toast_empty': '⚠️ Tin nhắn trống. Vui lòng nhập câu hỏi.',
+    'ai.raised': 'Đã gọi:',
+    'ai.view': 'Xem',
+    'ai.project_error': '[Lỗi hiển thị dự án]',
+    'ai.toast_wallet_copied': 'Đã sao chép địa chỉ ví thành công!',
+    'ai.wallet_tooltip': 'Nhấp để sao chép địa chỉ ví',
+    'ai.tx_tooltip': 'Xem biên lai trên Etherscan Sepolia Explorer',
+    'ai.member': 'Thành viên',
+    'ai.guest': 'Chế độ khách vãng lai',
+    'ai.clear_tooltip': 'Làm mới lịch sử chat',
+    'ai.suggested_questions': 'Câu hỏi gợi ý:',
+    'ai.tooltip': 'Trợ lý ảo AI',
+    'ai.error_connect':
+      '⚠️ Không thể kết nối với máy chủ AI. Vui lòng kiểm tra lại kết nối mạng hoặc thử lại sau.',
+    // How It Works / Quy trình
+    'nav.how_it_works': 'Quy trình',
+    'how.title': 'Cách hoạt động & Điều khoản FundHive',
+    'how.subtitle':
+      'Hướng dẫn từng bước giúp người sáng lập gọi vốn và người ủng hộ đầu tư an tâm, minh bạch qua 4 giai đoạn đơn giản.',
+    'how.step.1': '01. Đăng ký & Tạo dự án',
+    'how.step.2': '02. Gây quỹ',
+    'how.step.3': '03. Triển khai & Nhận vốn',
+    'how.step.4': '04. Rút quỹ & Hoàn tiền',
+
+    // Step 1 Details
+    'how.phase1.title': 'Bước 1: Soạn thảo ý tưởng & Kích hoạt',
+    'how.phase1.subtitle':
+      'Người sáng lập (Creator) thiết lập hồ sơ dự án qua 5 bước đơn giản trên website và kích hoạt chiến dịch lên mạng lưới blockchain.',
+    'how.phase1.step1.title': '1. Điền thông tin cơ bản',
+    'how.phase1.step1.desc':
+      'Đặt tên dự án, viết mô tả ngắn, đăng tải hình ảnh và video giới thiệu. Quyết định số vốn cần kêu gọi (bằng USDT) và thời hạn gây quỹ.',
+    'how.phase1.step2.title': '2. Chia nhỏ các giai đoạn (Cột mốc)',
+    'how.phase1.step2.desc':
+      'Chia dự án thành nhiều cột mốc phát triển. Với mỗi mốc, bạn điền số ngày thực hiện, sản phẩm dự kiến bàn giao và số tiền cần để làm mốc đó. Tổng tiền của tất cả cột mốc phải bằng đúng số vốn bạn kêu gọi ban đầu.',
+    'how.phase1.step3.title': '3. Giới thiệu đội ngũ',
+    'how.phase1.step3.desc':
+      'Điền tên, vai trò cụ thể, email và liên kết ví điện tử của từng thành viên để tạo sự tin tưởng tuyệt đối với người đầu tư.',
+    'how.phase1.step4.title': '4. Đính kèm tài liệu chi tiết',
+    'how.phase1.step4.desc':
+      'Tải lên bản kế hoạch kinh doanh hoặc tài liệu giới thiệu chi tiết (tối đa 10 tài liệu, dưới 10MB mỗi tệp) để người đầu tư tham khảo.',
+    'how.phase1.step5.title': '5. Admin duyệt & Kích hoạt Blockchain',
+    'how.phase1.step5.desc':
+      'Dự án sẽ được gửi đến Ban quản trị (Admin) kiểm duyệt thông tin để tránh gian lận. Sau khi duyệt, người sáng lập bấm nút kết nối ví MetaMask/Coinbase để đưa dự án lên blockchain, chuẩn bị nhận tiền đầu tư.',
+    'how.phase1.rule1':
+      'Kiểm duyệt chặt chẽ: Chỉ các dự án thực tế, minh bạch và nghiêm túc mới được phê duyệt hiển thị trên trang chủ.',
+    'how.phase1.rule2':
+      'Chế độ thử nghiệm (Demo Mode): Cho phép rút ngắn thời gian gọi vốn và thực hiện xuống còn 5 phút để bạn dễ dàng chạy thử quy trình.',
+
+    // Step 2 Details
+    'how.phase2.title': 'Bước 2: Gây quỹ & Két sắt an toàn',
+    'how.phase2.subtitle':
+      'Tiền đầu tư được giữ an toàn tuyệt đối bằng hợp đồng thông minh blockchain và hoạt động theo quy tắc bảo vệ người dùng.',
+    'how.phase2.desc':
+      'Dự án sau khi kích hoạt sẽ được mở công khai để mọi người vào đầu tư bằng đồng USDT. Két sắt blockchain (hợp đồng thông minh) sẽ tự động tiếp nhận và khóa số tiền này lại. Người sáng lập dự án không thể chạm vào số tiền này, Ban quản trị FundHive cũng không thể lấy đi, đảm bảo an toàn tuyệt đối cho người ủng hộ.',
+    'how.phase2.rule1.title':
+      'Quy tắc "Đạt mục tiêu hoặc Trả lại tiền" (All-or-Nothing)',
+    'how.phase2.rule1.desc':
+      'Dự án bắt buộc phải quyên góp đủ 100% số vốn đăng ký trước khi hết hạn mới được coi là thành công. Nếu thiếu dù chỉ 1 đồng khi hết hạn, toàn bộ số tiền đã quyên góp sẽ tự động được hệ thống mở khóa để người đầu tư nhận lại đầy đủ.',
+    'how.phase2.rule2.title': 'Minh bạch 100% trên Blockchain',
+    'how.phase2.rule2.desc':
+      'Mọi giao dịch gửi tiền, số dư hiện có trong két dự án đều được ghi nhận vĩnh viễn trên sổ cái blockchain. Bất kỳ ai cũng có thể vào kiểm tra số dư và lịch sử giao dịch bất cứ lúc nào.',
+
+    // Step 3 Details
+    'how.phase3.title': 'Bước 3: Thực hiện dự án & Nhận vốn từng phần',
+    'how.phase3.subtitle':
+      'Nhận vốn theo từng cột mốc đã cam kết để đảm bảo dự án phát triển thực tế, tránh rủi ro người sáng lập ôm tiền mất tích.',
+    'how.phase3.desc':
+      'Thay vì nhận toàn bộ số tiền gọi vốn một lần, người sáng lập sẽ nhận tiền theo từng cột mốc sau khi chứng minh được kết quả làm việc thực tế.',
+    'how.phase3.step1.title': '1. Nộp báo cáo và bằng chứng',
+    'how.phase3.step1.desc':
+      'Khi hoàn thành một cột mốc, người sáng lập gửi báo cáo chi tiết kèm theo các hình ảnh, video chạy thử sản phẩm, hoặc liên kết kiểm chứng thực tế lên hệ thống.',
+    'how.phase3.step2.title': '2. Thẩm định kết quả',
+    'how.phase3.step2.desc':
+      'Ban quản trị FundHive sẽ kiểm tra kỹ lưỡng các bằng chứng. Nếu sản phẩm đạt yêu cầu đúng như cam kết ban đầu, cột mốc sẽ được phê duyệt.',
+    'how.phase3.step3.title': '3. Chuyển giao cột mốc tiếp theo',
+    'how.phase3.step3.desc':
+      'Sau khi mốc cũ được duyệt và nhận vốn, mốc thời gian tiếp theo mới bắt đầu chạy, giúp tiến trình công việc luôn diễn ra khoa học, minh bạch.',
+
+    // Step 4 Details
+    'how.phase4.title': 'Bước 4: Nhận vốn dự án hoặc Hoàn trả tiền ủng hộ',
+    'how.phase4.subtitle':
+      'Quy trình phân chia dòng tiền minh bạch: Người sáng lập nhận vốn khi làm việc tốt; Người đầu tư nhận lại tiền nếu dự án gặp sự cố.',
+    'how.phase4.withdraw.title': 'Người sáng lập rút tiền (Rút vốn cột mốc)',
+    'how.phase4.withdraw.desc':
+      'Khi một cột mốc được duyệt thành công, người sáng lập kết nối ví điện tử để rút đúng số tiền (%) đã phân bổ riêng cho cột mốc đó về ví của mình để tiếp tục phát triển dự án.',
+    'how.phase4.refund.title': 'Người ủng hộ nhận lại tiền (Hoàn trả tự động)',
+    'how.phase4.refund.desc':
+      'Hệ thống bảo vệ tối đa quyền lợi người đầu tư bằng cách tự động cho phép hoàn trả tiền trong 2 trường hợp cụ thể dưới đây.',
+    'how.btn.start': 'Trải nghiệm ngay',
+
+    // New translations for How It Works (Bilingual compliance)
+    'how.badge.guide': 'Hướng dẫn sử dụng FundHive',
+    'how.phase1.rule_header': 'Quy tắc hệ thống bắt buộc',
+    'how.phase1.rule1.title':
+      'Tổng tiền chia cột mốc phải bằng mục tiêu gọi vốn',
+    'how.phase1.rule1.desc':
+      'Khi chia nhỏ dự án thành nhiều giai đoạn, tổng số tiền bạn phân bổ cho tất cả các mốc bắt buộc phải khớp chính xác 100% với tổng số vốn kêu gọi đăng ký ban đầu. Điều này đảm bảo dự án có đủ kinh phí để đi đến đích cuối cùng.',
+    'how.phase1.rule2.title': 'Kiểm duyệt chất lượng kỹ lưỡng',
+    'how.phase1.rule2.desc':
+      'Hệ thống sẽ thẩm định hồ sơ để loại bỏ các dự án rác hoặc thông tin không rõ ràng. Chỉ khi được Ban quản trị duyệt và đồng ý, bạn mới có quyền đưa dự án lên blockchain để bắt đầu nhận đầu tư.',
+    'how.phase1.rule3.title': 'Hỗ trợ chế độ thử nghiệm',
+    'how.phase1.rule3.desc':
+      'Người sáng lập có thể kích hoạt Chế độ thử nghiệm (Demo Mode) để rút ngắn thời gian gọi vốn và thực hiện xuống 5 phút, giúp trải nghiệm và kiểm tra toàn bộ tính năng một cách nhanh chóng.',
+
+    'how.phase3.safety_header': 'Vì sao phương pháp này an toàn?',
+    'how.phase3.safety.1':
+      'Người đầu tư không sợ bị người sáng lập ôm trọn tiền bỏ trốn.',
+    'how.phase3.safety.2':
+      'Số tiền giải ngân được kiểm soát chặt chẽ dựa trên kết quả nghiệm thu thực tế.',
+    'how.phase3.safety.3':
+      'Lịch trình thực hiện rõ ràng, minh bạch giúp tăng tính kỷ luật của người sáng lập.',
+
+    'how.phase4.creator_badge': 'Người sáng lập rút tiền',
+    'how.phase4.withdraw.step1.title': 'Bước 1: Được phê duyệt kết quả',
+    'how.phase4.withdraw.step1.desc':
+      'Khi hoàn thành một cột mốc đã cam kết, người sáng lập đăng báo cáo chi tiết kèm bằng chứng. Ban quản trị sẽ thẩm định kỹ lưỡng và duyệt cột mốc chuyển sang trạng thái Thành công.',
+    'how.phase4.withdraw.step2.title': 'Bước 2: Kết nối ví Web3 & ký xác nhận',
+    'how.phase4.withdraw.step2.desc':
+      'Người sáng lập nhấp vào nút "Rút tiền cột mốc" trực tiếp trên giao diện của dự án, kết nối ví MetaMask hoặc Coinbase của mình để ký duyệt xác nhận giao dịch.',
+    'how.phase4.withdraw.step3.title': 'Bước 3: Nhận vốn về ví cá nhân',
+    'how.phase4.withdraw.step3.desc':
+      'Ngay khi giao dịch hoàn tất trên blockchain, hợp đồng thông minh tự động mở khóa và giải ngân chính xác phần trăm ngân sách của cột mốc đó thẳng vào ví của bạn.',
+
+    'how.phase4.backer_badge': 'Người ủng hộ nhận lại tiền',
+    'how.phase4.refund.case1.title':
+      'Trường hợp 1: Dự án không đạt mục tiêu (Gây quỹ thất bại)',
+    'how.phase4.refund.case1.desc':
+      'Khi hết thời gian kêu gọi vốn mà số lượng tiền quyên góp chưa đạt đủ 100% mục tiêu ban đầu. Két sắt blockchain tự động đóng dự án lại. Bạn chỉ cần vào trang dự án, bấm nút "Nhận lại tiền" để rút toàn bộ 100% số tiền ban đầu về ví mà KHÔNG tốn bất kỳ khoản phí dịch vụ nào.',
+    'how.phase4.refund.case2.title':
+      'Trường hợp 2: Dự án bị dừng do lỗi tiến độ hoặc bị Admin từ chối (Hủy dự án)',
+    'how.phase4.refund.case2.desc':
+      'Trong thời gian thực hiện, nếu người sáng lập không bàn giao sản phẩm đúng cam kết hoặc bị Ban quản trị từ chối phê duyệt cột mốc vĩnh viễn, dự án sẽ bị đóng cửa. Khi đó, toàn bộ số tiền chưa giải ngân (đang khóa trong các mốc chưa thực hiện) sẽ được chia đều và tự động hoàn trả lại đầy đủ cho những người ủng hộ theo tỷ lệ đóng góp ban đầu của mỗi người. Phần tiền của các mốc cũ đã hoàn tất thành công trước đó sẽ không bị ảnh hưởng.',
+
+    'how.phase4.warning':
+      'Lưu ý an tâm: Hệ thống két sắt blockchain được lập trình sẵn và hoạt động hoàn toàn tự động. Số tiền của bạn sẽ chỉ được chuyển đi khi các điều kiện cam kết được nghiệm thu minh bạch. Không ai có quyền can thiệp trái phép vào tài sản của bạn.',
+
+    'how.cta.title': 'Sẵn Sàng Tham Gia Khởi Tạo Ý Tưởng?',
+    'how.cta.desc':
+      'Cho dù bạn là một người sáng lập đầy nhiệt huyết hay một nhà ủng hộ muốn tìm kiếm những giải pháp thực tế, FundHive luôn đem lại cho bạn điểm tựa an tâm nhất.',
+    'how.cta.btn_new': 'Tạo Dự Án Mới',
+    ...errorsVi
   },
   en: {
     // Navigation / Header
@@ -756,6 +961,39 @@ export const dictionary = {
     'toast.milestone_updated': 'Milestone updated successfully!',
     'toast.milestone_added': 'Milestone added successfully!',
     'toast.save_success': 'Settings saved successfully!',
+
+    // Profile Translations
+    'profile.identity_details': 'Identity Details',
+    'profile.display_name': 'Display Name',
+    'profile.display_name_placeholder': 'Your public name',
+    'profile.email_address': 'Email Address',
+    'profile.email_placeholder': 'alex@example.com',
+    'profile.btn_verify': 'Verify',
+    'profile.btn_verified': 'Verified',
+    'profile.btn_confirm': 'Confirm',
+    'profile.phone_number': 'Phone Number',
+    'profile.phone_placeholder': '+1 (555) 000-0000',
+    'profile.location': 'Location',
+    'profile.location_placeholder': 'Search city or country',
+    'profile.biography': 'Biography',
+    'profile.biography_placeholder': 'Tell the community about yourself...',
+    'profile.biography_desc': 'Briefly describe your background and interests.',
+    'profile.presence_links': 'Presence & Links',
+    'profile.website': 'Website',
+    'profile.platform': 'Platform',
+    'profile.social_links': 'Social Links',
+    'profile.btn_add_link': 'Add Link',
+    'profile.social_url_placeholder': 'https://',
+    'profile.remove_link': 'Remove link',
+    'profile.avatar_title': 'Profile Image',
+    'profile.avatar_formats': 'JPEG, PNG, or WebP. Max file size: 15MB.',
+    'profile.btn_uploading': 'Uploading...',
+    'profile.btn_select_file': 'Select File',
+    'profile.unsaved_changes': 'Unsaved Changes',
+    'profile.unsaved_changes_desc':
+      'Review your changes before saving to the network.',
+    'profile.btn_saving': 'Saving...',
+    'profile.btn_save_settings': 'Save Settings',
     'toast.save_error': 'An error occurred while saving settings.',
     'toast.email_required': 'Please enter your email address before verifying.',
     'toast.otp_sent_success':
@@ -788,6 +1026,10 @@ export const dictionary = {
 
     // Overview
     'overview.projectOverview': 'Project overview',
+    'overview.kyc_warning_title': 'Email Verification Required (KYC)',
+    'overview.kyc_warning_desc':
+      'You must complete your email verification in your Profile settings before you can publish a fundraising campaign.',
+    'overview.kyc_warning_btn': 'Verify Now',
     'overview.completeRequiredSections':
       'Complete the required sections before publishing. Attachments are optional but greatly improve investor confidence.',
     'overview.sectionsComplete': 'sections complete',
@@ -966,7 +1208,171 @@ export const dictionary = {
     'nav.appearance.light': 'Light',
     'nav.appearance.dark': 'Dark',
     'nav.appearance.system': 'System',
-    'nav.language': 'Language'
+    'nav.language': 'Language',
+
+    // AI Assistant
+    'ai.assistant_title': 'FundHive AI Assistant',
+    'ai.online': 'Online',
+    'ai.greeting':
+      'Hello! I am the FundHive Virtual Assistant.\n\nI am ready to answer any questions you have about mUSDT investment rules, the refund mechanism when a project fails to reach its goal, and our secure milestone release process.\n\nHow can I help you today?',
+    'ai.clear_confirm': 'Are you sure you want to reset this conversation?',
+    'ai.clear_success':
+      'Chat history has been refreshed. I am ready for your next questions!',
+    'ai.placeholder': 'Ask FundHive Assistant...',
+    'ai.thinking': 'Assistant is thinking...',
+    'ai.footnote': 'Online FundHive Information & Support',
+    'ai.faq_usdt_label': '⚡ Top-up mUSDT',
+    'ai.faq_usdt_q': 'What is mUSDT? How do I get test mUSDT to invest?',
+    'ai.faq_refund_label': '🛡️ Refund Policy',
+    'ai.faq_refund_q':
+      'If a project funding fails, will my investment be refunded?',
+    'ai.faq_milestone_label': '📦 Milestone Escrow',
+    'ai.faq_milestone_q':
+      'How does the milestone release mechanism protect investors?',
+    'ai.faq_about_label': '🌐 What is FundHive?',
+    'ai.faq_about_q': 'Provide an overview of the FundHive platform',
+    'ai.toast_empty': '⚠️ Empty message. Please type a question.',
+    'ai.raised': 'Raised:',
+    'ai.view': 'View',
+    'ai.project_error': '[Project display error]',
+    'ai.toast_wallet_copied': 'Wallet address copied successfully!',
+    'ai.wallet_tooltip': 'Click to copy wallet address',
+    'ai.tx_tooltip': 'View receipt on Etherscan Sepolia Explorer',
+    'ai.member': 'Member',
+    'ai.guest': 'Guest mode',
+    'ai.clear_tooltip': 'Reset chat history',
+    'ai.suggested_questions': 'Suggested questions:',
+    'ai.tooltip': 'AI Virtual Assistant',
+    'ai.error_connect':
+      '⚠️ Unable to connect to the AI server. Please check your connection or try again later.',
+    // How It Works
+    'nav.how_it_works': 'How It Works',
+    'how.title': 'How It Works & System Terms',
+    'how.subtitle':
+      'Step-by-step guide helping creators raise funds and supporters invest with total peace of mind and transparency through 4 simple stages.',
+    'how.step.1': '01. Setup & Create Project',
+    'how.step.2': '02. Fundraising',
+    'how.step.3': '03. Execution & Payout',
+    'how.step.4': '04. Withdraw & Refund',
+
+    // Step 1 Details
+    'how.phase1.title': 'Step 1: Idea Setup & Activation',
+    'how.phase1.subtitle':
+      'Creators configure campaign details through 5 simple steps on the website and activate the campaign on the blockchain network.',
+    'how.phase1.step1.title': '1. Core Project Basics',
+    'how.phase1.step1.desc':
+      'Enter project title, write a short pitch, upload cover images or videos. Specify the target budget (in USDT) and the fundraising duration.',
+    'how.phase1.step2.title': '2. Breakdown Milestones',
+    'how.phase1.step2.desc':
+      'Split the campaign into tangible development stages. For each phase, input days duration, expected deliverables, and the allocated budget share. The total budget across all milestones must exactly match your target goal.',
+    'how.phase1.step3.title': '3. Introduce the Team',
+    'how.phase1.step3.desc':
+      'Enter name, role, email address, and wallet address of each member to establish total transparency and trust with supporters.',
+    'how.phase1.step4.title': '4. Attach Pitch Deck Documents',
+    'how.phase1.step4.desc':
+      'Upload business plans or deck documents (up to 10 files, maximum 10MB per file) for supporters to read and evaluate.',
+    'how.phase1.step5.title': '5. Verification & Blockchain Deploy',
+    'how.phase1.step5.desc':
+      'The campaign goes to admin audit to prevent fraud. Once approved, the creator connects a wallet (MetaMask/Coinbase) to launch the campaign on the blockchain and prepare for funding.',
+    'how.phase1.rule1':
+      'Strict Audit: Only realistic, honest, and high-quality campaigns will be approved to launch on the home page.',
+    'how.phase1.rule2':
+      'Demo Mode: Allows overriding durations down to 5 minutes so you can rapidly test the full end-to-end fundraising cycle.',
+
+    // Step 2 Details
+    'how.phase2.title': 'Step 2: Fundraising & Secure Escrow',
+    'how.phase2.subtitle':
+      'Pledged capital is locked securely by audited smart contracts following strict backer protection rules.',
+    'how.phase2.desc':
+      'Once activated, the campaign opens to the public for USDT contributions. The blockchain contract (escrow) automatically receives and locks these funds. Neither the creator nor the platform admin can touch this capital, ensuring 100% protection for backers.',
+    'how.phase2.rule1.title': 'The "All-or-Nothing" Principle',
+    'how.phase2.rule1.desc':
+      'Campaigns must reach 100% of their USDT funding goal before the expiration deadline to succeed. Failing by even $1 blocks creator withdrawals and unlocks immediate refunds to all backers.',
+    'how.phase2.rule2.title': '100% On-Chain Transparency',
+    'how.phase2.rule2.desc':
+      'Every single contribution and escrow balance state is permanently recorded on the blockchain. Anyone can inspect pool balance states and historical transactions 24/7.',
+
+    // Step 3 Details
+    'how.phase3.title': 'Step 3: Development & Phased Releases',
+    'how.phase3.subtitle':
+      'Claim budget shares in stages as you prove concrete progress, shielding backers from project abandonment and exit scams.',
+    'how.phase3.desc':
+      'Instead of receiving the entire budget at once, creators unlock funding in sequential parts only after delivering real work results.',
+    'how.phase3.step1.title': '1. Submit Progress Reports',
+    'how.phase3.step1.desc':
+      'Upon reaching a milestone deadline, creators submit progress reports with verifiable evidence such as photos, video demos, or draft links.',
+    'how.phase3.step2.title': '2. Quality Evaluation',
+    'how.phase3.step2.desc':
+      'System admin carefully audits the submitted proofs. If deliverables match expectations, the milestone is approved.',
+    'how.phase3.step3.title': '3. Subsequent Milestone Initiation',
+    'how.phase3.step3.desc':
+      'Once the previous milestone is approved and withdrawn, the next milestone duration starts running, ensuring a streamlined, structured pipeline.',
+
+    // Step 4 Details
+    'how.phase4.title': 'Step 4: Claiming Funds or Reclaiming Support',
+    'how.phase4.subtitle':
+      'Secured funds distribution: Creators pull budget portion for approved work; Backers reclaim capital if projects get cancelled or fail.',
+    'how.phase4.withdraw.title':
+      'Creators Claiming Funds (Milestone Withdrawal)',
+    'how.phase4.withdraw.desc':
+      'When a milestone is successfully approved, creators connect their Web3 wallet to withdraw the exact percentage of the budget locked specifically for that phase.',
+    'how.phase4.refund.title':
+      'Supporters Reclaiming Contributions (Automatic Refunds)',
+    'how.phase4.refund.desc':
+      'The system guarantees maximum security for backers, allowing instant refunds in two specific scenarios.',
+    'how.btn.start': 'Explore Now',
+
+    // New translations for How It Works (Bilingual compliance)
+    'how.badge.guide': 'FundHive User Guide',
+    'how.phase1.rule_header': 'Mandatory System Rules',
+    'how.phase1.rule1.title':
+      'Milestone budget share total must equal fundraising goal',
+    'how.phase1.rule1.desc':
+      'When splitting the project into development phases, the sum of budgets allocated to all milestones must exactly match 100% of your target funding goal. This ensures there is sufficient capital to finish the project.',
+    'how.phase1.rule2.title': 'Thorough quality control audits',
+    'how.phase1.rule2.desc':
+      'The system carefully audits campaign details to prevent spam or incomplete listings. You can only launch the project on the blockchain after admin approval.',
+    'how.phase1.rule3.title': 'Demo Mode support enabled',
+    'how.phase1.rule3.desc':
+      'Creators can activate Demo Mode to compress campaign and milestone durations down to 5 minutes, allowing you to easily test the entire lifecycle.',
+
+    'how.phase3.safety_header': 'Why is this mechanism secure?',
+    'how.phase3.safety.1':
+      'Supporters never worry about creators running off with the entire budget.',
+    'how.phase3.safety.2':
+      'Payouts are strictly released based on successfully audited work outcomes.',
+    'how.phase3.safety.3':
+      'A clear chronological timeline ensures high accountability for the development team.',
+
+    'how.phase4.creator_badge': 'Creator Payout',
+    'how.phase4.withdraw.step1.title': 'Step 1: Milestone Approval',
+    'how.phase4.withdraw.step1.desc':
+      'Upon completing a milestone deliverables report, creators submit evidence. Platform admins verify progress details and mark the milestone as approved.',
+    'how.phase4.withdraw.step2.title': 'Step 2: Web3 Wallet Connect & Sign',
+    'how.phase4.withdraw.step2.desc':
+      'Creators click "Withdraw Milestone Funds" on their campaign dashboard, and connect their MetaMask/Coinbase wallet to sign the withdrawal transaction.',
+    'how.phase4.withdraw.step3.title': 'Step 3: Receive Pledged Funds',
+    'how.phase4.withdraw.step3.desc':
+      'As soon as the transaction completes on-chain, the smart contract automatically transfers the milestone budget share straight to your wallet address.',
+
+    'how.phase4.backer_badge': 'Backer Refund',
+    'how.phase4.refund.case1.title':
+      'Case 1: Expired Under Goal (Fundraising Failure)',
+    'how.phase4.refund.case1.desc':
+      'If a campaign finishes its fundraising duration without reaching 100% of the target goal, the blockchain contract shuts it down. Backers can simply click "Claim Refund" on the project page to reclaim 100% of their USDT with zero service fees.',
+    'how.phase4.refund.case2.title':
+      'Case 2: Terminated Due to Milestones Rejection (Campaign Cancellation)',
+    'how.phase4.refund.case2.desc':
+      'If creators fail to deliver milestones or violate terms, or if admins permanently reject a phase, the project gets cancelled. The smart contract locks all unreleased budget shares and distributes them back to backers proportionally. Completed and released milestone funds are not affected.',
+
+    'how.phase4.warning':
+      'Peace of Mind: The decentralized blockchain escrow system runs completely autonomously. Pledged assets are only released when commitments are fully checked and verified. Nobody can unauthorizedly access your funds.',
+
+    'how.cta.title': 'Ready to Launch Your Campaign?',
+    'how.cta.desc':
+      'Whether you are a passionate creator or a supporter looking to power real ideas, FundHive is your most secure and trusted crowdfunding platform.',
+    'how.cta.btn_new': 'Create New Project',
+    ...errorsEn
   }
 }
 

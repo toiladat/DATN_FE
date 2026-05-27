@@ -338,7 +338,8 @@ const Header = () => {
     { name: t('nav.home'), path: '/' },
     { name: t('nav.projects'), path: '/projects' },
     { name: t('nav.launch_idea'), path: '/launch-project' },
-    { name: t('nav.my_projects'), path: '/my-project' }
+    { name: t('nav.my_projects'), path: '/my-project' },
+    { name: t('nav.how_it_works'), path: '/how-it-works' }
   ]
 
   return (

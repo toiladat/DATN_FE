@@ -229,18 +229,18 @@ export default function Profile() {
             {/* Identity Details Section */}
             <section className="space-y-6">
               <h2 className="text-lg font-['Space_Grotesk'] font-semibold text-[#ecedf6] flex items-center gap-2">
-                Identity Details
+                {t('profile.identity_details')}
               </h2>
 
               <div className="space-y-5 bg-[#161a21] border border-[#2e323b]/50 rounded-lg p-6">
                 {/* Name Input */}
                 <div className="space-y-2">
                   <Label htmlFor="name" className="text-[#ecedf6]">
-                    Display Name
+                    {t('profile.display_name')}
                   </Label>
                   <Input
                     id="name"
-                    placeholder="Your public name"
+                    placeholder={t('profile.display_name_placeholder')}
                     type="text"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
@@ -251,12 +251,12 @@ export default function Profile() {
                 {/* Email – read-only, updated only via KYC verify */}
                 <div className="space-y-2">
                   <Label htmlFor="email" className="text-[#ecedf6]">
-                    Email Address
+                    {t('profile.email_address')}
                   </Label>
                   <div className="flex gap-2">
                     <Input
                       id="email"
-                      placeholder="alex@example.com"
+                      placeholder={t('profile.email_placeholder')}
                       type="email"
                       value={email}
                       readOnly={!isKycPending}
@@ -273,7 +273,7 @@ export default function Profile() {
                         {isSendingOtp ? (
                           <div className="w-4 h-4 border-2 border-[#10131a]/30 border-t-[#10131a] rounded-full animate-spin mr-2" />
                         ) : null}
-                        Verify
+                        {t('profile.btn_verify')}
                       </Button>
                     )}
                     {!isKycPending && (
@@ -285,7 +285,7 @@ export default function Profile() {
                         <span className="material-symbols-outlined text-[16px] mr-1">
                           check_circle
                         </span>{' '}
-                        Verified
+                        {t('profile.btn_verified')}
                       </Button>
                     )}
                   </div>
@@ -314,7 +314,7 @@ export default function Profile() {
                       {isVerifyingOtp ? (
                         <div className="w-4 h-4 border-2 border-[#10131a]/30 border-t-[#10131a] rounded-full animate-spin" />
                       ) : (
-                        'Confirm'
+                        t('profile.btn_confirm')
                       )}
                     </Button>
                   </div>
@@ -324,11 +324,11 @@ export default function Profile() {
                   {/* Phone Input */}
                   <div className="space-y-2">
                     <Label htmlFor="phoneNumber" className="text-[#ecedf6]">
-                      Phone Number
+                      {t('profile.phone_number')}
                     </Label>
                     <Input
                       id="phoneNumber"
-                      placeholder="+1 (555) 000-0000"
+                      placeholder={t('profile.phone_placeholder')}
                       type="tel"
                       value={phoneNumber}
                       onChange={(e) => setPhoneNumber(e.target.value)}
@@ -339,11 +339,11 @@ export default function Profile() {
                   {/* Location Input */}
                   <div className="space-y-2">
                     <Label htmlFor="location" className="text-[#ecedf6]">
-                      Location
+                      {t('profile.location')}
                     </Label>
                     <Input
                       id="location"
-                      placeholder="Search city or country"
+                      placeholder={t('profile.location_placeholder')}
                       type="text"
                       value={location}
                       onChange={(e) => setLocation(e.target.value)}
@@ -355,11 +355,11 @@ export default function Profile() {
                 {/* Bio Textarea */}
                 <div className="space-y-2">
                   <Label htmlFor="biography" className="text-[#ecedf6]">
-                    Biography
+                    {t('profile.biography')}
                   </Label>
                   <Textarea
                     id="biography"
-                    placeholder="Tell the community about yourself..."
+                    placeholder={t('profile.biography_placeholder')}
                     rows={4}
                     value={biography}
                     onChange={(e) => setBiography(e.target.value)}
@@ -367,7 +367,7 @@ export default function Profile() {
                   />
                   <div className="flex justify-between items-center">
                     <span className="text-xs text-[#73757d]">
-                      Briefly describe your background and interests.
+                      {t('profile.biography_desc')}
                     </span>
                     <span className="text-xs text-[#73757d] font-mono">
                       {biography.length} / 300
@@ -380,18 +380,18 @@ export default function Profile() {
             {/* Presence & Links Card */}
             <section className="space-y-6">
               <h2 className="text-lg font-['Space_Grotesk'] font-semibold text-[#ecedf6] flex items-center gap-2">
-                Presence & Links
+                {t('profile.presence_links')}
               </h2>
 
               <div className="bg-[#161a21] border border-[#2e323b]/50 rounded-lg p-6 space-y-6">
                 <div className="space-y-2">
                   <Label htmlFor="website" className="text-[#ecedf6]">
-                    Website
+                    {t('profile.website')}
                   </Label>
                   <Input
                     id="website"
                     type="url"
-                    placeholder="https://"
+                    placeholder={t('profile.social_url_placeholder')}
                     value={website}
                     onChange={(e) => setWebsite(e.target.value)}
                     className="bg-[#10131a] border-[#2e323b] text-[#ecedf6] focus-visible:ring-[#8ff5ff]"
@@ -400,7 +400,9 @@ export default function Profile() {
 
                 <div className="border-t border-[#2e323b]/50 pt-5 mt-5">
                   <div className="flex items-center justify-between mb-4">
-                    <Label className="text-[#ecedf6]">Social Links</Label>
+                    <Label className="text-[#ecedf6]">
+                      {t('profile.social_links')}
+                    </Label>
                     <Button
                       variant="ghost"
                       size="sm"
@@ -415,7 +417,7 @@ export default function Profile() {
                       <span className="material-symbols-outlined text-[14px] mr-1">
                         add
                       </span>{' '}
-                      Add Link
+                      {t('profile.btn_add_link')}
                     </Button>
                   </div>
 
@@ -435,7 +437,11 @@ export default function Profile() {
                             }}
                           >
                             <SelectTrigger className="bg-[#10131a] border-[#2e323b] text-[#ecedf6] focus-visible:ring-[#8ff5ff]">
-                              <SelectValue placeholder="Platform" />
+                              <SelectValue
+                                placeholder={
+                                  t('profile.platform') || 'Platform'
+                                }
+                              />
                             </SelectTrigger>
                             <SelectContent>
                               {PLATFORMS.map((p) => (
@@ -449,7 +455,7 @@ export default function Profile() {
                         <div className="flex-1">
                           <Input
                             type="url"
-                            placeholder="https://"
+                            placeholder={t('profile.social_url_placeholder')}
                             value={link.url}
                             className="bg-[#10131a] border-[#2e323b] text-[#ecedf6] focus-visible:ring-[#8ff5ff]"
                             onChange={(e) => {
@@ -466,7 +472,7 @@ export default function Profile() {
                           variant="ghost"
                           size="icon"
                           className="h-10 w-10 text-[#73757d] hover:text-[#ff716c] hover:bg-[#ff716c]/10 shrink-0"
-                          title="Remove link"
+                          title={t('profile.remove_link') || 'Remove link'}
                           onClick={() =>
                             setLinks(links.filter((l) => l.id !== link.id))
                           }
@@ -488,7 +494,7 @@ export default function Profile() {
             {/* Avatar Upload Card */}
             <div className="bg-[#161a21] border border-[#2e323b]/50 rounded-lg p-6 flex flex-col items-center text-center">
               <h2 className="text-sm font-medium text-[#ecedf6] mb-6 w-full text-left">
-                Profile Image
+                {t('profile.avatar_title')}
               </h2>
 
               {/* Hidden file input */}
@@ -533,9 +539,7 @@ export default function Profile() {
               </div>
 
               <p className="text-xs text-[#73757d] mb-4">
-                JPEG, PNG, or WebP.
-                <br />
-                Max file size: 15MB.
+                {t('profile.avatar_formats')}
               </p>
 
               <Button
@@ -544,17 +548,19 @@ export default function Profile() {
                 disabled={isAvatarUploading}
                 onClick={() => avatarInputRef.current?.click()}
               >
-                {isAvatarUploading ? 'Uploading...' : 'Select File'}
+                {isAvatarUploading
+                  ? t('profile.btn_uploading')
+                  : t('profile.btn_select_file')}
               </Button>
             </div>
 
             {/* Action Card */}
             <div className="bg-[#161a21] border border-[#2e323b]/50 rounded-lg p-6 sticky top-28">
               <h3 className="text-sm font-medium text-[#ecedf6] mb-2">
-                Unsaved Changes
+                {t('profile.unsaved_changes')}
               </h3>
               <p className="text-xs text-[#a9abb3] mb-5">
-                Review your changes before saving to the network.
+                {t('profile.unsaved_changes_desc')}
               </p>
 
               <Button
@@ -565,10 +571,10 @@ export default function Profile() {
                 {isSaving ? (
                   <span className="flex items-center gap-2">
                     <span className="w-4 h-4 border-2 border-[#10131a]/30 border-t-[#10131a] rounded-full animate-spin" />
-                    Saving...
+                    {t('profile.btn_saving')}
                   </span>
                 ) : (
-                  'Save Settings'
+                  t('profile.btn_save_settings')
                 )}
               </Button>
             </div>

@@ -1,7 +1,7 @@
 import { clsx, type ClassValue } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 
-import { ERROR_MESSAGES } from './errors'
+import i18n from './locales/i18n'
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -23,5 +23,12 @@ export const getErrorMessage = (err: any, defaultMsg: string) => {
     msg = data.message
   }
 
-  return ERROR_MESSAGES[msg] || msg
+  // Convert standard key format if it's like 'Error.UserKYCRequired'
+  const errorKey = msg.startsWith('Error.') ? `error.${msg.substring(6)}` : msg
+
+  if (i18n.exists(errorKey)) {
+    return i18n.t(errorKey)
+  }
+
+  return msg
 }

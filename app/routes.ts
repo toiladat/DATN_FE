@@ -14,6 +14,7 @@ export default [
     route('my-project/:id', './routes/ProjectDetail.tsx'),
     route('invested', './routes/Invested.tsx'),
     route('launch-project', './routes/LaunchProject.tsx'),
-    route('profile', './routes/Profile.tsx')
+    route('profile', './routes/Profile.tsx'),
+    route('how-it-works', './routes/HowItWorks.tsx')
   ])
 ] satisfies RouteConfig

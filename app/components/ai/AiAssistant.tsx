@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
+import { useTranslation } from 'react-i18next'
 import {
   Bot,
   Send,
@@ -21,6 +22,7 @@ interface Message {
 }
 
 export default function AiAssistant() {
+  const { t } = useTranslation()
   const [isOpen, setIsOpen] = useState(false)
   const [inputMessage, setInputMessage] = useState('')
   const [messages, setMessages] = useState<Message[]>([])
@@ -72,7 +74,7 @@ export default function AiAssistant() {
         setMessages([
           {
             sender: 'ai',
-            text: 'Xin chào! Tôi là Trợ Lý Ảo FundHive.\n\nTôi sẵn sàng giải đáp mọi thắc mắc của bạn về quy tắc đầu tư mUSDT, cơ chế hoàn tiền (Refund) khi dự án gọi vốn thất bại, và quy trình giải ngân Milestone an toàn trên nền tảng.\n\nHôm nay bạn cần tôi hỗ trợ thông tin gì?',
+            text: t('ai.greeting'),
             timestamp: new Date()
           }
         ])
@@ -93,18 +95,21 @@ export default function AiAssistant() {
   // 2. Các câu hỏi mẫu thông minh (Quick FAQ)
   const quickFaqs = [
     {
-      label: '⚡ Nạp mUSDT',
-      q: 'Đồng mUSDT là gì? Cách lấy mUSDT thử nghiệm để đầu tư?'
+      label: t('ai.faq_usdt_label'),
+      q: t('ai.faq_usdt_q')
     },
     {
-      label: '🛡️ Luật Hoàn Tiền',
-      q: 'Nếu dự án gọi vốn thất bại thì tiền đầu tư của tôi có được hoàn lại không?'
+      label: t('ai.faq_refund_label'),
+      q: t('ai.faq_refund_q')
     },
     {
-      label: '📦 Giải ngân Milestone',
-      q: 'Cơ chế giải ngân Milestone bảo vệ nhà đầu tư như thế nào?'
+      label: t('ai.faq_milestone_label'),
+      q: t('ai.faq_milestone_q')
     },
-    { label: '🌐 FundHive là gì?', q: 'Giới thiệu tổng quan về FundHive' }
+    {
+      label: t('ai.faq_about_label'),
+      q: t('ai.faq_about_q')
+    }
   ]
 
   // 3. Xử lý gửi tin nhắn & Stream phản hồi (SSE)
@@ -209,7 +214,7 @@ export default function AiAssistant() {
         if (copy[aiMsgIndex]) {
           copy[aiMsgIndex] = {
             ...copy[aiMsgIndex],
-            text: '⚠️ Không thể kết nối với máy chủ AI. Vui lòng kiểm tra lại kết nối mạng hoặc thử lại sau.'
+            text: t('ai.error_connect')
           }
         }
         return copy
@@ -225,13 +230,11 @@ export default function AiAssistant() {
 
   // 4. Xóa lịch sử cuộc trò chuyện
   const handleClearHistory = () => {
-    if (
-      window.confirm('Bạn có chắc chắn muốn làm mới cuộc hội thoại này không?')
-    ) {
+    if (window.confirm(t('ai.clear_confirm'))) {
       sessionStorage.removeItem('fundhive_chat')
       const defaultGreeting: Message = {
         sender: 'ai',
-        text: 'Lịch sử cuộc trò chuyện đã được làm mới. Tôi sẵn sàng hỗ trợ những câu hỏi tiếp theo của bạn!',
+        text: t('ai.clear_success'),
         timestamp: new Date()
       }
       setMessages([defaultGreeting])
@@ -300,7 +303,7 @@ export default function AiAssistant() {
                       ></div>
                     </div>
                     <p className="text-[9px] text-slate-400 mt-1 font-mono">
-                      Đã gọi:{' '}
+                      {t('ai.raised')}{' '}
                       <span className="text-cyan-400 font-semibold">
                         {raised}
                       </span>{' '}
@@ -313,7 +316,7 @@ export default function AiAssistant() {
                 href={`/projects/${slug}`}
                 className="px-2.5 py-1.5 text-[10px] bg-cyan-600 hover:bg-cyan-500 text-white font-medium rounded-lg transition-colors shrink-0 flex items-center gap-1 shadow-sm"
               >
-                Xem
+                {t('ai.view')}
                 <ExternalLink className="w-2.5 h-2.5" />
               </a>
             </div>
@@ -321,7 +324,7 @@ export default function AiAssistant() {
         } catch (e) {
           return (
             <span key={index} className="text-rose-400">
-              [Lỗi hiển thị dự án]
+              {t('ai.project_error')}
             </span>
           )
         }
@@ -335,10 +338,10 @@ export default function AiAssistant() {
             key={`wallet-${index}`}
             onClick={() => {
               navigator.clipboard.writeText(address)
-              toast.success('Đã sao chép địa chỉ ví thành công!')
+              toast.success(t('ai.toast_wallet_copied'))
             }}
             className="inline-flex items-center gap-1 px-1.5 py-0.5 mx-1 rounded bg-slate-900 border border-cyan-500/20 hover:border-cyan-500/40 text-cyan-400 font-mono text-[11px] cursor-pointer hover:bg-slate-850 transition-all duration-200"
-            title="Nhấp để sao chép địa chỉ ví"
+            title={t('ai.wallet_tooltip')}
           >
             <Wallet className="w-3 h-3" />
             {address.length > 12
@@ -359,7 +362,7 @@ export default function AiAssistant() {
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-1 px-1.5 py-0.5 mx-1 rounded bg-slate-900 border border-emerald-500/20 hover:border-emerald-500/40 text-emerald-400 font-mono text-[11px] hover:bg-slate-850 transition-all duration-200"
-            title="Xem biên lai trên Etherscan Sepolia Explorer"
+            title={t('ai.tx_tooltip')}
           >
             <ExternalLink className="w-3 h-3" />
             Tx:{' '}
@@ -434,14 +437,14 @@ export default function AiAssistant() {
   }
 
   return (
-    <div className="fixed bottom-6 right-6 z-50 font-sans select-none">
+    <div className="fixed bottom-6 right-6 z-50 font-sans">
       {/* NÚT FLOAT TOGGLE CHAT WIDGET - Smooth Friendly Glow */}
       {!isOpen && (
         <button
           onClick={() => setIsOpen(true)}
-          className="group relative flex items-center justify-center w-14 h-14 rounded-full bg-slate-900 border border-slate-800 text-cyan-400 hover:text-cyan-300 hover:border-cyan-500/50 hover:bg-slate-850 transition-all duration-300 shadow-xl hover:shadow-[0_0_15px_rgba(6,182,212,0.25)] animate-bounce"
+          className="group relative flex items-center justify-center w-14 h-14 rounded-full bg-slate-900 border border-slate-800 text-cyan-400 hover:text-cyan-300 hover:border-cyan-500/50 hover:bg-slate-850 transition-all duration-300 shadow-xl hover:shadow-[0_0_15px_rgba(6,182,212,0.25)] animate-bounce select-none"
           style={{ animationDuration: '3s' }}
-          title="Trợ lý ảo AI"
+          title={t('ai.tooltip')}
         >
           {/* Active Status Ring */}
           <span className="absolute top-0.5 right-0.5 flex h-3 w-3">
@@ -457,7 +460,7 @@ export default function AiAssistant() {
       {isOpen && (
         <div className="flex flex-col w-96 max-w-[calc(100vw-2rem)] h-[550px] max-h-[85vh] rounded-2xl border border-slate-850 bg-slate-950/98 shadow-2xl overflow-hidden transition-all duration-300 animate-in fade-in zoom-in-95">
           {/* HEADER CHAT - Clean & Elegant */}
-          <div className="relative flex items-center justify-between px-4 py-3.5 bg-slate-900 border-b border-slate-850">
+          <div className="relative flex items-center justify-between px-4 py-3.5 bg-slate-900 border-b border-slate-850 select-none">
             <div className="flex items-center gap-2">
               <div className="relative flex items-center justify-center w-8 h-8 rounded-lg bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
                 <Bot className="w-5 h-5" />
@@ -465,7 +468,7 @@ export default function AiAssistant() {
               <div>
                 <div className="flex items-center gap-1.5">
                   <span className="text-sm font-bold text-white tracking-wide">
-                    Trợ Lý Ảo FundHive
+                    {t('ai.assistant_title')}
                   </span>
                   <span className="flex h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
                 </div>
@@ -473,12 +476,14 @@ export default function AiAssistant() {
                   {isLoggedIn ? (
                     <>
                       <CheckCircle2 className="w-2.5 h-2.5 text-emerald-400" />
-                      <span>Thành viên ({userWallet})</span>
+                      <span>
+                        {t('ai.member')} ({userWallet})
+                      </span>
                     </>
                   ) : (
                     <>
                       <span className="w-1.5 h-1.5 bg-amber-400 rounded-full"></span>
-                      <span>Chế độ khách vãng lai</span>
+                      <span>{t('ai.guest')}</span>
                     </>
                   )}
                 </span>
@@ -489,7 +494,7 @@ export default function AiAssistant() {
               <button
                 onClick={handleClearHistory}
                 className="p-2 rounded-lg bg-slate-850 border border-slate-800 text-slate-400 hover:text-white hover:border-slate-700 transition-colors"
-                title="Làm mới lịch sử chat"
+                title={t('ai.clear_tooltip')}
               >
                 <RotateCcw className="w-3.5 h-3.5" />
               </button>
@@ -587,10 +592,10 @@ export default function AiAssistant() {
 
           {/* QUICK FAQs BADGES */}
           {messages.length === 1 && !isStreaming && (
-            <div className="px-4 pb-3 border-t border-slate-900 pt-3">
+            <div className="px-4 pb-3 border-t border-slate-900 pt-3 select-none">
               <span className="text-[10px] text-slate-400 flex items-center gap-1 font-semibold mb-2">
                 <HelpCircle className="w-3.5 h-3.5 text-cyan-500" />
-                Câu hỏi gợi ý:
+                {t('ai.suggested_questions')}
               </span>
               <div className="grid grid-cols-2 gap-2">
                 {quickFaqs.map((faq, i) => (
@@ -607,7 +612,7 @@ export default function AiAssistant() {
           )}
 
           {/* KHU VỰC NHẬP TIN NHẮN (INPUT BAR) */}
-          <div className="p-3 bg-slate-900 border-t border-slate-850">
+          <div className="p-3 bg-slate-900 border-t border-slate-850 select-none">
             <form
               onSubmit={(e) => {
                 e.preventDefault()
@@ -622,9 +627,7 @@ export default function AiAssistant() {
                   onChange={(e) => setInputMessage(e.target.value)}
                   disabled={isStreaming}
                   placeholder={
-                    isStreaming
-                      ? 'Trợ lý đang suy nghĩ...'
-                      : 'Hỏi Trợ Lý FundHive...'
+                    isStreaming ? t('ai.thinking') : t('ai.placeholder')
                   }
                   className="w-full bg-slate-950 border border-slate-800 focus:border-cyan-500/50 text-white placeholder-slate-500 text-xs rounded-xl pl-3 pr-8 py-2.5 outline-none transition-colors"
                 />
@@ -642,7 +645,7 @@ export default function AiAssistant() {
             {/* Friendly help footnote */}
             <div className="text-[10px] text-slate-500 text-center mt-2 flex items-center justify-center gap-1">
               <Sparkles className="w-3 h-3 text-cyan-500" />
-              <span>Hỗ trợ giải đáp thông tin FundHive trực tuyến</span>
+              <span>{t('ai.footnote')}</span>
             </div>
           </div>
         </div>
