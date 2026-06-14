@@ -4,10 +4,12 @@ import { ProjectGrid } from '@/components/projectsPage/ProjectGrid'
 import { Pagination } from '@/components/projectsPage/Pagination'
 import { useGetProjects } from '@/apis/queries/project'
 import { Loader2 } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 
 const ITEMS_PER_PAGE = 6
 
 export default function Projects() {
+  const { t } = useTranslation()
   const [currentPage, setCurrentPage] = useState(1)
   const [selectedCategory, setSelectedCategory] = useState('')
   const [selectedSort, setSelectedSort] = useState('trending')
@@ -50,11 +52,11 @@ export default function Projects() {
         {isLoading ? (
           <div className="flex flex-col items-center justify-center py-20">
             <Loader2 className="w-10 h-10 animate-spin text-[#ac89ff] mb-4" />
-            <p className="text-[#a9abb3]">Loading projects...</p>
+            <p className="text-[#a9abb3]">{t('search.searching')}</p>
           </div>
         ) : isError ? (
           <div className="text-center py-20 text-red-400">
-            Failed to load projects. Please try again later.
+            {t('error.Network')}
           </div>
         ) : (
           <>

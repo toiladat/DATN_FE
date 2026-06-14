@@ -57,5 +57,7 @@ export const projectRequests = {
     apiClient.post(
       `/projects/${projectId}/milestones/${milestoneId}/withdraw`,
       payload
-    )
+    ),
+
+  getProjectStats: () => apiClient.get('/projects/stats')
 }

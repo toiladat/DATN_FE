@@ -23,12 +23,14 @@ import {
   type MilestoneUpdateStatus
 } from '@/hooks/useMilestoneEligibility'
 import { MilestoneUpdateForm } from './MilestoneUpdateForm'
+import { useTranslation } from 'react-i18next'
 
 // ─── helpers ───────────────────────────────────────────────────────────────
 
 function getStepAppearance(
   status: MilestoneUpdateStatus | null,
-  milestoneStatus: string
+  milestoneStatus: string,
+  t: any
 ) {
   if (
     milestoneStatus === 'COMPLETED' ||
@@ -39,7 +41,10 @@ function getStepAppearance(
       ring: 'border-[#8ff5ff] bg-[#8ff5ff]/10',
       nodeText: 'text-[#8ff5ff]',
       glow: 'shadow-[0_0_18px_rgba(143,245,255,0.35)]',
-      label: milestoneStatus === 'WITHDRAWN' ? 'WITHDRAWN' : 'DONE',
+      label:
+        milestoneStatus === 'WITHDRAWN'
+          ? t('detail.withdrawn')
+          : t('updates.status.done'),
       labelColor: 'text-[#8ff5ff] bg-[#8ff5ff]/10 border-[#8ff5ff]/30',
       icon: <CheckCircle2 className="w-3 h-3" />
     }
@@ -49,7 +54,7 @@ function getStepAppearance(
       ring: 'border-[#ac89ff] bg-[#ac89ff]/10',
       nodeText: 'text-[#ac89ff]',
       glow: 'shadow-[0_0_18px_rgba(172,137,255,0.4)]',
-      label: 'PROGRESS',
+      label: t('updates.status.progress'),
       labelColor: 'text-[#ac89ff] bg-[#ac89ff]/10 border-[#ac89ff]/30',
       icon: <Zap className="w-3 h-3" />
     }
@@ -59,7 +64,7 @@ function getStepAppearance(
       ring: 'border-[#ff716c] bg-[#ff716c]/10',
       nodeText: 'text-[#ff716c]',
       glow: 'shadow-[0_0_18px_rgba(255,113,108,0.35)]',
-      label: 'LATE',
+      label: t('updates.status.late'),
       labelColor: 'text-[#ff716c] bg-[#ff716c]/10 border-[#ff716c]/30',
       icon: <Clock className="w-3 h-3" />
     }
@@ -69,7 +74,7 @@ function getStepAppearance(
       ring: 'border-[#8ff5ff]/40 bg-[#8ff5ff]/5',
       nodeText: 'text-[#8ff5ff]/60',
       glow: '',
-      label: 'CLOSED',
+      label: t('updates.status.closed'),
       labelColor: 'text-[#8ff5ff]/60 bg-transparent border-[#8ff5ff]/20',
       icon: <CheckCircle2 className="w-3 h-3" />
     }
@@ -79,7 +84,7 @@ function getStepAppearance(
     ring: 'border-[#2e323b] bg-[#161a21]',
     nodeText: 'text-[#3a3e4a]',
     glow: '',
-    label: 'LOCKED',
+    label: t('updates.status.locked'),
     labelColor: 'text-[#3a3e4a] bg-transparent border-[#2e323b]',
     icon: <Lock className="w-3 h-3" />
   }
@@ -87,6 +92,7 @@ function getStepAppearance(
 
 // ─── Read-only update card (visible to all users) ─────────────────────────
 function MilestoneUpdateCard({ update }: { update: MilestoneUpdateRest }) {
+  const { t } = useTranslation()
   const hasImages = !!(update.images && update.images.length > 0)
   const hasVideo = !!update.video
   const hasMedia = hasImages || hasVideo
@@ -106,7 +112,7 @@ function MilestoneUpdateCard({ update }: { update: MilestoneUpdateRest }) {
         <div className="flex items-center gap-1.5 px-4 py-2 border-b border-[#181c27] bg-[#ff716c]/5">
           <AlertTriangle className="w-3 h-3 text-[#ff716c]" />
           <span className="text-[10px] font-semibold text-[#ff716c]">
-            Submitted late
+            {t('updates.submitted_late')}
           </span>
         </div>
       )}
@@ -116,7 +122,7 @@ function MilestoneUpdateCard({ update }: { update: MilestoneUpdateRest }) {
             <CheckCheck className="w-4 h-4 text-[#6bcb77] mt-0.5 shrink-0" />
             <div>
               <p className="text-[10px] font-bold uppercase tracking-widest text-[#6bcb77] mb-1.5">
-                Progress
+                {t('updates.progress_title')}
               </p>
               <p className="text-[13px] text-[#bbbdca] leading-relaxed whitespace-pre-wrap">
                 {update.completed}
@@ -129,7 +135,7 @@ function MilestoneUpdateCard({ update }: { update: MilestoneUpdateRest }) {
             <AlertTriangle className="w-4 h-4 text-[#e8a838] mt-0.5 shrink-0" />
             <div>
               <p className="text-[10px] font-bold uppercase tracking-widest text-[#e8a838] mb-1.5">
-                Blockers
+                {t('updates.blockers_title')}
               </p>
               <p className="text-[13px] text-[#bbbdca] leading-relaxed whitespace-pre-wrap">
                 {update.blockers}
@@ -146,7 +152,7 @@ function MilestoneUpdateCard({ update }: { update: MilestoneUpdateRest }) {
                   className={`flex items-center gap-1.5 px-5 py-2.5 text-[11px] font-semibold transition-colors border-b-2 -mb-px ${mediaTab === 'images' ? 'text-[#ecedf6] border-[#8ff5ff]' : 'text-[#545760] border-transparent hover:text-[#a9abb3]'}`}
                 >
                   <ImageIcon className="w-3 h-3" />
-                  Images
+                  {t('media.images')}
                   <span className="text-[10px] font-mono opacity-60">
                     ({images.length})
                   </span>
@@ -158,7 +164,7 @@ function MilestoneUpdateCard({ update }: { update: MilestoneUpdateRest }) {
                   className={`flex items-center gap-1.5 px-5 py-2.5 text-[11px] font-semibold transition-colors border-b-2 -mb-px ${mediaTab === 'video' ? 'text-[#ecedf6] border-[#8ff5ff]' : 'text-[#545760] border-transparent hover:text-[#a9abb3]'}`}
                 >
                   <Film className="w-3 h-3" />
-                  Video
+                  {t('media.video')}
                 </button>
               )}
             </div>
@@ -247,24 +253,31 @@ function MilestoneStep({
   isLast: boolean
   isOwner: boolean
 }) {
+  const { t } = useTranslation()
   const [showForm, setShowForm] = useState(false)
   const [showUpdate, setShowUpdate] = useState(false) // inline update viewer
 
   const canUpdate =
     isOwner && (updateStatus === 'unlocked' || updateStatus === 'late')
-  const appearance = getStepAppearance(updateStatus, milestone.status)
+  const appearance = getStepAppearance(updateStatus, milestone.status, t)
   const hasExisting = !!milestone.milestoneUpdates
 
-  const startLabel = new Date(milestone.startDate).toLocaleDateString('en-US', {
-    month: 'short',
-    day: 'numeric',
-    year: 'numeric'
-  })
-  const endLabel = new Date(milestone.endDate).toLocaleDateString('en-US', {
-    month: 'short',
-    day: 'numeric',
-    year: 'numeric'
-  })
+  const startLabel = new Date(milestone.startDate).toLocaleDateString(
+    t('common.locale', 'en-US'),
+    {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric'
+    }
+  )
+  const endLabel = new Date(milestone.endDate).toLocaleDateString(
+    t('common.locale', 'en-US'),
+    {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric'
+    }
+  )
 
   // Relative time label — shows where "today" sits relative to this milestone
   const relativeLabel = (() => {
@@ -287,16 +300,25 @@ function MilestoneStep({
 
     if (isDone) return null // đã xong, không cần label
     if (daysToStart > 0)
-      return { text: `starts in ${daysToStart}d`, color: 'text-[#4a4e5a]' }
+      return {
+        text: t('updates.starts_in', { days: daysToStart }),
+        color: 'text-[#4a4e5a]'
+      }
     if (daysToEnd === 0)
-      return { text: 'ends today', color: 'text-[#ff716c] font-bold' }
+      return {
+        text: t('updates.ends_today'),
+        color: 'text-[#ff716c] font-bold'
+      }
     if (daysToEnd > 0)
       return {
-        text: `${daysToEnd}d left`,
+        text: t('updates.days_left', { days: daysToEnd }),
         color: updateStatus === 'unlocked' ? 'text-[#ac89ff]' : 'text-[#4a4e5a]'
       }
     if (daysPastEnd > 0)
-      return { text: `${daysPastEnd}d overdue`, color: 'text-[#ff716c]' }
+      return {
+        text: t('updates.days_overdue', { days: daysPastEnd }),
+        color: 'text-[#ff716c]'
+      }
     return null
   })()
 
@@ -345,7 +367,7 @@ function MilestoneStep({
                   <ChevronRight
                     className={`w-2.5 h-2.5 transition-transform duration-150 ${showUpdate ? 'rotate-90' : ''}`}
                   />
-                  {showUpdate ? 'Hide' : 'View update'}
+                  {showUpdate ? t('updates.hide') : t('updates.view_update')}
                 </button>
               )}
             </div>
@@ -377,14 +399,14 @@ function MilestoneStep({
               {showForm ? (
                 <>
                   <ChevronRight className="w-3.5 h-3.5" />
-                  Close
+                  {t('updates.close')}
                 </>
               ) : (
                 <>
                   <PenLine className="w-3.5 h-3.5" />
-                  {hasExisting ? 'Edit Update' : 'Update'}
+                  {hasExisting ? t('updates.edit_update') : t('updates.update')}
                   {updateStatus === 'late' && (
-                    <span className="opacity-70">(Late)</span>
+                    <span className="opacity-70">{t('updates.late_tag')}</span>
                   )}
                 </>
               )}
@@ -414,13 +436,13 @@ function MilestoneStep({
         {!canUpdate && updateStatus === 'locked_prev' && (
           <p className="text-[#3a3e4a] text-[11px] flex items-center gap-1.5">
             <Lock className="w-3 h-3" />
-            Complete previous milestone first
+            {t('updates.complete_prev_first')}
           </p>
         )}
         {!canUpdate && updateStatus === 'locked_date' && (
           <p className="text-[#3a3e4a] text-[11px] flex items-center gap-1.5">
             <Clock className="w-3 h-3" />
-            Starts {startLabel}
+            {t('updates.starts_on', { date: startLabel })}
           </p>
         )}
       </div>
@@ -437,6 +459,7 @@ export function ProjectUpdates({
   project: ProjectDetail
   currentUserId: string | null
 }) {
+  const { t } = useTranslation()
   const { milestones } = project
   const isOwner = !!currentUserId && currentUserId === project.userId
   const sorted = milestones
@@ -450,10 +473,10 @@ export function ProjectUpdates({
           <Zap className="w-6 h-6 text-[#3a3e4a]" />
         </div>
         <p className="text-[#a9abb3] text-sm font-['Space_Grotesk'] font-medium">
-          No milestones defined
+          {t('updates.no_milestones')}
         </p>
         <p className="text-[#73757d] text-xs">
-          Milestones are set when the project is created.
+          {t('updates.no_milestones_desc')}
         </p>
       </div>
     )
@@ -464,18 +487,20 @@ export function ProjectUpdates({
       {/* Header */}
       <div className="flex items-center gap-3 mb-10">
         <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#73757d] font-['Space_Grotesk']">
-          Progress Updates
+          {t('updates.title')}
         </span>
         <div className="flex-1 h-px bg-[#2e323b]/40" />
         <span className="text-[11px] font-mono text-[#3a3e4a]">
-          {sorted.length} {sorted.length === 1 ? 'phase' : 'phases'}
+          {sorted.length === 1
+            ? t('updates.phases_count', { count: sorted.length })
+            : t('updates.phases_count_plural', { count: sorted.length })}
         </span>
       </div>
 
       {!isOwner && (
         <p className="text-[#3a3e4a] text-[11px] mb-8 flex items-center gap-1.5">
           <Lock className="w-3 h-3" />
-          Only the project owner can submit progress updates.
+          {t('updates.only_owner_can_submit')}
         </p>
       )}
 

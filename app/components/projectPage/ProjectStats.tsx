@@ -1,7 +1,9 @@
 import { ThumbsUp, MessageSquare } from 'lucide-react'
 import type { ProjectDetail } from '@/schemas/projectSchema'
+import { useTranslation } from 'react-i18next'
 
 export function ProjectStats({ project }: { project: ProjectDetail }) {
+  const { t } = useTranslation()
   const { totalAmount, raisedAmount, stats, endDate } = project
   const progressPercentage =
     Math.min(100, Math.round((raisedAmount / totalAmount) * 100)) || 0
@@ -33,7 +35,7 @@ export function ProjectStats({ project }: { project: ProjectDetail }) {
           ></div>
         </div>
         <span className="text-[10px] font-bold text-[#a9abb3] uppercase tracking-widest flex items-center gap-2">
-          {progressPercentage}% of minimum goal reached
+          {t('stats.goal_reached_pct', { percent: progressPercentage })}
         </span>
       </div>
 
@@ -43,7 +45,7 @@ export function ProjectStats({ project }: { project: ProjectDetail }) {
             {daysLeft}
           </span>
           <span className="text-[10px] text-[#73757d] uppercase tracking-widest font-bold">
-            Days Left
+            {t('stats.days_left')}
           </span>
         </div>
         <div className="flex flex-col gap-1.5">
@@ -51,7 +53,7 @@ export function ProjectStats({ project }: { project: ProjectDetail }) {
             {stats.likes}
           </span>
           <span className="text-[10px] text-[#73757d] uppercase tracking-widest font-bold">
-            Likes
+            {t('stats.likes')}
           </span>
         </div>
       </div>
@@ -60,13 +62,13 @@ export function ProjectStats({ project }: { project: ProjectDetail }) {
         <div className="flex items-center gap-3">
           <ThumbsUp className="text-[#ac89ff] w-4 h-4 shrink-0" />
           <span className="text-[13px] font-medium text-[#ecedf6]">
-            {stats.likes} Total Likes
+            {t('stats.total_likes', { count: stats.likes })}
           </span>
         </div>
         <div className="flex items-center gap-3">
           <MessageSquare className="text-[#ac89ff] w-4 h-4 shrink-0" />
           <span className="text-[13px] font-medium text-[#ecedf6]">
-            {stats.reviews} Total Reviews
+            {t('stats.total_reviews', { count: stats.reviews })}
           </span>
         </div>
       </div>

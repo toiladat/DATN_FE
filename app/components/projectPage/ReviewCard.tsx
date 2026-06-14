@@ -19,6 +19,7 @@ import { useAuth } from '../providers/AuthProvider'
 import { toast } from 'sonner'
 import { formatDistanceToNow } from 'date-fns'
 import { getErrorMessage } from '@/lib/utils'
+import { useTranslation } from 'react-i18next'
 
 // ─── Avatar with colored initials fallback ────────────────────────────────────
 const AVATAR_COLORS = [
@@ -75,6 +76,7 @@ function Avatar({ user, size = 'md' }: AvatarProps) {
 // ─── Truncated content with show more/less ────────────────────────────────────
 const MAX_LINES = 4
 function CollapsibleContent({ text }: { text: string }) {
+  const { t } = useTranslation()
   const ref = useRef<HTMLParagraphElement>(null)
   const [clamped, setClamped] = useState(false)
   const [expanded, setExpanded] = useState(false)
@@ -100,12 +102,12 @@ function CollapsibleContent({ text }: { text: string }) {
           {expanded ? (
             <>
               <ChevronUp className="w-3 h-3" />
-              Show less
+              {t('reviews.show_less')}
             </>
           ) : (
             <>
               <ChevronDown className="w-3 h-3" />
-              See more
+              {t('reviews.see_more')}
             </>
           )}
         </button>
@@ -134,6 +136,7 @@ export function ReviewCard({
   memberUserIds = [],
   isReply = false
 }: ReviewCardProps) {
+  const { t } = useTranslation()
   // ─── Role detection ──────────────────────────────────────────────────────
   const isProjectOwner = !!ownerId && review.userId === ownerId
   const isProjectMember =
@@ -158,7 +161,7 @@ export function ReviewCard({
     review.user?.name ||
     (review.user?.walletAddress
       ? `${review.user.walletAddress.slice(0, 6)}...${review.user.walletAddress.slice(-4)}`
-      : 'Anonymous')
+      : t('investors.anonymous'))
 
   const replies = review.replies || []
   const visibleReplies = showAllReplies
@@ -177,7 +180,7 @@ export function ReviewCard({
           setIsReplying(false)
         },
         onError: (err) => {
-          toast.error(getErrorMessage(err, 'Không thể gửi phản hồi.'))
+          toast.error(getErrorMessage(err, t('reviews.reply_error')))
         }
       }
     )
@@ -191,20 +194,20 @@ export function ReviewCard({
       {
         onSuccess: () => setIsEditing(false),
         onError: (err) => {
-          toast.error(getErrorMessage(err, 'Không thể sửa bình luận.'))
+          toast.error(getErrorMessage(err, t('reviews.edit_error')))
         }
       }
     )
   }
 
   const handleDelete = () => {
-    if (window.confirm('Delete this comment? Replies will also be removed.'))
+    if (window.confirm(t('reviews.delete_confirm')))
       deleteReview(review.id, {
         onSuccess: () => {
-          toast.success('Xóa bình luận thành công!')
+          toast.success(t('reviews.delete_success'))
         },
         onError: (err) => {
-          toast.error(getErrorMessage(err, 'Không thể xóa bình luận.'))
+          toast.error(getErrorMessage(err, t('reviews.delete_error')))
         }
       })
   }
@@ -236,7 +239,7 @@ export function ReviewCard({
                       border: '1px solid rgba(255,210,63,0.3)'
                     }}
                   >
-                    ⚡ Owner
+                    ⚡ {t('reviews.owner_badge')}
                   </span>
                 )}
                 {isProjectMember && (
@@ -248,7 +251,7 @@ export function ReviewCard({
                       border: '1px solid rgba(172,137,255,0.3)'
                     }}
                   >
-                    🔧 Team
+                    🔧 {t('reviews.team_badge')}
                   </span>
                 )}
 
@@ -282,7 +285,8 @@ export function ReviewCard({
                           }}
                           className="w-full flex items-center gap-2 px-3 py-2 text-xs text-[#ecedf6] hover:bg-[#252b3a] transition-colors"
                         >
-                          <Edit2 className="w-3.5 h-3.5 text-[#8ff5ff]" /> Edit
+                          <Edit2 className="w-3.5 h-3.5 text-[#8ff5ff]" />{' '}
+                          {t('reviews.edit')}
                         </button>
                         <button
                           onClick={() => {
@@ -297,7 +301,7 @@ export function ReviewCard({
                           ) : (
                             <Trash2 className="w-3.5 h-3.5" />
                           )}
-                          Delete
+                          {t('reviews.delete')}
                         </button>
                       </motion.div>
                     )}
@@ -325,7 +329,7 @@ export function ReviewCard({
                     }}
                     className="text-xs text-[#a9abb3] hover:text-[#ecedf6] transition-colors px-2 py-1 rounded-lg hover:bg-[#252b3a]"
                   >
-                    Cancel
+                    {t('reviews.cancel')}
                   </button>
                   <button
                     type="submit"
@@ -339,7 +343,7 @@ export function ReviewCard({
                     {isUpdating ? (
                       <Loader2 className="w-3 h-3 animate-spin" />
                     ) : (
-                      'Save'
+                      t('reviews.save')
                     )}
                   </button>
                 </div>
@@ -357,19 +361,16 @@ export function ReviewCard({
               <button
                 onClick={() => {
                   if (!isAuthenticated) {
-                    toast.warning(
-                      'Please connect your wallet to comment on this project',
-                      {
-                        duration: 3000
-                      }
-                    )
+                    toast.warning(t('reviews.connect_wallet_warning'), {
+                      duration: 3000
+                    })
                     return
                   }
                   setIsReplying((v) => !v)
                 }}
                 className="text-xs font-semibold text-[#8ff5ff] hover:underline transition-colors"
               >
-                Reply
+                {t('reviews.reply')}
               </button>
             )}
           </div>
@@ -391,7 +392,9 @@ export function ReviewCard({
                   autoFocus
                   type="text"
                   className="flex-1 bg-transparent text-sm text-[#ecedf6] placeholder-[#545760] focus:outline-none"
-                  placeholder={`Reply to ${displayName}...`}
+                  placeholder={t('reviews.reply_placeholder', {
+                    name: displayName
+                  })}
                   value={replyContent}
                   onChange={(e) => setReplyContent(e.target.value)}
                 />
@@ -431,8 +434,9 @@ export function ReviewCard({
                 className="flex items-center gap-1 text-xs font-semibold text-[#8ff5ff] hover:underline mt-2 ml-1"
               >
                 <ChevronDown className="w-3.5 h-3.5" />
-                View {hiddenCount} more{' '}
-                {hiddenCount === 1 ? 'reply' : 'replies'}
+                {hiddenCount === 1
+                  ? t('reviews.view_more_reply')
+                  : t('reviews.view_more_replies', { count: hiddenCount })}
               </button>
             )}
             {showAllReplies && replies.length > REPLIES_PREVIEW && (
@@ -441,7 +445,7 @@ export function ReviewCard({
                 className="flex items-center gap-1 text-xs font-semibold text-[#545760] hover:text-[#a9abb3] hover:underline mt-2 ml-1"
               >
                 <ChevronUp className="w-3.5 h-3.5" />
-                Show less
+                {t('reviews.show_less')}
               </button>
             )}
           </div>

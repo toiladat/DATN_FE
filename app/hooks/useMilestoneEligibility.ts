@@ -26,9 +26,6 @@ export function getMilestoneUpdateStatus(
   // Terminal status — read-only
   if (TERMINAL_STATUSES.includes(milestone.status)) return 'finalized'
 
-  // If the milestone itself is already completed/approved/withdrawn, it is finalized (read-only)
-  if (DONE_STATUSES.includes(milestone.status)) return 'finalized'
-
   // Date window: today >= startDate (date-only)
   const today = new Date()
   today.setHours(0, 0, 0, 0)

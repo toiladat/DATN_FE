@@ -42,7 +42,10 @@ type SidebarContextProps = {
   toggleSidebar: () => void
 }
 
-const SidebarContext = React.createContext<SidebarContextProps | null>(null)
+const SidebarContext: React.Context<SidebarContextProps | null> =
+  (globalThis as any).__sidebarContext ||
+  React.createContext<SidebarContextProps | null>(null)
+;(globalThis as any).__sidebarContext = SidebarContext
 
 function useSidebar() {
   const context = React.useContext(SidebarContext)

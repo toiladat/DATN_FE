@@ -1,8 +1,10 @@
 import { useState } from 'react'
 import { ChevronLeft, ChevronRight, ImageIcon, Film } from 'lucide-react'
 import type { ProjectDetail } from '@/schemas/projectSchema'
+import { useTranslation } from 'react-i18next'
 
 export function ProjectMedia({ project }: { project: ProjectDetail }) {
+  const { t } = useTranslation()
   const images: string[] =
     project.images && project.images.length > 0 ? project.images : []
   const hasVideo = !!project.video
@@ -22,7 +24,9 @@ export function ProjectMedia({ project }: { project: ProjectDetail }) {
   if (!hasImages && !hasVideo) {
     return (
       <div className="lg:col-span-8 rounded-2xl overflow-hidden border border-[#2e323b]/50 bg-[#0d0f14] aspect-video flex items-center justify-center">
-        <p className="text-[#3a3e4a] text-sm font-mono">No media available</p>
+        <p className="text-[#3a3e4a] text-sm font-mono">
+          {t('media.no_media')}
+        </p>
       </div>
     )
   }
@@ -41,7 +45,7 @@ export function ProjectMedia({ project }: { project: ProjectDetail }) {
             }`}
           >
             <ImageIcon className="w-3.5 h-3.5" />
-            Images
+            {t('media.images')}
             <span className="font-mono font-normal opacity-50 normal-case tracking-normal">
               ({images.length})
             </span>
@@ -55,7 +59,7 @@ export function ProjectMedia({ project }: { project: ProjectDetail }) {
             }`}
           >
             <Film className="w-3.5 h-3.5" />
-            Video
+            {t('media.video')}
           </button>
         </div>
       )}

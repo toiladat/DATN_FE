@@ -151,6 +151,11 @@ export default function Profile() {
       toast.error(t('toast.email_required'))
       return
     }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(email)) {
+      toast.error(t('toast.email_invalid'))
+      return
+    }
     setIsSendingOtp(true)
     try {
       await authRequests.requestEmailVerification(email)

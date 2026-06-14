@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router'
 import { Loader2 } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { useGetProjectById } from '@/apis/queries/project'
 import { ProjectDetailView } from '@/components/projectPage/ProjectDetailView'
 import { useAuth } from '@/components/providers/AuthProvider'
 
 export default function ProjectDetail() {
+  const { t } = useTranslation()
   const { id } = useParams<{ id: string }>()
   const { currentUserId } = useAuth()
 
@@ -23,10 +25,10 @@ export default function ProjectDetail() {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-[#0a0c10] text-[#ecedf6]">
         <h2 className="text-2xl font-bold mb-4 font-['Space_Grotesk']">
-          Project Not Found
+          {t('my_project.not_found')}
         </h2>
         <Link to="/my-project" className="text-[#8ff5ff] hover:underline">
-          Back to My Projects
+          {t('my_project.back_to_my_projects')}
         </Link>
       </div>
     )
@@ -37,7 +39,7 @@ export default function ProjectDetail() {
       project={project}
       currentUserId={currentUserId}
       isPublicView={false}
-      backLink={{ to: '/my-project', label: 'My Projects' }}
+      backLink={{ to: '/my-project', label: t('my_project.my_projects') }}
     />
   )
 }

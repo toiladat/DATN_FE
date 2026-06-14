@@ -11,6 +11,8 @@ import { toast } from 'sonner'
 import { useUpdateMilestone } from '@/apis/queries/project'
 import { ImageUpload } from '@/components/ui/image-upload'
 import mediaRequests from '@/apis/requests/media'
+import { useTranslation } from 'react-i18next'
+import { getErrorMessage } from '@/lib/utils'
 
 interface MilestoneUpdateFormProps {
   projectId: string
@@ -33,10 +35,10 @@ export function MilestoneUpdateForm({
   existingUpdate,
   onClose
 }: MilestoneUpdateFormProps) {
+  const { t } = useTranslation()
   const [completed, setCompleted] = useState(existingUpdate?.completed ?? '')
   const [blockers, setBlockers] = useState(existingUpdate?.blockers ?? '')
   const [link, setLink] = useState(existingUpdate?.link ?? '')
-  const [submitSuccess, setSubmitSuccess] = useState(false)
 
   // ── Images ───────────────────────────────────────────────────────────────
   const [imageUrls, setImageUrls] = useState<string[]>(
@@ -70,8 +72,8 @@ export function MilestoneUpdateForm({
           newCache[f.name + f.size] = urls[idx]
         })
       } catch {
-        toast.error('Upload failed', {
-          description: 'Failed to upload some images.'
+        toast.error(t('updates.form.upload_failed'), {
+          description: t('updates.form.upload_failed_desc')
         })
         throw new Error('upload failed')
       } finally {
@@ -96,7 +98,9 @@ export function MilestoneUpdateForm({
     const file = e.target.files[0]
 
     if (file.size > 100 * 1024 * 1024) {
-      toast.error('Video too large', { description: 'Max size is 100MB.' })
+      toast.error(t('toast.video_too_large'), {
+        description: t('toast.video_too_large_desc')
+      })
       return
     }
 
@@ -111,7 +115,7 @@ export function MilestoneUpdateForm({
       const uploadUrl = data[0].uploadUrl
       const finalUrl = data[0].fileUrl
 
-      toast.info('Uploading video...')
+      toast.info(t('toast.uploading_video'))
       await mediaRequests.uploadToPresignedUrl(file, uploadUrl)
 
       // Delete old video from storage if it was uploaded (not an external link)
@@ -124,9 +128,11 @@ export function MilestoneUpdateForm({
       }
 
       setVideoUrl(finalUrl)
-      toast.success('Video uploaded!')
+      toast.success(t('toast.video_uploaded_success'))
     } catch {
-      toast.error('Video upload failed', { description: 'Please try again.' })
+      toast.error(t('toast.video_upload_failed'), {
+        description: t('updates.form.try_again')
+      })
     } finally {
       setIsUploadingVideo(false)
       if (videoInputRef.current) videoInputRef.current.value = ''
@@ -153,22 +159,10 @@ export function MilestoneUpdateForm({
       },
       {
         onSuccess: () => {
-          setSubmitSuccess(true)
-          setTimeout(onClose, 1500)
+          toast.success(t('updates.form.success'))
+          onClose()
         }
       }
-    )
-  }
-
-  // ── Success state ─────────────────────────────────────────────────────────
-  if (submitSuccess) {
-    return (
-      <div className="flex flex-col items-center gap-3 py-8">
-        <CheckCircle2 className="w-8 h-8 text-[#8ff5ff]" />
-        <p className="text-[#ecedf6] text-sm font-['Space_Grotesk'] font-semibold">
-          Update submitted successfully
-        </p>
-      </div>
     )
   }
 
@@ -179,8 +173,7 @@ export function MilestoneUpdateForm({
         <div className="flex items-start gap-2.5 p-3.5 rounded-xl bg-[#ff716c]/8 border border-[#ff716c]/25">
           <AlertTriangle className="w-4 h-4 text-[#ff716c] shrink-0 mt-0.5" />
           <p className="text-[#ff716c] text-[12px] leading-relaxed">
-            This update is past the milestone deadline. It will be marked as
-            late.
+            {t('updates.form.late_warning')}
           </p>
         </div>
       )}
@@ -188,13 +181,14 @@ export function MilestoneUpdateForm({
       {/* Completed field */}
       <div className="space-y-2">
         <label className="text-[10px] font-bold uppercase tracking-widest text-[#a9abb3]">
-          What was completed <span className="text-[#ff716c]">*</span>
+          {t('updates.form.completed_label')}{' '}
+          <span className="text-[#ff716c]">*</span>
         </label>
         <textarea
           value={completed}
           onChange={(e) => setCompleted(e.target.value)}
           rows={4}
-          placeholder="Describe what has been delivered in this phase..."
+          placeholder={t('updates.form.completed_placeholder')}
           required
           className="w-full bg-[#161a21] border border-[#2e323b]/60 rounded-xl px-4 py-3 text-[#ecedf6] text-sm placeholder:text-[#3a3e4a] focus:outline-none focus:border-[#8ff5ff]/50 transition-colors duration-200 resize-none font-['Space_Grotesk']"
         />
@@ -203,16 +197,16 @@ export function MilestoneUpdateForm({
       {/* Blockers field */}
       <div className="space-y-2">
         <label className="text-[10px] font-bold uppercase tracking-widest text-[#a9abb3]">
-          Blockers / Delays
+          {t('updates.form.blockers_label')}
           <span className="text-[#73757d] ml-2 normal-case tracking-normal">
-            optional
+            {t('common.optional')}
           </span>
         </label>
         <textarea
           value={blockers}
           onChange={(e) => setBlockers(e.target.value)}
           rows={3}
-          placeholder="Any issues or delays to report..."
+          placeholder={t('updates.form.blockers_placeholder')}
           className="w-full bg-[#161a21] border border-[#2e323b]/60 rounded-xl px-4 py-3 text-[#ecedf6] text-sm placeholder:text-[#3a3e4a] focus:outline-none focus:border-[#8ff5ff]/50 transition-colors duration-200 resize-none font-['Space_Grotesk']"
         />
       </div>
@@ -221,9 +215,9 @@ export function MilestoneUpdateForm({
       <div className="space-y-2">
         <label className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-[#a9abb3]">
           <Images className="w-3.5 h-3.5" />
-          Progress Images
+          {t('updates.form.images_label')}
           <span className="text-[#73757d] normal-case tracking-normal font-normal">
-            optional · max 4
+            {t('updates.form.images_helper')}
           </span>
         </label>
         <ImageUpload
@@ -246,7 +240,7 @@ export function MilestoneUpdateForm({
         {isUploadingImage && (
           <p className="text-[#8ff5ff] text-[11px] flex items-center gap-1.5">
             <Loader2 className="w-3 h-3 animate-spin" />
-            Uploading images...
+            {t('updates.form.uploading_images')}
           </p>
         )}
       </div>
@@ -255,7 +249,8 @@ export function MilestoneUpdateForm({
       <div className="space-y-2">
         <label className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-[#a9abb3]">
           <Video className="w-3.5 h-3.5" />
-          Demo Video <span className="text-[#ff716c]">*</span>
+          {t('updates.form.video_label')}{' '}
+          <span className="text-[#ff716c]">*</span>
         </label>
 
         {/* Clickable upload area */}
@@ -275,14 +270,16 @@ export function MilestoneUpdateForm({
           </div>
           <div className="flex-1 min-w-0">
             <p className="text-[#ecedf6] text-sm font-semibold">
-              {videoUrl ? 'Video selected' : 'Upload demo video'}
+              {videoUrl
+                ? t('updates.form.video_selected')
+                : t('updates.form.video_upload_label')}
             </p>
             <p className="text-[#73757d] text-[11px] mt-0.5">
               {isUploadingVideo
-                ? 'Uploading, please wait...'
+                ? t('updates.form.video_uploading')
                 : videoUrl
-                  ? 'Click to replace'
-                  : 'MP4, WEBM or MOV · Max 100MB'}
+                  ? t('updates.form.video_click_replace')
+                  : t('updates.form.video_constraints')}
             </p>
           </div>
           <button
@@ -293,12 +290,12 @@ export function MilestoneUpdateForm({
             {isUploadingVideo ? (
               <span className="flex items-center gap-1">
                 <Loader2 className="w-3 h-3 animate-spin" />
-                Uploading...
+                {t('updates.form.submitting')}
               </span>
             ) : videoUrl ? (
-              'Change'
+              t('updates.form.change')
             ) : (
-              'Upload'
+              t('updates.form.upload')
             )}
           </button>
         </div>
@@ -311,7 +308,7 @@ export function MilestoneUpdateForm({
               controls
               className="w-full h-full object-contain"
             >
-              Your browser does not support the video tag.
+              {t('basics.videoNotSupported')}
             </video>
             <button
               type="button"
@@ -326,7 +323,7 @@ export function MilestoneUpdateForm({
                 if (videoInputRef.current) videoInputRef.current.value = ''
               }}
               className="absolute top-3 right-3 w-7 h-7 flex items-center justify-center bg-black/70 hover:bg-[#ff716c]/80 text-white rounded-full transition-colors backdrop-blur-md"
-              title="Remove Video"
+              title={t('basics.removeVideo')}
             >
               <X className="w-3.5 h-3.5" />
             </button>
@@ -337,9 +334,9 @@ export function MilestoneUpdateForm({
       {/* External link */}
       <div className="space-y-2">
         <label className="text-[10px] font-bold uppercase tracking-widest text-[#a9abb3]">
-          External Link
+          {t('updates.form.link_label')}
           <span className="text-[#73757d] ml-2 normal-case tracking-normal">
-            optional
+            {t('common.optional')}
           </span>
         </label>
         <input
@@ -353,14 +350,9 @@ export function MilestoneUpdateForm({
 
       {/* Error */}
       {isError && (
-        <p className="text-[#ff716c] text-xs flex items-center gap-1.5">
+        <p className="text-[#ff716c] text-xs flex items-center gap-1.5 font-['Space_Grotesk']">
           <AlertTriangle className="w-3.5 h-3.5 shrink-0" />
-          {(() => {
-            const msg = (error as any)?.response?.data?.message
-            if (typeof msg === 'string') return msg
-            if (Array.isArray(msg) && msg[0]?.message) return msg[0].message
-            return 'Failed to submit update. Please try again.'
-          })()}
+          {getErrorMessage(error, t('updates.form.submit_failed'))}
         </p>
       )}
 
@@ -380,10 +372,10 @@ export function MilestoneUpdateForm({
           {isPending ? (
             <>
               <Loader2 className="w-3.5 h-3.5 animate-spin" />
-              Submitting...
+              {t('updates.form.submitting')}
             </>
           ) : (
-            'Submit Update'
+            t('updates.form.submit_btn')
           )}
         </button>
         <button
@@ -393,7 +385,7 @@ export function MilestoneUpdateForm({
           className="inline-flex items-center gap-1.5 px-4 py-2.5 text-[#73757d] text-[12px] font-medium hover:text-[#a9abb3] disabled:opacity-40 transition-colors duration-200"
         >
           <X className="w-3.5 h-3.5" />
-          Cancel
+          {t('btn.cancel')}
         </button>
       </div>
     </form>

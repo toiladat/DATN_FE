@@ -16,6 +16,7 @@ import { ProjectUpdates } from '@/components/projectPage/ProjectUpdates'
 import { ProjectReviews } from '@/components/projectPage/ProjectReviews'
 import { ProjectAttachments } from '@/components/projectPage/ProjectAttachments'
 import type { ProjectDetail } from '@/schemas/projectSchema'
+import { useTranslation } from 'react-i18next'
 
 // ─── Tabs theo status ────────────────────────────────────────────────────────
 const TABS_PROGRESS = ['Story', 'Milestone', 'Review', 'Attachments', 'Teams']
@@ -38,19 +39,18 @@ const TABS_DEFAULT = [
 
 // ─── InvestCTA — placeholder, disabled ───────────────────────────────────────
 function PublishCTA({ project }: { project: ProjectDetail }) {
+  const { t } = useTranslation()
   return (
     <div className="p-6 rounded-2xl bg-[#10131a] border border-[#8ff5ff]/50 flex flex-col gap-5 relative overflow-hidden group">
       <div className="absolute -right-10 -top-10 w-32 h-32 bg-[#8ff5ff]/5 rounded-full blur-3xl group-hover:bg-[#8ff5ff]/10 transition-colors duration-700 ease-out" />
       <div className="flex items-center gap-2 relative z-10">
         <Zap className="w-4 h-4 text-[#8ff5ff]" />
         <span className="text-[11px] font-bold uppercase tracking-widest text-[#8ff5ff]">
-          Ready to Launch
+          {t('detail.ready_to_launch')}
         </span>
       </div>
       <div className="space-y-2 relative z-10">
-        <p className="text-[#a9abb3] text-sm">
-          Dự án của bạn đã được duyệt! Đã đến lúc đưa nó lên Blockchain.
-        </p>
+        <p className="text-[#a9abb3] text-sm">{t('detail.approved_desc')}</p>
       </div>
       <div className="relative z-10">
         <PublishModal project={project}>
@@ -58,7 +58,7 @@ function PublishCTA({ project }: { project: ProjectDetail }) {
             className="w-full font-['Space_Grotesk'] font-bold uppercase tracking-widest text-[11px]"
             size="lg"
           >
-            Publish to Blockchain
+            {t('detail.publish_btn')}
           </Button>
         </PublishModal>
       </div>
@@ -75,6 +75,7 @@ function InvestCTA({
   raisedAmount: number
   fundingGoal: number
 }) {
+  const { t } = useTranslation()
   const pct =
     fundingGoal > 0
       ? Math.min(100, Math.round((raisedAmount / fundingGoal) * 100))
@@ -84,13 +85,13 @@ function InvestCTA({
       <div className="flex items-center gap-2">
         <Zap className="w-4 h-4 text-[#8ff5ff]" />
         <span className="text-[11px] font-bold uppercase tracking-widest text-[#73757d]">
-          Funding Progress
+          {t('detail.funding_progress')}
         </span>
       </div>
       <div className="space-y-2">
         <div className="flex justify-between text-[11px] font-mono">
           <span className="text-[#8ff5ff] font-bold">
-            {raisedAmount.toLocaleString()} raised
+            {raisedAmount.toLocaleString()} {t('detail.raised')}
           </span>
           <span className="text-[#73757d]">{pct}%</span>
         </div>
@@ -101,7 +102,7 @@ function InvestCTA({
           />
         </div>
         <div className="text-right text-[11px] font-mono text-[#73757d]">
-          Goal: {fundingGoal.toLocaleString()} USDT
+          {t('detail.goal')}: {fundingGoal.toLocaleString()} USDT
         </div>
       </div>
       <InvestModal
@@ -111,7 +112,7 @@ function InvestCTA({
       >
         <button className="w-full py-3 rounded-xl border border-[#8ff5ff] bg-[#161a21] text-[11px] font-bold uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-[#8ff5ff]/10 transition-colors opacity-100 font-['Space_Grotesk']">
           <Zap className="w-3.5 h-3.5 text-[#8ff5ff]" />
-          <span className="text-[#8ff5ff]">Fund This Project</span>
+          <span className="text-[#8ff5ff]">{t('detail.fund_btn')}</span>
         </button>
       </InvestModal>
     </div>
@@ -137,6 +138,7 @@ export function ProjectDetailView({
   isPublicView = false,
   backLink
 }: ProjectDetailViewProps) {
+  const { t } = useTranslation()
   const isOwner = project.userId === currentUserId
   const isProgress = project.status === 'progress'
   const isActive = project.status === 'active'
@@ -193,11 +195,10 @@ export function ProjectDetailView({
             {isPublicView && isActive && (
               <div className="p-5 rounded-2xl bg-[#10131a] border border-[#2e323b]/50 text-center">
                 <p className="text-[11px] font-bold uppercase tracking-widest text-[#ac89ff] mb-2">
-                  Project Status
+                  {t('detail.project_status')}
                 </p>
                 <p className="text-[#a9abb3] text-xs">
-                  This project has reached its funding goal and is currently
-                  executing milestones.
+                  {t('detail.active_status_desc')}
                 </p>
               </div>
             )}
@@ -208,11 +209,10 @@ export function ProjectDetailView({
                 <div className="absolute -right-10 -top-10 w-32 h-32 bg-[#8ff5ff]/5 rounded-full blur-3xl group-hover:bg-[#8ff5ff]/10 transition-colors duration-700 ease-out" />
                 <p className="text-[11px] font-bold uppercase tracking-widest text-[#8ff5ff] mb-2 relative z-10 flex items-center justify-center gap-1.5 font-['Space_Grotesk']">
                   <Zap className="w-3.5 h-3.5 text-[#8ff5ff]" />
-                  Project Completed
+                  {t('detail.project_completed')}
                 </p>
                 <p className="text-[#a9abb3] text-xs relative z-10">
-                  This project has successfully completed all its milestones and
-                  all funds have been disbursed!
+                  {t('detail.success_status_desc')}
                 </p>
               </div>
             )}

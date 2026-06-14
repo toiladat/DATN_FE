@@ -6,6 +6,8 @@ import type { ProjectSummary } from '@/schemas/projectSchema'
 import { useToggleLike } from '@/apis/queries/project'
 import { useAuth } from '@/components/providers/AuthProvider'
 import { toast } from 'sonner'
+import { useTranslation } from 'react-i18next'
+import { getErrorMessage } from '@/lib/utils'
 
 // ─── Màu accent tự động từ category ─────────────────────────────────────────
 const CATEGORY_COLORS: Record<string, string> = {
@@ -47,6 +49,7 @@ const itemVariant = {
 }
 
 export function ProjectDirectoryCard({ project, index = 0 }: Props) {
+  const { t } = useTranslation()
   const isFunding = isFundingStatus(project.status)
   const accentColor = getAccentColor(project.primaryCategory, index)
 
@@ -61,14 +64,37 @@ export function ProjectDirectoryCard({ project, index = 0 }: Props) {
   const handleLike = (e: React.MouseEvent) => {
     e.preventDefault() // prevent navigating to project detail
     if (!isAuthenticated) {
-      toast.warning('Please connect your wallet to like this project', {
+      toast.warning(t('toast.like_wallet_required'), {
         duration: 3000
       })
       return
     }
+
+    const previousLiked = isLiked
+    const nextLiked = !isLiked
+
     // Optimistic UI update
-    setIsLiked(!isLiked)
-    toggleLike({ id: project.id, isLiked })
+    setIsLiked(nextLiked)
+
+    toggleLike(
+      { id: project.id, isLiked: previousLiked },
+      {
+        onSuccess: () => {
+          if (nextLiked) {
+            toast.success(t('toast.like_success'))
+          } else {
+            toast.success(t('toast.unlike_success'))
+          }
+        },
+        onError: (err) => {
+          setIsLiked(previousLiked)
+          const fallbackMsg = nextLiked
+            ? t('toast.like_error')
+            : t('toast.unlike_error')
+          toast.error(getErrorMessage(err, fallbackMsg))
+        }
+      }
+    )
   }
 
   // ── Funding: tính % progress từ raisedAmount / fundingGoal ───────────────

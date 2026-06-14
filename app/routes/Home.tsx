@@ -1,6 +1,7 @@
 import { Hero } from '@/components/landing/Hero'
 import { Partners } from '@/components/landing/Partners'
 import { FeaturedProjects } from '@/components/landing/FeaturedProjects'
+import { StatsSection } from '@/components/landing/StatsSection'
 import { HowItWorks } from '@/components/landing/HowItWorks'
 import { Features } from '@/components/landing/Features'
 import { CtaBanner } from '@/components/landing/CtaBanner'
@@ -11,6 +12,7 @@ export default function Home() {
       <Hero />
       <Partners />
       <FeaturedProjects />
+      <StatsSection />
       <HowItWorks />
       <Features />
       <CtaBanner />

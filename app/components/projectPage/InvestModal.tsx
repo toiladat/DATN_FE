@@ -17,6 +17,8 @@ import { parseEther, erc20Abi } from 'viem'
 import { contractAbi, contractAddress } from '@/contract/ContractClient'
 import { projectRequests } from '@/apis/requests/project'
 import { toast } from 'sonner'
+import { useTranslation } from 'react-i18next'
+import { getErrorMessage } from '@/lib/utils'
 
 interface InvestModalProps {
   projectId: string
@@ -33,6 +35,7 @@ export function InvestModal({
   disabled,
   children
 }: InvestModalProps) {
+  const { t } = useTranslation()
   const [open, setOpen] = useState(false)
   const [amount, setAmount] = useState('')
   const [content, setContent] = useState('')
@@ -56,20 +59,20 @@ export function InvestModal({
   const handleInvest = async () => {
     if (isPending) return
     if (!amount || Number(amount) <= 0) {
-      toast.error('Vui lòng nhập số tiền hợp lệ')
+      toast.error(t('toast.invalid_amount'))
       return
     }
 
     const remainingAmount = fundingGoal - raisedAmount
     if (Number(amount) > remainingAmount) {
       toast.error(
-        `Bạn chỉ có thể invest tối đa ${remainingAmount} USDT (số tiền còn thiếu của dự án)`
+        t('toast.amount_exceeds_remaining_usdt', { remaining: remainingAmount })
       )
       return
     }
 
     if (balanceData && Number(amount) > Number(balanceData.formatted)) {
-      toast.error('Số dư không đủ')
+      toast.error(t('toast.insufficient_balance'))
       return
     }
 
@@ -87,7 +90,7 @@ export function InvestModal({
         args: [contractAddress, parsedAmount]
       })
 
-      toast.info('Đang chờ approve transaction...')
+      toast.info(t('toast.waiting_approve_tx'))
 
       if (publicClient) {
         await publicClient.waitForTransactionReceipt({ hash: approveTx })
@@ -106,7 +109,7 @@ export function InvestModal({
         args: [campaignIdUint256, parsedAmount]
       })
 
-      toast.info('Đang xác nhận đầu tư trên chuỗi...')
+      toast.info(t('toast.confirming_investment_chain'))
 
       // 3. Call BE API để lưu lịch sử
       await projectRequests.invest(projectId, {
@@ -115,13 +118,13 @@ export function InvestModal({
         content: content.trim() || undefined
       })
 
-      toast.success('Đầu tư thành công!')
+      toast.success(t('toast.invest_success'))
       setOpen(false)
       setAmount('')
       setContent('')
     } catch (error: any) {
       console.error('Invest error:', error)
-      toast.error(error?.shortMessage || error?.message || 'Đã có lỗi xảy ra')
+      toast.error(getErrorMessage(error, t('toast.invest_error')))
     } finally {
       setIsProcessing(false)
     }
@@ -136,18 +139,18 @@ export function InvestModal({
         <DialogHeader>
           <DialogTitle className="text-[#8ff5ff] font-['Space_Grotesk'] tracking-wide flex items-center gap-2">
             <Zap className="w-5 h-5" />
-            BACK THIS PROJECT
+            {t('invest.title')}
           </DialogTitle>
         </DialogHeader>
 
         <div className="space-y-6 py-4">
           <div className="space-y-2">
             <div className="flex justify-between text-xs text-[#73757d] font-mono">
-              <span>Số dư khả dụng</span>
+              <span>{t('invest.available_balance')}</span>
               <span>
                 {balanceData
                   ? `${Number(balanceData.formatted).toLocaleString()} USDT`
-                  : 'Đang tải...'}
+                  : t('invest.loading')}
               </span>
             </div>
             <div className="relative">
@@ -155,7 +158,7 @@ export function InvestModal({
                 type="number"
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
-                placeholder="Nhập số tiền USDT"
+                placeholder={t('invest.amount_placeholder')}
                 className="w-full bg-[#161a21] border border-[#2e323b] rounded-xl px-4 py-3 text-white placeholder:text-[#45484f] focus:outline-none focus:border-[#8ff5ff] focus:ring-1 focus:ring-[#8ff5ff]/50 transition-all font-mono"
                 disabled={isPending}
               />
@@ -176,13 +179,13 @@ export function InvestModal({
 
           <div className="space-y-2">
             <div className="flex justify-between text-xs text-[#73757d] font-mono">
-              <span>Lời nhắn động viên (Tuỳ chọn)</span>
+              <span>{t('invest.optional_message')}</span>
               <span>{content.length}/200</span>
             </div>
             <textarea
               value={content}
               onChange={(e) => setContent(e.target.value.slice(0, 200))}
-              placeholder="Bạn có muốn nhắn gửi điều gì đến Founder không?"
+              placeholder={t('invest.message_placeholder')}
               rows={3}
               className="w-full bg-[#161a21] border border-[#2e323b] rounded-xl px-4 py-3 text-white placeholder:text-[#45484f] focus:outline-none focus:border-[#8ff5ff] focus:ring-1 focus:ring-[#8ff5ff]/50 transition-all font-mono resize-none"
               disabled={isPending}
@@ -197,10 +200,10 @@ export function InvestModal({
             {isPending ? (
               <>
                 <Loader2 className="w-4 h-4 animate-spin" />
-                ĐANG XỬ LÝ...
+                {t('invest.processing_btn')}
               </>
             ) : (
-              'XÁC NHẬN ĐẦU TƯ'
+              t('invest.confirm_btn')
             )}
           </button>
         </div>

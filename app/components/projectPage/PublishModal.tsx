@@ -15,6 +15,7 @@ import { toast } from 'sonner'
 import type { ProjectDetail } from '@/schemas/projectSchema'
 import { apiClient } from '@/apis/axios'
 import { useTranslation } from 'react-i18next'
+import { getErrorMessage } from '@/lib/utils'
 
 interface PublishModalProps {
   project: ProjectDetail
@@ -42,16 +43,21 @@ export function PublishModal({ project, children }: PublishModalProps) {
       const campaignIdUint256 = BigInt('0x' + project.id)
       const goal = parseEther(project.totalAmount.toString())
 
-      // Demo Mode: override fundDeadline = now + 5 phút (rút tiền ngay sau 5 phút)
+      // Demo Mode: override fundDeadline = now + 5 phút để có đủ thời gian test thủ công
       // Normal Mode: dùng Target Launch Date của dự án
       const fundDeadline = isDemoMode
-        ? Math.floor(Date.now() / 1000) + 5 * 60
+        ? Math.floor(Date.now() / 1000) + 300
         : Math.floor(new Date(project.startDate).getTime() / 1000)
 
       // Prepare milestone arrays: Thời gian giải ngân là đầu ngày bắt đầu giai đoạn
       // Nhưng phải >= fundDeadline (yêu cầu của Smart Contract)
       // → dùng max(startOfDay, fundDeadline) để đảm bảo cả hai điều kiện
-      const milestoneTimes = project.milestones.map((m) => {
+      const milestoneTimes = project.milestones.map((m, idx) => {
+        if (isDemoMode) {
+          // Demo Mode: Milestone 1 giải ngân sau 5 phút (bằng fundDeadline).
+          // Các milestone tiếp theo giải ngân cách nhau 1 phút để test nhanh.
+          return fundDeadline + idx * 60
+        }
         const d = new Date(m.startDate)
         d.setHours(0, 0, 0, 0)
         const startOfDay = Math.floor(d.getTime() / 1000)
@@ -120,7 +126,7 @@ export function PublishModal({ project, children }: PublishModalProps) {
       }, 2000)
     } catch (error: any) {
       console.error(error)
-      toast.error(error.message || t('toast.contract_call_error'))
+      toast.error(getErrorMessage(error, t('toast.contract_call_error')))
     } finally {
       setIsSubmitting(false)
     }
@@ -133,24 +139,25 @@ export function PublishModal({ project, children }: PublishModalProps) {
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 text-xl font-bold text-[#8ff5ff] font-['Space_Grotesk']">
             <Rocket className="w-5 h-5 text-[#8ff5ff]" />
-            Publish to Blockchain
+            {t('publish.title')}
           </DialogTitle>
         </DialogHeader>
 
         <div className="space-y-4 py-4">
-          <p className="text-[#a9abb3] text-sm">
-            Dự án của bạn đã được Admin duyệt. Bây giờ bạn cần tạo Smart
-            Contract cho dự án này trên chuỗi (Tốn phí Gas mạng Sepolia).
-          </p>
+          <p className="text-[#a9abb3] text-sm">{t('publish.description')}</p>
           <div className="p-4 rounded-xl bg-[#1c2028] border border-[#2e323b]/50 space-y-2">
             <div className="flex justify-between text-sm">
-              <span className="text-[#73757d]">Funding Goal:</span>
+              <span className="text-[#73757d]">
+                {t('publish.funding_goal')}
+              </span>
               <span className="font-bold font-mono">
                 {project.totalAmount} USDT
               </span>
             </div>
             <div className="flex justify-between text-sm">
-              <span className="text-[#73757d]">Milestones:</span>
+              <span className="text-[#73757d]">
+                {t('publish.milestones_count')}
+              </span>
               <span className="font-bold font-mono">
                 {project.milestones.length}
               </span>
@@ -158,25 +165,41 @@ export function PublishModal({ project, children }: PublishModalProps) {
           </div>
 
           {/* Demo Mode Toggle */}
-          <button
-            type="button"
+          <div
             onClick={() => setIsDemoMode((v) => !v)}
-            className={`w-full flex items-center gap-2 px-4 py-3 rounded-xl border text-[11px] font-bold uppercase tracking-widest transition-all ${
+            className={`w-full flex items-center justify-between p-4 rounded-xl border cursor-pointer select-none transition-all ${
               isDemoMode
-                ? 'bg-[#f59e0b]/15 border-[#f59e0b]/50 text-[#f59e0b]'
-                : 'bg-[#22262f]/50 border-[#2e323b] text-[#73757d] hover:border-[#f59e0b]/30 hover:text-[#f59e0b]/70'
+                ? 'bg-[#f59e0b]/10 border-[#f59e0b]/40 text-[#f59e0b]'
+                : 'bg-[#1c2028]/60 border-[#2e323b] text-[#ecedf6] hover:border-[#2e323b]/80'
             }`}
           >
-            <Zap className="w-3.5 h-3.5" />
-            <span className="flex-1 text-left">Demo Mode</span>
-            <span
-              className={`text-[10px] px-2 py-0.5 rounded-full ${isDemoMode ? 'bg-[#f59e0b]/20' : 'bg-[#2e323b]'}`}
+            <div className="space-y-1 pr-4">
+              <div className="flex items-center gap-2">
+                <Zap
+                  className={`w-4 h-4 ${isDemoMode ? 'text-[#f59e0b] animate-pulse' : 'text-[#73757d]'}`}
+                />
+                <span className="text-xs font-bold uppercase tracking-wider font-['Space_Grotesk']">
+                  {t('publish.demo_mode')}
+                </span>
+              </div>
+              <p className="text-[11px] text-[#73757d] font-sans leading-relaxed">
+                {isDemoMode ? t('publish.demo_on') : t('publish.demo_off')}
+              </p>
+            </div>
+
+            {/* Switch Toggle */}
+            <div
+              className={`w-10 h-6 rounded-full p-1 transition-all duration-300 relative shrink-0 ${
+                isDemoMode ? 'bg-[#f59e0b]' : 'bg-[#2e323b]'
+              }`}
             >
-              {isDemoMode
-                ? 'BẬT — Rút tiền sau 5 phút'
-                : 'TẮT — Dùng Launch Date thực'}
-            </span>
-          </button>
+              <div
+                className={`w-4 h-4 rounded-full bg-[#10131a] shadow-md transition-all duration-300 transform ${
+                  isDemoMode ? 'translate-x-4' : 'translate-x-0'
+                }`}
+              />
+            </div>
+          </div>
 
           <Button
             onClick={handlePublish}
@@ -189,7 +212,7 @@ export function PublishModal({ project, children }: PublishModalProps) {
             ) : (
               <Rocket className="w-5 h-5" />
             )}
-            Xác nhận & Launch
+            {t('publish.confirm_btn')}
           </Button>
         </div>
       </DialogContent>

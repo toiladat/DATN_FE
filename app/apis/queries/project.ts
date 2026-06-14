@@ -165,3 +165,18 @@ export function useWithdrawMilestone(projectId: string) {
     }
   })
 }
+
+export function useGetProjectStats() {
+  return useQuery({
+    queryKey: [...projectKeys.all, 'stats'] as const,
+    queryFn: async (): Promise<{
+      total: number
+      fundraising: number
+      active: number
+      success: number
+    }> => {
+      const { data } = await projectRequests.getProjectStats()
+      return data
+    }
+  })
+}

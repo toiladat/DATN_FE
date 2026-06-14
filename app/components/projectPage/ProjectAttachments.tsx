@@ -7,12 +7,14 @@ import {
   ExternalLink,
   Archive
 } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 
 interface ProjectAttachmentsProps {
   project: ProjectDetail
 }
 
 export function ProjectAttachments({ project }: ProjectAttachmentsProps) {
+  const { t } = useTranslation()
   const attachments = project.projectAttachments || []
 
   if (attachments.length === 0) {
@@ -20,11 +22,9 @@ export function ProjectAttachments({ project }: ProjectAttachmentsProps) {
       <div className="bg-[#10131a] rounded-2xl border border-[#2e323b]/50 p-12 text-center mt-6">
         <Archive className="w-12 h-12 text-[#2e323b] mx-auto mb-4" />
         <h3 className="text-[#ecedf6] font-['Space_Grotesk'] font-bold text-lg mb-2">
-          No Attachments Found
+          {t('attachments.no_attachments_found')}
         </h3>
-        <p className="text-[#73757d]">
-          This project hasn't uploaded any additional documents or files.
-        </p>
+        <p className="text-[#73757d]">{t('attachments.no_attachments_desc')}</p>
       </div>
     )
   }
@@ -33,9 +33,9 @@ export function ProjectAttachments({ project }: ProjectAttachmentsProps) {
     <div className="space-y-6 mt-6">
       <div className="flex items-center justify-between mb-8">
         <h2 className="text-2xl font-['Space_Grotesk'] font-bold text-[#ecedf6]">
-          Project Documents
+          {t('attachments.project_documents')}
           <span className="text-sm text-[#a9abb3] font-normal ml-3">
-            ({attachments.length} file{attachments.length !== 1 ? 's' : ''})
+            {t('attachments.files_count', { count: attachments.length })}
           </span>
         </h2>
         <div className="h-[1px] flex-1 bg-gradient-to-r from-[#2e323b] to-transparent ml-6" />
@@ -87,7 +87,7 @@ export function ProjectAttachments({ project }: ProjectAttachmentsProps) {
                     </p>
                   ) : (
                     <p className="text-xs text-[#45484f] italic">
-                      No description provided
+                      {t('team.no_description')}
                     </p>
                   )}
                 </div>
@@ -100,7 +100,7 @@ export function ProjectAttachments({ project }: ProjectAttachmentsProps) {
                   target="_blank"
                   rel="noreferrer"
                   className="w-10 h-10 rounded-full bg-[#161a21] flex items-center justify-center hover:bg-[#8ff5ff]/10 text-[#a9abb3] hover:text-[#8ff5ff] transition-colors border border-[#2e323b]/50 hover:border-[#8ff5ff]/30"
-                  title="View File"
+                  title={t('common.view_file')}
                 >
                   <ExternalLink className="w-4 h-4" />
                 </a>

@@ -1,3 +1,5 @@
+import { useTranslation } from 'react-i18next'
+
 const DEFAULT_TABS = ['Story', 'Milestone', 'Updates', 'Review', 'Teams']
 
 interface ProjectTabsProps {
@@ -11,6 +13,8 @@ export function ProjectTabs({
   onTabChange,
   tabs = DEFAULT_TABS
 }: ProjectTabsProps) {
+  const { t } = useTranslation()
+
   return (
     <nav className="sticky top-20 z-40 bg-[#10131a]/80 backdrop-blur-xl border-b border-[#2e323b]/50 mb-12 flex gap-10 overflow-x-auto no-scrollbar px-2">
       {tabs.map((tab, i) => (
@@ -23,7 +27,7 @@ export function ProjectTabs({
               : 'text-[#73757d] hover:text-[#ecedf6]'
           }`}
         >
-          {tab}
+          {t(`tab.${tab.toLowerCase()}` as any, tab)}
           {activeTab === tab && (
             <div className="absolute bottom-0 left-0 w-full h-[2px] bg-[#8ff5ff] shadow-[0_-2px_10px_rgba(143,245,255,0.8)]" />
           )}

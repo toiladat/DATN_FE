@@ -13,7 +13,7 @@ export const errorsEn = {
   'error.WalletNonceNotFound': 'Wallet nonce not found.',
   'error.EmailAlreadyInUse':
     'This email is already registered by another account.',
-
+  'error.UserIsBanned': 'Your account has been banned.',
   // Categories & Projects
   'error.FailedToFetchCategories': 'Failed to fetch campaign categories.',
   'error.ProjectNotFound': 'Project not found.',

@@ -13,7 +13,7 @@ export const errorsVi = {
   'error.WalletNonceNotFound': 'Không tìm thấy Nonce cho ví này.',
   'error.EmailAlreadyInUse':
     'Email này đã được đăng ký bởi một tài khoản khác.',
-
+  'error.UserIsBanned': 'Tài khoản của bạn đã bị khoá.',
   // Categories & Projects
   'error.FailedToFetchCategories': 'Lấy danh sách danh mục dự án thất bại.',
   'error.ProjectNotFound': 'Không tìm thấy dự án.',

@@ -3,8 +3,10 @@ import { Loader2 } from 'lucide-react'
 import { useGetProjectById } from '@/apis/queries/project'
 import { ProjectDetailView } from '@/components/projectPage/ProjectDetailView'
 import { useAuth } from '@/components/providers/AuthProvider'
+import { useTranslation } from 'react-i18next'
 
 export default function PublicProjectDetail() {
+  const { t } = useTranslation()
   const { id } = useParams<{ id: string }>()
   const { data: project, isLoading, isError } = useGetProjectById(id || '')
   const { currentUserId } = useAuth()
@@ -21,10 +23,10 @@ export default function PublicProjectDetail() {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-[#0a0c10] text-[#ecedf6]">
         <h2 className="text-2xl font-bold mb-4 font-['Space_Grotesk']">
-          Project Not Found
+          {t('error.ProjectNotFound')}
         </h2>
         <Link to="/projects" className="text-[#8ff5ff] hover:underline">
-          Return to Discover
+          {t('my_project.back_to_my_projects')}
         </Link>
       </div>
     )
@@ -35,7 +37,7 @@ export default function PublicProjectDetail() {
       project={project}
       currentUserId={currentUserId}
       isPublicView
-      backLink={{ to: '/projects', label: 'Discover Projects' }}
+      backLink={{ to: '/projects', label: t('hero.btn.explore') }}
     />
   )
 }

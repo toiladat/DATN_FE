@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import {
   ShieldCheck,
   Calendar,
@@ -24,6 +25,25 @@ export function ProjectMilestones({
   project: ProjectDetail
   isOwner?: boolean
 }) {
+  const { t } = useTranslation()
+
+  const getMilestoneStatusLabel = (status: string) => {
+    switch (status) {
+      case 'WITHDRAWN':
+        return `✓ ${t('detail.withdrawn')}`
+      case 'COMPLETED':
+        return t('detail.completed')
+      case 'PROGRESS':
+        return t('status.in_progress')
+      case 'APPROVED':
+        return t('status.approved')
+      case 'PENDING':
+        return t('status.pending')
+      default:
+        return status
+    }
+  }
+
   const { milestones } = project
   const [expandedId, setExpandedId] = useState<string | null>(
     milestones?.[0]?.id || null
@@ -32,7 +52,7 @@ export function ProjectMilestones({
   if (!milestones || milestones.length === 0) {
     return (
       <div className="lg:col-span-12 p-8 text-center text-[#73757d] border border-[#2e323b] rounded-xl bg-[#161a21]">
-        No milestones defined yet.
+        {t('milestones.empty')}
       </div>
     )
   }
@@ -44,18 +64,17 @@ export function ProjectMilestones({
       <div className="flex items-center gap-4 mb-10">
         <div className="w-6 h-1 bg-[#8ff5ff] rounded-full shadow-[0_0_10px_#8ff5ff]" />
         <h3 className="text-2xl md:text-3xl font-['Space_Grotesk'] font-bold text-[#ecedf6]">
-          Roadmap & Milestones
+          {t('detail.roadmap_milestones')}
         </h3>
       </div>
 
       <div className="relative flex flex-col gap-8 before:absolute before:inset-y-0 before:left-[19px] before:w-[2px] before:bg-gradient-to-b before:from-[#2e323b] before:via-[#2e323b]/50 before:to-transparent">
         {sortedMilestones.map((m) => {
-          const isActiveOrDone = [
-            'COMPLETED',
-            'PROGRESS',
-            'APPROVED',
-            'WITHDRAWN'
-          ].includes(m.status)
+          const isActiveOrDone =
+            (project.status === 'active' || project.status === 'success') &&
+            ['COMPLETED', 'PROGRESS', 'APPROVED', 'WITHDRAWN'].includes(
+              m.status
+            )
           const isExpanded = expandedId === m.id
 
           const mediaItems = []
@@ -100,18 +119,21 @@ export function ProjectMilestones({
                         >
                           {m.title}
                         </h4>
-                        <span
-                          className={`px-2.5 py-0.5 text-[9px] font-bold uppercase tracking-widest rounded-sm border 
-                          ${
-                            m.status === 'WITHDRAWN'
-                              ? 'bg-[#ac89ff]/10 text-[#ac89ff] border-[#ac89ff]/30'
-                              : isActiveOrDone
-                                ? 'bg-[#8ff5ff]/10 text-[#8ff5ff] border-[#8ff5ff]/30'
-                                : 'bg-[#22262f] text-[#a9abb3] border-[#45484f]/30'
-                          }`}
-                        >
-                          {m.status === 'WITHDRAWN' ? '✓ WITHDRAWN' : m.status}
-                        </span>
+                        {(project.status === 'active' ||
+                          project.status === 'success') && (
+                          <span
+                            className={`px-2.5 py-0.5 text-[9px] font-bold uppercase tracking-widest rounded-sm border 
+                            ${
+                              m.status === 'WITHDRAWN'
+                                ? 'bg-[#ac89ff]/10 text-[#ac89ff] border-[#ac89ff]/30'
+                                : isActiveOrDone
+                                  ? 'bg-[#8ff5ff]/10 text-[#8ff5ff] border-[#8ff5ff]/30'
+                                  : 'bg-[#22262f] text-[#a9abb3] border-[#45484f]/30'
+                            }`}
+                          >
+                            {getMilestoneStatusLabel(m.status)}
+                          </span>
+                        )}
                       </div>
                       <div className="flex items-center gap-5 text-[13px] font-bold text-[#73757d] font-['Space_Grotesk'] tracking-wide">
                         <span className="flex items-center gap-1.5">
@@ -139,7 +161,7 @@ export function ProjectMilestones({
                               className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gradient-to-r from-[#8ff5ff]/20 to-[#ac89ff]/20 border border-[#8ff5ff]/30 text-[10px] font-bold uppercase tracking-widest text-[#8ff5ff] hover:from-[#8ff5ff]/30 hover:to-[#ac89ff]/30 transition-all"
                             >
                               <Banknote className="w-3.5 h-3.5" />
-                              Withdraw
+                              {t('detail.withdraw')}
                             </button>
                           </WithdrawMilestoneModal>
                         )}
@@ -147,7 +169,7 @@ export function ProjectMilestones({
                       {isOwner && m.withdrawalRecord?.status === 'PENDING' && (
                         <span className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#f59e0b]/10 border border-[#f59e0b]/30 text-[10px] font-bold uppercase tracking-widest text-[#f59e0b]">
                           <Clock className="w-3 h-3 animate-pulse" />
-                          Pending...
+                          {t('detail.pending')}
                         </span>
                       )}
 
@@ -185,7 +207,7 @@ export function ProjectMilestones({
                               <div className="flex items-center gap-2 mb-3">
                                 <Lightbulb className="w-4 h-4 text-[#8ff5ff]" />
                                 <span className="text-[10px] font-bold uppercase tracking-widest text-[#8ff5ff]">
-                                  Advantages
+                                  {t('detail.advantages')}
                                 </span>
                               </div>
                               <div
@@ -203,7 +225,7 @@ export function ProjectMilestones({
                               <div className="flex items-center gap-2 mb-3">
                                 <AlertTriangle className="w-4 h-4 text-[#ff716c]" />
                                 <span className="text-[10px] font-bold uppercase tracking-widest text-[#ff716c]">
-                                  Challenges
+                                  {t('detail.challenges')}
                                 </span>
                               </div>
                               <div
@@ -220,7 +242,7 @@ export function ProjectMilestones({
                               <div className="flex items-center gap-2 mb-3">
                                 <Target className="w-4 h-4 text-[#ac89ff]" />
                                 <span className="text-[10px] font-bold uppercase tracking-widest text-[#ac89ff]">
-                                  Expected Outcome
+                                  {t('detail.expected_outcome')}
                                 </span>
                               </div>
                               <div
@@ -235,14 +257,14 @@ export function ProjectMilestones({
                         {m.milestoneUpdates && (
                           <div className="mt-6 p-5 rounded-xl border border-[#8ff5ff]/20 bg-[#8ff5ff]/5">
                             <h5 className="text-xs font-bold uppercase tracking-widest text-[#8ff5ff] mb-4 flex items-center gap-2 border-b border-[#8ff5ff]/10 pb-2">
-                              <ShieldCheck className="w-4 h-4" /> Official
-                              Update Report
+                              <ShieldCheck className="w-4 h-4" />{' '}
+                              {t('detail.official_update_report')}
                             </h5>
 
                             <div className="space-y-4">
                               <div>
                                 <span className="text-[10px] font-bold uppercase tracking-widest text-[#a9abb3] mb-1 block">
-                                  Completed
+                                  {t('detail.completed')}
                                 </span>
                                 <div
                                   className="text-xs text-[#ecedf6] [&_p]:mb-2 [&_ul]:list-disc [&_ul]:pl-4"
@@ -255,7 +277,7 @@ export function ProjectMilestones({
                               {m.milestoneUpdates.blockers && (
                                 <div>
                                   <span className="text-[10px] font-bold uppercase tracking-widest text-[#ff716c] mb-1 block">
-                                    Blockers / Delays
+                                    {t('detail.blockers')}
                                   </span>
                                   <div
                                     className="text-xs text-[#ff716c]/90 [&_p]:mb-2 [&_ul]:list-disc [&_ul]:pl-4"
@@ -279,7 +301,7 @@ export function ProjectMilestones({
                                     className="inline-flex px-3 py-1.5 rounded bg-[#8ff5ff]/20 text-xs font-bold text-[#8ff5ff] hover:bg-[#8ff5ff]/30 transition-colors items-center gap-1.5"
                                   >
                                     <Play className="w-3 h-3 fill-current" />{' '}
-                                    Watch Demo
+                                    {t('detail.watch_demo')}
                                   </a>
                                 )}
                                 {m.milestoneUpdates.link && (
@@ -290,7 +312,7 @@ export function ProjectMilestones({
                                     className="inline-flex px-3 py-1.5 rounded border border-[#45484f] text-xs font-bold text-[#ecedf6] hover:bg-[#22262f] transition-colors items-center gap-1.5"
                                   >
                                     <ExternalLink className="w-3 h-3" />{' '}
-                                    External Link
+                                    {t('detail.external_link')}
                                   </a>
                                 )}
                               </div>

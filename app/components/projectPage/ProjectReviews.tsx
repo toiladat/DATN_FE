@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Send, Loader2, MessageSquare } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { useGetProjectReviews, useAddReview } from '@/apis/queries/project'
 import { useAuth } from '../providers/AuthProvider'
 import { ReviewCard } from './ReviewCard'
@@ -37,6 +38,7 @@ export function ProjectReviews({
   ownerId,
   memberUserIds = []
 }: ProjectReviewsProps) {
+  const { t } = useTranslation()
   const { data: reviews = [], isLoading } = useGetProjectReviews(projectId)
   const { mutate: addReview, isPending } = useAddReview(projectId)
   const { isAuthenticated } = useAuth()
@@ -54,7 +56,7 @@ export function ProjectReviews({
           setFocused(false)
         },
         onError: (err) => {
-          toast.error(getErrorMessage(err, 'Không thể gửi bình luận.'))
+          toast.error(getErrorMessage(err, t('reviews.send_error')))
         }
       }
     )
@@ -69,8 +71,10 @@ export function ProjectReviews({
         <MessageSquare className="w-5 h-5 text-[#8ff5ff]" />
         <span className="text-base font-bold text-[#ecedf6]">
           {reviews.length > 0
-            ? `${reviews.length} Comment${reviews.length > 1 ? 's' : ''}`
-            : 'Reviews & Discussions'}
+            ? reviews.length === 1
+              ? t('reviews.comments_count', { count: reviews.length })
+              : t('reviews.comments_count_plural', { count: reviews.length })
+            : t('reviews.title')}
         </span>
       </div>
 
@@ -97,7 +101,7 @@ export function ProjectReviews({
             <textarea
               rows={focused ? 3 : 1}
               className="flex-1 bg-transparent text-sm text-[#ecedf6] placeholder-[#545760] focus:outline-none resize-none leading-relaxed transition-all duration-200"
-              placeholder="Write a comment..."
+              placeholder={t('reviews.write_placeholder')}
               value={content}
               onChange={(e) => setContent(e.target.value)}
               onFocus={() => setFocused(true)}
@@ -134,17 +138,14 @@ export function ProjectReviews({
         <div
           className="flex items-center gap-3 bg-[#161b25] border border-[#2e323b] rounded-2xl px-4 py-3 cursor-text"
           onClick={() =>
-            toast.warning(
-              'Please connect your wallet to comment on this project',
-              {
-                duration: 3000
-              }
-            )
+            toast.warning(t('reviews.connect_wallet_warning'), {
+              duration: 3000
+            })
           }
         >
           <div className="w-9 h-9 rounded-full bg-[#1f2530] border border-[#2e323b] shrink-0" />
           <p className="text-sm text-[#545760] select-none">
-            Write a comment...
+            {t('reviews.write_placeholder')}
           </p>
         </div>
       )}
@@ -157,7 +158,7 @@ export function ProjectReviews({
           </div>
         ) : reviews.length === 0 ? (
           <div className="text-center py-10 text-[#545760] text-sm">
-            No comments yet — be the first to share your thoughts!
+            {t('reviews.empty')}
           </div>
         ) : (
           reviews.map((review) => (

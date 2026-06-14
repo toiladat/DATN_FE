@@ -17,7 +17,7 @@ export function MyProjectsHeader({ projects }: { projects: ProjectSummary[] }) {
       </div>
 
       <Link
-        to="/launch"
+        to="/launch-project"
         className="hidden md:flex items-center gap-2 px-4 py-2 bg-[#8ff5ff] hover:bg-[#a8f8ff] text-[#00383d] rounded-xl text-xs font-bold transition-all duration-200 active:scale-95 shadow-[0_0_16px_rgba(143,245,255,0.2)]"
       >
         <span className="material-symbols-outlined text-base">add</span>

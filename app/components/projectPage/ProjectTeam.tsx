@@ -1,5 +1,6 @@
 import { Users, Wallet, Copy, CheckCheck, Mail } from 'lucide-react'
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import {
   Popover,
   PopoverContent,
@@ -59,6 +60,7 @@ function MemberCard({
   member: Member
   isOwner?: boolean
 }) {
+  const { t } = useTranslation()
   const user = member.user
   const name = user?.name || 'Unknown Member'
   const avatar = user?.avatar
@@ -128,7 +130,7 @@ function MemberCard({
             </div>
           ) : (
             <div className="text-[#73757d] italic">
-              No description provided.
+              {t('team.no_description')}
             </div>
           )}
         </div>
@@ -138,6 +140,7 @@ function MemberCard({
 }
 
 export function ProjectTeam({ project }: { project: ProjectDetail }) {
+  const { t } = useTranslation()
   const members = project.projectMembers ?? []
 
   const creator = project.user
@@ -192,10 +195,10 @@ export function ProjectTeam({ project }: { project: ProjectDetail }) {
           </div>
           <div>
             <p className="text-[#a9abb3] text-sm font-['Space_Grotesk'] font-medium">
-              No team members assigned
+              {t('team.no_members')}
             </p>
             <p className="text-[#73757d] text-xs mt-1">
-              Team members are added when the project is created.
+              {t('team.empty_hint')}
             </p>
           </div>
         </div>

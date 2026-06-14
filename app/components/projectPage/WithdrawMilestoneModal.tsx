@@ -13,13 +13,14 @@ import {
   CheckCircle2,
   AlertTriangle
 } from 'lucide-react'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useWriteContract, usePublicClient } from 'wagmi'
 import { contractAbi, contractAddress } from '@/contract/ContractClient'
 import { useWithdrawMilestone } from '@/apis/queries/project'
 import { toast } from 'sonner'
 import { getErrorMessage } from '@/lib/utils'
 import type { MilestoneRest } from '@/schemas/projectSchema'
+import { useTranslation } from 'react-i18next'
 
 interface WithdrawMilestoneModalProps {
   projectId: string
@@ -32,6 +33,7 @@ export function WithdrawMilestoneModal({
   milestone,
   children
 }: WithdrawMilestoneModalProps) {
+  const { t } = useTranslation()
   const [open, setOpen] = useState(false)
   const [isProcessing, setIsProcessing] = useState(false)
   const publicClient = usePublicClient()
@@ -42,13 +44,41 @@ export function WithdrawMilestoneModal({
 
   const isPending = isContractPending || isProcessing
 
-  // Kiểm tra releaseTime: So sánh theo NGÀY (bỏ qua giờ phút)
-  // Nếu ngày hôm nay >= ngày bắt đầu milestone thì được phép rút
-  const releaseDate = new Date(milestone.startDate)
-  releaseDate.setHours(0, 0, 0, 0) // normalize về đầu ngày
-  const today = new Date()
-  today.setHours(0, 0, 0, 0) // normalize về đầu ngày
-  const isReleaseDatePassed = today >= releaseDate
+  const [blockchainReleaseTime, setBlockchainReleaseTime] = useState<
+    number | null
+  >(null)
+
+  useEffect(() => {
+    async function fetchReleaseTime() {
+      if (!publicClient) return
+      try {
+        const projectIdUint256 = BigInt('0x' + projectId)
+        const milestoneIndex = BigInt(milestone.order - 1)
+        const milestoneData = await publicClient.readContract({
+          address: contractAddress,
+          abi: contractAbi,
+          functionName: 'projectMilestones',
+          args: [projectIdUint256, milestoneIndex]
+        })
+        if (Array.isArray(milestoneData) && milestoneData.length > 0) {
+          setBlockchainReleaseTime(Number(milestoneData[0]))
+        }
+      } catch (e) {
+        console.error('Failed to fetch blockchain milestone release time:', e)
+      }
+    }
+    fetchReleaseTime()
+  }, [projectId, milestone.order, publicClient, open])
+
+  // Sử dụng blockchainReleaseTime nếu có (dành cho Demo Mode/Normal Mode đồng bộ chính xác),
+  // ngược lại fallback về database date.
+  const releaseDate = blockchainReleaseTime
+    ? new Date(blockchainReleaseTime * 1000)
+    : new Date(milestone.startDate)
+
+  const isReleaseDatePassed = blockchainReleaseTime
+    ? Math.floor(Date.now() / 1000) >= blockchainReleaseTime
+    : new Date() >= releaseDate
 
   const handleWithdraw = async () => {
     if (isPending) return
@@ -58,7 +88,7 @@ export function WithdrawMilestoneModal({
       // Chuyển MongoDB ObjectId (24 char hex) sang uint256 BigInt — giống pattern invest
       const projectIdUint256 = BigInt('0x' + projectId)
 
-      toast.info('Đang gửi giao dịch lên Blockchain...')
+      toast.info(t('toast.sending_tx_blockchain'))
 
       // 1. Gọi contract.withdrawMilestone(projectId)
       const tx = await writeContractAsync({
@@ -72,13 +102,11 @@ export function WithdrawMilestoneModal({
 
       await withdrawMilestone({ milestoneId: milestone.id, txHash: tx })
 
-      toast.success(
-        'Yêu cầu rút tiền đã được ghi nhận! Hệ thống sẽ xác minh trong vài giây.'
-      )
+      toast.success(t('toast.withdraw_success'))
       setOpen(false)
     } catch (error: any) {
       console.error('Withdrawal error:', error)
-      toast.error(getErrorMessage(error, 'Đã có lỗi xảy ra'))
+      toast.error(getErrorMessage(error, t('toast.error_occurred')))
     } finally {
       setIsProcessing(false)
     }
@@ -91,7 +119,7 @@ export function WithdrawMilestoneModal({
         <DialogHeader>
           <DialogTitle className="text-[#8ff5ff] font-['Space_Grotesk'] tracking-wide flex items-center gap-2">
             <Banknote className="w-5 h-5" />
-            WITHDRAW MILESTONE FUNDS
+            {t('withdraw.title')}
           </DialogTitle>
         </DialogHeader>
 
@@ -101,7 +129,7 @@ export function WithdrawMilestoneModal({
             <div className="flex justify-between items-start">
               <div>
                 <p className="text-[10px] font-bold uppercase tracking-widest text-[#73757d] mb-1">
-                  Milestone
+                  {t('withdraw.milestone_label')}
                 </p>
                 <p className="text-[#ecedf6] font-['Space_Grotesk'] font-bold">
                   {milestone.title}
@@ -109,7 +137,7 @@ export function WithdrawMilestoneModal({
               </div>
               <div className="text-right">
                 <p className="text-[10px] font-bold uppercase tracking-widest text-[#73757d] mb-1">
-                  Amount
+                  {t('withdraw.amount_label')}
                 </p>
                 <p className="text-[#8ff5ff] font-['Space_Grotesk'] font-bold text-lg">
                   {milestone.amount.toLocaleString()} USDT
@@ -132,8 +160,12 @@ export function WithdrawMilestoneModal({
               )}
               <span className="font-mono">
                 {isReleaseDatePassed
-                  ? `Release time đã qua (${releaseDate.toLocaleDateString()})`
-                  : `Chưa đến release time: ${releaseDate.toLocaleDateString()}`}
+                  ? t('withdraw.release_passed', {
+                      date: releaseDate.toLocaleString()
+                    })
+                  : t('withdraw.release_pending', {
+                      date: releaseDate.toLocaleString()
+                    })}
               </span>
             </div>
           </div>
@@ -142,19 +174,21 @@ export function WithdrawMilestoneModal({
           <div className="flex items-start gap-3 p-4 rounded-xl bg-[#ff716c]/5 border border-[#ff716c]/20">
             <AlertTriangle className="w-4 h-4 text-[#ff716c] shrink-0 mt-0.5" />
             <div className="text-xs text-[#a9abb3] leading-relaxed">
-              <span className="text-[#ff716c] font-bold">Lưu ý: </span>
-              Giao dịch này không thể hoàn tác. Smart contract sẽ chuyển{' '}
+              <span className="text-[#ff716c] font-bold">
+                {t('withdraw.note')}
+              </span>
+              {t('withdraw.warning_prefix')}
               <span className="text-[#ecedf6] font-bold">
                 {milestone.amount.toLocaleString()} USDT
-              </span>{' '}
-              vào ví của bạn. Hệ thống sẽ cần ~10 giây để xác nhận.
+              </span>
+              {t('withdraw.warning_suffix')}
             </div>
           </div>
 
           {/* Verification badge */}
           <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-[#ac89ff]">
             <ShieldCheck className="w-3.5 h-3.5" />
-            <span>Milestone đã được Admin approve</span>
+            <span>{t('withdraw.admin_approved')}</span>
           </div>
 
           {/* CTA Button */}
@@ -167,17 +201,17 @@ export function WithdrawMilestoneModal({
             {isPending ? (
               <>
                 <Loader2 className="w-4 h-4 animate-spin" />
-                ĐANG XỬ LÝ...
+                {t('invest.processing_btn')}
               </>
             ) : !isReleaseDatePassed ? (
               <>
                 <Clock className="w-4 h-4" />
-                CHƯA ĐẾN HẠN RÚT
+                {t('withdraw.not_ready_btn')}
               </>
             ) : (
               <>
                 <Banknote className="w-4 h-4" />
-                XÁC NHẬN RÚT TIỀN
+                {t('withdraw.confirm_btn')}
               </>
             )}
           </button>

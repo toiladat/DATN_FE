@@ -8,6 +8,16 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export const getErrorMessage = (err: any, defaultMsg: string) => {
+  const isRejected =
+    err?.code === 4001 ||
+    err?.name === 'UserRejectedRequestError' ||
+    err?.message?.includes('User rejected the request') ||
+    err?.message?.includes('User denied transaction signature')
+
+  if (isRejected) {
+    return i18n.t('toast.tx_rejected')
+  }
+
   const data = err?.response?.data
   let msg = defaultMsg
 
