@@ -23,8 +23,8 @@ export function ProjectMedia({ project }: { project: ProjectDetail }) {
   // ── Nothing at all ──────────────────────────────────────────────
   if (!hasImages && !hasVideo) {
     return (
-      <div className="lg:col-span-8 rounded-2xl overflow-hidden border border-[#2e323b]/50 bg-[#0d0f14] aspect-video flex items-center justify-center">
-        <p className="text-[#3a3e4a] text-sm font-mono">
+      <div className="lg:col-span-8 rounded-none overflow-hidden border border-border/50 bg-card aspect-video flex items-center justify-center">
+        <p className="text-muted-foreground/40 text-sm font-mono">
           {t('media.no_media')}
         </p>
       </div>
@@ -32,16 +32,16 @@ export function ProjectMedia({ project }: { project: ProjectDetail }) {
   }
 
   return (
-    <div className="lg:col-span-8 flex flex-col rounded-2xl overflow-hidden border border-[#2e323b]/50 bg-[#0d0f14] shadow-[0_10px_40px_rgba(0,0,0,0.5)]">
+    <div className="lg:col-span-8 flex flex-col rounded-none overflow-hidden border border-border/50 bg-card shadow-sm dark:shadow-[0_8px_30px_rgba(0,0,0,0.3)]">
       {/* ── Tab bar — only when both exist ── */}
       {showTabs && (
-        <div className="flex border-b border-[#1a1f2b] shrink-0">
+        <div className="flex border-b border-border/30 shrink-0">
           <button
             onClick={() => setTab('images')}
             className={`flex items-center gap-2 px-5 py-3 text-[11px] font-bold uppercase tracking-widest transition-colors border-b-2 -mb-px ${
               tab === 'images'
-                ? 'text-[#ecedf6] border-[#8ff5ff]'
-                : 'text-[#3a3e4a] border-transparent hover:text-[#73757d]'
+                ? 'text-foreground border-neon-cyan'
+                : 'text-muted-foreground/40 border-transparent hover:text-muted-foreground'
             }`}
           >
             <ImageIcon className="w-3.5 h-3.5" />
@@ -54,8 +54,8 @@ export function ProjectMedia({ project }: { project: ProjectDetail }) {
             onClick={() => setTab('video')}
             className={`flex items-center gap-2 px-5 py-3 text-[11px] font-bold uppercase tracking-widest transition-colors border-b-2 -mb-px ${
               tab === 'video'
-                ? 'text-[#ecedf6] border-[#8ff5ff]'
-                : 'text-[#3a3e4a] border-transparent hover:text-[#73757d]'
+                ? 'text-foreground border-neon-cyan'
+                : 'text-muted-foreground/40 border-transparent hover:text-muted-foreground'
             }`}
           >
             <Film className="w-3.5 h-3.5" />
@@ -88,13 +88,13 @@ export function ProjectMedia({ project }: { project: ProjectDetail }) {
               <>
                 <button
                   onClick={prev}
-                  className="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-black/60 hover:bg-black/90 border border-white/10 flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-all"
+                  className="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-none bg-black/60 hover:bg-black/90 border border-white/10 flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-all"
                 >
                   <ChevronLeft className="w-5 h-5" />
                 </button>
                 <button
                   onClick={next}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-black/60 hover:bg-black/90 border border-white/10 flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-all"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-none bg-black/60 hover:bg-black/90 border border-white/10 flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-all"
                 >
                   <ChevronRight className="w-5 h-5" />
                 </button>
@@ -103,7 +103,7 @@ export function ProjectMedia({ project }: { project: ProjectDetail }) {
 
             {/* Counter — only for multi-image */}
             {images.length > 1 && (
-              <div className="absolute bottom-3 right-3 bg-black/60 backdrop-blur-sm text-white text-[10px] font-mono px-2 py-1 rounded-md">
+              <div className="absolute bottom-3 right-3 bg-black/60 backdrop-blur-sm text-white text-[10px] font-mono px-2 py-1 rounded-none">
                 {idx + 1} / {images.length}
               </div>
             )}
@@ -111,14 +111,14 @@ export function ProjectMedia({ project }: { project: ProjectDetail }) {
 
           {/* Thumbnail strip — only for multi-image */}
           {images.length > 1 && (
-            <div className="flex gap-2 p-3 bg-[#080a0e] overflow-x-auto">
+            <div className="flex gap-2 p-3 bg-background overflow-x-auto">
               {images.map((src, i) => (
                 <button
                   key={i}
                   onClick={() => setIdx(i)}
-                  className={`shrink-0 w-16 h-11 rounded-lg overflow-hidden border-2 transition-all duration-150 ${
+                  className={`shrink-0 w-16 h-11 rounded-none overflow-hidden border-2 transition-all duration-150 ${
                     i === idx
-                      ? 'border-[#8ff5ff] opacity-100 scale-[1.06]'
+                      ? 'border-neon-cyan opacity-100 scale-[1.06]'
                       : 'border-transparent opacity-40 hover:opacity-75'
                   }`}
                 >

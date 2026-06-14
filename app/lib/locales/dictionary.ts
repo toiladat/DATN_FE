@@ -3,6 +3,24 @@ import { errorsEn } from './en/errors.en'
 
 export const dictionary = {
   vi: {
+    // Card Translations
+    'card.funding': 'ĐANG GỌI VỐN',
+    'card.active': 'ĐANG HOẠT ĐỘNG',
+    'card.completed': 'ĐÃ HOÀN THÀNH',
+    'card.pending': 'ĐANG CHỜ DUYỆT',
+    'card.backers_one': '{{count}} người ủng hộ',
+    'card.backers_other': '{{count}} người ủng hộ',
+    'card.sys_progress': 'TIẾN TRÌNH',
+    'card.sys_roadmap': 'LỘ TRÌNH',
+    'card.raised': 'Đã gọi',
+    'card.goal': 'Mục tiêu',
+    'card.done': 'HOÀN THÀNH',
+    'card.updated': 'CẬP NHẬT',
+    'card.days_left': 'NGÀY CÒN LẠI',
+    'card.milestones': 'GIAI ĐOẠN',
+    'card.init_support': 'Đầu tư ngay',
+    'card.view_protocol': 'Xem chi tiết',
+
     // Navigation / Header
     'nav.home': 'Trang chủ',
     'tab.story': 'Câu chuyện',
@@ -896,6 +914,24 @@ export const dictionary = {
     ...errorsVi
   },
   en: {
+    // Card Translations
+    'card.funding': 'FUNDING',
+    'card.active': 'ACTIVE',
+    'card.completed': 'COMPLETED',
+    'card.pending': 'PENDING',
+    'card.backers_one': '{{count}} backer',
+    'card.backers_other': '{{count}} backers',
+    'card.sys_progress': 'SYS.PROGRESS',
+    'card.sys_roadmap': 'SYS.ROADMAP',
+    'card.raised': 'raised',
+    'card.goal': 'Goal',
+    'card.done': 'DONE',
+    'card.updated': 'UPDATED',
+    'card.days_left': 'DAYS LEFT',
+    'card.milestones': 'MILESTONES',
+    'card.init_support': 'Initialize Support',
+    'card.view_protocol': 'View Protocol',
+
     // Navigation / Header
     'nav.home': 'Home',
     'tab.story': 'Story',

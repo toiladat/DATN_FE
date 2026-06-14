@@ -143,7 +143,7 @@ export function BasicsStep({ onStepChange }: BasicsStepProps = {}) {
     if (!result.success) {
       toast.error(t('validation.missing_required_fields'), {
         description: (
-          <div className="flex flex-col gap-1 text-xs mt-1 text-[#ff716c]">
+          <div className="flex flex-col gap-1 text-xs mt-1 text-neon-rose">
             {result.error.issues.map((err: any, idx: number) => (
               <div key={idx} className="flex items-start gap-1">
                 <span className="shrink-0">•</span>
@@ -219,41 +219,41 @@ export function BasicsStep({ onStepChange }: BasicsStepProps = {}) {
             <h3 className="text-xl font-['Space_Grotesk'] font-bold mb-2">
               {t('basics.projectTitle')}
             </h3>
-            <p className="text-[#a9abb3] text-sm">
+            <p className="text-muted-foreground text-sm">
               {t('basics.projectTitleDesc')}
             </p>
           </div>
           <div className="lg:col-span-8 space-y-6">
             <div className="relative">
-              <label className="block text-xs font-['Space_Grotesk'] font-bold uppercase tracking-widest text-[#a9abb3] mb-2">
+              <label className="block text-xs font-['Space_Grotesk'] font-bold uppercase tracking-widest text-muted-foreground mb-2">
                 {t('basics.fieldTitle')}
               </label>
               <Input
-                className="w-full bg-[#10131a] border-[#45484f]/30 rounded-xl px-4 py-6 focus-visible:ring-1 focus-visible:ring-[#8ff5ff] transition-all text-[#ecedf6]"
+                className="w-full bg-background border border-border rounded-none px-4 py-6 focus-visible:ring-1 focus-visible:ring-neon-cyan transition-all text-foreground"
                 maxLength={60}
                 placeholder={t('basics.titlePlaceholder')}
                 type="text"
                 value={basics.title}
                 onChange={(e) => setBasics({ title: e.target.value })}
               />
-              <span className="absolute right-4 bottom-4 text-[10px] text-[#a9abb3]/50">
+              <span className="absolute right-4 bottom-4 text-[10px] text-muted-foreground/50">
                 {basics.title.length} / 60
               </span>
             </div>
 
             <div className="relative">
-              <label className="block text-xs font-['Space_Grotesk'] font-bold uppercase tracking-widest text-[#a9abb3] mb-2">
+              <label className="block text-xs font-['Space_Grotesk'] font-bold uppercase tracking-widest text-muted-foreground mb-2">
                 {t('basics.fieldSubtitle')}
               </label>
               <Textarea
-                className="w-full bg-[#10131a] border-[#45484f]/30 rounded-xl px-4 py-4 focus-visible:ring-1 focus-visible:ring-[#8ff5ff] transition-all text-[#ecedf6] resize-none"
+                className="w-full bg-background border border-border rounded-none px-4 py-4 focus-visible:ring-1 focus-visible:ring-neon-cyan transition-all text-foreground resize-none"
                 maxLength={135}
                 placeholder={t('basics.subtitlePlaceholder')}
                 rows={3}
                 value={basics.subtitle}
                 onChange={(e) => setBasics({ subtitle: e.target.value })}
               />
-              <span className="absolute right-4 bottom-4 text-[10px] text-[#a9abb3]/50">
+              <span className="absolute right-4 bottom-4 text-[10px] text-muted-foreground/50">
                 {basics.subtitle?.length || 0} / 135
               </span>
             </div>
@@ -266,23 +266,23 @@ export function BasicsStep({ onStepChange }: BasicsStepProps = {}) {
             <h3 className="text-xl font-['Space_Grotesk'] font-bold mb-2">
               {t('basics.projectCategory')}
             </h3>
-            <p className="text-[#a9abb3] text-sm">
+            <p className="text-muted-foreground text-sm">
               {t('basics.projectCategoryDesc')}
             </p>
           </div>
           <div className="lg:col-span-8 grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-4">
-              <label className="block text-xs font-['Space_Grotesk'] font-bold uppercase tracking-widest text-[#a9abb3]">
+              <label className="block text-xs font-['Space_Grotesk'] font-bold uppercase tracking-widest text-muted-foreground">
                 {t('basics.primaryCategory')}
               </label>
               <Select
                 value={basics.primaryCategory}
                 onValueChange={(val) => setBasics({ primaryCategory: val })}
               >
-                <SelectTrigger className="w-full bg-[#10131a] border-[#45484f]/30 rounded-xl px-4 py-6 focus:ring-1 focus:ring-[#8ff5ff]">
+                <SelectTrigger className="w-full bg-background border border-border rounded-none px-4 py-6 focus:ring-1 focus:ring-neon-cyan">
                   <SelectValue placeholder={t('basics.selectCategory')} />
                 </SelectTrigger>
-                <SelectContent className="bg-[#161a21] border-[#45484f]/20">
+                <SelectContent className="bg-card border border-border rounded-none">
                   {isLoadingCategories ? (
                     <SelectItem value="loading" disabled>
                       {t('basics.loadingCategories')}
@@ -303,17 +303,17 @@ export function BasicsStep({ onStepChange }: BasicsStepProps = {}) {
             </div>
 
             <div className="space-y-4">
-              <label className="block text-xs font-['Space_Grotesk'] font-bold uppercase tracking-widest text-[#a9abb3]/60">
+              <label className="block text-xs font-['Space_Grotesk'] font-bold uppercase tracking-widest text-muted-foreground/60">
                 {t('basics.secondaryCategory')}
               </label>
               <Select
                 value={basics.secondaryCategory}
                 onValueChange={(val) => setBasics({ secondaryCategory: val })}
               >
-                <SelectTrigger className="w-full bg-[#10131a] border-[#45484f]/30 rounded-xl px-4 py-6 focus:ring-1 focus:ring-[#8ff5ff]">
+                <SelectTrigger className="w-full bg-background border border-border rounded-none px-4 py-6 focus:ring-1 focus:ring-neon-cyan">
                   <SelectValue placeholder={t('basics.selectCategory')} />
                 </SelectTrigger>
-                <SelectContent className="bg-[#161a21] border-[#45484f]/20">
+                <SelectContent className="bg-card border border-border rounded-none">
                   {isLoadingCategories ? (
                     <SelectItem value="loading" disabled>
                       {t('basics.loadingCategories')}
@@ -341,17 +341,17 @@ export function BasicsStep({ onStepChange }: BasicsStepProps = {}) {
             <h3 className="text-xl font-['Space_Grotesk'] font-bold mb-2">
               {t('basics.projectLocation')}
             </h3>
-            <p className="text-[#a9abb3] text-sm">
+            <p className="text-muted-foreground text-sm">
               {t('basics.projectLocationDesc')}
             </p>
           </div>
           <div className="lg:col-span-8">
             <div className="relative group/loc">
-              <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-[#a9abb3]/60 group-focus-within/loc:text-[#8ff5ff] transition-colors">
+              <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground/60 group-focus-within/loc:text-neon-cyan transition-colors">
                 location_on
               </span>
               <Input
-                className="w-full bg-[#10131a] border-[#45484f]/30 rounded-xl pl-12 pr-4 py-6 focus-visible:ring-1 focus-visible:ring-[#8ff5ff] transition-all text-[#ecedf6]"
+                className="w-full bg-background border border-border rounded-none pl-12 pr-4 py-6 focus-visible:ring-1 focus-visible:ring-neon-cyan transition-all text-foreground"
                 placeholder={t('basics.searchLocationPlaceholder')}
                 type="text"
                 value={basics.location}
@@ -367,14 +367,14 @@ export function BasicsStep({ onStepChange }: BasicsStepProps = {}) {
             <h3 className="text-xl font-['Space_Grotesk'] font-bold mb-2">
               {t('basics.projectMedia')}
             </h3>
-            <p className="text-[#a9abb3] text-sm">
+            <p className="text-muted-foreground text-sm">
               {t('basics.projectMediaDesc')}
             </p>
           </div>
           <div className="lg:col-span-8 space-y-8">
             {/* Image Upload */}
             <div>
-              <Label className="block text-sm font-medium text-[#a9abb3] mb-2">
+              <Label className="block text-sm font-medium text-muted-foreground mb-2">
                 {t('basics.referenceImage')}
               </Label>
               <ImageUpload
@@ -397,7 +397,7 @@ export function BasicsStep({ onStepChange }: BasicsStepProps = {}) {
                 }}
               />
               {isUploadingImage && (
-                <p className="text-sm text-[#8ff5ff] mt-2">
+                <p className="text-sm text-neon-cyan mt-2">
                   {t('basics.uploadingImages')}
                 </p>
               )}
@@ -407,7 +407,7 @@ export function BasicsStep({ onStepChange }: BasicsStepProps = {}) {
             <div className="space-y-4">
               <div
                 onClick={() => videoInputRef.current?.click()}
-                className="relative group/video cursor-pointer rounded-xl border border-[#45484f]/30 hover:bg-[#1c2028] transition-all bg-[#10131a] p-8 flex items-center gap-6"
+                className="relative group/video cursor-pointer rounded-none border border-border hover:bg-card/80 transition-all bg-background p-8 flex items-center gap-6"
               >
                 <input
                   type="file"
@@ -416,14 +416,14 @@ export function BasicsStep({ onStepChange }: BasicsStepProps = {}) {
                   ref={videoInputRef}
                   onChange={handleVideoChange}
                 />
-                <div className="w-16 h-16 rounded-full bg-[#22262f] flex items-center justify-center text-[#8ff5ff] group-hover/video:bg-[#8ff5ff] group-hover/video:text-[#005d63] transition-colors">
+                <div className="w-16 h-16 rounded-none bg-muted flex items-center justify-center text-neon-cyan group-hover/video:bg-neon-cyan group-hover/video:text-background transition-colors border border-border/40">
                   <span className="material-symbols-outlined text-3xl">
                     {basics.video ? 'smart_display' : 'videocam'}
                   </span>
                 </div>
                 <div className="flex-1">
                   <h4 className="font-bold">{t('basics.projectVideo')}</h4>
-                  <p className="text-sm text-[#a9abb3]">
+                  <p className="text-sm text-muted-foreground">
                     {isUploadingVideo
                       ? t('basics.uploadingVideo')
                       : basics.video
@@ -434,7 +434,7 @@ export function BasicsStep({ onStepChange }: BasicsStepProps = {}) {
                 <button
                   type="button"
                   disabled={isUploadingVideo}
-                  className="text-xs font-bold uppercase tracking-widest text-[#8ff5ff] border border-[#8ff5ff]/20 px-4 py-2 rounded-lg group-hover/video:bg-[#8ff5ff]/10 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="text-xs font-bold uppercase tracking-widest text-neon-cyan border border-neon-cyan/25 px-4 py-2 rounded-none group-hover/video:bg-neon-cyan/10 transition-all shadow-[1px_1px_0px_0px_var(--neon-purple)] hover:shadow-[2px_2px_0px_0px_var(--neon-purple)] disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {isUploadingVideo
                     ? t('basics.videoUploading')
@@ -445,7 +445,7 @@ export function BasicsStep({ onStepChange }: BasicsStepProps = {}) {
               </div>
 
               {basics.video && (
-                <div className="relative rounded-xl overflow-hidden border border-[#45484f]/30 bg-[#10131a] aspect-video shadow-lg">
+                <div className="relative rounded-none overflow-hidden border border-border bg-background aspect-video shadow-[2px_2px_0px_rgba(0,0,0,0.15)]">
                   <video
                     src={basics.video}
                     controls
@@ -466,7 +466,7 @@ export function BasicsStep({ onStepChange }: BasicsStepProps = {}) {
                       if (videoInputRef.current)
                         videoInputRef.current.value = ''
                     }}
-                    className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center bg-black/60 hover:bg-[#ff716c]/80 text-white rounded-full transition-colors backdrop-blur-md"
+                    className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center bg-black/60 hover:bg-neon-rose/80 text-white rounded-none transition-colors backdrop-blur-md border border-border/40"
                     title={t('basics.removeVideo')}
                   >
                     <span className="material-symbols-outlined text-sm">
@@ -485,16 +485,16 @@ export function BasicsStep({ onStepChange }: BasicsStepProps = {}) {
             <h3 className="text-xl font-['Space_Grotesk'] font-bold mb-2">
               {t('basics.projectStory')}
             </h3>
-            <p className="text-[#a9abb3] text-sm">
+            <p className="text-muted-foreground text-sm">
               {t('basics.projectStoryDesc')}
             </p>
           </div>
           <div className="lg:col-span-8 space-y-8">
             <div className="space-y-4">
-              <label className="block text-xs font-['Space_Grotesk'] font-bold uppercase tracking-widest text-[#a9abb3]">
+              <label className="block text-xs font-['Space_Grotesk'] font-bold uppercase tracking-widest text-muted-foreground">
                 {t('basics.projectDescription')}
               </label>
-              <div className="rounded-2xl overflow-hidden border border-[#45484f]/30">
+              <div className="rounded-none overflow-hidden border border-border">
                 <RichTextEditor
                   height={450}
                   placeholder={t('basics.projectDescriptionPlaceholder')}
@@ -506,16 +506,16 @@ export function BasicsStep({ onStepChange }: BasicsStepProps = {}) {
 
             <div className="space-y-4">
               <div className="flex items-center justify-between mt-2">
-                <label className="block text-xs font-['Space_Grotesk'] font-bold uppercase tracking-widest text-[#a9abb3]">
+                <label className="block text-xs font-['Space_Grotesk'] font-bold uppercase tracking-widest text-muted-foreground">
                   {t('basics.risks')}
                 </label>
-                <span className="text-[10px] text-[#a9abb3] bg-[#22262f] px-2 py-1 rounded-full uppercase font-bold tracking-widest">
+                <span className="text-[10px] text-muted-foreground bg-muted px-2 py-1 rounded-none uppercase font-bold tracking-widest border border-border/40">
                   {t('common.required')}
                 </span>
               </div>
-              <div className="rounded-2xl border border-[#45484f]/30 bg-[#10131a] relative">
+              <div className="rounded-none border border-border bg-background relative">
                 <Textarea
-                  className="w-full bg-transparent border-none focus-visible:ring-0 text-[#ecedf6] px-4 py-4 min-h-[120px] resize-none shadow-none"
+                  className="w-full bg-transparent border-none focus-visible:ring-0 text-foreground px-4 py-4 min-h-[120px] resize-none shadow-none rounded-none"
                   placeholder={t('basics.risksPlaceholder')}
                   value={basics.risks || ''}
                   onChange={(e) => setBasics({ risks: e.target.value })}
@@ -530,17 +530,17 @@ export function BasicsStep({ onStepChange }: BasicsStepProps = {}) {
             <h3 className="text-xl font-['Space_Grotesk'] font-bold mb-2">
               {t('basics.fundingGoal')}
             </h3>
-            <p className="text-[#a9abb3] text-sm">
+            <p className="text-muted-foreground text-sm">
               {t('basics.fundingGoalDesc')}
             </p>
           </div>
           <div className="lg:col-span-8">
             <div className="relative max-w-sm">
-              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-lg font-bold text-[#8ff5ff]">
+              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-lg font-bold text-neon-cyan">
                 €
               </span>
               <Input
-                className="w-full bg-[#10131a] border-[#45484f]/30 rounded-xl pl-10 pr-4 py-6 focus-visible:ring-1 focus-visible:ring-[#8ff5ff] transition-all text-2xl font-bold text-[#ecedf6]"
+                className="w-full bg-background border border-border rounded-none pl-10 pr-4 py-6 focus-visible:ring-1 focus-visible:ring-neon-cyan transition-all text-2xl font-bold text-foreground"
                 placeholder="50,000"
                 type="number"
                 value={basics.fundingGoal || ''}
@@ -549,12 +549,12 @@ export function BasicsStep({ onStepChange }: BasicsStepProps = {}) {
                 }
               />
             </div>
-            <div className="mt-6 p-4 rounded-xl bg-[#9f0519]/10 border border-[#d7383b]/20 flex gap-4">
-              <span className="material-symbols-outlined text-[#d7383b]">
+            <div className="mt-6 p-4 rounded-none bg-neon-rose/5 border border-neon-rose/20 flex gap-4">
+              <span className="material-symbols-outlined text-neon-rose">
                 warning
               </span>
-              <p className="text-sm text-[#a9abb3] leading-relaxed">
-                <strong className="text-[#d7383b]">
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                <strong className="text-neon-rose">
                   {t('basics.allOrNothing')}:
                 </strong>{' '}
                 {t('basics.allOrNothingDesc')}
@@ -569,13 +569,13 @@ export function BasicsStep({ onStepChange }: BasicsStepProps = {}) {
             <h3 className="text-xl font-['Space_Grotesk'] font-bold mb-2">
               {t('basics.targetLaunchDate')}
             </h3>
-            <p className="text-[#a9abb3] text-sm">
+            <p className="text-muted-foreground text-sm">
               {t('basics.targetLaunchDateDesc')}
             </p>
           </div>
           <div className="lg:col-span-8">
             <div className="mb-6">
-              <label className="text-[10px] uppercase tracking-tighter text-[#a9abb3] font-bold block mb-2">
+              <label className="text-[10px] uppercase tracking-tighter text-muted-foreground font-bold block mb-2">
                 {t('basics.selectDate')}
               </label>
               <div className="flex flex-wrap items-center gap-3">
@@ -584,11 +584,11 @@ export function BasicsStep({ onStepChange }: BasicsStepProps = {}) {
                     <Button
                       variant="outline"
                       className={cn(
-                        'w-full md:w-[280px] justify-start text-left font-normal bg-[#10131a] border-[#45484f]/30 rounded-xl px-4 py-6 focus:ring-1 focus:ring-[#8ff5ff] hover:bg-[#161a21] text-[#ecedf6] border-solid shadow-none',
-                        !startDate && 'text-[#45484f]'
+                        'w-full md:w-[280px] justify-start text-left font-normal bg-background border border-border rounded-none px-4 py-6 focus:ring-1 focus:ring-neon-cyan hover:bg-card text-foreground border-solid shadow-none',
+                        !startDate && 'text-muted-foreground'
                       )}
                     >
-                      <span className="material-symbols-outlined text-[#8ff5ff] mr-2 text-xl">
+                      <span className="material-symbols-outlined text-neon-cyan mr-2 text-xl">
                         calendar_month
                       </span>
                       {startDate ? (
@@ -599,7 +599,7 @@ export function BasicsStep({ onStepChange }: BasicsStepProps = {}) {
                     </Button>
                   </PopoverTrigger>
                   <PopoverContent
-                    className="w-auto p-0 bg-[#161a21] border-[#45484f]/20 text-[#ecedf6]"
+                    className="w-auto p-0 bg-card border border-border text-foreground rounded-none"
                     align="start"
                   >
                     <Calendar
@@ -607,22 +607,22 @@ export function BasicsStep({ onStepChange }: BasicsStepProps = {}) {
                       selected={startDate}
                       onSelect={(date) => handleDateSelect(date, 'startDate')}
                       initialFocus
-                      className="bg-[#161a21] rounded-xl text-[#ecedf6]"
+                      className="bg-card rounded-none text-foreground"
                     />
                   </PopoverContent>
                 </Popover>
               </div>
             </div>
 
-            <div className="p-5 bg-[#22262f]/40 backdrop-blur-xl border border-[#8ff5ff]/5 rounded-2xl flex items-center gap-6">
-              <div className="w-12 h-12 rounded-full bg-[#8ff5ff]/10 flex items-center justify-center text-[#8ff5ff]">
+            <div className="p-5 bg-card/40 backdrop-blur-xl border border-border rounded-none flex items-center gap-6">
+              <div className="w-12 h-12 rounded-none border border-neon-cyan/20 bg-neon-cyan/10 flex items-center justify-center text-neon-cyan">
                 <span className="material-symbols-outlined">timeline</span>
               </div>
               <div>
                 <h5 className="font-bold text-sm">
                   {t('basics.recommendedTimeline')}
                 </h5>
-                <p className="text-xs text-[#a9abb3]">
+                <p className="text-xs text-muted-foreground">
                   {t('basics.recommendedTimelineDesc')}
                 </p>
               </div>
@@ -636,7 +636,7 @@ export function BasicsStep({ onStepChange }: BasicsStepProps = {}) {
             <h3 className="text-xl font-['Space_Grotesk'] font-bold mb-2">
               {t('basics.campaignDuration')}
             </h3>
-            <p className="text-[#a9abb3] text-sm">
+            <p className="text-muted-foreground text-sm">
               {t('basics.campaignDurationDesc')}
             </p>
           </div>
@@ -654,26 +654,26 @@ export function BasicsStep({ onStepChange }: BasicsStepProps = {}) {
                 />
                 <label
                   htmlFor="fixed"
-                  className="absolute inset-0 cursor-pointer rounded-2xl z-0"
+                  className="absolute inset-0 cursor-pointer rounded-none z-0"
                 ></label>
-                <div className="block h-full p-6 bg-[#10131a] border border-[#45484f]/30 rounded-2xl peer-data-[state=checked]:border-[#8ff5ff] peer-data-[state=checked]:bg-[#8ff5ff]/5 transition-all relative z-10 pointer-events-none">
+                <div className="block h-full p-6 bg-background border border-border rounded-none peer-data-[state=checked]:border-neon-cyan peer-data-[state=checked]:bg-neon-cyan/5 peer-data-[state=checked]:shadow-[2px_2px_0px_var(--neon-cyan)] transition-all relative z-10 pointer-events-none">
                   <div className="flex justify-between items-start mb-4">
-                    <span className="material-symbols-outlined text-[#a9abb3] peer-data-[state=checked]:text-[#8ff5ff]">
+                    <span className="material-symbols-outlined text-muted-foreground peer-data-[state=checked]:text-neon-cyan">
                       schedule
                     </span>
                     {/* Fake radio indicator inside the box for stylistic purpose */}
-                    <div className="w-5 h-5 rounded-full border-2 border-[#45484f] peer-data-[state=checked]:border-[#8ff5ff] peer-data-[state=checked]:bg-[#8ff5ff] flex items-center justify-center">
-                      <div className="w-2 h-2 rounded-full bg-[#005d63] peer-data-[state=unchecked]:hidden"></div>
+                    <div className="w-5 h-5 rounded-none border-2 border-border peer-data-[state=checked]:border-neon-cyan peer-data-[state=checked]:bg-neon-cyan flex items-center justify-center">
+                      <div className="w-2 h-2 rounded-none bg-zinc-950 dark:bg-white peer-data-[state=unchecked]:hidden"></div>
                     </div>
                   </div>
                   <h4 className="font-bold mb-1 pointer-events-auto">
                     {t('basics.fixedDays')}
                   </h4>
-                  <p className="text-xs text-[#a9abb3] mb-4 pointer-events-auto">
+                  <p className="text-xs text-muted-foreground mb-4 pointer-events-auto">
                     {t('basics.fixedDaysDesc')}
                   </p>
                   <Input
-                    className="w-full bg-[#161a21]/50 border border-[#45484f]/20 rounded-lg px-3 py-2 text-sm focus-visible:ring-1 focus-visible:ring-[#8ff5ff] h-10 pointer-events-auto"
+                    className="w-full bg-muted/50 border border-border rounded-none px-3 py-2 text-sm focus-visible:ring-1 focus-visible:ring-neon-cyan h-10 pointer-events-auto"
                     placeholder="30"
                     type="number"
                     value={campaignDays || ''}
@@ -700,21 +700,21 @@ export function BasicsStep({ onStepChange }: BasicsStepProps = {}) {
                 />
                 <label
                   htmlFor="specific"
-                  className="absolute inset-0 cursor-pointer rounded-2xl z-0"
+                  className="absolute inset-0 cursor-pointer rounded-none z-0"
                 ></label>
-                <div className="block h-full p-6 bg-[#10131a] border border-[#45484f]/30 rounded-2xl peer-data-[state=checked]:border-[#8ff5ff] peer-data-[state=checked]:bg-[#8ff5ff]/5 transition-all relative z-10 pointer-events-none">
+                <div className="block h-full p-6 bg-background border border-border rounded-none peer-data-[state=checked]:border-neon-cyan peer-data-[state=checked]:bg-neon-cyan/5 peer-data-[state=checked]:shadow-[2px_2px_0px_var(--neon-cyan)] transition-all relative z-10 pointer-events-none">
                   <div className="flex justify-between items-start mb-4">
-                    <span className="material-symbols-outlined text-[#a9abb3] peer-data-[state=checked]:text-[#8ff5ff]">
+                    <span className="material-symbols-outlined text-muted-foreground peer-data-[state=checked]:text-neon-cyan">
                       event
                     </span>
-                    <div className="w-5 h-5 rounded-full border-2 border-[#45484f] peer-data-[state=checked]:border-[#8ff5ff] peer-data-[state=checked]:bg-[#8ff5ff] flex items-center justify-center">
-                      <div className="w-2 h-2 rounded-full bg-[#005d63] peer-data-[state=unchecked]:hidden"></div>
+                    <div className="w-5 h-5 rounded-none border-2 border-border peer-data-[state=checked]:border-neon-cyan peer-data-[state=checked]:bg-neon-cyan flex items-center justify-center">
+                      <div className="w-2 h-2 rounded-none bg-zinc-950 dark:bg-white peer-data-[state=unchecked]:hidden"></div>
                     </div>
                   </div>
                   <h4 className="font-bold mb-1 pointer-events-auto">
                     {t('basics.endSpecificDate')}
                   </h4>
-                  <p className="text-xs text-[#a9abb3] mb-4 pointer-events-auto">
+                  <p className="text-xs text-muted-foreground mb-4 pointer-events-auto">
                     {t('basics.endSpecificDateDesc')}
                   </p>
 
@@ -724,8 +724,8 @@ export function BasicsStep({ onStepChange }: BasicsStepProps = {}) {
                         <Button
                           variant="outline"
                           className={cn(
-                            'w-full justify-start text-left font-normal bg-[#161a21]/50 border-[#45484f]/20 rounded-lg px-3 py-2 text-sm focus-visible:ring-1 focus-visible:ring-[#8ff5ff] h-10 hover:bg-[#22262f] text-[#ecedf6] border-solid shadow-none',
-                            !endDate && 'text-[#45484f]'
+                            'w-full justify-start text-left font-normal bg-muted/50 border border-border rounded-none px-3 py-2 text-sm focus-visible:ring-1 focus-visible:ring-neon-cyan h-10 hover:bg-card text-foreground border-solid shadow-none',
+                            !endDate && 'text-muted-foreground'
                           )}
                         >
                           <span className="material-symbols-outlined text-sm mr-2">
@@ -739,7 +739,7 @@ export function BasicsStep({ onStepChange }: BasicsStepProps = {}) {
                         </Button>
                       </PopoverTrigger>
                       <PopoverContent
-                        className="w-auto p-0 bg-[#161a21] border-[#45484f]/20 text-[#ecedf6]"
+                        className="w-auto p-0 bg-card border border-border text-foreground rounded-none"
                         align="start"
                       >
                         <Calendar
@@ -747,7 +747,7 @@ export function BasicsStep({ onStepChange }: BasicsStepProps = {}) {
                           selected={endDate}
                           onSelect={(date) => handleDateSelect(date, 'endDate')}
                           initialFocus
-                          className="bg-[#161a21] rounded-xl text-[#ecedf6]"
+                          className="bg-card rounded-none text-foreground"
                         />
                       </PopoverContent>
                     </Popover>

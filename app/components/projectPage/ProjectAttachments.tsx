@@ -19,12 +19,14 @@ export function ProjectAttachments({ project }: ProjectAttachmentsProps) {
 
   if (attachments.length === 0) {
     return (
-      <div className="bg-[#10131a] rounded-2xl border border-[#2e323b]/50 p-12 text-center mt-6">
-        <Archive className="w-12 h-12 text-[#2e323b] mx-auto mb-4" />
-        <h3 className="text-[#ecedf6] font-['Space_Grotesk'] font-bold text-lg mb-2">
+      <div className="bg-card rounded-none border border-border/50 p-12 text-center mt-6">
+        <Archive className="w-12 h-12 text-muted-foreground/45 mx-auto mb-4" />
+        <h3 className="text-foreground font-['Space_Grotesk'] font-bold text-lg mb-2">
           {t('attachments.no_attachments_found')}
         </h3>
-        <p className="text-[#73757d]">{t('attachments.no_attachments_desc')}</p>
+        <p className="text-muted-foreground/60">
+          {t('attachments.no_attachments_desc')}
+        </p>
       </div>
     )
   }
@@ -32,13 +34,13 @@ export function ProjectAttachments({ project }: ProjectAttachmentsProps) {
   return (
     <div className="space-y-6 mt-6">
       <div className="flex items-center justify-between mb-8">
-        <h2 className="text-2xl font-['Space_Grotesk'] font-bold text-[#ecedf6]">
+        <h2 className="text-2xl font-['Space_Grotesk'] font-bold text-foreground">
           {t('attachments.project_documents')}
-          <span className="text-sm text-[#a9abb3] font-normal ml-3">
+          <span className="text-sm text-muted-foreground font-normal ml-3">
             {t('attachments.files_count', { count: attachments.length })}
           </span>
         </h2>
-        <div className="h-[1px] flex-1 bg-gradient-to-r from-[#2e323b] to-transparent ml-6" />
+        <div className="h-[1px] flex-1 bg-gradient-to-r from-border to-transparent ml-6" />
       </div>
 
       <div className="flex flex-col gap-3">
@@ -58,35 +60,35 @@ export function ProjectAttachments({ project }: ProjectAttachmentsProps) {
           return (
             <div
               key={att.id}
-              className="group flex items-center justify-between p-4 bg-[#10131a] rounded-xl border border-[#2e323b]/50 hover:border-[#8ff5ff]/30 transition-all duration-300"
+              className="group flex items-center justify-between p-4 bg-card rounded-none border border-border/50 hover:border-neon-cyan/30 transition-all duration-300"
             >
               <div className="flex items-center gap-4 min-w-0">
                 {/* Icon */}
-                <div className="w-12 h-12 rounded-lg bg-[#161a21] border border-[#2e323b]/50 flex items-center justify-center shrink-0 group-hover:border-[#8ff5ff]/20 transition-colors relative overflow-hidden">
+                <div className="w-12 h-12 rounded-none bg-background border border-border/50 flex items-center justify-center shrink-0 group-hover:border-neon-cyan/20 transition-colors relative overflow-hidden">
                   <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent" />
                   {isDoc ? (
-                    <FileText className="w-5 h-5 text-[#ac89ff] relative z-10" />
+                    <FileText className="w-5 h-5 text-neon-purple relative z-10" />
                   ) : (
-                    <ImageIcon className="w-5 h-5 text-[#8ff5ff] relative z-10" />
+                    <ImageIcon className="w-5 h-5 text-neon-cyan relative z-10" />
                   )}
                 </div>
 
                 {/* Details */}
                 <div className="min-w-0">
                   <div className="flex items-center gap-2 mb-1">
-                    <h3 className="text-sm font-['Space_Grotesk'] font-bold text-[#ecedf6] truncate group-hover:text-[#8ff5ff] transition-colors uppercase tracking-widest">
+                    <h3 className="text-sm font-['Space_Grotesk'] font-bold text-foreground truncate group-hover:text-neon-cyan transition-colors uppercase tracking-widest">
                       {categoryName}
                     </h3>
-                    <span className="shrink-0 px-1.5 py-0.5 rounded text-[9px] font-mono font-bold bg-[#1c2028] text-[#a9abb3] border border-[#2e323b] uppercase tracking-wider">
+                    <span className="shrink-0 px-1.5 py-0.5 rounded-none font-mono text-[9px] font-bold bg-background text-muted-foreground border border-border uppercase tracking-wider">
                       {ext}
                     </span>
                   </div>
                   {att.description ? (
-                    <p className="text-xs text-[#73757d] truncate max-w-md">
+                    <p className="text-xs text-muted-foreground/60 truncate max-w-md">
                       {att.description}
                     </p>
                   ) : (
-                    <p className="text-xs text-[#45484f] italic">
+                    <p className="text-xs text-muted-foreground/45 italic">
                       {t('team.no_description')}
                     </p>
                   )}
@@ -99,7 +101,7 @@ export function ProjectAttachments({ project }: ProjectAttachmentsProps) {
                   href={att.url}
                   target="_blank"
                   rel="noreferrer"
-                  className="w-10 h-10 rounded-full bg-[#161a21] flex items-center justify-center hover:bg-[#8ff5ff]/10 text-[#a9abb3] hover:text-[#8ff5ff] transition-colors border border-[#2e323b]/50 hover:border-[#8ff5ff]/30"
+                  className="w-10 h-10 rounded-none bg-background flex items-center justify-center hover:bg-neon-cyan/10 text-muted-foreground hover:text-neon-cyan transition-colors border border-border/50 hover:border-neon-cyan/30"
                   title={t('common.view_file')}
                 >
                   <ExternalLink className="w-4 h-4" />

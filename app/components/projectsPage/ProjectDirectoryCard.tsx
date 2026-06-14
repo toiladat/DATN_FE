@@ -9,22 +9,7 @@ import { toast } from 'sonner'
 import { useTranslation } from 'react-i18next'
 import { getErrorMessage } from '@/lib/utils'
 
-// ─── Màu accent tự động từ category ─────────────────────────────────────────
-const CATEGORY_COLORS: Record<string, string> = {
-  ai: '#8ff5ff',
-  defi: '#8ff5ff',
-  gaming: '#8ff5ff',
-  infrastructure: '#ac89ff',
-  metaverse: '#ff716c',
-  privacy: '#ac89ff',
-  nft: '#ac89ff'
-}
-const ACCENT_CYCLE = ['#8ff5ff', '#ac89ff', '#ff716c'] as const
-
-function getAccentColor(category: string | undefined, index: number): string {
-  const key = (category ?? '').toLowerCase()
-  return CATEGORY_COLORS[key] ?? ACCENT_CYCLE[index % 3]
-}
+// All card accents now use the system-level neon-cyan variable for aesthetic consistency.
 
 // ─── Status: BE dùng 'active' | 'progress' | 'pending' | 'success' | 'rejected'
 // 'progress' = đang gây quỹ (FUNDING) → hiển thị thanh tiến độ funding
@@ -51,7 +36,7 @@ const itemVariant = {
 export function ProjectDirectoryCard({ project, index = 0 }: Props) {
   const { t } = useTranslation()
   const isFunding = isFundingStatus(project.status)
-  const accentColor = getAccentColor(project.primaryCategory, index)
+  const accentColor = 'var(--neon-cyan)'
 
   const [isLiked, setIsLiked] = useState(project.isLiked ?? false)
   const { isAuthenticated } = useAuth()
@@ -128,7 +113,7 @@ export function ProjectDirectoryCard({ project, index = 0 }: Props) {
     <motion.div variants={itemVariant} className="h-full">
       <Link
         to={`/projects/${project.id}`}
-        className="group bg-[#10131a] rounded-2xl overflow-hidden border border-[#2e323b]/50 hover:border-[#2e323b] transition-all duration-500 ease-out flex flex-col relative h-full shadow-[0_8px_20px_rgba(0,0,0,0.4)]"
+        className="group bg-card/65 backdrop-blur-md rounded-none overflow-hidden border border-border/40 hover:border-neon-cyan/50 hover:-translate-y-1 transition-all duration-300 ease-out flex flex-col relative h-full shadow-[0_4px_16px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_32px_rgba(143,245,255,0.04)] dark:shadow-[0_4px_16px_rgba(0,0,0,0.3)] dark:hover:shadow-[0_12px_32px_rgba(143,245,255,0.04)] will-change-transform transform-gpu"
       >
         {/* Hover Glow */}
         <div
@@ -139,22 +124,22 @@ export function ProjectDirectoryCard({ project, index = 0 }: Props) {
         />
 
         {/* ── Image Header ─────────────────────────────────────────────── */}
-        <div className="h-36 overflow-hidden relative shrink-0">
+        <div className="h-36 overflow-hidden relative shrink-0 isolate rounded-none">
           <img
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000 ease-out opacity-60 group-hover:opacity-100 mix-blend-luminosity group-hover:mix-blend-normal"
+            className="w-full h-full object-cover transform-gpu group-hover:scale-105 transition-transform duration-1000 ease-out opacity-90 group-hover:opacity-100 will-change-transform"
             src={
               project.image ??
               'https://placehold.co/600x300/0a0c10/2e323b?text=NO+IMAGE'
             }
             alt={project.title}
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#10131a] via-[#10131a]/50 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-card via-card/10 to-transparent" />
 
           {/* Category Badge (Top Left) */}
           <div className="absolute top-3 left-3 z-10">
             {project.primaryCategory && (
               <span
-                className="bg-[#0a0c10]/90 backdrop-blur-md px-2.5 py-1 rounded-full border border-[#2e323b] text-[9px] font-bold uppercase tracking-[0.15em] shadow-lg"
+                className="bg-background/95 backdrop-blur-md px-2.5 py-1 rounded-none border border-border/60 text-[9px] font-mono font-bold uppercase tracking-[0.15em] shadow-md"
                 style={{ color: accentColor }}
               >
                 {project.primaryCategory}
@@ -165,24 +150,24 @@ export function ProjectDirectoryCard({ project, index = 0 }: Props) {
           {/* Status Badge (Top Right) */}
           <div className="absolute top-3 right-3 z-10">
             {isFunding ? (
-              <span className="bg-[#0a0c10]/90 backdrop-blur-md text-[#8ff5ff] px-2.5 py-1 rounded-full text-[9px] font-bold border border-[#8ff5ff]/30 uppercase tracking-[0.15em] flex items-center gap-1.5 shadow-lg">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#8ff5ff] animate-pulse shadow-[0_0_8px_#8ff5ff]"></span>
-                FUNDING
+              <span className="bg-background/95 backdrop-blur-md text-neon-cyan px-2.5 py-1 rounded-none text-[9px] font-mono font-bold border border-neon-cyan/30 uppercase tracking-[0.15em] flex items-center gap-1.5 shadow-md">
+                <span className="w-1.5 h-1.5 rounded-full bg-neon-cyan animate-pulse shadow-[0_0_8px_var(--color-neon-cyan)]"></span>
+                {t('card.funding')}
               </span>
             ) : project.status === 'active' ? (
-              <span className="bg-[#0a0c10]/90 backdrop-blur-md text-[#ac89ff] px-2.5 py-1 rounded-full text-[9px] font-bold border border-[#ac89ff]/30 uppercase tracking-[0.15em] flex items-center gap-1.5 shadow-lg">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#ac89ff] animate-pulse shadow-[0_0_8px_#ac89ff]"></span>
-                ACTIVE
+              <span className="bg-background/95 backdrop-blur-md text-neon-cyan px-2.5 py-1 rounded-none text-[9px] font-mono font-bold border border-neon-cyan/30 uppercase tracking-[0.15em] flex items-center gap-1.5 shadow-md">
+                <span className="w-1.5 h-1.5 rounded-full bg-neon-cyan animate-pulse shadow-[0_0_8px_var(--color-neon-cyan)]"></span>
+                {t('card.active')}
               </span>
             ) : project.status === 'success' ? (
-              <span className="bg-[#0a0c10]/90 backdrop-blur-md text-[#8ff5ff] px-2.5 py-1 rounded-full text-[9px] font-bold border border-[#8ff5ff]/30 uppercase tracking-[0.15em] flex items-center gap-1.5 shadow-lg">
-                <Shield className="w-3 h-3 text-[#8ff5ff]" />
-                COMPLETED
+              <span className="bg-background/95 backdrop-blur-md text-neon-cyan px-2.5 py-1 rounded-none text-[9px] font-mono font-bold border border-neon-cyan/30 uppercase tracking-[0.15em] flex items-center gap-1.5 shadow-md">
+                <Shield className="w-3 h-3 text-neon-cyan" />
+                {t('card.completed')}
               </span>
             ) : (
-              <span className="bg-[#0a0c10]/90 backdrop-blur-md text-[#a9abb3] px-2.5 py-1 rounded-full text-[9px] font-bold border border-[#2e323b] uppercase tracking-[0.15em] flex items-center gap-1.5 shadow-lg">
+              <span className="bg-background/95 backdrop-blur-md text-muted-foreground px-2.5 py-1 rounded-none text-[9px] font-mono font-bold border border-border uppercase tracking-[0.15em] flex items-center gap-1.5 shadow-md">
                 <Activity className="w-3 h-3" />
-                {project.status?.toUpperCase() ?? 'PENDING'}
+                {t(`card.${project.status?.toLowerCase() ?? 'pending'}`)}
               </span>
             )}
           </div>
@@ -193,10 +178,10 @@ export function ProjectDirectoryCard({ project, index = 0 }: Props) {
           <div>
             <div className="flex justify-between gap-3 mb-4 min-h-[58px]">
               <div className="flex-1">
-                <h3 className="text-base font-['Space_Grotesk'] font-bold text-[#ecedf6] mb-1.5 group-hover:text-white transition-colors leading-snug line-clamp-1">
+                <h3 className="text-base font-headline font-bold text-foreground mb-1.5 group-hover:text-neon-cyan dark:group-hover:text-white transition-colors leading-snug line-clamp-1">
                   {project.title}
                 </h3>
-                <p className="text-[#73757d] text-[12px] line-clamp-2 leading-4 font-light">
+                <p className="text-muted-foreground text-[12px] line-clamp-2 leading-4 font-light">
                   {project.description}
                 </p>
               </div>
@@ -208,13 +193,13 @@ export function ProjectDirectoryCard({ project, index = 0 }: Props) {
                       <img
                         key={idx}
                         src={avatar}
-                        className="w-[22px] h-[22px] rounded-full border border-[#10131a] object-cover"
+                        className="w-[22px] h-[22px] rounded-full border border-card object-cover"
                         alt="Investor"
                       />
                     ))}
                   </div>
-                  <span className="text-[9px] text-[#73757d] uppercase tracking-widest mt-1.5 font-bold">
-                    {project.investorsCount} backers
+                  <span className="text-[9px] text-muted-foreground uppercase tracking-widest mt-1.5 font-bold">
+                    {t('card.backers', { count: project.investorsCount })}
                   </span>
                 </div>
               )}
@@ -224,31 +209,41 @@ export function ProjectDirectoryCard({ project, index = 0 }: Props) {
             <div className="space-y-1.5 mb-4 h-[52px]">
               {isFunding ? (
                 <>
-                  <div className="flex justify-between text-[10px] font-bold uppercase tracking-widest text-[#73757d]">
-                    <span>SYS.PROGRESS</span>
-                    <span style={{ color: accentColor }}>{progress}%</span>
+                  <div className="flex justify-between text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
+                    <span>{t('card.sys_progress')}</span>
+                    <span
+                      style={{ color: accentColor }}
+                      className="font-mono tabular-nums"
+                    >
+                      {progress}%
+                    </span>
                   </div>
-                  <div className="h-1 w-full bg-[#161a21] rounded-full overflow-hidden relative border border-[#2e323b]/50">
+                  <div className="h-1 w-full bg-muted rounded-none overflow-hidden relative border border-border/30">
                     <div
-                      className="absolute top-0 left-0 h-full rounded-full"
+                      className="absolute top-0 left-0 h-full bg-neon-cyan shadow-[0_0_8px_var(--color-neon-cyan)]"
                       style={{
-                        width: `${progress}%`,
-                        backgroundColor: accentColor,
-                        boxShadow: `0 0 10px ${accentColor}`
+                        width: `${progress}%`
                       }}
                     />
                   </div>
-                  <div className="flex justify-between text-[11px] font-mono text-[#a9abb3] h-[16px] items-center">
-                    <span>{project.raisedAmount.toLocaleString()} raised</span>
-                    <span>Goal: {project.fundingGoal.toLocaleString()}</span>
+                  <div className="flex justify-between text-[11px] font-mono tabular-nums text-muted-foreground h-[16px] items-center">
+                    <span>
+                      {project.raisedAmount.toLocaleString()} {t('card.raised')}
+                    </span>
+                    <span>
+                      {t('card.goal')}: {project.fundingGoal.toLocaleString()}
+                    </span>
                   </div>
                 </>
               ) : (
                 <>
-                  <div className="flex justify-between text-[10px] font-bold uppercase tracking-widest text-[#73757d]">
-                    <span>SYS.ROADMAP</span>
-                    <span style={{ color: accentColor }}>
-                      {completedCount} / {totalCount} DONE
+                  <div className="flex justify-between text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
+                    <span>{t('card.sys_roadmap')}</span>
+                    <span
+                      style={{ color: accentColor }}
+                      className="font-mono tabular-nums"
+                    >
+                      {completedCount} / {totalCount} {t('card.done')}
                     </span>
                   </div>
                   {totalCount > 0 ? (
@@ -263,33 +258,33 @@ export function ProjectDirectoryCard({ project, index = 0 }: Props) {
                           key={idx}
                           className={
                             stage === 'active'
-                              ? 'rounded-full animate-pulse'
-                              : 'rounded-full'
+                              ? 'rounded-none animate-pulse'
+                              : 'rounded-none'
                           }
                           style={{
                             backgroundColor:
                               stage === 'completed'
                                 ? accentColor
                                 : stage === 'active'
-                                  ? `${accentColor}80`
-                                  : '#161a21',
+                                  ? 'color-mix(in srgb, var(--neon-cyan) 50%, transparent)'
+                                  : 'var(--muted)',
                             border:
                               stage === 'pending'
-                                ? '1px solid #2e323b50'
+                                ? '1px solid var(--border)'
                                 : 'none',
                             boxShadow:
                               stage === 'completed'
-                                ? `0 0 6px ${accentColor}80`
+                                ? '0 0 6px color-mix(in srgb, var(--neon-cyan) 50%, transparent)'
                                 : 'none'
                           }}
                         />
                       ))}
                     </div>
                   ) : (
-                    <div className="h-1 w-full bg-[#161a21] rounded-full border border-[#2e323b]/50" />
+                    <div className="h-1 w-full bg-muted rounded-none border border-border/30" />
                   )}
-                  <div className="flex gap-2 text-[11px] font-mono text-[#a9abb3] h-[16px] items-center">
-                    <span>UPDATED</span>
+                  <div className="flex gap-2 text-[11px] font-mono text-muted-foreground h-[16px] items-center">
+                    <span>{t('card.updated')}</span>
                     <span>
                       {new Date(project.updatedAt).toLocaleDateString()}
                     </span>
@@ -300,22 +295,22 @@ export function ProjectDirectoryCard({ project, index = 0 }: Props) {
           </div>
 
           {/* ── Stats Bar ─────────────────────────────────────────────────── */}
-          <div className="grid grid-cols-2 gap-3 py-3 border-y border-[#2e323b]/50">
+          <div className="grid grid-cols-2 gap-3 py-3 border-y border-border/35 bg-card/25 px-2">
             {isFunding ? (
               <>
                 <div className="flex flex-col gap-0.5">
-                  <p className="text-[9px] text-[#73757d] uppercase tracking-widest font-bold flex items-center gap-1">
-                    <Terminal className="w-2.5 h-2.5" /> DAYS LEFT
+                  <p className="text-[9px] text-muted-foreground uppercase tracking-widest font-bold flex items-center gap-1">
+                    <Terminal className="w-2.5 h-2.5" /> {t('card.days_left')}
                   </p>
-                  <p className="font-mono text-[12px] text-[#ecedf6]">
+                  <p className="font-mono tabular-nums text-[12px] text-foreground">
                     {daysLeft}
                   </p>
                 </div>
                 <div className="flex flex-col gap-0.5 text-right items-end">
-                  <p className="text-[9px] text-[#73757d] uppercase tracking-widest font-bold">
-                    GOAL
+                  <p className="text-[9px] text-muted-foreground uppercase tracking-widest font-bold">
+                    {t('card.goal').toUpperCase()}
                   </p>
-                  <p className="font-mono text-[12px] text-[#ecedf6]">
+                  <p className="font-mono tabular-nums text-[12px] text-foreground">
                     {project.fundingGoal.toLocaleString()}
                   </p>
                 </div>
@@ -323,18 +318,18 @@ export function ProjectDirectoryCard({ project, index = 0 }: Props) {
             ) : (
               <>
                 <div className="flex flex-col gap-0.5">
-                  <p className="text-[9px] text-[#73757d] uppercase tracking-widest font-bold flex items-center gap-1">
-                    <Shield className="w-2.5 h-2.5" /> MILESTONES
+                  <p className="text-[9px] text-muted-foreground uppercase tracking-widest font-bold flex items-center gap-1">
+                    <Shield className="w-2.5 h-2.5" /> {t('card.milestones')}
                   </p>
-                  <p className="font-mono text-[12px] text-[#ecedf6]">
+                  <p className="font-mono tabular-nums text-[12px] text-foreground">
                     {completedCount}/{totalCount}
                   </p>
                 </div>
                 <div className="flex flex-col gap-0.5 text-right items-end">
-                  <p className="text-[9px] text-[#73757d] uppercase tracking-widest font-bold">
-                    RAISED
+                  <p className="text-[9px] text-muted-foreground uppercase tracking-widest font-bold">
+                    {t('card.raised').toUpperCase()}
                   </p>
-                  <p className="font-mono text-[12px] text-[#ecedf6]">
+                  <p className="font-mono tabular-nums text-[12px] text-foreground">
                     {project.raisedAmount.toLocaleString()}
                   </p>
                 </div>
@@ -344,30 +339,26 @@ export function ProjectDirectoryCard({ project, index = 0 }: Props) {
 
           {/* ── CTA ─────────────────────────────────────────────────────── */}
           <div className="pt-3 flex gap-3">
-            <button
-              className="flex-1 py-2.5 bg-[#161a21] hover:bg-[#1a1f28] border border-[#2e323b] rounded-xl font-['Space_Grotesk'] font-bold transition-all duration-500 ease-out text-[10px] uppercase tracking-widest flex justify-center items-center gap-2"
-              style={{ boxShadow: '0 4px 20px rgba(0,0,0,0.3)' }}
-            >
-              <span style={{ color: accentColor }}>
-                {isFunding ? 'Initialize Support' : 'View Protocol'}
+            <button className="flex-1 py-2.5 bg-neon-cyan hover:bg-neon-cyan/95 border border-neon-cyan rounded-none font-headline font-bold transition-all duration-300 ease-out text-[10px] uppercase tracking-[0.12em] flex justify-center items-center gap-2 text-background cursor-pointer active:translate-y-0.5 active:translate-x-0.5 shadow-[2px_2px_0px_0px_var(--neon-purple)]">
+              <span>
+                {isFunding ? t('card.init_support') : t('card.view_protocol')}
               </span>
-              <ArrowRight
-                className="w-3.5 h-3.5"
-                style={{ color: accentColor }}
-              />
+              <ArrowRight className="w-3.5 h-3.5" />
             </button>
 
             <button
               onClick={handleLike}
-              className={`w-10 flex items-center justify-center rounded-xl border transition-all duration-500 hover:scale-105 active:scale-95 ${
+              className={`w-10 flex items-center justify-center rounded-none border transition-all duration-500 hover:scale-[1.03] active:translate-y-0.5 active:translate-x-0.5 cursor-pointer ${
                 isLiked
-                  ? 'bg-[#ff2a5f]/10 border-[#ff2a5f] shadow-[0_0_15px_rgba(255,42,95,0.3)]'
-                  : 'bg-[#161a21] border-[#2e323b] hover:border-[#4d5363] hover:bg-[#1a1f28]'
+                  ? 'bg-rose-500/10 border-rose-500 shadow-[2px_2px_0px_rgba(239,68,68,0.3)]'
+                  : 'bg-muted border-border hover:border-border/80 shadow-[2px_2px_0px_rgba(0,0,0,0.08)] dark:shadow-[2px_2px_0px_rgba(255,255,255,0.05)]'
               }`}
             >
               <Heart
                 className={`w-4 h-4 transition-all duration-500 ${
-                  isLiked ? 'text-[#ff2a5f] fill-[#ff2a5f]' : 'text-[#73757d]'
+                  isLiked
+                    ? 'text-rose-500 fill-rose-500'
+                    : 'text-muted-foreground'
                 }`}
               />
             </button>

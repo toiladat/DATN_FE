@@ -41,21 +41,23 @@ const TABS_DEFAULT = [
 function PublishCTA({ project }: { project: ProjectDetail }) {
   const { t } = useTranslation()
   return (
-    <div className="p-6 rounded-2xl bg-[#10131a] border border-[#8ff5ff]/50 flex flex-col gap-5 relative overflow-hidden group">
-      <div className="absolute -right-10 -top-10 w-32 h-32 bg-[#8ff5ff]/5 rounded-full blur-3xl group-hover:bg-[#8ff5ff]/10 transition-colors duration-700 ease-out" />
+    <div className="p-6 rounded-none bg-card border border-neon-cyan/35 shadow-[2px_2px_0px_var(--neon-purple)] flex flex-col gap-5 relative overflow-hidden group">
+      <div className="absolute -right-10 -top-10 w-32 h-32 bg-neon-cyan/5 rounded-none blur-3xl group-hover:bg-neon-cyan/10 transition-colors duration-700 ease-out" />
       <div className="flex items-center gap-2 relative z-10">
-        <Zap className="w-4 h-4 text-[#8ff5ff]" />
-        <span className="text-[11px] font-bold uppercase tracking-widest text-[#8ff5ff]">
+        <Zap className="w-4 h-4 text-neon-cyan" />
+        <span className="text-[11px] font-bold uppercase tracking-widest text-neon-cyan">
           {t('detail.ready_to_launch')}
         </span>
       </div>
       <div className="space-y-2 relative z-10">
-        <p className="text-[#a9abb3] text-sm">{t('detail.approved_desc')}</p>
+        <p className="text-muted-foreground text-sm">
+          {t('detail.approved_desc')}
+        </p>
       </div>
       <div className="relative z-10">
         <PublishModal project={project}>
           <Button
-            className="w-full font-['Space_Grotesk'] font-bold uppercase tracking-widest text-[11px]"
+            className="w-full font-['Space_Grotesk'] font-bold uppercase tracking-widest text-[11px] rounded-none shadow-[2px_2px_0px_rgba(143,245,255,0.3)]"
             size="lg"
           >
             {t('detail.publish_btn')}
@@ -81,27 +83,27 @@ function InvestCTA({
       ? Math.min(100, Math.round((raisedAmount / fundingGoal) * 100))
       : 0
   return (
-    <div className="p-6 rounded-2xl bg-[#10131a] border border-[#2e323b]/50 flex flex-col gap-5">
+    <div className="p-6 rounded-none bg-card border border-border/60 shadow-[2px_2px_0px_rgba(143,245,255,0.3)] flex flex-col gap-5">
       <div className="flex items-center gap-2">
-        <Zap className="w-4 h-4 text-[#8ff5ff]" />
-        <span className="text-[11px] font-bold uppercase tracking-widest text-[#73757d]">
+        <Zap className="w-4 h-4 text-neon-cyan" />
+        <span className="text-[11px] font-bold uppercase tracking-widest text-muted-foreground/85">
           {t('detail.funding_progress')}
         </span>
       </div>
       <div className="space-y-2">
         <div className="flex justify-between text-[11px] font-mono">
-          <span className="text-[#8ff5ff] font-bold">
+          <span className="text-neon-cyan font-bold">
             {raisedAmount.toLocaleString()} {t('detail.raised')}
           </span>
-          <span className="text-[#73757d]">{pct}%</span>
+          <span className="text-muted-foreground/85">{pct}%</span>
         </div>
-        <div className="h-1.5 w-full bg-[#161a21] rounded-full overflow-hidden border border-[#2e323b]/50">
+        <div className="h-1.5 w-full bg-background rounded-none overflow-hidden border border-border/50">
           <div
-            className="h-full rounded-full bg-gradient-to-r from-[#8ff5ff] to-[#ac89ff] shadow-[0_0_12px_rgba(143,245,255,0.6)] transition-all duration-1000"
+            className="h-full rounded-none bg-gradient-to-r from-neon-cyan to-neon-purple shadow-[0_0_12px_var(--color-neon-cyan)/60] transition-all duration-1000"
             style={{ width: `${pct}%` }}
           />
         </div>
-        <div className="text-right text-[11px] font-mono text-[#73757d]">
+        <div className="text-right text-[11px] font-mono text-muted-foreground/85">
           {t('detail.goal')}: {fundingGoal.toLocaleString()} USDT
         </div>
       </div>
@@ -110,9 +112,9 @@ function InvestCTA({
         raisedAmount={raisedAmount}
         fundingGoal={fundingGoal}
       >
-        <button className="w-full py-3 rounded-xl border border-[#8ff5ff] bg-[#161a21] text-[11px] font-bold uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-[#8ff5ff]/10 transition-colors opacity-100 font-['Space_Grotesk']">
-          <Zap className="w-3.5 h-3.5 text-[#8ff5ff]" />
-          <span className="text-[#8ff5ff]">{t('detail.fund_btn')}</span>
+        <button className="w-full py-3 rounded-none border border-neon-cyan bg-card text-[11px] font-bold uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-neon-cyan/10 transition-colors opacity-100 font-['Space_Grotesk'] shadow-[2px_2px_0px_var(--neon-purple)]">
+          <Zap className="w-3.5 h-3.5 text-neon-cyan" />
+          <span className="text-neon-cyan">{t('detail.fund_btn')}</span>
         </button>
       </InvestModal>
     </div>
@@ -153,13 +155,13 @@ export function ProjectDetailView({
   const safeTab = tabs.includes(activeTab) ? activeTab : tabs[0]
 
   return (
-    <div className="bg-[#0a0c10] text-[#ecedf6] min-h-screen font-['Space_Grotesk']">
+    <div className="bg-background text-foreground min-h-screen font-['Space_Grotesk']">
       <main className="pt-28 pb-20 px-4 md:px-12 lg:px-24 max-w-7xl mx-auto">
         {/* ── Back + Owner shortcut ────────────────────────────────────── */}
         <div className="flex items-center justify-between mb-10">
           <Link
             to={backLink.to}
-            className="inline-flex items-center gap-2 text-[#73757d] hover:text-[#ecedf6] transition-colors font-bold group"
+            className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors font-bold group"
           >
             <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
             {backLink.label}
@@ -170,7 +172,7 @@ export function ProjectDetailView({
         <ProjectHero project={project} />
 
         {/* ── Media + Sidebar ─────────────────────────────────────────── */}
-        <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-16">
+        <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-16 items-start">
           <ProjectMedia project={project} />
 
           <div className="lg:col-span-4 flex flex-col gap-6">
@@ -193,11 +195,11 @@ export function ProjectDetailView({
 
             {/* Active status note (public view) */}
             {isPublicView && isActive && (
-              <div className="p-5 rounded-2xl bg-[#10131a] border border-[#2e323b]/50 text-center">
-                <p className="text-[11px] font-bold uppercase tracking-widest text-[#ac89ff] mb-2">
+              <div className="p-5 rounded-none bg-card border border-border/50 text-center shadow-sm dark:shadow-[0_8px_30px_rgba(0,0,0,0.3)]">
+                <p className="text-[11px] font-bold uppercase tracking-widest text-neon-purple mb-2">
                   {t('detail.project_status')}
                 </p>
-                <p className="text-[#a9abb3] text-xs">
+                <p className="text-muted-foreground text-xs">
                   {t('detail.active_status_desc')}
                 </p>
               </div>
@@ -205,13 +207,13 @@ export function ProjectDetailView({
 
             {/* Success status note (both public and owner view) */}
             {project.status === 'success' && (
-              <div className="p-5 rounded-2xl bg-[#10131a] border border-[#8ff5ff]/30 text-center shadow-[0_0_24px_rgba(143,245,255,0.15)] relative overflow-hidden group">
-                <div className="absolute -right-10 -top-10 w-32 h-32 bg-[#8ff5ff]/5 rounded-full blur-3xl group-hover:bg-[#8ff5ff]/10 transition-colors duration-700 ease-out" />
-                <p className="text-[11px] font-bold uppercase tracking-widest text-[#8ff5ff] mb-2 relative z-10 flex items-center justify-center gap-1.5 font-['Space_Grotesk']">
-                  <Zap className="w-3.5 h-3.5 text-[#8ff5ff]" />
+              <div className="p-5 rounded-none bg-card border border-neon-cyan/30 text-center shadow-sm dark:shadow-[0_0_24px_var(--color-neon-cyan)/15] relative overflow-hidden group">
+                <div className="absolute -right-10 -top-10 w-32 h-32 bg-neon-cyan/5 rounded-none blur-3xl group-hover:bg-neon-cyan/10 transition-colors duration-700 ease-out" />
+                <p className="text-[11px] font-bold uppercase tracking-widest text-neon-cyan mb-2 relative z-10 flex items-center justify-center gap-1.5 font-['Space_Grotesk']">
+                  <Zap className="w-3.5 h-3.5 text-neon-cyan" />
                   {t('detail.project_completed')}
                 </p>
-                <p className="text-[#a9abb3] text-xs relative z-10">
+                <p className="text-muted-foreground text-xs relative z-10">
                   {t('detail.success_status_desc')}
                 </p>
               </div>

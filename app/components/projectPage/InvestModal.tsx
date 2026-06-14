@@ -135,9 +135,9 @@ export function InvestModal({
       <DialogTrigger asChild disabled={disabled}>
         {children}
       </DialogTrigger>
-      <DialogContent className="bg-[#10131a] border-[#2e323b] text-white sm:max-w-md">
+      <DialogContent className="bg-card border-2 border-border text-foreground sm:max-w-md rounded-none shadow-[4px_4px_0px_var(--neon-purple)]">
         <DialogHeader>
-          <DialogTitle className="text-[#8ff5ff] font-['Space_Grotesk'] tracking-wide flex items-center gap-2">
+          <DialogTitle className="text-neon-cyan font-['Space_Grotesk'] tracking-wide flex items-center gap-2">
             <Zap className="w-5 h-5" />
             {t('invest.title')}
           </DialogTitle>
@@ -145,7 +145,7 @@ export function InvestModal({
 
         <div className="space-y-6 py-4">
           <div className="space-y-2">
-            <div className="flex justify-between text-xs text-[#73757d] font-mono">
+            <div className="flex justify-between text-xs text-muted-foreground/60 font-mono">
               <span>{t('invest.available_balance')}</span>
               <span>
                 {balanceData
@@ -159,7 +159,7 @@ export function InvestModal({
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
                 placeholder={t('invest.amount_placeholder')}
-                className="w-full bg-[#161a21] border border-[#2e323b] rounded-xl px-4 py-3 text-white placeholder:text-[#45484f] focus:outline-none focus:border-[#8ff5ff] focus:ring-1 focus:ring-[#8ff5ff]/50 transition-all font-mono"
+                className="w-full bg-background border border-border rounded-none px-4 py-3 text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:border-neon-cyan focus:ring-1 focus:ring-neon-cyan/50 transition-all font-mono"
                 disabled={isPending}
               />
               <button
@@ -170,7 +170,7 @@ export function InvestModal({
                     setAmount(Math.min(userBal, remainingAmount).toString())
                   }
                 }}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] uppercase font-bold text-[#ac89ff] hover:text-[#8ff5ff]"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] uppercase font-bold text-neon-purple hover:text-neon-cyan"
               >
                 Max
               </button>
@@ -178,7 +178,7 @@ export function InvestModal({
           </div>
 
           <div className="space-y-2">
-            <div className="flex justify-between text-xs text-[#73757d] font-mono">
+            <div className="flex justify-between text-xs text-muted-foreground/60 font-mono">
               <span>{t('invest.optional_message')}</span>
               <span>{content.length}/200</span>
             </div>
@@ -187,7 +187,7 @@ export function InvestModal({
               onChange={(e) => setContent(e.target.value.slice(0, 200))}
               placeholder={t('invest.message_placeholder')}
               rows={3}
-              className="w-full bg-[#161a21] border border-[#2e323b] rounded-xl px-4 py-3 text-white placeholder:text-[#45484f] focus:outline-none focus:border-[#8ff5ff] focus:ring-1 focus:ring-[#8ff5ff]/50 transition-all font-mono resize-none"
+              className="w-full bg-background border border-border rounded-none px-4 py-3 text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:border-neon-cyan focus:ring-1 focus:ring-neon-cyan/50 transition-all font-mono resize-none"
               disabled={isPending}
             />
           </div>
@@ -195,7 +195,7 @@ export function InvestModal({
           <button
             onClick={handleInvest}
             disabled={isPending || !amount || Number(amount) < 1}
-            className="w-full py-3.5 rounded-xl bg-gradient-to-r from-[#8ff5ff] to-[#ac89ff] text-[#10131a] font-bold uppercase tracking-widest hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2 font-['Space_Grotesk'] shadow-[0_0_20px_rgba(143,245,255,0.3)]"
+            className="w-full py-3.5 rounded-none bg-gradient-to-r from-neon-cyan to-neon-purple text-background font-bold uppercase tracking-widest hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2 font-['Space_Grotesk'] shadow-[2px_2px_0px_var(--neon-purple)] hover:shadow-none"
           >
             {isPending ? (
               <>

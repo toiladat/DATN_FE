@@ -55,14 +55,14 @@ export default function MyProject() {
   }
 
   return (
-    <div className="pt-24 px-6 md:px-12 pb-24 w-full h-screen flex flex-col bg-[#0b0e14]">
+    <div className="pt-24 px-6 md:px-12 pb-24 w-full h-screen flex flex-col bg-background">
       <MyProjectsHeader projects={projects} />
 
       {/* Kanban Board Area */}
-      <div className="flex-1 w-full rounded-md pb-4 overflow-x-auto custom-scrollbar relative">
+      <div className="flex-1 w-full rounded-none pb-4 overflow-x-auto custom-scrollbar relative">
         {isLoading && (
-          <div className="absolute inset-0 z-10 bg-[#0b0e14]/50 backdrop-blur-sm flex justify-center items-center rounded-xl">
-            <div className="text-[#8ff5ff] flex items-center gap-3">
+          <div className="absolute inset-0 z-10 bg-background/50 backdrop-blur-sm flex justify-center items-center rounded-none">
+            <div className="text-neon-cyan flex items-center gap-3">
               <span className="material-symbols-outlined animate-spin text-3xl">
                 sync
               </span>
@@ -90,18 +90,20 @@ export default function MyProject() {
           height: 10px;
         }
         .custom-scrollbar::-webkit-scrollbar-track {
-          background: rgba(22, 26, 33, 0.3);
-          border-radius: 10px;
+          background: var(--border);
+          border-radius: 0px;
           margin-inline: 4px;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb {
-          background-color: rgba(143, 245, 255, 0.15);
-          border-radius: 10px;
-          border: 3px solid #0b0e14;
+          background-color: var(--color-neon-cyan);
+          opacity: 0.15;
+          border-radius: 0px;
+          border: 3px solid var(--background);
         }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-          background-color: rgba(143, 245, 255, 0.4);
-          border: 2px solid #0b0e14;
+          background-color: var(--color-neon-cyan);
+          opacity: 0.4;
+          border: 2px solid var(--background);
         }
       `}</style>
     </div>

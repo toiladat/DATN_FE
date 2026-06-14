@@ -74,29 +74,29 @@ export function InvestedStats({ projects }: { projects: ProjectSummary[] }) {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-10">
       {/* Overview Cards */}
-      <div className="lg:col-span-1 bg-[#161a21] border border-[#2e323b] rounded-2xl p-6 flex flex-col justify-center gap-6 relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-40 h-40 bg-[#8ff5ff]/5 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute bottom-0 left-0 w-40 h-40 bg-[#ac89ff]/5 rounded-full blur-3xl pointer-events-none" />
+      <div className="lg:col-span-1 bg-card border border-border rounded-none p-6 flex flex-col justify-center gap-6 relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-40 h-40 bg-neon-cyan/5 rounded-none blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 left-0 w-40 h-40 bg-neon-purple/5 rounded-none blur-3xl pointer-events-none" />
 
         <div>
-          <h3 className="text-[#a9abb3] text-xs uppercase tracking-widest font-semibold mb-1">
+          <h3 className="text-muted-foreground text-xs uppercase tracking-widest font-semibold mb-1">
             {t('stats.total_invested')}
           </h3>
-          <p className="text-3xl font-bold font-mono text-[#ecedf6]">
+          <p className="text-3xl font-bold font-mono text-foreground">
             {stats.totalInvested.toLocaleString()}{' '}
-            <span className="text-sm text-[#8ff5ff]">mUSDT</span>
+            <span className="text-sm text-neon-cyan">mUSDT</span>
           </p>
         </div>
 
-        <div className="h-px w-full bg-[#2e323b]/50" />
+        <div className="h-px w-full bg-border/50" />
 
         <div>
-          <h3 className="text-[#a9abb3] text-xs uppercase tracking-widest font-semibold mb-1">
+          <h3 className="text-muted-foreground text-xs uppercase tracking-widest font-semibold mb-1">
             {t('stats.projects_backed')}
           </h3>
-          <p className="text-3xl font-bold font-mono text-[#ecedf6]">
+          <p className="text-3xl font-bold font-mono text-foreground">
             {stats.totalProjects}{' '}
-            <span className="text-sm text-[#ac89ff]">
+            <span className="text-sm text-neon-purple">
               {t('stats.projects_plural')}
             </span>
           </p>
@@ -104,7 +104,7 @@ export function InvestedStats({ projects }: { projects: ProjectSummary[] }) {
       </div>
 
       {/* Chart */}
-      <div className="lg:col-span-2 bg-[#161a21] border border-[#2e323b] rounded-2xl p-6 flex flex-col md:flex-row items-center justify-between">
+      <div className="lg:col-span-2 bg-card border border-border rounded-none p-6 flex flex-col md:flex-row items-center justify-between">
         <div className="flex-1 w-full h-[250px]">
           {stats.chartData.length > 0 ? (
             <ResponsiveContainer width="100%" height="100%">
@@ -129,35 +129,40 @@ export function InvestedStats({ projects }: { projects: ProjectSummary[] }) {
                     return [value, entry ? t(entry.labelKey) : name]
                   }}
                   contentStyle={{
-                    backgroundColor: '#10131a',
-                    borderColor: '#2e323b',
-                    borderRadius: '8px'
+                    backgroundColor: 'var(--card)',
+                    borderColor: 'var(--border)',
+                    borderRadius: '0px'
                   }}
-                  itemStyle={{ color: '#ecedf6', fontFamily: 'Space Grotesk' }}
+                  itemStyle={{
+                    color: 'var(--foreground)',
+                    fontFamily: 'Space Grotesk'
+                  }}
                 />
               </PieChart>
             </ResponsiveContainer>
           ) : (
-            <div className="w-full h-full flex items-center justify-center text-[#73757d]">
+            <div className="w-full h-full flex items-center justify-center text-muted-foreground">
               {t('stats.no_data')}
             </div>
           )}
         </div>
 
         {/* Custom Legend */}
-        <div className="md:w-1/3 mt-6 md:mt-0 flex flex-col gap-4 pl-4 md:border-l border-[#2e323b]">
+        <div className="md:w-1/3 mt-6 md:mt-0 flex flex-col gap-4 pl-4 md:border-l border-border">
           {stats.chartData.map((item) => (
             <div key={item.name} className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <div
-                  className="w-3 h-3 rounded-full"
+                  className="w-3 h-3 rounded-none"
                   style={{ backgroundColor: item.color }}
                 />
-                <span className="text-[#ecedf6] text-sm">
+                <span className="text-foreground text-sm">
                   {t(item.labelKey)}
                 </span>
               </div>
-              <span className="font-mono text-[#a9abb3]">{item.value}</span>
+              <span className="font-mono text-muted-foreground">
+                {item.value}
+              </span>
             </div>
           ))}
         </div>

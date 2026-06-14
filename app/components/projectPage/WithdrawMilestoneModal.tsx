@@ -115,9 +115,9 @@ export function WithdrawMilestoneModal({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent className="bg-[#10131a] border-[#2e323b] text-white sm:max-w-md">
+      <DialogContent className="bg-card border-2 border-border text-foreground sm:max-w-md rounded-none shadow-[4px_4px_0px_var(--neon-purple)]">
         <DialogHeader>
-          <DialogTitle className="text-[#8ff5ff] font-['Space_Grotesk'] tracking-wide flex items-center gap-2">
+          <DialogTitle className="text-neon-cyan font-['Space_Grotesk'] tracking-wide flex items-center gap-2">
             <Banknote className="w-5 h-5" />
             {t('withdraw.title')}
           </DialogTitle>
@@ -125,21 +125,21 @@ export function WithdrawMilestoneModal({
 
         <div className="space-y-5 py-4">
           {/* Milestone Info */}
-          <div className="p-4 rounded-xl bg-[#161a21] border border-[#2e323b]/70 space-y-3">
+          <div className="p-4 rounded-none bg-muted/40 border border-border space-y-3">
             <div className="flex justify-between items-start">
               <div>
-                <p className="text-[10px] font-bold uppercase tracking-widest text-[#73757d] mb-1">
+                <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60 mb-1">
                   {t('withdraw.milestone_label')}
                 </p>
-                <p className="text-[#ecedf6] font-['Space_Grotesk'] font-bold">
+                <p className="text-foreground font-['Space_Grotesk'] font-bold">
                   {milestone.title}
                 </p>
               </div>
               <div className="text-right">
-                <p className="text-[10px] font-bold uppercase tracking-widest text-[#73757d] mb-1">
+                <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60 mb-1">
                   {t('withdraw.amount_label')}
                 </p>
-                <p className="text-[#8ff5ff] font-['Space_Grotesk'] font-bold text-lg">
+                <p className="text-neon-cyan font-['Space_Grotesk'] font-bold text-lg">
                   {milestone.amount.toLocaleString()} USDT
                 </p>
               </div>
@@ -147,10 +147,10 @@ export function WithdrawMilestoneModal({
 
             {/* Release time status */}
             <div
-              className={`flex items-center gap-2 text-xs rounded-lg px-3 py-2 border ${
+              className={`flex items-center gap-2 text-xs rounded-none px-3 py-2 border ${
                 isReleaseDatePassed
-                  ? 'bg-[#8ff5ff]/5 border-[#8ff5ff]/20 text-[#8ff5ff]'
-                  : 'bg-[#ff716c]/5 border-[#ff716c]/20 text-[#ff716c]'
+                  ? 'bg-neon-cyan/5 border-neon-cyan/20 text-neon-cyan'
+                  : 'bg-neon-rose/5 border-neon-rose/20 text-neon-rose'
               }`}
             >
               {isReleaseDatePassed ? (
@@ -171,14 +171,14 @@ export function WithdrawMilestoneModal({
           </div>
 
           {/* Warning */}
-          <div className="flex items-start gap-3 p-4 rounded-xl bg-[#ff716c]/5 border border-[#ff716c]/20">
-            <AlertTriangle className="w-4 h-4 text-[#ff716c] shrink-0 mt-0.5" />
-            <div className="text-xs text-[#a9abb3] leading-relaxed">
-              <span className="text-[#ff716c] font-bold">
+          <div className="flex items-start gap-3 p-4 rounded-none bg-neon-rose/5 border border-neon-rose/30">
+            <AlertTriangle className="w-4 h-4 text-neon-rose shrink-0 mt-0.5" />
+            <div className="text-xs text-muted-foreground leading-relaxed">
+              <span className="text-neon-rose font-bold">
                 {t('withdraw.note')}
               </span>
               {t('withdraw.warning_prefix')}
-              <span className="text-[#ecedf6] font-bold">
+              <span className="text-foreground font-bold">
                 {milestone.amount.toLocaleString()} USDT
               </span>
               {t('withdraw.warning_suffix')}
@@ -186,7 +186,7 @@ export function WithdrawMilestoneModal({
           </div>
 
           {/* Verification badge */}
-          <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-[#ac89ff]">
+          <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-neon-purple">
             <ShieldCheck className="w-3.5 h-3.5" />
             <span>{t('withdraw.admin_approved')}</span>
           </div>
@@ -196,7 +196,7 @@ export function WithdrawMilestoneModal({
             id={`withdraw-btn-${milestone.id}`}
             onClick={handleWithdraw}
             disabled={isPending || !isReleaseDatePassed}
-            className="w-full py-3.5 rounded-xl bg-gradient-to-r from-[#8ff5ff] to-[#ac89ff] text-[#10131a] font-bold uppercase tracking-widest hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2 font-['Space_Grotesk'] shadow-[0_0_20px_rgba(143,245,255,0.3)]"
+            className="w-full py-3.5 rounded-none bg-gradient-to-r from-neon-cyan to-neon-purple text-background font-bold uppercase tracking-widest hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2 font-['Space_Grotesk'] shadow-[2px_2px_0px_var(--neon-purple)] hover:shadow-none"
           >
             {isPending ? (
               <>

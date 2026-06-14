@@ -101,7 +101,7 @@ export function MilestonesStep({ onStepChange }: MilestonesStepProps = {}) {
     if (!result.success) {
       toast.error(t('validation.missing_required_fields'), {
         description: (
-          <div className="flex flex-col gap-1 text-xs mt-1 text-[#ff716c]">
+          <div className="flex flex-col gap-1 text-xs mt-1 text-neon-rose">
             {result.error.issues.map((err: any, idx: number) => (
               <div key={idx} className="flex items-start gap-1">
                 <span className="shrink-0">•</span>
@@ -200,10 +200,10 @@ export function MilestonesStep({ onStepChange }: MilestonesStepProps = {}) {
     <div className="max-w-6xl mx-auto pb-32">
       {/* Header Section */}
       <header className="mb-12">
-        <h1 className="text-4xl md:text-5xl font-bold font-['Space_Grotesk'] tracking-tighter text-[#ecedf6] mb-3">
+        <h1 className="text-4xl md:text-5xl font-bold font-['Space_Grotesk'] tracking-tighter text-foreground mb-3">
           {t('milestones.title')}
         </h1>
-        <p className="text-[#a9abb3] text-lg max-w-2xl">
+        <p className="text-muted-foreground text-lg max-w-2xl">
           {t('milestones.desc')}
         </p>
       </header>
@@ -213,25 +213,25 @@ export function MilestonesStep({ onStepChange }: MilestonesStepProps = {}) {
         <div className="md:col-span-12 lg:col-span-8 space-y-8">
           {/* Budget/Time Summary Card */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <Card className="bg-[#22262f]/40 backdrop-blur-xl border-[#8ff5ff]/10 rounded-xl relative overflow-hidden shadow-none">
+            <Card className="bg-card backdrop-blur-xl border border-border rounded-none relative overflow-hidden shadow-none">
               <CardContent className="p-6">
                 <div className="flex justify-between items-center mb-4">
-                  <span className="text-[#a9abb3] text-sm">
+                  <span className="text-muted-foreground text-sm">
                     {t('milestones.totalBudget')}
                   </span>
-                  <span className="text-[#8ff5ff] font-bold font-['Space_Grotesk'] text-lg">
+                  <span className="text-neon-cyan font-bold font-['Space_Grotesk'] text-lg">
                     €{totalBudget.toLocaleString()}
                   </span>
                 </div>
-                <div className="h-2 bg-[#22262f] rounded-full overflow-hidden">
+                <div className="h-2 bg-background rounded-none overflow-hidden border border-border/20">
                   <div
-                    className="h-full bg-gradient-to-r from-[#8ff5ff] to-[#7d98ff] shadow-[0_0_10px_rgba(143,245,255,0.4)] transition-all duration-500"
+                    className="h-full bg-gradient-to-r from-neon-cyan to-neon-purple shadow-[0_0_10px_var(--color-neon-cyan)/40] transition-all duration-500"
                     style={{
                       width: `${Math.min(100, (totalBudget / (project.basics.fundingGoal || 1)) * 100)}%`
                     }}
                   ></div>
                 </div>
-                <p className="mt-3 text-xs text-[#a9abb3] italic">
+                <p className="mt-3 text-xs text-muted-foreground italic">
                   {t('milestones.remainingBudget', {
                     remaining: remainingBudget.toLocaleString()
                   })}
@@ -239,19 +239,19 @@ export function MilestonesStep({ onStepChange }: MilestonesStepProps = {}) {
               </CardContent>
             </Card>
 
-            <Card className="bg-[#22262f]/40 backdrop-blur-xl border-[#8ff5ff]/10 rounded-xl relative overflow-hidden shadow-none">
+            <Card className="bg-card backdrop-blur-xl border border-border rounded-none relative overflow-hidden shadow-none">
               <CardContent className="p-6">
                 <div className="flex justify-between items-center mb-4">
-                  <span className="text-[#a9abb3] text-sm">
+                  <span className="text-muted-foreground text-sm">
                     {t('milestones.executionTime')}
                   </span>
-                  <span className="text-[#8ff5ff] font-bold font-['Space_Grotesk'] text-lg">
+                  <span className="text-neon-cyan font-bold font-['Space_Grotesk'] text-lg">
                     {t('milestones.totalDuration', { duration: totalDuration })}
                   </span>
                 </div>
-                <div className="h-2 bg-[#22262f] rounded-full overflow-hidden">
+                <div className="h-2 bg-background rounded-none overflow-hidden border border-border/20">
                   <div
-                    className="h-full bg-gradient-to-r from-[#8ff5ff] to-[#7d98ff] shadow-[0_0_10px_rgba(143,245,255,0.4)] transition-all duration-500"
+                    className="h-full bg-gradient-to-r from-neon-cyan to-neon-purple shadow-[0_0_10px_var(--color-neon-cyan)/40] transition-all duration-500"
                     style={{
                       width:
                         maxDuration > 0
@@ -260,7 +260,7 @@ export function MilestonesStep({ onStepChange }: MilestonesStepProps = {}) {
                     }}
                   ></div>
                 </div>
-                <p className="mt-3 text-xs text-[#a9abb3] italic">
+                <p className="mt-3 text-xs text-muted-foreground italic">
                   {maxDuration > 0
                     ? t('milestones.remainingDuration', {
                         remaining: remainingDuration
@@ -274,14 +274,14 @@ export function MilestonesStep({ onStepChange }: MilestonesStepProps = {}) {
           </div>
 
           {/* Milestone Form */}
-          <Card className="bg-[#10131a] rounded-xl border-[#45484f]/10 shadow-none">
+          <Card className="bg-card rounded-none border border-border/50 shadow-none">
             <CardContent className="p-8 space-y-6">
               <div>
-                <Label className="block text-sm font-medium text-[#a9abb3] mb-2">
+                <Label className="block text-sm font-medium text-muted-foreground mb-2">
                   {t('milestones.name')}
                 </Label>
                 <Input
-                  className="w-full bg-[#1c2028] border-none text-[#ecedf6] rounded-lg focus-visible:ring-1 focus-visible:ring-[#8ff5ff] py-6 px-4"
+                  className="w-full bg-background border border-border text-foreground rounded-none focus-visible:ring-1 focus-visible:ring-neon-cyan py-6 px-4"
                   placeholder={t('milestones.namePlaceholder')}
                   type="text"
                   value={newMilestone.name}
@@ -292,11 +292,11 @@ export function MilestonesStep({ onStepChange }: MilestonesStepProps = {}) {
               </div>
 
               <div>
-                <Label className="block text-sm font-medium text-[#a9abb3] mb-2">
+                <Label className="block text-sm font-medium text-muted-foreground mb-2">
                   {t('milestones.description')}
                 </Label>
                 <Textarea
-                  className="w-full bg-[#1c2028] border-none text-[#ecedf6] rounded-lg focus-visible:ring-1 focus-visible:ring-[#8ff5ff] p-4 resize-none shadow-none"
+                  className="w-full bg-background border border-border text-foreground rounded-none focus-visible:ring-1 focus-visible:ring-neon-cyan p-4 resize-none shadow-none"
                   placeholder={t('milestones.descriptionPlaceholder')}
                   rows={4}
                   value={newMilestone.description}
@@ -311,27 +311,27 @@ export function MilestonesStep({ onStepChange }: MilestonesStepProps = {}) {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div>
-                  <Label className="block text-sm font-medium text-[#a9abb3] mb-1">
+                  <Label className="block text-sm font-medium text-muted-foreground mb-1">
                     {t('milestones.duration')}
                   </Label>
                   <Input
-                    className="w-full bg-[#1c2028] border-none text-[#ecedf6] rounded-lg focus-visible:ring-1 focus-visible:ring-[#8ff5ff] py-6 px-4 shadow-none"
+                    className="w-full bg-background border border-border text-foreground rounded-none focus-visible:ring-1 focus-visible:ring-neon-cyan py-6 px-4 shadow-none"
                     type="number"
                     value={newMilestone.durationDays || ''}
                     onChange={(e) =>
                       handleDurationChange(Number(e.target.value))
                     }
                   />
-                  <p className="mt-2 text-[10px] text-[#a9abb3] uppercase tracking-wider">
+                  <p className="mt-2 text-[10px] text-muted-foreground uppercase tracking-wider">
                     {t('milestones.durationHelper')}
                   </p>
                 </div>
                 <div>
-                  <Label className="block text-sm font-medium text-[#a9abb3] mb-1">
+                  <Label className="block text-sm font-medium text-muted-foreground mb-1">
                     {t('milestones.budget')}
                   </Label>
                   <Input
-                    className="w-full bg-[#1c2028] border-none text-[#ecedf6] rounded-lg focus-visible:ring-1 focus-visible:ring-[#8ff5ff] py-6 px-4 shadow-none"
+                    className="w-full bg-background border border-border text-foreground rounded-none focus-visible:ring-1 focus-visible:ring-neon-cyan py-6 px-4 shadow-none"
                     type="number"
                     value={newMilestone.budget || ''}
                     onChange={(e) =>
@@ -341,7 +341,7 @@ export function MilestonesStep({ onStepChange }: MilestonesStepProps = {}) {
                       })
                     }
                   />
-                  <p className="mt-2 text-[10px] text-[#a9abb3] uppercase tracking-wider">
+                  <p className="mt-2 text-[10px] text-muted-foreground uppercase tracking-wider">
                     {t('milestones.budgetHelper')}
                   </p>
                 </div>
@@ -349,11 +349,11 @@ export function MilestonesStep({ onStepChange }: MilestonesStepProps = {}) {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div>
-                  <Label className="block text-sm font-medium text-[#a9abb3] mb-2">
+                  <Label className="block text-sm font-medium text-muted-foreground mb-2">
                     {t('milestones.advantages')}
                   </Label>
                   <Input
-                    className="w-full bg-[#1c2028] border-none text-[#ecedf6] rounded-lg focus-visible:ring-1 focus-visible:ring-[#8ff5ff] py-6 px-4 shadow-none"
+                    className="w-full bg-background border border-border text-foreground rounded-none focus-visible:ring-1 focus-visible:ring-neon-cyan py-6 px-4 shadow-none"
                     type="text"
                     value={newMilestone.advantages}
                     onChange={(e) =>
@@ -365,11 +365,11 @@ export function MilestonesStep({ onStepChange }: MilestonesStepProps = {}) {
                   />
                 </div>
                 <div>
-                  <Label className="block text-sm font-medium text-[#a9abb3] mb-2">
+                  <Label className="block text-sm font-medium text-muted-foreground mb-2">
                     {t('milestones.challenges')}
                   </Label>
                   <Input
-                    className="w-full bg-[#1c2028] border-none text-[#ecedf6] rounded-lg focus-visible:ring-1 focus-visible:ring-[#8ff5ff] py-6 px-4 shadow-none"
+                    className="w-full bg-background border border-border text-foreground rounded-none focus-visible:ring-1 focus-visible:ring-neon-cyan py-6 px-4 shadow-none"
                     type="text"
                     value={newMilestone.challenges}
                     onChange={(e) =>
@@ -384,7 +384,7 @@ export function MilestonesStep({ onStepChange }: MilestonesStepProps = {}) {
 
               <div className="space-y-6">
                 <div>
-                  <Label className="block text-sm font-medium text-[#a9abb3] mb-2">
+                  <Label className="block text-sm font-medium text-muted-foreground mb-2">
                     {t('milestones.referenceImage')}
                   </Label>
                   <ImageUpload
@@ -414,10 +414,10 @@ export function MilestonesStep({ onStepChange }: MilestonesStepProps = {}) {
                 </div>
 
                 <div>
-                  <Label className="block text-sm font-medium text-[#a9abb3] mb-2">
+                  <Label className="block text-sm font-medium text-muted-foreground mb-2">
                     {t('milestones.expectedOutcome')}
                   </Label>
-                  <div className="mb-6 shadow-[0_4px_24px_rgba(0,0,0,0.15)] rounded-xl relative z-10">
+                  <div className="mb-6 shadow-[2px_2px_0px_rgba(0,0,0,0.15)] rounded-none relative z-10">
                     <RichTextEditor
                       placeholder={t('milestones.expectedOutcomePlaceholder')}
                       value={newMilestone.expectedOutcome}
@@ -429,11 +429,11 @@ export function MilestonesStep({ onStepChange }: MilestonesStepProps = {}) {
                       }
                     />
                   </div>
-                  <div className="bg-[#0356ff]/10 border-l-4 border-[#7d98ff] p-4 flex gap-4 items-start">
-                    <span className="material-symbols-outlined text-[#7d98ff] mt-1">
+                  <div className="border border-neon-purple/20 bg-neon-purple/5 p-4 flex gap-4 items-start rounded-none">
+                    <span className="material-symbols-outlined text-neon-purple mt-1">
                       gavel
                     </span>
-                    <p className="text-sm text-[#7d98ff]/90 leading-relaxed font-medium">
+                    <p className="text-sm text-muted-foreground leading-relaxed font-medium">
                       {t('milestones.adminWarning')}
                     </p>
                   </div>
@@ -444,7 +444,7 @@ export function MilestonesStep({ onStepChange }: MilestonesStepProps = {}) {
                 {editingIndex !== null && (
                   <Button
                     variant="ghost"
-                    className="px-6 py-6 text-[#a9abb3] font-bold rounded-lg hover:text-white hover:bg-[#22262f] transition-all border-none"
+                    className="px-6 py-6 text-muted-foreground font-bold rounded-none hover:text-foreground hover:bg-background transition-all border-none"
                     onClick={() => {
                       setEditingIndex(null)
                       setMilestoneDraft(defaultMilestone)
@@ -456,7 +456,7 @@ export function MilestonesStep({ onStepChange }: MilestonesStepProps = {}) {
                 )}
                 <Button
                   type="button"
-                  className="px-8 py-6 bg-[#8ff5ff] text-[#005d63] font-bold rounded-lg hover:brightness-110 transition-all border-none"
+                  className="px-8 py-6 bg-neon-cyan text-background font-bold rounded-none hover:bg-neon-cyan/80 transition-all border border-neon-cyan shadow-[2px_2px_0px_0px_var(--neon-purple)]"
                   onClick={handleAddMilestone}
                   disabled={isUploading}
                 >
@@ -477,11 +477,10 @@ export function MilestonesStep({ onStepChange }: MilestonesStepProps = {}) {
             </CardContent>
           </Card>
         </div>
-
         {/* Right Column: Step-by-Step Summary */}
         <div className="md:col-span-12 lg:col-span-4 sticky top-24">
-          <h3 className="text-xl font-['Space_Grotesk'] font-bold text-[#ecedf6] mb-6 flex items-center gap-2">
-            <span className="material-symbols-outlined text-[#8ff5ff]">
+          <h3 className="text-xl font-['Space_Grotesk'] font-bold text-foreground mb-6 flex items-center gap-2">
+            <span className="material-symbols-outlined text-neon-cyan">
               analytics
             </span>
             {t('milestones.pipeline')}
@@ -489,7 +488,7 @@ export function MilestonesStep({ onStepChange }: MilestonesStepProps = {}) {
 
           <div className="space-y-2.5 relative">
             {/* Connecting Line */}
-            <div className="absolute left-[27px] top-4 bottom-10 w-[2px] bg-gradient-to-b from-[#8ff5ff] to-[#22262f]/20 z-0"></div>
+            <div className="absolute left-[27px] top-4 bottom-10 w-[2px] bg-gradient-to-b from-neon-cyan to-border/20 z-0"></div>
 
             {(() => {
               let currentDate = project.basics.startDate
@@ -540,13 +539,13 @@ export function MilestonesStep({ onStepChange }: MilestonesStepProps = {}) {
                   {currentPageMilestones.map((milestone) => (
                     <div key={milestone.index} className="relative z-10 pl-14">
                       <div className="absolute left-0 top-1 w-14 h-14 flex items-center justify-center">
-                        <div className="w-8 h-8 rounded-full bg-[#8ff5ff] border-4 border-[#0b0e14] flex items-center justify-center">
-                          <span className="text-[#005d63] text-[10px] font-black">
+                        <div className="w-8 h-8 rounded-none bg-neon-cyan border border-background flex items-center justify-center">
+                          <span className="text-background text-[10px] font-black">
                             {String(milestone.index + 1).padStart(2, '0')}
                           </span>
                         </div>
                       </div>
-                      <Card className="bg-[#1c2028] rounded-xl border-[#45484f]/15 hover:border-[#8ff5ff]/30 transition-colors shadow-none group/card">
+                      <Card className="bg-card rounded-none border border-border/50 hover:border-neon-cyan/30 transition-colors shadow-none group/card">
                         <CardContent className="p-l-5 relative">
                           <div className="absolute top-2 right-2 flex items-center gap-1 opacity-0 group-hover/card:opacity-100 transition-opacity">
                             <button
@@ -573,7 +572,7 @@ export function MilestonesStep({ onStepChange }: MilestonesStepProps = {}) {
                                 setEditingIndex(milestone.index)
                                 window.scrollTo({ top: 0, behavior: 'smooth' })
                               }}
-                              className="p-1 text-[#8ff5ff] hover:text-white transition-colors"
+                              className="p-1 text-neon-cyan hover:text-foreground transition-colors"
                               title={t('btn.edit')}
                             >
                               <span className="material-symbols-outlined text-sm">
@@ -602,7 +601,7 @@ export function MilestonesStep({ onStepChange }: MilestonesStepProps = {}) {
                                 if (currentPage > newTotal && newTotal > 0)
                                   setCurrentPage(newTotal)
                               }}
-                              className="p-1 text-[#ff716c] hover:text-white transition-colors"
+                              className="p-1 text-neon-rose hover:text-foreground transition-colors"
                               title={t('btn.delete')}
                             >
                               <span className="material-symbols-outlined text-sm">
@@ -614,7 +613,7 @@ export function MilestonesStep({ onStepChange }: MilestonesStepProps = {}) {
                           <div className="flex items-start gap-4 pr-6">
                             {milestone.images &&
                               milestone.images.length > 0 && (
-                                <div className="w-14 h-14 rounded-md overflow-hidden flex-shrink-0 border border-[#45484f]/30">
+                                <div className="w-14 h-14 rounded-none overflow-hidden flex-shrink-0 border border-border/30">
                                   <img
                                     src={milestone.images[0]}
                                     alt="Thumbnail"
@@ -623,11 +622,11 @@ export function MilestonesStep({ onStepChange }: MilestonesStepProps = {}) {
                                 </div>
                               )}
                             <div className="flex-1 min-w-0">
-                              <h4 className="font-bold text-[#ecedf6] truncate mb-1">
+                              <h4 className="font-bold text-foreground truncate mb-1">
                                 {milestone.name}
                               </h4>
-                              <div className="flex flex-col gap-1.5 mt-2 text-xs text-[#a9abb3] font-medium">
-                                <div className="flex items-center gap-1.5 text-[#8ff5ff]">
+                              <div className="flex flex-col gap-1.5 mt-2 text-xs text-muted-foreground font-medium">
+                                <div className="flex items-center gap-1.5 text-neon-cyan">
                                   <span className="material-symbols-outlined text-[12px]">
                                     calendar_today
                                   </span>
@@ -663,14 +662,14 @@ export function MilestonesStep({ onStepChange }: MilestonesStepProps = {}) {
                           setCurrentPage((p) => Math.max(1, p - 1))
                         }
                         disabled={currentPage === 1}
-                        className="text-[#a9abb3] hover:text-[#ecedf6]"
+                        className="text-muted-foreground hover:text-foreground rounded-none"
                       >
                         <span className="material-symbols-outlined text-sm mr-1">
                           chevron_left
                         </span>
                         {t('common.prev')}
                       </Button>
-                      <span className="text-xs text-[#a9abb3] font-medium tracking-wider">
+                      <span className="text-xs text-muted-foreground font-medium tracking-wider">
                         {t('common.pageOf', {
                           current: currentPage,
                           total: totalPages
@@ -683,7 +682,7 @@ export function MilestonesStep({ onStepChange }: MilestonesStepProps = {}) {
                           setCurrentPage((p) => Math.min(totalPages, p + 1))
                         }
                         disabled={currentPage === totalPages}
-                        className="text-[#a9abb3] hover:text-[#ecedf6]"
+                        className="text-muted-foreground hover:text-foreground rounded-none"
                       >
                         {t('common.next')}
                         <span className="material-symbols-outlined text-sm ml-1">
@@ -697,14 +696,14 @@ export function MilestonesStep({ onStepChange }: MilestonesStepProps = {}) {
             })()}
 
             {milestones.length === 0 && (
-              <p className="text-[#a9abb3] text-sm italic pl-14">
+              <p className="text-muted-foreground text-sm italic pl-14">
                 {t('milestones.empty')}
               </p>
             )}
 
             {/* Empty state hint */}
             <div className="relative z-10 pl-14 pt-4">
-              <div className="w-full aspect-[4/1] rounded-xl border-2 border-dashed border-[#45484f]/30 flex items-center justify-center text-[#45484f] text-xs">
+              <div className="w-full aspect-[4/1] rounded-none border border-dashed border-border/30 flex items-center justify-center text-muted-foreground/30 text-xs">
                 {t('milestones.emptyHint')}
               </div>
             </div>

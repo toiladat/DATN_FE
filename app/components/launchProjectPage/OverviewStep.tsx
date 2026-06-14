@@ -156,10 +156,10 @@ export function OverviewStep({ onStepChange }: OverviewStepProps = {}) {
     <div className="max-w-5xl mx-auto w-full">
       <header className="mb-12">
         <div className="flex items-center justify-between mb-2">
-          <h1 className="text-4xl md:text-5xl font-['Space_Grotesk'] font-bold text-[#ecedf6] tracking-tight">
+          <h1 className="text-4xl md:text-5xl font-['Space_Grotesk'] font-bold text-foreground tracking-tight">
             {t('overview.projectOverview')}
           </h1>
-          <div className="flex items-center gap-2 text-[#45484f] text-sm hidden md:flex">
+          <div className="flex items-center gap-2 text-muted-foreground/45 text-sm hidden md:flex">
             <span className="material-symbols-outlined text-xs">schedule</span>
             <span className="font-mono text-xs">
               {project.updatedAt
@@ -168,23 +168,23 @@ export function OverviewStep({ onStepChange }: OverviewStepProps = {}) {
             </span>
           </div>
         </div>
-        <p className="text-[#73757d] max-w-xl mt-3 text-base leading-relaxed">
+        <p className="text-muted-foreground/60 max-w-xl mt-3 text-base leading-relaxed">
           {t('overview.completeRequiredSections')}
         </p>
       </header>
 
       {/* KYC Warning Banner */}
       {!isUserLoading && !isKycVerified && (
-        <div className="mb-8 p-5 bg-[#ffb020]/10 border border-[#ffb020]/30 rounded-2xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4 shadow-[0_0_24px_rgba(255,176,32,0.06)] animate-in fade-in slide-in-from-top-4 duration-300">
+        <div className="mb-8 p-5 bg-amber-500/10 border border-amber-500/30 rounded-none flex flex-col md:flex-row items-start md:items-center justify-between gap-4 shadow-[2px_2px_0px_rgba(245,158,11,0.2)] animate-in fade-in slide-in-from-top-4 duration-300">
           <div className="flex gap-4 items-start">
-            <span className="material-symbols-outlined text-[#ffb020] text-3xl shrink-0 mt-0.5 animate-pulse">
+            <span className="material-symbols-outlined text-amber-500 text-3xl shrink-0 mt-0.5 animate-pulse">
               warning
             </span>
             <div className="space-y-1">
-              <h3 className="text-base font-semibold text-[#ffb020]">
+              <h3 className="text-base font-semibold text-amber-500">
                 {t('overview.kyc_warning_title')}
               </h3>
-              <p className="text-sm text-[#ecedf6]/80 max-w-2xl leading-relaxed">
+              <p className="text-sm text-foreground/80 max-w-2xl leading-relaxed">
                 {t('overview.kyc_warning_desc')}
               </p>
             </div>
@@ -192,7 +192,7 @@ export function OverviewStep({ onStepChange }: OverviewStepProps = {}) {
           <Button
             type="button"
             onClick={() => navigate('/profile')}
-            className="bg-[#ffb020] text-[#10131a] hover:bg-[#ffb020]/90 font-bold px-5 py-2 rounded-xl shrink-0 transition-all duration-200 active:scale-95 shadow-[0_0_12px_rgba(255,176,32,0.2)]"
+            className="bg-warning text-background hover:bg-warning/90 font-bold px-5 py-2 rounded-none shrink-0 transition-all duration-200 shadow-[2px_2px_0px_0px_rgba(245,158,11,0.4)] border border-warning cursor-pointer"
           >
             {t('overview.kyc_warning_btn')}
           </Button>
@@ -215,14 +215,14 @@ export function OverviewStep({ onStepChange }: OverviewStepProps = {}) {
       </section>
 
       {/* Action Buttons */}
-      <div className="flex items-center justify-between gap-4 border-t border-[#2e323b]/50 pt-8">
-        <p className="text-xs text-[#45484f]">
+      <div className="flex items-center justify-between gap-4 border-t border-border/50 pt-8">
+        <p className="text-xs text-muted-foreground/45">
           {tasks.filter((t) => t.status === 'Complete').length} / {tasks.length}{' '}
           {t('overview.sectionsComplete')}
         </p>
         <Button
           disabled={!isPublishable || isUserLoading || !isKycVerified}
-          className="bg-[#8ff5ff] hover:bg-[#a8f8ff] text-[#00383d] active:scale-95 transition-all font-bold px-8 rounded-xl shadow-[0_0_20px_rgba(143,245,255,0.2)] hover:shadow-[0_0_28px_rgba(143,245,255,0.35)] disabled:opacity-40 disabled:grayscale border-none"
+          className="bg-neon-cyan hover:bg-neon-cyan/85 text-background font-bold px-8 rounded-none shadow-[2px_2px_0px_0px_var(--neon-purple)] disabled:opacity-40 disabled:grayscale border border-neon-cyan disabled:shadow-none cursor-pointer"
           onClick={handlePublish}
         >
           {t('overview.publishProject')}

@@ -38,54 +38,54 @@ function getStepAppearance(
     milestoneStatus === 'WITHDRAWN'
   ) {
     return {
-      ring: 'border-[#8ff5ff] bg-[#8ff5ff]/10',
-      nodeText: 'text-[#8ff5ff]',
-      glow: 'shadow-[0_0_18px_rgba(143,245,255,0.35)]',
+      ring: 'border-neon-cyan bg-neon-cyan/10',
+      nodeText: 'text-neon-cyan',
+      glow: 'shadow-[0_0_18px_var(--color-neon-cyan)/35]',
       label:
         milestoneStatus === 'WITHDRAWN'
           ? t('detail.withdrawn')
           : t('updates.status.done'),
-      labelColor: 'text-[#8ff5ff] bg-[#8ff5ff]/10 border-[#8ff5ff]/30',
+      labelColor: 'text-neon-cyan bg-neon-cyan/10 border-neon-cyan/30',
       icon: <CheckCircle2 className="w-3 h-3" />
     }
   }
   if (status === 'unlocked') {
     return {
-      ring: 'border-[#ac89ff] bg-[#ac89ff]/10',
-      nodeText: 'text-[#ac89ff]',
-      glow: 'shadow-[0_0_18px_rgba(172,137,255,0.4)]',
+      ring: 'border-neon-purple bg-neon-purple/10',
+      nodeText: 'text-neon-purple',
+      glow: 'shadow-[0_0_18px_var(--color-neon-purple)/40]',
       label: t('updates.status.progress'),
-      labelColor: 'text-[#ac89ff] bg-[#ac89ff]/10 border-[#ac89ff]/30',
+      labelColor: 'text-neon-purple bg-neon-purple/10 border-neon-purple/30',
       icon: <Zap className="w-3 h-3" />
     }
   }
   if (status === 'late') {
     return {
-      ring: 'border-[#ff716c] bg-[#ff716c]/10',
-      nodeText: 'text-[#ff716c]',
-      glow: 'shadow-[0_0_18px_rgba(255,113,108,0.35)]',
+      ring: 'border-neon-rose bg-neon-rose/10',
+      nodeText: 'text-neon-rose',
+      glow: 'shadow-[0_0_18px_var(--color-neon-rose)/35]',
       label: t('updates.status.late'),
-      labelColor: 'text-[#ff716c] bg-[#ff716c]/10 border-[#ff716c]/30',
+      labelColor: 'text-neon-rose bg-neon-rose/10 border-neon-rose/30',
       icon: <Clock className="w-3 h-3" />
     }
   }
   if (status === 'finalized') {
     return {
-      ring: 'border-[#8ff5ff]/40 bg-[#8ff5ff]/5',
-      nodeText: 'text-[#8ff5ff]/60',
+      ring: 'border-neon-cyan/40 bg-neon-cyan/5',
+      nodeText: 'text-neon-cyan/60',
       glow: '',
       label: t('updates.status.closed'),
-      labelColor: 'text-[#8ff5ff]/60 bg-transparent border-[#8ff5ff]/20',
+      labelColor: 'text-neon-cyan/60 bg-transparent border-neon-cyan/20',
       icon: <CheckCircle2 className="w-3 h-3" />
     }
   }
   // locked_date | locked_prev | null
   return {
-    ring: 'border-[#2e323b] bg-[#161a21]',
-    nodeText: 'text-[#3a3e4a]',
+    ring: 'border-border bg-card',
+    nodeText: 'text-muted-foreground/45',
     glow: '',
     label: t('updates.status.locked'),
-    labelColor: 'text-[#3a3e4a] bg-transparent border-[#2e323b]',
+    labelColor: 'text-muted-foreground/45 bg-transparent border-border',
     icon: <Lock className="w-3 h-3" />
   }
 }
@@ -107,24 +107,24 @@ function MilestoneUpdateCard({ update }: { update: MilestoneUpdateRest }) {
   const next = () => setImgIdx((i) => (i + 1) % images.length)
 
   return (
-    <div className="mt-3 rounded-xl border border-[#1e2330] bg-[#0c0f16] overflow-hidden">
+    <div className="mt-3 rounded-none border border-border/50 bg-card overflow-hidden">
       {update.isLate && (
-        <div className="flex items-center gap-1.5 px-4 py-2 border-b border-[#181c27] bg-[#ff716c]/5">
-          <AlertTriangle className="w-3 h-3 text-[#ff716c]" />
-          <span className="text-[10px] font-semibold text-[#ff716c]">
+        <div className="flex items-center gap-1.5 px-4 py-2 border-b border-border/50 bg-neon-rose/5">
+          <AlertTriangle className="w-3 h-3 text-neon-rose" />
+          <span className="text-[10px] font-semibold text-neon-rose">
             {t('updates.submitted_late')}
           </span>
         </div>
       )}
-      <div className="divide-y divide-[#181c27]">
+      <div className="divide-y divide-border/50">
         {update.completed && (
           <div className="flex gap-4 px-5 py-4">
-            <CheckCheck className="w-4 h-4 text-[#6bcb77] mt-0.5 shrink-0" />
+            <CheckCheck className="w-4 h-4 text-success mt-0.5 shrink-0" />
             <div>
-              <p className="text-[10px] font-bold uppercase tracking-widest text-[#6bcb77] mb-1.5">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-success mb-1.5">
                 {t('updates.progress_title')}
               </p>
-              <p className="text-[13px] text-[#bbbdca] leading-relaxed whitespace-pre-wrap">
+              <p className="text-[13px] text-muted-foreground leading-relaxed whitespace-pre-wrap">
                 {update.completed}
               </p>
             </div>
@@ -132,12 +132,12 @@ function MilestoneUpdateCard({ update }: { update: MilestoneUpdateRest }) {
         )}
         {update.blockers && (
           <div className="flex gap-4 px-5 py-4">
-            <AlertTriangle className="w-4 h-4 text-[#e8a838] mt-0.5 shrink-0" />
+            <AlertTriangle className="w-4 h-4 text-warning mt-0.5 shrink-0" />
             <div>
-              <p className="text-[10px] font-bold uppercase tracking-widest text-[#e8a838] mb-1.5">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-warning mb-1.5">
                 {t('updates.blockers_title')}
               </p>
-              <p className="text-[13px] text-[#bbbdca] leading-relaxed whitespace-pre-wrap">
+              <p className="text-[13px] text-muted-foreground leading-relaxed whitespace-pre-wrap">
                 {update.blockers}
               </p>
             </div>
@@ -145,11 +145,11 @@ function MilestoneUpdateCard({ update }: { update: MilestoneUpdateRest }) {
         )}
         {hasMedia && (
           <div>
-            <div className="flex border-b border-[#181c27]">
+            <div className="flex border-b border-border/50">
               {hasImages && (
                 <button
                   onClick={() => setMediaTab('images')}
-                  className={`flex items-center gap-1.5 px-5 py-2.5 text-[11px] font-semibold transition-colors border-b-2 -mb-px ${mediaTab === 'images' ? 'text-[#ecedf6] border-[#8ff5ff]' : 'text-[#545760] border-transparent hover:text-[#a9abb3]'}`}
+                  className={`flex items-center gap-1.5 px-5 py-2.5 text-[11px] font-semibold transition-colors border-b-2 -mb-px ${mediaTab === 'images' ? 'text-foreground border-neon-cyan' : 'text-muted-foreground/45 border-transparent hover:text-muted-foreground'}`}
                 >
                   <ImageIcon className="w-3 h-3" />
                   {t('media.images')}
@@ -161,7 +161,7 @@ function MilestoneUpdateCard({ update }: { update: MilestoneUpdateRest }) {
               {hasVideo && (
                 <button
                   onClick={() => setMediaTab('video')}
-                  className={`flex items-center gap-1.5 px-5 py-2.5 text-[11px] font-semibold transition-colors border-b-2 -mb-px ${mediaTab === 'video' ? 'text-[#ecedf6] border-[#8ff5ff]' : 'text-[#545760] border-transparent hover:text-[#a9abb3]'}`}
+                  className={`flex items-center gap-1.5 px-5 py-2.5 text-[11px] font-semibold transition-colors border-b-2 -mb-px ${mediaTab === 'video' ? 'text-foreground border-neon-cyan' : 'text-muted-foreground/45 border-transparent hover:text-muted-foreground'}`}
                 >
                   <Film className="w-3 h-3" />
                   {t('media.video')}
@@ -186,13 +186,13 @@ function MilestoneUpdateCard({ update }: { update: MilestoneUpdateRest }) {
                   <>
                     <button
                       onClick={prev}
-                      className="absolute left-2 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full bg-black/60 hover:bg-black/80 flex items-center justify-center text-white transition-colors"
+                      className="absolute left-2 top-1/2 -translate-y-1/2 w-7 h-7 rounded-none bg-black/60 hover:bg-black/80 flex items-center justify-center text-white transition-colors border border-white/10"
                     >
                       <ChevronLeft className="w-4 h-4" />
                     </button>
                     <button
                       onClick={next}
-                      className="absolute right-2 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full bg-black/60 hover:bg-black/80 flex items-center justify-center text-white transition-colors"
+                      className="absolute right-2 top-1/2 -translate-y-1/2 w-7 h-7 rounded-none bg-black/60 hover:bg-black/80 flex items-center justify-center text-white transition-colors border border-white/10"
                     >
                       <ChevronRight className="w-4 h-4" />
                     </button>
@@ -201,7 +201,7 @@ function MilestoneUpdateCard({ update }: { update: MilestoneUpdateRest }) {
                         <button
                           key={i}
                           onClick={() => setImgIdx(i)}
-                          className={`w-1.5 h-1.5 rounded-full transition-all ${i === imgIdx ? 'bg-white scale-125' : 'bg-white/40'}`}
+                          className={`w-1.5 h-1.5 rounded-none transition-all ${i === imgIdx ? 'bg-white scale-125' : 'bg-white/40'}`}
                         />
                       ))}
                     </div>
@@ -224,7 +224,7 @@ function MilestoneUpdateCard({ update }: { update: MilestoneUpdateRest }) {
               href={update.link}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 text-xs text-[#8ff5ff]/80 hover:text-[#8ff5ff] transition-colors group"
+              className="inline-flex items-center gap-2 text-xs text-neon-cyan/80 hover:text-neon-cyan transition-colors group"
             >
               <ExternalLink className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
               <span className="truncate max-w-xs underline underline-offset-2 decoration-dashed">
@@ -302,22 +302,25 @@ function MilestoneStep({
     if (daysToStart > 0)
       return {
         text: t('updates.starts_in', { days: daysToStart }),
-        color: 'text-[#4a4e5a]'
+        color: 'text-muted-foreground/50'
       }
     if (daysToEnd === 0)
       return {
         text: t('updates.ends_today'),
-        color: 'text-[#ff716c] font-bold'
+        color: 'text-neon-rose font-bold'
       }
     if (daysToEnd > 0)
       return {
         text: t('updates.days_left', { days: daysToEnd }),
-        color: updateStatus === 'unlocked' ? 'text-[#ac89ff]' : 'text-[#4a4e5a]'
+        color:
+          updateStatus === 'unlocked'
+            ? 'text-neon-purple'
+            : 'text-muted-foreground/50'
       }
     if (daysPastEnd > 0)
       return {
         text: t('updates.days_overdue', { days: daysPastEnd }),
-        color: 'text-[#ff716c]'
+        color: 'text-neon-rose'
       }
     return null
   })()
@@ -328,7 +331,7 @@ function MilestoneStep({
       <div className="flex flex-col items-center w-12 shrink-0">
         {/* Node circle */}
         <div
-          className={`w-10 h-10 rounded-full flex items-center justify-center border-2 transition-all duration-500 z-10 ${appearance.ring} ${appearance.glow}`}
+          className={`w-10 h-10 rounded-none flex items-center justify-center border-2 transition-all duration-500 z-10 ${appearance.ring} ${appearance.glow}`}
         >
           <span
             className={`font-['Space_Grotesk'] font-bold text-sm ${appearance.nodeText}`}
@@ -338,7 +341,7 @@ function MilestoneStep({
         </div>
         {/* Connector line */}
         {!isLast && (
-          <div className="flex-1 w-px bg-gradient-to-b from-[#2e323b]/60 to-transparent mt-1 min-h-[32px]" />
+          <div className="flex-1 w-px bg-gradient-to-b from-border/60 to-transparent mt-1 min-h-[32px]" />
         )}
       </div>
 
@@ -348,12 +351,12 @@ function MilestoneStep({
         <div className="flex flex-wrap items-start gap-3 mb-3">
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 flex-wrap">
-              <h3 className="text-[#ecedf6] font-['Space_Grotesk'] font-semibold text-[15px] leading-snug">
+              <h3 className="text-foreground font-['Space_Grotesk'] font-semibold text-[15px] leading-snug">
                 {milestone.title}
               </h3>
               {/* Status badge */}
               <span
-                className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full border text-[9px] font-bold uppercase tracking-widest ${appearance.labelColor}`}
+                className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-none border text-[9px] font-bold uppercase tracking-widest ${appearance.labelColor}`}
               >
                 {appearance.icon}
                 {appearance.label}
@@ -362,7 +365,7 @@ function MilestoneStep({
               {hasExisting && !showForm && (
                 <button
                   onClick={() => setShowUpdate((v) => !v)}
-                  className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full border text-[9px] font-bold uppercase tracking-wider border-[#8ff5ff]/20 text-[#8ff5ff]/60 hover:text-[#8ff5ff] hover:border-[#8ff5ff]/40 transition-colors"
+                  className="inline-flex items-center gap-1 px-2 py-0.5 rounded-none border text-[9px] font-bold uppercase tracking-wider border-neon-cyan/20 text-neon-cyan/60 hover:text-neon-cyan hover:border-neon-cyan/40 transition-colors"
                 >
                   <ChevronRight
                     className={`w-2.5 h-2.5 transition-transform duration-150 ${showUpdate ? 'rotate-90' : ''}`}
@@ -371,7 +374,7 @@ function MilestoneStep({
                 </button>
               )}
             </div>
-            <p className="text-[#73757d] text-[11px] mt-1 font-mono flex items-center gap-2 flex-wrap">
+            <p className="text-muted-foreground/60 text-[11px] mt-1 font-mono flex items-center gap-2 flex-wrap">
               {startLabel} → {endLabel}
               {relativeLabel && (
                 <span
@@ -387,13 +390,13 @@ function MilestoneStep({
           {canUpdate && (
             <button
               onClick={() => setShowForm((v) => !v)}
-              className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl text-[11px] font-bold uppercase tracking-widest transition-all duration-200 shrink-0
+              className={`inline-flex items-center gap-2 px-4 py-2 rounded-none text-[11px] font-bold uppercase tracking-widest transition-all duration-200 shrink-0 shadow-[2px_2px_0px_var(--neon-purple)] hover:shadow-none
                 ${
                   showForm
-                    ? 'bg-[#22262f] border border-[#2e323b] text-[#73757d]'
+                    ? 'bg-background border border-border text-muted-foreground/60'
                     : updateStatus === 'late'
-                      ? 'bg-[#ff716c]/10 border border-[#ff716c]/30 text-[#ff716c] hover:bg-[#ff716c]/20 hover:border-[#ff716c]/50'
-                      : 'bg-[#ac89ff]/10 border border-[#ac89ff]/30 text-[#ac89ff] hover:bg-[#ac89ff]/20 hover:border-[#ac89ff]/50'
+                      ? 'bg-neon-rose/10 border border-neon-rose/30 text-neon-rose hover:bg-neon-rose/20 hover:border-neon-rose/50'
+                      : 'bg-neon-purple/10 border border-neon-purple/30 text-neon-purple hover:bg-neon-purple/20 hover:border-neon-purple/50'
                 }`}
             >
               {showForm ? (
@@ -421,7 +424,7 @@ function MilestoneStep({
 
         {/* Inline form — chỉ show khi owner click nút Update/Edit */}
         {showForm && (
-          <div className="rounded-2xl bg-[#161a21] border border-[#2e323b]/60 p-5 mt-3">
+          <div className="rounded-none bg-background border border-border/60 p-5 mt-3">
             <MilestoneUpdateForm
               projectId={projectId}
               milestoneId={milestone.id}
@@ -434,13 +437,13 @@ function MilestoneStep({
 
         {/* Locked hint */}
         {!canUpdate && updateStatus === 'locked_prev' && (
-          <p className="text-[#3a3e4a] text-[11px] flex items-center gap-1.5">
+          <p className="text-muted-foreground/45 text-[11px] flex items-center gap-1.5 font-mono">
             <Lock className="w-3 h-3" />
             {t('updates.complete_prev_first')}
           </p>
         )}
         {!canUpdate && updateStatus === 'locked_date' && (
-          <p className="text-[#3a3e4a] text-[11px] flex items-center gap-1.5">
+          <p className="text-muted-foreground/45 text-[11px] flex items-center gap-1.5 font-mono">
             <Clock className="w-3 h-3" />
             {t('updates.starts_on', { date: startLabel })}
           </p>
@@ -469,13 +472,13 @@ export function ProjectUpdates({
   if (sorted.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-20 gap-4 text-center">
-        <div className="w-14 h-14 rounded-full bg-[#161a21] border border-[#2e323b]/50 flex items-center justify-center">
-          <Zap className="w-6 h-6 text-[#3a3e4a]" />
+        <div className="w-14 h-14 rounded-none bg-background border border-border/50 flex items-center justify-center">
+          <Zap className="w-6 h-6 text-muted-foreground/45" />
         </div>
-        <p className="text-[#a9abb3] text-sm font-['Space_Grotesk'] font-medium">
+        <p className="text-muted-foreground text-sm font-['Space_Grotesk'] font-medium">
           {t('updates.no_milestones')}
         </p>
-        <p className="text-[#73757d] text-xs">
+        <p className="text-muted-foreground/60 text-xs">
           {t('updates.no_milestones_desc')}
         </p>
       </div>
@@ -486,11 +489,11 @@ export function ProjectUpdates({
     <div className="max-w-2xl">
       {/* Header */}
       <div className="flex items-center gap-3 mb-10">
-        <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#73757d] font-['Space_Grotesk']">
+        <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-muted-foreground/60 font-['Space_Grotesk']">
           {t('updates.title')}
         </span>
-        <div className="flex-1 h-px bg-[#2e323b]/40" />
-        <span className="text-[11px] font-mono text-[#3a3e4a]">
+        <div className="flex-1 h-px bg-border/40" />
+        <span className="text-[11px] font-mono text-muted-foreground/45">
           {sorted.length === 1
             ? t('updates.phases_count', { count: sorted.length })
             : t('updates.phases_count_plural', { count: sorted.length })}
@@ -498,7 +501,7 @@ export function ProjectUpdates({
       </div>
 
       {!isOwner && (
-        <p className="text-[#3a3e4a] text-[11px] mb-8 flex items-center gap-1.5">
+        <p className="text-muted-foreground/45 text-[11px] mb-8 flex items-center gap-1.5 font-mono">
           <Lock className="w-3 h-3" />
           {t('updates.only_owner_can_submit')}
         </p>

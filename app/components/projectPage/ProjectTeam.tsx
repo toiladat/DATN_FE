@@ -10,7 +10,9 @@ import type { ProjectDetail } from '@/schemas/projectSchema'
 
 type Member = ProjectDetail['projectMembers'][number]
 
-function getInitials(name?: string | null) {
+type OptionalString = string | null | undefined
+
+function getInitials(name?: OptionalString) {
   if (!name) return '?'
   return name
     .split(' ')
@@ -38,14 +40,14 @@ function WalletCell({ address }: { address: string }) {
     <button
       onClick={copy}
       title={address}
-      className="group/w inline-flex items-center gap-1.5 text-[#73757d] hover:text-[#a9abb3] transition-colors duration-200"
+      className="group/w inline-flex items-center gap-1.5 text-muted-foreground/60 hover:text-muted-foreground transition-colors duration-200"
     >
       <Wallet className="w-3 h-3 shrink-0" />
       <span className="font-mono text-[11px] tracking-wide">
         {truncateWallet(address)}
       </span>
       {copied ? (
-        <CheckCheck className="w-3 h-3 text-[#8ff5ff]" />
+        <CheckCheck className="w-3 h-3 text-neon-cyan" />
       ) : (
         <Copy className="w-3 h-3 opacity-0 group-hover/w:opacity-100 transition-opacity duration-200" />
       )}
@@ -76,9 +78,9 @@ function MemberCard({
           className={`flex flex-col items-center gap-3 text-center group cursor-pointer focus:outline-none ${isOwner ? 'w-40' : 'w-28'}`}
         >
           <div
-            className={`rounded-full bg-gradient-to-br from-[#8ff5ff] to-[#ac89ff] p-[2px] transition-transform duration-300 ease-out group-hover:scale-110 ${isOwner ? 'w-20 h-20' : 'w-16 h-16'}`}
+            className={`rounded-none bg-gradient-to-br from-neon-cyan to-neon-purple p-[2px] transition-transform duration-300 ease-out group-hover:scale-110 ${isOwner ? 'w-20 h-20' : 'w-16 h-16'}`}
           >
-            <div className="w-full h-full rounded-full bg-[#161a21] overflow-hidden flex items-center justify-center">
+            <div className="w-full h-full rounded-none bg-background overflow-hidden flex items-center justify-center border border-border/20">
               {avatar ? (
                 <img
                   src={avatar}
@@ -86,7 +88,7 @@ function MemberCard({
                   className="w-full h-full object-cover transition-all duration-300"
                 />
               ) : (
-                <span className="text-[#ac89ff] font-semibold text-lg font-['Space_Grotesk']">
+                <span className="text-neon-purple font-semibold text-lg font-['Space_Grotesk']">
                   {getInitials(name)}
                 </span>
               )}
@@ -94,12 +96,12 @@ function MemberCard({
           </div>
           <div>
             <p
-              className={`text-[#ecedf6] font-['Space_Grotesk'] font-bold leading-snug line-clamp-2 group-hover:text-[#8ff5ff] transition-colors ${isOwner ? 'text-[14px]' : 'text-[12px]'}`}
+              className={`text-foreground font-['Space_Grotesk'] font-bold leading-snug line-clamp-2 group-hover:text-neon-cyan transition-colors ${isOwner ? 'text-[14px]' : 'text-[12px]'}`}
             >
               {name}
             </p>
             <p
-              className={`text-[#8ff5ff] font-medium uppercase tracking-widest mt-1 ${isOwner ? 'text-[10px]' : 'text-[9px]'}`}
+              className={`text-neon-cyan font-medium uppercase tracking-widest mt-1 ${isOwner ? 'text-[10px]' : 'text-[9px]'}`}
             >
               {role}
             </p>
@@ -109,27 +111,27 @@ function MemberCard({
       <PopoverContent
         side="bottom"
         align="center"
-        className="bg-[#10131a]/95 backdrop-blur-md border-[#2e323b]/50 text-[#ecedf6] w-64 p-4 shadow-2xl"
+        className="bg-card/95 backdrop-blur-md border-border/50 text-foreground w-64 p-4 shadow-2xl"
       >
         <div className="flex flex-col gap-3 text-xs">
-          <div className="flex flex-col gap-2 border-b border-[#2e323b]/40 pb-3">
+          <div className="flex flex-col gap-2 border-b border-border/40 pb-3">
             <div className="flex items-center gap-2">
-              <Wallet className="w-3.5 h-3.5 text-[#73757d]" />
+              <Wallet className="w-3.5 h-3.5 text-muted-foreground/60" />
               <WalletCell address={wallet} />
             </div>
             {email && (
-              <div className="flex items-center gap-2 text-[#a9abb3]">
-                <Mail className="w-3.5 h-3.5 text-[#73757d]" />
+              <div className="flex items-center gap-2 text-muted-foreground">
+                <Mail className="w-3.5 h-3.5 text-muted-foreground/60" />
                 <span className="truncate">{email}</span>
               </div>
             )}
           </div>
           {description ? (
-            <div className="text-[#ecedf6]/80 leading-relaxed">
+            <div className="text-foreground/80 leading-relaxed">
               {description}
             </div>
           ) : (
-            <div className="text-[#73757d] italic">
+            <div className="text-muted-foreground/60 italic">
               {t('team.no_description')}
             </div>
           )}
@@ -190,14 +192,14 @@ export function ProjectTeam({ project }: { project: ProjectDetail }) {
       {isEmpty ? (
         /* Empty state */
         <div className="flex flex-col items-center justify-center py-20 gap-5 text-center">
-          <div className="w-14 h-14 rounded-full bg-[#161a21] border border-[#2e323b]/50 flex items-center justify-center">
-            <Users className="w-6 h-6 text-[#3a3e4a]" />
+          <div className="w-14 h-14 rounded-none bg-background border border-border/50 flex items-center justify-center">
+            <Users className="w-6 h-6 text-muted-foreground/40" />
           </div>
           <div>
-            <p className="text-[#a9abb3] text-sm font-['Space_Grotesk'] font-medium">
+            <p className="text-muted-foreground text-sm font-['Space_Grotesk'] font-medium">
               {t('team.no_members')}
             </p>
-            <p className="text-[#73757d] text-xs mt-1">
+            <p className="text-muted-foreground/60 text-xs mt-1">
               {t('team.empty_hint')}
             </p>
           </div>

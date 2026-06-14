@@ -6,13 +6,23 @@ const Footer = () => {
   const { t } = useTranslation()
 
   return (
-    <footer className="bg-background w-full py-16 px-4 border-t border-border mt-auto z-10 relative">
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-12 max-w-7xl mx-auto">
+    <footer className="bg-background w-full py-16 px-4 border-t border-border/40 mt-auto z-10 relative overflow-hidden">
+      {/* Background dot grid overlay */}
+      <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAyIiBoZWlnaHQ9IjYwMiIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4gPGNpcmNsZSBjeD0iMiIgY3k9IjIiIHI9IjEiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4wMTUpIi8+PC9zdmc+')] opacity-20 pointer-events-none z-0" />
+
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-12 max-w-7xl mx-auto relative z-10">
         <div className="col-span-1 md:col-span-1">
-          <span className="text-xl font-bold text-cyan-400 mb-4 block font-headline">
-            FundHive
-          </span>
-          <p className="font-['Inter'] text-sm text-slate-400 leading-relaxed">
+          <div className="flex items-center gap-1 mb-4">
+            <img
+              src="/logo.png"
+              alt="FundHive Logo"
+              className="h-14 w-14 object-contain my-[-8px] ml-[-10px] mr-[-8px]"
+            />
+            <span className="text-xl font-bold text-neon-cyan font-headline tracking-tighter drop-shadow-[0_0_8px_rgba(143,245,255,0.3)]">
+              FundHive
+            </span>
+          </div>
+          <p className="font-['Inter'] text-sm text-muted-foreground leading-relaxed">
             {t('footer.desc')}
           </p>
         </div>
@@ -24,7 +34,7 @@ const Footer = () => {
           <ul className="space-y-4">
             <li>
               <Link
-                className="font-['Inter'] text-sm text-slate-500 hover:text-cyan-400 transition-colors"
+                className="font-['Inter'] text-sm text-muted-foreground hover:text-neon-cyan transition-colors"
                 to="/projects"
               >
                 {t('nav.projects')}
@@ -32,7 +42,7 @@ const Footer = () => {
             </li>
             <li>
               <a
-                className="font-['Inter'] text-sm text-slate-500 hover:text-cyan-400 transition-colors"
+                className="font-['Inter'] text-sm text-muted-foreground hover:text-neon-cyan transition-colors"
                 href="#"
               >
                 Yield Pools
@@ -40,7 +50,7 @@ const Footer = () => {
             </li>
             <li>
               <a
-                className="font-['Inter'] text-sm text-slate-500 hover:text-cyan-400 transition-colors"
+                className="font-['Inter'] text-sm text-muted-foreground hover:text-neon-cyan transition-colors"
                 href="#"
               >
                 Governance
@@ -48,7 +58,7 @@ const Footer = () => {
             </li>
             <li>
               <a
-                className="font-['Inter'] text-sm text-slate-500 hover:text-cyan-400 transition-colors"
+                className="font-['Inter'] text-sm text-muted-foreground hover:text-neon-cyan transition-colors"
                 href="#"
               >
                 Documentation
@@ -64,7 +74,7 @@ const Footer = () => {
           <ul className="space-y-4">
             <li>
               <a
-                className="font-['Inter'] text-sm text-slate-500 hover:text-cyan-400 transition-colors"
+                className="font-['Inter'] text-sm text-muted-foreground hover:text-neon-cyan transition-colors"
                 href="#"
               >
                 Discord
@@ -72,7 +82,7 @@ const Footer = () => {
             </li>
             <li>
               <a
-                className="font-['Inter'] text-sm text-slate-500 hover:text-cyan-400 transition-colors"
+                className="font-['Inter'] text-sm text-muted-foreground hover:text-neon-cyan transition-colors"
                 href="#"
               >
                 Twitter
@@ -80,7 +90,7 @@ const Footer = () => {
             </li>
             <li>
               <a
-                className="font-['Inter'] text-sm text-slate-500 hover:text-cyan-400 transition-colors"
+                className="font-['Inter'] text-sm text-muted-foreground hover:text-neon-cyan transition-colors"
                 href="#"
               >
                 Telegram
@@ -88,7 +98,7 @@ const Footer = () => {
             </li>
             <li>
               <a
-                className="font-['Inter'] text-sm text-slate-500 hover:text-cyan-400 transition-colors"
+                className="font-['Inter'] text-sm text-muted-foreground hover:text-neon-cyan transition-colors"
                 href="#"
               >
                 Newsletter Signup
@@ -104,7 +114,7 @@ const Footer = () => {
           <ul className="space-y-4">
             <li>
               <a
-                className="font-['Inter'] text-sm text-slate-500 hover:text-cyan-400 transition-colors"
+                className="font-['Inter'] text-sm text-muted-foreground hover:text-neon-cyan transition-colors"
                 href="#"
               >
                 Privacy Policy
@@ -112,7 +122,7 @@ const Footer = () => {
             </li>
             <li>
               <Link
-                className="font-['Inter'] text-sm text-slate-500 hover:text-cyan-400 transition-colors"
+                className="font-['Inter'] text-sm text-muted-foreground hover:text-neon-cyan transition-colors"
                 to="/how-it-works"
               >
                 {t('nav.how_it_works')}
@@ -120,7 +130,7 @@ const Footer = () => {
             </li>
             <li>
               <a
-                className="font-['Inter'] text-sm text-slate-500 hover:text-cyan-400 transition-colors"
+                className="font-['Inter'] text-sm text-muted-foreground hover:text-neon-cyan transition-colors"
                 href="#"
               >
                 Security Audits
@@ -130,14 +140,14 @@ const Footer = () => {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 mt-16 pt-8 border-t border-border flex flex-col md:flex-row justify-between items-center gap-4">
-        <p className="font-['Inter'] text-sm text-slate-400">
+      <div className="max-w-7xl mx-auto px-4 mt-16 pt-8 border-t border-border/30 flex flex-col md:flex-row justify-between items-center gap-4 relative z-10">
+        <p className="font-mono text-[11px] tracking-wider text-muted-foreground/80">
           © {new Date().getFullYear()} VaultPrime. {t('footer.rights')}
         </p>
         <div className="flex gap-6">
-          <Globe className="text-muted-foreground hover:text-foreground cursor-pointer transition-colors w-5 h-5" />
-          <Shield className="text-muted-foreground hover:text-foreground cursor-pointer transition-colors w-5 h-5" />
-          <Activity className="text-muted-foreground hover:text-foreground cursor-pointer transition-colors w-5 h-5" />
+          <Globe className="text-muted-foreground hover:text-neon-cyan cursor-pointer transition-colors w-4 h-4" />
+          <Shield className="text-muted-foreground hover:text-neon-cyan cursor-pointer transition-colors w-4 h-4" />
+          <Activity className="text-muted-foreground hover:text-neon-cyan cursor-pointer transition-colors w-4 h-4" />
         </div>
       </div>
     </footer>

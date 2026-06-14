@@ -15,19 +15,19 @@ export default function ProjectDetail() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#0a0c10]">
-        <Loader2 className="w-10 h-10 animate-spin text-[#8ff5ff]" />
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <Loader2 className="w-10 h-10 animate-spin text-neon-cyan" />
       </div>
     )
   }
 
   if (isError || !project) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-[#0a0c10] text-[#ecedf6]">
+      <div className="min-h-screen flex flex-col items-center justify-center bg-background text-foreground">
         <h2 className="text-2xl font-bold mb-4 font-['Space_Grotesk']">
           {t('my_project.not_found')}
         </h2>
-        <Link to="/my-project" className="text-[#8ff5ff] hover:underline">
+        <Link to="/my-project" className="text-neon-cyan hover:underline">
           {t('my_project.back_to_my_projects')}
         </Link>
       </div>

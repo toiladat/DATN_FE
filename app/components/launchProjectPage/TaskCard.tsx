@@ -35,12 +35,12 @@ export function TaskCard({
   const isOptional = status === 'Optional'
   const stepNum = STEP_NUMBERS[stepIndex] ?? '0' + (stepIndex + 1)
 
-  const containerClass = `p-5 flex flex-col md:flex-row md:items-center justify-between group transition-all duration-300 gap-4 bg-[#10131a] ${
+  const containerClass = `p-5 flex flex-col md:flex-row md:items-center justify-between group transition-all duration-300 gap-4 bg-card rounded-none ${
     isComplete
-      ? 'border border-[#ac89ff]/20'
+      ? 'border border-neon-purple/20'
       : isInProgress
-        ? 'border border-[#8ff5ff]/25 shadow-[0_0_20px_rgba(143,245,255,0.07)]'
-        : 'border border-[#2e323b]/60 hover:border-[#2e323b]'
+        ? 'border border-neon-cyan/25 shadow-[0_0_20px_var(--color-neon-cyan)/7]'
+        : 'border border-border/60 hover:border-border'
   } ${onClick ? 'cursor-pointer' : ''}`
 
   return (
@@ -51,10 +51,10 @@ export function TaskCard({
           <span
             className={`font-mono text-lg font-bold w-8 shrink-0 ${
               isComplete
-                ? 'text-[#ac89ff]'
+                ? 'text-neon-purple'
                 : isInProgress
-                  ? 'text-[#8ff5ff]'
-                  : 'text-[#45484f]'
+                  ? 'text-neon-cyan'
+                  : 'text-muted-foreground/45'
             }`}
           >
             {stepNum}
@@ -63,12 +63,14 @@ export function TaskCard({
           <div>
             <h3
               className={`text-base font-['Space_Grotesk'] font-semibold ${
-                isComplete ? 'text-[#a9abb3]' : 'text-[#ecedf6]'
+                isComplete ? 'text-muted-foreground' : 'text-foreground'
               }`}
             >
               {title}
             </h3>
-            <p className="text-sm text-[#73757d] mt-0.5">{description}</p>
+            <p className="text-sm text-muted-foreground/60 mt-0.5">
+              {description}
+            </p>
           </div>
         </div>
 
@@ -77,10 +79,10 @@ export function TaskCard({
           <span
             className={`text-[10px] font-bold uppercase tracking-widest ${
               isComplete
-                ? 'text-[#ac89ff]'
+                ? 'text-neon-purple'
                 : isInProgress
-                  ? 'text-[#8ff5ff]'
-                  : 'text-[#45484f]'
+                  ? 'text-neon-cyan'
+                  : 'text-muted-foreground/45'
             }`}
           >
             {t(statusKeyMap[status])}
@@ -88,19 +90,19 @@ export function TaskCard({
 
           {/* CTA */}
           {isInProgress ? (
-            <Button className="bg-[#8ff5ff] text-[#00383d] hover:bg-[#a8f8ff] px-5 h-9 text-sm font-medium rounded-lg shadow-none">
+            <Button className="bg-neon-cyan text-background hover:bg-neon-cyan/85 px-5 h-9 text-sm font-bold rounded-none shadow-none">
               {t('btn.continue')}
             </Button>
           ) : isComplete ? (
-            <span className="material-symbols-outlined text-[#ac89ff] text-xl">
+            <span className="material-symbols-outlined text-neon-purple text-xl">
               check_circle
             </span>
           ) : isOptional ? (
-            <span className="material-symbols-outlined text-[#45484f] group-hover:text-[#8ff5ff] transition-colors text-xl">
+            <span className="material-symbols-outlined text-muted-foreground/45 group-hover:text-neon-cyan transition-colors text-xl">
               add_circle
             </span>
           ) : (
-            <span className="material-symbols-outlined text-[#45484f] group-hover:text-[#8ff5ff] transition-colors text-xl">
+            <span className="material-symbols-outlined text-muted-foreground/45 group-hover:text-neon-cyan transition-colors text-xl">
               chevron_right
             </span>
           )}

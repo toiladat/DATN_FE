@@ -213,17 +213,17 @@ export default function Profile() {
 
   if (isLoading) {
     return (
-      <div className="flex-1 flex items-center justify-center bg-[#10131a] min-h-[calc(100vh-4rem)]">
-        <div className="w-8 h-8 border-2 border-[#8ff5ff]/30 border-t-[#8ff5ff] rounded-full animate-spin" />
+      <div className="flex-1 flex items-center justify-center bg-background min-h-[calc(100vh-4rem)]">
+        <div className="w-8 h-8 border-2 border-neon-cyan/30 border-t-neon-cyan rounded-none animate-spin" />
       </div>
     )
   }
 
   return (
-    <div className="flex-1 overflow-y-auto p-6 md:p-12 relative bg-[#10131a] min-h-[calc(100vh-4rem)]">
+    <div className="flex-1 overflow-y-auto p-6 md:p-12 relative bg-background min-h-[calc(100vh-4rem)]">
       {/* Background Atmospheric Glow */}
       <div className="absolute top-0 right-0 w-full h-full overflow-hidden pointer-events-none z-0">
-        <div className="absolute -top-40 -right-40 w-[600px] h-[600px] bg-[#8ff5ff]/5 rounded-full blur-[120px]"></div>
+        <div className="absolute -top-40 -right-40 w-[600px] h-[600px] bg-neon-cyan/5 rounded-none blur-[120px]"></div>
       </div>
 
       <div className="max-w-4xl mx-auto relative z-10 mt-8 md:mt-12">
@@ -233,14 +233,14 @@ export default function Profile() {
           <div className="lg:col-span-2 space-y-8">
             {/* Identity Details Section */}
             <section className="space-y-6">
-              <h2 className="text-lg font-['Space_Grotesk'] font-semibold text-[#ecedf6] flex items-center gap-2">
+              <h2 className="text-lg font-['Space_Grotesk'] font-semibold text-foreground flex items-center gap-2">
                 {t('profile.identity_details')}
               </h2>
 
-              <div className="space-y-5 bg-[#161a21] border border-[#2e323b]/50 rounded-lg p-6">
+              <div className="space-y-5 bg-card border border-border rounded-none p-6">
                 {/* Name Input */}
                 <div className="space-y-2">
-                  <Label htmlFor="name" className="text-[#ecedf6]">
+                  <Label htmlFor="name" className="text-foreground">
                     {t('profile.display_name')}
                   </Label>
                   <Input
@@ -249,13 +249,13 @@ export default function Profile() {
                     type="text"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    className="bg-[#10131a] border-[#2e323b] text-[#ecedf6] focus-visible:ring-[#8ff5ff]"
+                    className="bg-background border border-border text-foreground focus-visible:ring-neon-cyan rounded-none"
                   />
                 </div>
 
                 {/* Email – read-only, updated only via KYC verify */}
                 <div className="space-y-2">
-                  <Label htmlFor="email" className="text-[#ecedf6]">
+                  <Label htmlFor="email" className="text-foreground">
                     {t('profile.email_address')}
                   </Label>
                   <div className="flex gap-2">
@@ -266,17 +266,17 @@ export default function Profile() {
                       value={email}
                       readOnly={!isKycPending}
                       onChange={(e) => setEmail(e.target.value)}
-                      className="bg-[#10131a] border-[#2e323b] text-[#ecedf6] flex-1 disabled:opacity-50"
+                      className="bg-background border border-border text-foreground flex-1 disabled:opacity-50 rounded-none"
                     />
                     {isKycPending && !isVerifyMode && (
                       <Button
                         type="button"
                         onClick={handleSendCode}
                         disabled={isSendingOtp}
-                        className="bg-[#ffb020] text-[#10131a] hover:bg-[#ffb020]/90 font-semibold px-4"
+                        className="bg-warning text-background hover:bg-warning/90 font-semibold px-4 rounded-none shadow-[2px_2px_0px_rgba(245,158,11,0.3)] border border-warning"
                       >
                         {isSendingOtp ? (
-                          <div className="w-4 h-4 border-2 border-[#10131a]/30 border-t-[#10131a] rounded-full animate-spin mr-2" />
+                          <div className="w-4 h-4 border-2 border-background/30 border-t-background rounded-none animate-spin mr-2" />
                         ) : null}
                         {t('profile.btn_verify')}
                       </Button>
@@ -285,7 +285,7 @@ export default function Profile() {
                       <Button
                         type="button"
                         disabled
-                        className="bg-[#2e323b] text-[#8ff5ff] font-semibold opacity-100 cursor-default px-4"
+                        className="bg-muted text-neon-cyan font-semibold opacity-100 cursor-default px-4 rounded-none"
                       >
                         <span className="material-symbols-outlined text-[16px] mr-1">
                           check_circle
@@ -305,7 +305,7 @@ export default function Profile() {
                           <InputOTPSlot
                             key={i}
                             index={i}
-                            className="h-9 w-9 text-base font-mono bg-[#10131a] border-[#2e323b] text-[#ecedf6] data-[active=true]:border-[#8ff5ff]"
+                            className="h-9 w-9 text-base font-mono bg-background border border-border text-foreground data-[active=true]:border-neon-cyan rounded-none"
                           />
                         ))}
                       </InputOTPGroup>
@@ -314,10 +314,10 @@ export default function Profile() {
                       type="button"
                       onClick={handleVerifyOTP}
                       disabled={otp.length !== 6 || isVerifyingOtp}
-                      className="bg-[#8ff5ff] text-[#10131a] hover:bg-[#8ff5ff]/90 font-semibold px-4 h-9 min-w-[90px]"
+                      className="bg-neon-cyan text-background hover:bg-neon-cyan/90 font-semibold px-4 h-9 min-w-[90px] rounded-none shadow-[2px_2px_0px_rgba(0,0,0,0.15)]"
                     >
                       {isVerifyingOtp ? (
-                        <div className="w-4 h-4 border-2 border-[#10131a]/30 border-t-[#10131a] rounded-full animate-spin" />
+                        <div className="w-4 h-4 border-2 border-background/30 border-t-background rounded-none animate-spin" />
                       ) : (
                         t('profile.btn_confirm')
                       )}
@@ -328,7 +328,7 @@ export default function Profile() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                   {/* Phone Input */}
                   <div className="space-y-2">
-                    <Label htmlFor="phoneNumber" className="text-[#ecedf6]">
+                    <Label htmlFor="phoneNumber" className="text-foreground">
                       {t('profile.phone_number')}
                     </Label>
                     <Input
@@ -337,13 +337,13 @@ export default function Profile() {
                       type="tel"
                       value={phoneNumber}
                       onChange={(e) => setPhoneNumber(e.target.value)}
-                      className="bg-[#10131a] border-[#2e323b] text-[#ecedf6] focus-visible:ring-[#8ff5ff]"
+                      className="bg-background border border-border text-foreground focus-visible:ring-neon-cyan rounded-none"
                     />
                   </div>
 
                   {/* Location Input */}
                   <div className="space-y-2">
-                    <Label htmlFor="location" className="text-[#ecedf6]">
+                    <Label htmlFor="location" className="text-foreground">
                       {t('profile.location')}
                     </Label>
                     <Input
@@ -352,14 +352,14 @@ export default function Profile() {
                       type="text"
                       value={location}
                       onChange={(e) => setLocation(e.target.value)}
-                      className="bg-[#10131a] border-[#2e323b] text-[#ecedf6] focus-visible:ring-[#8ff5ff]"
+                      className="bg-background border border-border text-foreground focus-visible:ring-neon-cyan rounded-none"
                     />
                   </div>
                 </div>
 
                 {/* Bio Textarea */}
                 <div className="space-y-2">
-                  <Label htmlFor="biography" className="text-[#ecedf6]">
+                  <Label htmlFor="biography" className="text-foreground">
                     {t('profile.biography')}
                   </Label>
                   <Textarea
@@ -368,13 +368,13 @@ export default function Profile() {
                     rows={4}
                     value={biography}
                     onChange={(e) => setBiography(e.target.value)}
-                    className="bg-[#10131a] border-[#2e323b] text-[#ecedf6] focus-visible:ring-[#8ff5ff] resize-y"
+                    className="bg-background border border-border text-foreground focus-visible:ring-neon-cyan resize-y rounded-none"
                   />
                   <div className="flex justify-between items-center">
-                    <span className="text-xs text-[#73757d]">
+                    <span className="text-xs text-muted-foreground/60">
                       {t('profile.biography_desc')}
                     </span>
-                    <span className="text-xs text-[#73757d] font-mono">
+                    <span className="text-xs text-muted-foreground/60 font-mono">
                       {biography.length} / 300
                     </span>
                   </div>
@@ -384,13 +384,13 @@ export default function Profile() {
 
             {/* Presence & Links Card */}
             <section className="space-y-6">
-              <h2 className="text-lg font-['Space_Grotesk'] font-semibold text-[#ecedf6] flex items-center gap-2">
+              <h2 className="text-lg font-['Space_Grotesk'] font-semibold text-foreground flex items-center gap-2">
                 {t('profile.presence_links')}
               </h2>
 
-              <div className="bg-[#161a21] border border-[#2e323b]/50 rounded-lg p-6 space-y-6">
+              <div className="bg-card border border-border rounded-none p-6 space-y-6">
                 <div className="space-y-2">
-                  <Label htmlFor="website" className="text-[#ecedf6]">
+                  <Label htmlFor="website" className="text-foreground">
                     {t('profile.website')}
                   </Label>
                   <Input
@@ -399,19 +399,19 @@ export default function Profile() {
                     placeholder={t('profile.social_url_placeholder')}
                     value={website}
                     onChange={(e) => setWebsite(e.target.value)}
-                    className="bg-[#10131a] border-[#2e323b] text-[#ecedf6] focus-visible:ring-[#8ff5ff]"
+                    className="bg-background border border-border text-foreground focus-visible:ring-neon-cyan rounded-none"
                   />
                 </div>
 
-                <div className="border-t border-[#2e323b]/50 pt-5 mt-5">
+                <div className="border-t border-border pt-5 mt-5">
                   <div className="flex items-center justify-between mb-4">
-                    <Label className="text-[#ecedf6]">
+                    <Label className="text-foreground">
                       {t('profile.social_links')}
                     </Label>
                     <Button
                       variant="ghost"
                       size="sm"
-                      className="h-8 text-xs text-[#8ff5ff] hover:text-[#8ff5ff] hover:bg-[#8ff5ff]/10"
+                      className="h-8 text-xs text-neon-cyan hover:text-neon-cyan hover:bg-neon-cyan/10 rounded-none border border-neon-cyan/20"
                       onClick={() =>
                         setLinks([
                           ...links,
@@ -441,14 +441,14 @@ export default function Profile() {
                               setLinks(newLinks)
                             }}
                           >
-                            <SelectTrigger className="bg-[#10131a] border-[#2e323b] text-[#ecedf6] focus-visible:ring-[#8ff5ff]">
+                            <SelectTrigger className="bg-background border border-border text-foreground focus-visible:ring-neon-cyan rounded-none">
                               <SelectValue
                                 placeholder={
                                   t('profile.platform') || 'Platform'
                                 }
                               />
                             </SelectTrigger>
-                            <SelectContent>
+                            <SelectContent className="rounded-none">
                               {PLATFORMS.map((p) => (
                                 <SelectItem key={p.value} value={p.value}>
                                   {p.label}
@@ -462,7 +462,7 @@ export default function Profile() {
                             type="url"
                             placeholder={t('profile.social_url_placeholder')}
                             value={link.url}
-                            className="bg-[#10131a] border-[#2e323b] text-[#ecedf6] focus-visible:ring-[#8ff5ff]"
+                            className="bg-background border border-border text-foreground focus-visible:ring-neon-cyan rounded-none"
                             onChange={(e) => {
                               const newLinks = [...links]
                               newLinks[index] = {
@@ -476,7 +476,7 @@ export default function Profile() {
                         <Button
                           variant="ghost"
                           size="icon"
-                          className="h-10 w-10 text-[#73757d] hover:text-[#ff716c] hover:bg-[#ff716c]/10 shrink-0"
+                          className="h-10 w-10 text-muted-foreground hover:text-neon-rose hover:bg-neon-rose/10 shrink-0 rounded-none"
                           title={t('profile.remove_link') || 'Remove link'}
                           onClick={() =>
                             setLinks(links.filter((l) => l.id !== link.id))
@@ -497,8 +497,8 @@ export default function Profile() {
           {/* Right Column: Avatar & Actions */}
           <div className="space-y-6">
             {/* Avatar Upload Card */}
-            <div className="bg-[#161a21] border border-[#2e323b]/50 rounded-lg p-6 flex flex-col items-center text-center">
-              <h2 className="text-sm font-medium text-[#ecedf6] mb-6 w-full text-left">
+            <div className="bg-card border border-border rounded-none p-6 flex flex-col items-center text-center">
+              <h2 className="text-sm font-medium text-foreground mb-6 w-full text-left">
                 {t('profile.avatar_title')}
               </h2>
 
@@ -517,7 +517,7 @@ export default function Profile() {
                   !isAvatarUploading && avatarInputRef.current?.click()
                 }
               >
-                <div className="w-32 h-32 rounded-full overflow-hidden border border-[#2e323b] relative z-10 group-hover:border-[#8ff5ff]/50 transition-colors">
+                <div className="w-32 h-32 rounded-none overflow-hidden border border-border relative z-10 group-hover:border-neon-cyan/50 transition-colors">
                   {avatar ? (
                     <img
                       alt="Avatar"
@@ -525,17 +525,17 @@ export default function Profile() {
                       src={avatar}
                     />
                   ) : (
-                    <div className="w-full h-full bg-[#2e323b] flex items-center justify-center">
-                      <span className="material-symbols-outlined text-[#73757d] text-4xl">
+                    <div className="w-full h-full bg-muted flex items-center justify-center">
+                      <span className="material-symbols-outlined text-muted-foreground/60 text-4xl">
                         person
                       </span>
                     </div>
                   )}
-                  <div className="absolute inset-0 bg-[#10131a]/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                  <div className="absolute inset-0 bg-background/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                     {isAvatarUploading ? (
-                      <span className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                      <span className="w-6 h-6 border-2 border-white/30 border-t-white rounded-none animate-spin" />
                     ) : (
-                      <span className="material-symbols-outlined text-white text-2xl">
+                      <span className="material-symbols-outlined text-foreground text-2xl">
                         upload
                       </span>
                     )}
@@ -543,13 +543,13 @@ export default function Profile() {
                 </div>
               </div>
 
-              <p className="text-xs text-[#73757d] mb-4">
+              <p className="text-xs text-muted-foreground/60 mb-4">
                 {t('profile.avatar_formats')}
               </p>
 
               <Button
                 variant="outline"
-                className="w-full bg-[#10131a] border-[#2e323b] text-[#ecedf6] hover:bg-[#2e323b] hover:text-white disabled:opacity-50"
+                className="w-full bg-background border border-border text-foreground hover:bg-muted disabled:opacity-50 rounded-none shadow-[1px_1px_0px_rgba(0,0,0,0.1)]"
                 disabled={isAvatarUploading}
                 onClick={() => avatarInputRef.current?.click()}
               >
@@ -560,22 +560,22 @@ export default function Profile() {
             </div>
 
             {/* Action Card */}
-            <div className="bg-[#161a21] border border-[#2e323b]/50 rounded-lg p-6 sticky top-28">
-              <h3 className="text-sm font-medium text-[#ecedf6] mb-2">
+            <div className="bg-card border border-border rounded-none p-6 sticky top-28">
+              <h3 className="text-sm font-medium text-foreground mb-2">
                 {t('profile.unsaved_changes')}
               </h3>
-              <p className="text-xs text-[#a9abb3] mb-5">
+              <p className="text-xs text-muted-foreground mb-5">
                 {t('profile.unsaved_changes_desc')}
               </p>
 
               <Button
                 onClick={handleSave}
                 disabled={isSaving}
-                className="w-full bg-[#8ff5ff] text-[#10131a] hover:bg-[#8ff5ff]/90 font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full bg-neon-cyan text-background hover:bg-neon-cyan/90 font-semibold disabled:opacity-50 disabled:cursor-not-allowed rounded-none shadow-[2px_2px_0px_var(--neon-purple)] hover:shadow-[3px_3px_0px_var(--neon-purple)] transition-all border border-neon-cyan cursor-pointer"
               >
                 {isSaving ? (
                   <span className="flex items-center gap-2">
-                    <span className="w-4 h-4 border-2 border-[#10131a]/30 border-t-[#10131a] rounded-full animate-spin" />
+                    <span className="w-4 h-4 border-2 border-background/30 border-t-background rounded-none animate-spin" />
                     {t('profile.btn_saving')}
                   </span>
                 ) : (

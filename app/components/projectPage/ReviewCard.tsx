@@ -55,13 +55,13 @@ function Avatar({ user, size = 'md' }: AvatarProps) {
       <img
         src={user.avatar}
         alt=""
-        className={`${sz} rounded-full object-cover shrink-0`}
+        className={`${sz} rounded-none object-cover shrink-0`}
       />
     )
   }
   return (
     <div
-      className={`${sz} rounded-full flex items-center justify-center font-bold shrink-0`}
+      className={`${sz} rounded-none flex items-center justify-center font-bold shrink-0`}
       style={{
         background: `${color}22`,
         border: `1.5px solid ${color}55`,
@@ -90,14 +90,14 @@ function CollapsibleContent({ text }: { text: string }) {
     <div>
       <p
         ref={ref}
-        className={`text-[#d4d5dc] text-sm leading-relaxed whitespace-pre-wrap ${!expanded ? 'line-clamp-4' : ''}`}
+        className={`text-muted-foreground text-sm leading-relaxed whitespace-pre-wrap ${!expanded ? 'line-clamp-4' : ''}`}
       >
         {text}
       </p>
       {(clamped || expanded) && (
         <button
           onClick={() => setExpanded(!expanded)}
-          className="mt-1 text-xs font-semibold text-[#8ff5ff] hover:underline flex items-center gap-0.5"
+          className="mt-1 text-xs font-semibold text-neon-cyan hover:underline flex items-center gap-0.5"
         >
           {expanded ? (
             <>
@@ -220,19 +220,19 @@ export function ReviewCard({
         {/* Bubble */}
         <div className="relative">
           <div
-            className={`inline-block w-full bg-[#161b25] rounded-2xl px-4 py-3 ${isReply ? 'rounded-tl-sm' : 'rounded-tl-sm'}`}
+            className={`inline-block w-full bg-card rounded-none border border-border/50 px-4 py-3`}
           >
             {/* Header */}
             <div className="flex items-center justify-between gap-2 mb-1">
               <div className="flex items-center gap-2 flex-wrap">
-                <span className="text-[#ecedf6] text-sm font-semibold leading-none">
+                <span className="text-foreground text-sm font-semibold leading-none">
                   {displayName}
                 </span>
 
                 {/* Role badges */}
                 {isProjectOwner && (
                   <span
-                    className="inline-flex items-center gap-1 text-[10px] font-bold px-1.5 py-0.5 rounded-md"
+                    className="inline-flex items-center gap-1 text-[10px] font-bold px-1.5 py-0.5 rounded-none"
                     style={{
                       background: 'rgba(255,210,63,0.12)',
                       color: '#ffd23f',
@@ -244,7 +244,7 @@ export function ReviewCard({
                 )}
                 {isProjectMember && (
                   <span
-                    className="inline-flex items-center gap-1 text-[10px] font-bold px-1.5 py-0.5 rounded-md"
+                    className="inline-flex items-center gap-1 text-[10px] font-bold px-1.5 py-0.5 rounded-none"
                     style={{
                       background: 'rgba(172,137,255,0.12)',
                       color: '#ac89ff',
@@ -255,7 +255,7 @@ export function ReviewCard({
                   </span>
                 )}
 
-                <span className="text-[#545760] text-xs">
+                <span className="text-muted-foreground/45 text-xs font-mono">
                   {formatDistanceToNow(review.createdAt, { addSuffix: true })}
                 </span>
               </div>
@@ -265,7 +265,7 @@ export function ReviewCard({
                 <div className="relative shrink-0">
                   <button
                     onClick={() => setShowMenu((v) => !v)}
-                    className="p-1 rounded-full text-[#545760] hover:text-[#a9abb3] hover:bg-[#1f2530] transition-colors"
+                    className="p-1 rounded-none text-muted-foreground/45 hover:text-muted-foreground hover:bg-background border border-transparent hover:border-border transition-colors"
                   >
                     <MoreHorizontal className="w-4 h-4" />
                   </button>
@@ -276,16 +276,16 @@ export function ReviewCard({
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.92, y: -4 }}
                         transition={{ duration: 0.12 }}
-                        className="absolute right-0 top-full mt-1 w-28 bg-[#1a1f2e] border border-[#2e323b] rounded-xl shadow-2xl z-20 py-1 overflow-hidden"
+                        className="absolute right-0 top-full mt-1 w-28 bg-card border border-border rounded-none shadow-2xl z-20 py-1 overflow-hidden"
                       >
                         <button
                           onClick={() => {
                             setIsEditing(true)
                             setShowMenu(false)
                           }}
-                          className="w-full flex items-center gap-2 px-3 py-2 text-xs text-[#ecedf6] hover:bg-[#252b3a] transition-colors"
+                          className="w-full flex items-center gap-2 px-3 py-2 text-xs text-foreground hover:bg-background transition-colors"
                         >
-                          <Edit2 className="w-3.5 h-3.5 text-[#8ff5ff]" />{' '}
+                          <Edit2 className="w-3.5 h-3.5 text-neon-cyan" />{' '}
                           {t('reviews.edit')}
                         </button>
                         <button
@@ -294,7 +294,7 @@ export function ReviewCard({
                             setShowMenu(false)
                           }}
                           disabled={isDeleting}
-                          className="w-full flex items-center gap-2 px-3 py-2 text-xs text-[#ff5577] hover:bg-[#252b3a] transition-colors disabled:opacity-50"
+                          className="w-full flex items-center gap-2 px-3 py-2 text-xs text-neon-rose hover:bg-background transition-colors disabled:opacity-50"
                         >
                           {isDeleting ? (
                             <Loader2 className="w-3.5 h-3.5 animate-spin" />
@@ -314,7 +314,7 @@ export function ReviewCard({
             {isEditing ? (
               <form onSubmit={handleEditSubmit}>
                 <textarea
-                  className="w-full bg-transparent text-sm text-[#ecedf6] placeholder-[#545760] focus:outline-none resize-none border-b border-[#2e323b] pb-2 mb-2"
+                  className="w-full bg-transparent text-sm text-foreground placeholder-muted-foreground/45 focus:outline-none resize-none border-b border-border pb-2 mb-2"
                   value={editContent}
                   onChange={(e) => setEditContent(e.target.value)}
                   autoFocus
@@ -327,7 +327,7 @@ export function ReviewCard({
                       setIsEditing(false)
                       setEditContent(review.content)
                     }}
-                    className="text-xs text-[#a9abb3] hover:text-[#ecedf6] transition-colors px-2 py-1 rounded-lg hover:bg-[#252b3a]"
+                    className="text-xs text-muted-foreground hover:text-foreground transition-colors px-2 py-1 rounded-none hover:bg-background border border-transparent hover:border-border"
                   >
                     {t('reviews.cancel')}
                   </button>
@@ -338,7 +338,7 @@ export function ReviewCard({
                       editContent === review.content ||
                       isUpdating
                     }
-                    className="text-xs bg-[#8ff5ff] text-[#0a0c10] px-3 py-1 rounded-lg font-bold disabled:opacity-40 hover:bg-[#a6fcff] transition-colors"
+                    className="text-xs bg-neon-cyan text-background px-3 py-1 rounded-none font-bold disabled:opacity-40 hover:bg-neon-cyan/85 transition-colors border border-neon-cyan/40 shadow-[2px_2px_0px_var(--neon-purple)]"
                   >
                     {isUpdating ? (
                       <Loader2 className="w-3 h-3 animate-spin" />
@@ -368,7 +368,7 @@ export function ReviewCard({
                   }
                   setIsReplying((v) => !v)
                 }}
-                className="text-xs font-semibold text-[#8ff5ff] hover:underline transition-colors"
+                className="text-xs font-semibold text-neon-cyan hover:underline transition-colors"
               >
                 {t('reviews.reply')}
               </button>
@@ -387,11 +387,11 @@ export function ReviewCard({
               className="flex gap-2 mt-3 overflow-hidden"
             >
               <Avatar user={undefined} size="sm" />
-              <div className="flex-1 flex items-center bg-[#1a1f2e] border border-[#2e323b] rounded-2xl px-3 py-2 gap-2 focus-within:border-[#8ff5ff]/50 transition-colors">
+              <div className="flex-1 flex items-center bg-background border border-border rounded-none px-3 py-2 gap-2 focus-within:border-neon-cyan/50 transition-colors">
                 <input
                   autoFocus
                   type="text"
-                  className="flex-1 bg-transparent text-sm text-[#ecedf6] placeholder-[#545760] focus:outline-none"
+                  className="flex-1 bg-transparent text-sm text-foreground placeholder-muted-foreground/45 focus:outline-none"
                   placeholder={t('reviews.reply_placeholder', {
                     name: displayName
                   })}
@@ -401,7 +401,7 @@ export function ReviewCard({
                 <button
                   type="submit"
                   disabled={!replyContent.trim() || isAddingReply}
-                  className="shrink-0 text-[#8ff5ff] disabled:opacity-30 hover:text-[#a6fcff] transition-colors"
+                  className="shrink-0 text-neon-cyan disabled:opacity-30 hover:text-neon-cyan/85 transition-colors"
                 >
                   {isAddingReply ? (
                     <Loader2 className="w-4 h-4 animate-spin" />
@@ -416,7 +416,7 @@ export function ReviewCard({
 
         {/* Replies */}
         {replies.length > 0 && (
-          <div className="mt-3 ml-2 border-l-2 border-[#2e323b]/40 pl-3 space-y-1">
+          <div className="mt-3 ml-2 border-l-2 border-border/40 pl-3 space-y-1">
             {visibleReplies.map((reply) => (
               <ReviewCard
                 key={reply.id}
@@ -431,7 +431,7 @@ export function ReviewCard({
             {!showAllReplies && hiddenCount > 0 && (
               <button
                 onClick={() => setShowAllReplies(true)}
-                className="flex items-center gap-1 text-xs font-semibold text-[#8ff5ff] hover:underline mt-2 ml-1"
+                className="flex items-center gap-1 text-xs font-semibold text-neon-cyan hover:underline mt-2 ml-1"
               >
                 <ChevronDown className="w-3.5 h-3.5" />
                 {hiddenCount === 1
@@ -442,7 +442,7 @@ export function ReviewCard({
             {showAllReplies && replies.length > REPLIES_PREVIEW && (
               <button
                 onClick={() => setShowAllReplies(false)}
-                className="flex items-center gap-1 text-xs font-semibold text-[#545760] hover:text-[#a9abb3] hover:underline mt-2 ml-1"
+                className="flex items-center gap-1 text-xs font-semibold text-muted-foreground/45 hover:text-muted-foreground hover:underline mt-2 ml-1"
               >
                 <ChevronUp className="w-3.5 h-3.5" />
                 {t('reviews.show_less')}

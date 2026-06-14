@@ -63,7 +63,7 @@ export function Pagination({
                 e.preventDefault()
                 if (currentPage > 1) onPageChange(currentPage - 1)
               }}
-              className={`p-3 rounded-xl border border-[#2e323b] text-[#73757d] hover:text-[#ecedf6] hover:border-[#73757d] hover:bg-[#161a21] transition-all bg-[#161a21] ${currentPage === 1 ? 'opacity-50 cursor-not-allowed pointer-events-none' : 'cursor-pointer'}`}
+              className={`p-3 rounded-none border border-border text-muted-foreground hover:text-foreground hover:border-border/80 hover:bg-card transition-all bg-card ${currentPage === 1 ? 'opacity-50 cursor-not-allowed pointer-events-none' : 'cursor-pointer'} shadow-[2px_2px_0px_rgba(0,0,0,0.08)] dark:shadow-[2px_2px_0px_rgba(255,255,255,0.05)] active:translate-y-0.5 active:translate-x-0.5`}
             />
           </PaginationItem>
 
@@ -71,7 +71,7 @@ export function Pagination({
             if (page === '...') {
               return (
                 <PaginationItem key={`dots-${index}`}>
-                  <PaginationEllipsis className="text-[#2e323b]" />
+                  <PaginationEllipsis className="text-border" />
                 </PaginationItem>
               )
             }
@@ -85,10 +85,10 @@ export function Pagination({
                     onPageChange(page as number)
                   }}
                   isActive={isCurrent}
-                  className={`w-11 h-11 rounded-xl flex items-center justify-center transition-all cursor-pointer ${
+                  className={`w-11 h-11 rounded-none flex items-center justify-center transition-all cursor-pointer active:translate-y-0.5 active:translate-x-0.5 ${
                     isCurrent
-                      ? 'bg-[#8ff5ff]/10 text-[#8ff5ff] border border-[#8ff5ff]/50 shadow-[0_0_15px_rgba(143,245,255,0.2)] hover:bg-[#8ff5ff]/20 hover:text-[#8ff5ff]'
-                      : 'bg-[#161a21] border border-[#2e323b] text-[#73757d] hover:text-[#ecedf6] hover:border-[#73757d] hover:bg-[#2e323b]/50'
+                      ? 'bg-neon-cyan/10 text-neon-cyan border border-neon-cyan/50 shadow-[2px_2px_0px_0px_var(--neon-purple)] hover:bg-neon-cyan/20 hover:text-neon-cyan'
+                      : 'bg-card border border-border text-muted-foreground hover:text-foreground hover:border-border/80 hover:bg-muted/50 shadow-[2px_2px_0px_rgba(0,0,0,0.08)] dark:shadow-[2px_2px_0px_rgba(255,255,255,0.05)]'
                   }`}
                 >
                   {(page as number).toString().padStart(2, '0')}
@@ -103,7 +103,7 @@ export function Pagination({
                 e.preventDefault()
                 if (currentPage < totalPages) onPageChange(currentPage + 1)
               }}
-              className={`p-3 rounded-xl border border-[#2e323b] text-[#73757d] hover:text-[#ecedf6] hover:border-[#73757d] hover:bg-[#161a21] transition-all bg-[#161a21] ${currentPage === totalPages ? 'opacity-50 cursor-not-allowed pointer-events-none' : 'cursor-pointer'}`}
+              className={`p-3 rounded-none border border-border text-muted-foreground hover:text-foreground hover:border-border/80 hover:bg-card transition-all bg-card ${currentPage === totalPages ? 'opacity-50 cursor-not-allowed pointer-events-none' : 'cursor-pointer'} shadow-[2px_2px_0px_rgba(0,0,0,0.08)] dark:shadow-[2px_2px_0px_rgba(255,255,255,0.05)] active:translate-y-0.5 active:translate-x-0.5`}
             />
           </PaginationItem>
         </PaginationContent>

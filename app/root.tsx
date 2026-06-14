@@ -95,6 +95,7 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
             baseIntensity={0.2}
             hoverIntensity={0.18}
             enableHover={true}
+            className="text-foreground"
             children="404"
           />
         </div>

@@ -135,19 +135,21 @@ export function PublishModal({ project, children }: PublishModalProps) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent className="bg-[#10131a] border-[#2e323b] text-[#ecedf6] sm:max-w-md font-['Space_Grotesk']">
+      <DialogContent className="bg-card border-2 border-border text-foreground sm:max-w-md font-['Space_Grotesk'] rounded-none shadow-[4px_4px_0px_var(--neon-purple)]">
         <DialogHeader>
-          <DialogTitle className="flex items-center gap-2 text-xl font-bold text-[#8ff5ff] font-['Space_Grotesk']">
-            <Rocket className="w-5 h-5 text-[#8ff5ff]" />
+          <DialogTitle className="flex items-center gap-2 text-xl font-bold text-neon-cyan font-['Space_Grotesk']">
+            <Rocket className="w-5 h-5 text-neon-cyan" />
             {t('publish.title')}
           </DialogTitle>
         </DialogHeader>
 
         <div className="space-y-4 py-4">
-          <p className="text-[#a9abb3] text-sm">{t('publish.description')}</p>
-          <div className="p-4 rounded-xl bg-[#1c2028] border border-[#2e323b]/50 space-y-2">
+          <p className="text-muted-foreground text-sm">
+            {t('publish.description')}
+          </p>
+          <div className="p-4 rounded-none bg-muted/40 border border-border space-y-2">
             <div className="flex justify-between text-sm">
-              <span className="text-[#73757d]">
+              <span className="text-muted-foreground/60">
                 {t('publish.funding_goal')}
               </span>
               <span className="font-bold font-mono">
@@ -155,7 +157,7 @@ export function PublishModal({ project, children }: PublishModalProps) {
               </span>
             </div>
             <div className="flex justify-between text-sm">
-              <span className="text-[#73757d]">
+              <span className="text-muted-foreground/60">
                 {t('publish.milestones_count')}
               </span>
               <span className="font-bold font-mono">
@@ -167,35 +169,39 @@ export function PublishModal({ project, children }: PublishModalProps) {
           {/* Demo Mode Toggle */}
           <div
             onClick={() => setIsDemoMode((v) => !v)}
-            className={`w-full flex items-center justify-between p-4 rounded-xl border cursor-pointer select-none transition-all ${
+            className={`w-full flex items-center justify-between p-4 rounded-none border-2 cursor-pointer select-none transition-all ${
               isDemoMode
-                ? 'bg-[#f59e0b]/10 border-[#f59e0b]/40 text-[#f59e0b]'
-                : 'bg-[#1c2028]/60 border-[#2e323b] text-[#ecedf6] hover:border-[#2e323b]/80'
+                ? 'bg-warning/10 border-warning/40 text-warning shadow-[2px_2px_0px_var(--color-warning)]'
+                : 'bg-muted/60 border-border text-foreground hover:border-border/80'
             }`}
           >
             <div className="space-y-1 pr-4">
               <div className="flex items-center gap-2">
                 <Zap
-                  className={`w-4 h-4 ${isDemoMode ? 'text-[#f59e0b] animate-pulse' : 'text-[#73757d]'}`}
+                  className={`w-4 h-4 ${isDemoMode ? 'text-warning animate-pulse' : 'text-muted-foreground/60'}`}
                 />
                 <span className="text-xs font-bold uppercase tracking-wider font-['Space_Grotesk']">
                   {t('publish.demo_mode')}
                 </span>
               </div>
-              <p className="text-[11px] text-[#73757d] font-sans leading-relaxed">
+              <p className="text-[11px] text-muted-foreground/60 font-sans leading-relaxed">
                 {isDemoMode ? t('publish.demo_on') : t('publish.demo_off')}
               </p>
             </div>
 
             {/* Switch Toggle */}
             <div
-              className={`w-10 h-6 rounded-full p-1 transition-all duration-300 relative shrink-0 ${
-                isDemoMode ? 'bg-[#f59e0b]' : 'bg-[#2e323b]'
+              className={`w-10 h-6 rounded-none p-[2px] border-2 transition-all duration-300 relative shrink-0 ${
+                isDemoMode
+                  ? 'bg-warning/20 border-warning'
+                  : 'bg-muted border-border'
               }`}
             >
               <div
-                className={`w-4 h-4 rounded-full bg-[#10131a] shadow-md transition-all duration-300 transform ${
-                  isDemoMode ? 'translate-x-4' : 'translate-x-0'
+                className={`w-4 h-4 rounded-none bg-background shadow-md transition-all duration-300 transform ${
+                  isDemoMode
+                    ? 'translate-x-4 bg-warning'
+                    : 'translate-x-0 bg-muted-foreground'
                 }`}
               />
             </div>
@@ -204,7 +210,7 @@ export function PublishModal({ project, children }: PublishModalProps) {
           <Button
             onClick={handlePublish}
             disabled={isSubmitting}
-            className="w-full font-bold uppercase tracking-widest flex items-center justify-center gap-2 font-['Space_Grotesk']"
+            className="w-full rounded-none bg-gradient-to-r from-neon-cyan to-neon-purple text-background hover:opacity-90 transition-all shadow-[2px_2px_0px_var(--neon-purple)] hover:shadow-none font-bold uppercase tracking-widest flex items-center justify-center gap-2 font-['Space_Grotesk']"
             size="lg"
           >
             {isSubmitting ? (

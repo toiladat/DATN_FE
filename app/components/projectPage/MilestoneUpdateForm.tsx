@@ -170,9 +170,9 @@ export function MilestoneUpdateForm({
     <form onSubmit={handleSubmit} className="space-y-6">
       {/* Late warning */}
       {isLate && (
-        <div className="flex items-start gap-2.5 p-3.5 rounded-xl bg-[#ff716c]/8 border border-[#ff716c]/25">
-          <AlertTriangle className="w-4 h-4 text-[#ff716c] shrink-0 mt-0.5" />
-          <p className="text-[#ff716c] text-[12px] leading-relaxed">
+        <div className="flex items-start gap-2.5 p-3.5 rounded-none bg-neon-rose/5 border border-neon-rose/20">
+          <AlertTriangle className="w-4 h-4 text-neon-rose shrink-0 mt-0.5" />
+          <p className="text-neon-rose text-[12px] leading-relaxed">
             {t('updates.form.late_warning')}
           </p>
         </div>
@@ -180,9 +180,9 @@ export function MilestoneUpdateForm({
 
       {/* Completed field */}
       <div className="space-y-2">
-        <label className="text-[10px] font-bold uppercase tracking-widest text-[#a9abb3]">
+        <label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
           {t('updates.form.completed_label')}{' '}
-          <span className="text-[#ff716c]">*</span>
+          <span className="text-neon-rose">*</span>
         </label>
         <textarea
           value={completed}
@@ -190,15 +190,15 @@ export function MilestoneUpdateForm({
           rows={4}
           placeholder={t('updates.form.completed_placeholder')}
           required
-          className="w-full bg-[#161a21] border border-[#2e323b]/60 rounded-xl px-4 py-3 text-[#ecedf6] text-sm placeholder:text-[#3a3e4a] focus:outline-none focus:border-[#8ff5ff]/50 transition-colors duration-200 resize-none font-['Space_Grotesk']"
+          className="w-full bg-background border border-border rounded-none px-4 py-3 text-foreground text-sm placeholder:text-muted-foreground/40 focus:outline-none focus:border-neon-cyan focus:ring-1 focus:ring-neon-cyan/50 transition-colors duration-200 resize-none font-['Space_Grotesk']"
         />
       </div>
 
       {/* Blockers field */}
       <div className="space-y-2">
-        <label className="text-[10px] font-bold uppercase tracking-widest text-[#a9abb3]">
+        <label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
           {t('updates.form.blockers_label')}
-          <span className="text-[#73757d] ml-2 normal-case tracking-normal">
+          <span className="text-muted-foreground/60 ml-2 normal-case tracking-normal">
             {t('common.optional')}
           </span>
         </label>
@@ -207,16 +207,16 @@ export function MilestoneUpdateForm({
           onChange={(e) => setBlockers(e.target.value)}
           rows={3}
           placeholder={t('updates.form.blockers_placeholder')}
-          className="w-full bg-[#161a21] border border-[#2e323b]/60 rounded-xl px-4 py-3 text-[#ecedf6] text-sm placeholder:text-[#3a3e4a] focus:outline-none focus:border-[#8ff5ff]/50 transition-colors duration-200 resize-none font-['Space_Grotesk']"
+          className="w-full bg-background border border-border rounded-none px-4 py-3 text-foreground text-sm placeholder:text-muted-foreground/40 focus:outline-none focus:border-neon-cyan focus:ring-1 focus:ring-neon-cyan/50 transition-colors duration-200 resize-none font-['Space_Grotesk']"
         />
       </div>
 
       {/* Images */}
       <div className="space-y-2">
-        <label className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-[#a9abb3]">
+        <label className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
           <Images className="w-3.5 h-3.5" />
           {t('updates.form.images_label')}
-          <span className="text-[#73757d] normal-case tracking-normal font-normal">
+          <span className="text-muted-foreground/60 normal-case tracking-normal font-normal">
             {t('updates.form.images_helper')}
           </span>
         </label>
@@ -238,7 +238,7 @@ export function MilestoneUpdateForm({
           }}
         />
         {isUploadingImage && (
-          <p className="text-[#8ff5ff] text-[11px] flex items-center gap-1.5">
+          <p className="text-neon-cyan text-[11px] flex items-center gap-1.5 font-mono">
             <Loader2 className="w-3 h-3 animate-spin" />
             {t('updates.form.uploading_images')}
           </p>
@@ -247,16 +247,16 @@ export function MilestoneUpdateForm({
 
       {/* Video upload */}
       <div className="space-y-2">
-        <label className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-[#a9abb3]">
+        <label className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
           <Video className="w-3.5 h-3.5" />
           {t('updates.form.video_label')}{' '}
-          <span className="text-[#ff716c]">*</span>
+          <span className="text-neon-rose">*</span>
         </label>
 
         {/* Clickable upload area */}
         <div
           onClick={() => !isUploadingVideo && videoInputRef.current?.click()}
-          className="relative group/video cursor-pointer rounded-xl border border-[#2e323b]/60 hover:border-[#8ff5ff]/30 hover:bg-[#1c2028] transition-all bg-[#161a21] p-5 flex items-center gap-5"
+          className="relative group/video cursor-pointer rounded-none border border-border hover:border-neon-cyan/35 hover:bg-card transition-all bg-muted/30 p-5 flex items-center gap-5"
         >
           <input
             type="file"
@@ -265,16 +265,16 @@ export function MilestoneUpdateForm({
             ref={videoInputRef}
             onChange={handleVideoChange}
           />
-          <div className="w-12 h-12 rounded-full bg-[#22262f] flex items-center justify-center text-[#8ff5ff] group-hover/video:bg-[#8ff5ff]/15 transition-colors shrink-0">
+          <div className="w-12 h-12 rounded-none bg-muted flex items-center justify-center text-neon-cyan group-hover/video:bg-neon-cyan/15 transition-colors shrink-0">
             <Video className="w-5 h-5" />
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-[#ecedf6] text-sm font-semibold">
+            <p className="text-foreground text-sm font-semibold">
               {videoUrl
                 ? t('updates.form.video_selected')
                 : t('updates.form.video_upload_label')}
             </p>
-            <p className="text-[#73757d] text-[11px] mt-0.5">
+            <p className="text-muted-foreground/60 text-[11px] mt-0.5">
               {isUploadingVideo
                 ? t('updates.form.video_uploading')
                 : videoUrl
@@ -285,10 +285,10 @@ export function MilestoneUpdateForm({
           <button
             type="button"
             disabled={isUploadingVideo}
-            className="text-[10px] font-bold uppercase tracking-widest text-[#8ff5ff] border border-[#8ff5ff]/20 px-3 py-1.5 rounded-lg hover:bg-[#8ff5ff]/10 transition-colors disabled:opacity-50 disabled:cursor-not-allowed shrink-0"
+            className="text-[10px] font-bold uppercase tracking-widest text-neon-cyan border border-neon-cyan/20 px-3 py-1.5 rounded-none hover:bg-neon-cyan/10 transition-colors disabled:opacity-50 disabled:cursor-not-allowed shrink-0"
           >
             {isUploadingVideo ? (
-              <span className="flex items-center gap-1">
+              <span className="flex items-center gap-1 font-mono">
                 <Loader2 className="w-3 h-3 animate-spin" />
                 {t('updates.form.submitting')}
               </span>
@@ -302,7 +302,7 @@ export function MilestoneUpdateForm({
 
         {/* Video preview */}
         {videoUrl && !isUploadingVideo && (
-          <div className="relative rounded-xl overflow-hidden border border-[#2e323b]/50 bg-black aspect-video">
+          <div className="relative rounded-none overflow-hidden border border-border bg-black aspect-video">
             <video
               src={videoUrl}
               controls
@@ -322,7 +322,7 @@ export function MilestoneUpdateForm({
                 setVideoUrl('')
                 if (videoInputRef.current) videoInputRef.current.value = ''
               }}
-              className="absolute top-3 right-3 w-7 h-7 flex items-center justify-center bg-black/70 hover:bg-[#ff716c]/80 text-white rounded-full transition-colors backdrop-blur-md"
+              className="absolute top-3 right-3 w-7 h-7 flex items-center justify-center bg-black/70 hover:bg-neon-rose/80 text-white rounded-none transition-colors backdrop-blur-md"
               title={t('basics.removeVideo')}
             >
               <X className="w-3.5 h-3.5" />
@@ -333,9 +333,9 @@ export function MilestoneUpdateForm({
 
       {/* External link */}
       <div className="space-y-2">
-        <label className="text-[10px] font-bold uppercase tracking-widest text-[#a9abb3]">
+        <label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
           {t('updates.form.link_label')}
-          <span className="text-[#73757d] ml-2 normal-case tracking-normal">
+          <span className="text-muted-foreground/60 ml-2 normal-case tracking-normal">
             {t('common.optional')}
           </span>
         </label>
@@ -344,13 +344,13 @@ export function MilestoneUpdateForm({
           value={link}
           onChange={(e) => setLink(e.target.value)}
           placeholder="https://..."
-          className="w-full bg-[#161a21] border border-[#2e323b]/60 rounded-xl px-4 py-2.5 text-[#ecedf6] text-sm placeholder:text-[#3a3e4a] focus:outline-none focus:border-[#8ff5ff]/50 transition-colors duration-200 font-mono"
+          className="w-full bg-background border border-border rounded-none px-4 py-2.5 text-foreground text-sm placeholder:text-muted-foreground/45 focus:outline-none focus:border-neon-cyan focus:ring-1 focus:ring-neon-cyan/50 transition-colors duration-200 font-mono"
         />
       </div>
 
       {/* Error */}
       {isError && (
-        <p className="text-[#ff716c] text-xs flex items-center gap-1.5 font-['Space_Grotesk']">
+        <p className="text-neon-rose text-xs flex items-center gap-1.5 font-['Space_Grotesk'] font-mono">
           <AlertTriangle className="w-3.5 h-3.5 shrink-0" />
           {getErrorMessage(error, t('updates.form.submit_failed'))}
         </p>
@@ -367,7 +367,7 @@ export function MilestoneUpdateForm({
             isUploadingImage ||
             isUploadingVideo
           }
-          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#8ff5ff]/15 border border-[#8ff5ff]/30 text-[#8ff5ff] text-[12px] font-bold uppercase tracking-widest hover:bg-[#8ff5ff]/25 hover:border-[#8ff5ff]/50 disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-200"
+          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-none bg-neon-cyan/15 border border-neon-cyan/30 text-neon-cyan text-[12px] font-bold uppercase tracking-widest hover:bg-neon-cyan/25 hover:border-neon-cyan/50 disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-200 shadow-[2px_2px_0px_var(--neon-purple)] hover:shadow-none"
         >
           {isPending ? (
             <>
@@ -382,7 +382,7 @@ export function MilestoneUpdateForm({
           type="button"
           onClick={onClose}
           disabled={isPending}
-          className="inline-flex items-center gap-1.5 px-4 py-2.5 text-[#73757d] text-[12px] font-medium hover:text-[#a9abb3] disabled:opacity-40 transition-colors duration-200"
+          className="inline-flex items-center gap-1.5 px-4 py-2.5 text-muted-foreground/60 text-[12px] font-medium hover:text-muted-foreground disabled:opacity-40 transition-colors duration-200"
         >
           <X className="w-3.5 h-3.5" />
           {t('btn.cancel')}

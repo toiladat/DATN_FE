@@ -82,10 +82,10 @@ export function SearchFilter({
     >
       {/* Page heading */}
       <div className="mb-8">
-        <p className="text-[11px] font-bold tracking-[0.3em] text-[#8ff5ff] uppercase mb-2">
+        <p className="text-[11px] font-bold tracking-[0.3em] text-neon-cyan uppercase mb-2">
           {t('search.badge')}
         </p>
-        <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-[#ecedf6]">
+        <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-foreground">
           {t('search.title')}
         </h1>
       </div>
@@ -94,13 +94,13 @@ export function SearchFilter({
       <div className="flex flex-col lg:flex-row gap-4">
         {/* Search với dropdown */}
         <div className="relative w-full max-w-xs group">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-[#45484f] w-4 h-4 group-focus-within:text-[#8ff5ff] transition-colors duration-300 z-10" />
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground/60 w-4 h-4 group-focus-within:text-neon-cyan transition-colors duration-300 z-10" />
           {isFetching && debouncedSearch.length >= 2 && (
-            <Loader2 className="absolute right-4 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[#8ff5ff] animate-spin z-10" />
+            <Loader2 className="absolute right-4 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-neon-cyan animate-spin z-10" />
           )}
           <input
             ref={inputRef}
-            className="w-full bg-[#10131a] border border-[#2e323b] rounded-xl py-3 pl-11 pr-10 focus:ring-1 focus:ring-[#8ff5ff]/60 focus:border-[#8ff5ff]/60 text-[#ecedf6] text-sm placeholder:text-[#45484f] transition-all duration-300 outline-none"
+            className="w-full bg-background border border-border rounded-none py-3 pl-11 pr-10 focus:ring-1 focus:ring-neon-cyan/60 focus:border-neon-cyan/60 text-foreground text-sm placeholder:text-muted-foreground/50 transition-all duration-300 outline-none"
             placeholder={t('search.placeholder')}
             type="text"
             value={searchInput}
@@ -117,11 +117,11 @@ export function SearchFilter({
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: -8, scale: 0.98 }}
                 transition={{ duration: 0.15, ease: 'easeOut' }}
-                className="absolute z-50 top-[calc(100%+8px)] left-0 w-full bg-[#13161e] border border-[#2e323b] rounded-xl overflow-hidden shadow-[0_16px_40px_rgba(0,0,0,0.6)]"
+                className="absolute z-50 top-[calc(100%+8px)] left-0 w-full bg-card border border-border rounded-none overflow-hidden shadow-[4px_4px_20px_rgba(0,0,0,0.15)] dark:shadow-[4px_4px_20px_rgba(0,0,0,0.4)]"
               >
                 {isFetching ? (
-                  <div className="flex items-center justify-center gap-2 py-5 text-xs text-[#a9abb3]">
-                    <Loader2 className="w-3.5 h-3.5 animate-spin text-[#8ff5ff]" />
+                  <div className="flex items-center justify-center gap-2 py-5 text-xs text-muted-foreground">
+                    <Loader2 className="w-3.5 h-3.5 animate-spin text-neon-cyan" />
                     {t('search.searching')}
                   </div>
                 ) : searchResults.length > 0 ? (
@@ -130,14 +130,14 @@ export function SearchFilter({
                       <Link
                         key={project.id}
                         to={`/campaign/${project.id}`}
-                        className="flex items-center gap-3 px-3 py-2.5 hover:bg-[#8ff5ff]/8 transition-colors border-b border-[#2e323b]/50 last:border-b-0 group/item"
+                        className="flex items-center gap-3 px-3 py-2.5 hover:bg-neon-cyan/8 transition-colors border-b border-border/50 last:border-b-0 group/item"
                         onClick={() => {
                           setSearchInput('')
                           setIsFocused(false)
                         }}
                       >
                         {/* Thumbnail */}
-                        <div className="w-10 h-10 rounded-lg overflow-hidden flex-shrink-0 bg-[#1a1f28] border border-[#2e323b]">
+                        <div className="w-10 h-10 rounded-none overflow-hidden flex-shrink-0 bg-muted border border-border">
                           {project.image ? (
                             <img
                               src={project.image}
@@ -145,7 +145,7 @@ export function SearchFilter({
                               className="w-full h-full object-cover"
                             />
                           ) : (
-                            <div className="w-full h-full flex items-center justify-center text-[#45484f] text-xs font-bold">
+                            <div className="w-full h-full flex items-center justify-center text-muted-foreground/60 text-xs font-bold">
                               {project.title.substring(0, 2).toUpperCase()}
                             </div>
                           )}
@@ -153,20 +153,20 @@ export function SearchFilter({
 
                         {/* Info */}
                         <div className="flex-1 min-w-0">
-                          <p className="text-xs font-semibold text-[#ecedf6] group-hover/item:text-white truncate transition-colors">
+                          <p className="text-xs font-semibold text-foreground group-hover/item:text-neon-cyan dark:group-hover/item:text-white truncate transition-colors">
                             {project.title}
                           </p>
-                          <p className="text-[10px] text-[#73757d] truncate mt-0.5">
+                          <p className="text-[10px] text-muted-foreground truncate mt-0.5">
                             {getCategoryTranslation(project.primaryCategory)}
                           </p>
                         </div>
 
                         {/* Status badge */}
                         <span
-                          className={`shrink-0 text-[9px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full border ${
+                          className={`shrink-0 text-[9px] font-mono font-bold uppercase tracking-widest px-2 py-0.5 rounded-none border ${
                             project.status === 'progress'
-                              ? 'text-[#8ff5ff] border-[#8ff5ff]/30 bg-[#8ff5ff]/8'
-                              : 'text-[#ac89ff] border-[#ac89ff]/30 bg-[#ac89ff]/8'
+                              ? 'text-neon-cyan border-neon-cyan/30 bg-neon-cyan/8'
+                              : 'text-neon-purple border-neon-purple/30 bg-neon-purple/8'
                           }`}
                         >
                           {project.status === 'progress'
@@ -177,9 +177,9 @@ export function SearchFilter({
                     ))}
                   </div>
                 ) : (
-                  <div className="py-5 text-center text-xs text-[#73757d]">
+                  <div className="py-5 text-center text-xs text-muted-foreground">
                     {t('search.no_results')}{' '}
-                    <span className="text-[#8ff5ff]">"{debouncedSearch}"</span>
+                    <span className="text-neon-cyan">"{debouncedSearch}"</span>
                   </div>
                 )}
               </motion.div>
@@ -188,27 +188,27 @@ export function SearchFilter({
         </div>
 
         {/* Sort — segmented control */}
-        <div className="flex items-center gap-1 bg-[#10131a] border border-[#2e323b] rounded-xl p-1 shrink-0">
-          <SlidersHorizontal className="w-3.5 h-3.5 text-[#45484f] ml-2 mr-1 shrink-0" />
+        <div className="flex items-center gap-1 bg-background border border-border rounded-none p-1 shrink-0">
+          <SlidersHorizontal className="w-3.5 h-3.5 text-muted-foreground/60 ml-2 mr-1 shrink-0" />
           {SORT_OPTIONS.map(({ value, labelKey, icon: Icon }) => (
             <button
               key={value}
               onClick={() => onSortChange?.(value)}
-              className={`relative flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-xs font-semibold transition-all duration-200 ${
+              className={`relative flex items-center gap-1.5 px-3.5 py-2 rounded-none text-xs font-semibold transition-all duration-200 ${
                 selectedSort === value
-                  ? 'bg-[#1a1f2a] text-[#ecedf6]'
-                  : 'text-[#73757d] hover:text-[#a9abb3]'
+                  ? 'bg-muted text-foreground'
+                  : 'text-muted-foreground hover:text-foreground'
               }`}
             >
               {selectedSort === value && (
                 <motion.span
                   layoutId="sort-active"
-                  className="absolute inset-0 rounded-lg border border-[#2e323b]"
+                  className="absolute inset-0 rounded-none border border-border bg-card/65"
                   transition={{ duration: 0.2, ease: 'easeOut' as const }}
                 />
               )}
               <Icon
-                className={`w-3 h-3 relative z-10 ${selectedSort === value ? 'text-[#8ff5ff]' : ''}`}
+                className={`w-3 h-3 relative z-10 ${selectedSort === value ? 'text-neon-cyan' : ''}`}
               />
               <span className="relative z-10">{t(labelKey)}</span>
             </button>
@@ -222,14 +222,14 @@ export function SearchFilter({
           <button
             key={value}
             onClick={() => onCategoryChange?.(value === 'all' ? '' : value)}
-            className={`shrink-0 px-4 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 border ${
+            className={`shrink-0 px-4 py-1.5 rounded-none text-xs font-mono font-semibold transition-all duration-200 border ${
               (
                 value === 'all'
                   ? selectedCategory === ''
                   : selectedCategory === value
               )
-                ? 'border-[#8ff5ff]/40 text-[#8ff5ff] bg-[#8ff5ff]/8'
-                : 'border-[#2e323b] text-[#73757d] hover:text-[#a9abb3] hover:border-[#45484f] bg-transparent'
+                ? 'border-neon-cyan/40 text-neon-cyan bg-neon-cyan/8'
+                : 'border-border text-muted-foreground hover:text-foreground hover:border-border/80 bg-transparent'
             }`}
           >
             {label}

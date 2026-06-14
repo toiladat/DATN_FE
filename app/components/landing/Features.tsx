@@ -7,25 +7,25 @@ export function Features() {
 
   const features = [
     {
-      icon: 'lock',
+      id: 'lock',
       title: t('landing.feature1_title'),
       description: t('landing.feature1_desc'),
       iconColor: 'cyan'
     },
     {
-      icon: 'groups',
+      id: 'groups',
       title: t('landing.feature2_title'),
       description: t('landing.feature2_desc'),
       iconColor: 'purple'
     },
     {
-      icon: 'query_stats',
+      id: 'query_stats',
       title: t('landing.feature3_title'),
       description: t('landing.feature3_desc'),
       iconColor: 'cyan'
     },
     {
-      icon: 'security',
+      id: 'security',
       title: t('landing.feature4_title'),
       description: t('landing.feature4_desc'),
       iconColor: 'purple'
@@ -34,7 +34,7 @@ export function Features() {
 
   return (
     <section className="py-32 px-4 max-w-7xl mx-auto relative">
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-[500px] bg-[#8ff5ff]/5 rounded-[100%] blur-[120px] pointer-events-none" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-[500px] bg-neon-cyan/5 rounded-[100%] blur-[120px] pointer-events-none" />
 
       <motion.div
         initial={{ opacity: 0, y: 30 }}
@@ -44,22 +44,22 @@ export function Features() {
         className="flex flex-col lg:flex-row gap-16 mb-24 relative z-10 items-end"
       >
         <div className="flex-1 space-y-6">
-          <h2 className="text-5xl md:text-6xl font-['Space_Grotesk'] font-bold leading-[1.1] text-[#ecedf6] tracking-tight">
+          <h2 className="text-5xl md:text-6xl font-headline font-bold leading-[1.1] text-foreground tracking-tight">
             {t('landing.features_title')} <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#8ff5ff] to-[#ac89ff]">
+            <span className="text-neon-cyan">
               {t('landing.features_title_highlight')}
             </span>
           </h2>
         </div>
         <div className="flex-1 space-y-8">
-          <p className="text-xl text-[#a9abb3] leading-relaxed font-light">
+          <p className="text-xl text-muted-foreground leading-relaxed font-light">
             {t('landing.features_desc')}
           </p>
           <div className="flex gap-6">
-            <div className="flex items-center gap-2 text-[#8ff5ff] text-sm font-bold uppercase tracking-widest">
+            <div className="flex items-center gap-2 text-neon-cyan text-sm font-bold uppercase tracking-widest">
               <CheckCircle className="w-4 h-4" /> Multi-sig
             </div>
-            <div className="flex items-center gap-2 text-[#ac89ff] text-sm font-bold uppercase tracking-widest">
+            <div className="flex items-center gap-2 text-neon-purple text-sm font-bold uppercase tracking-widest">
               <CheckCircle className="w-4 h-4" /> ZK-Proofs
             </div>
           </div>
@@ -71,9 +71,16 @@ export function Features() {
           // Asymmetrical layout mapping
           const spanClass =
             index === 0 || index === 3 ? 'md:col-span-2' : 'md:col-span-1'
-          const bgClass = index % 2 === 0 ? 'bg-[#161a21]' : 'bg-[#10131a]'
-          const accentColor =
-            feature.iconColor === 'cyan' ? '#8ff5ff' : '#ac89ff'
+          const bgClass =
+            index % 2 === 0 ? 'bg-card/40' : 'bg-surface-container-low/30'
+          const hoverBorderClass =
+            feature.iconColor === 'cyan'
+              ? 'hover:border-neon-cyan/40'
+              : 'hover:border-neon-purple/40'
+          const accentColorVal =
+            feature.iconColor === 'cyan'
+              ? 'var(--neon-cyan)'
+              : 'var(--neon-purple)'
 
           return (
             <motion.div
@@ -86,31 +93,136 @@ export function Features() {
                 ease: 'easeOut'
               }}
               key={index}
-              className={`p-10 rounded-3xl ${bgClass} border border-[#2e323b]/50 hover:border-[${accentColor}]/50 transition-all duration-700 ease-out group relative overflow-hidden flex flex-col justify-between min-h-[320px] ${spanClass}`}
+              className={`p-10 rounded-none ${bgClass} border border-border/40 ${hoverBorderClass} backdrop-blur-sm transition-all duration-700 ease-out group relative overflow-hidden flex flex-col justify-between min-h-[320px] ${spanClass}`}
             >
               {/* Subtle hover gradient */}
               <div
                 className="absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-700 ease-out pointer-events-none"
                 style={{
-                  background: `radial-gradient(circle at top right, ${accentColor}, transparent 70%)`
+                  background: `radial-gradient(circle at top right, ${accentColorVal}, transparent 70%)`
                 }}
               />
 
               <div className="relative z-10">
-                <span
-                  className="material-symbols-outlined text-[48px] mb-8 transition-transform duration-500 ease-out group-hover:-translate-y-2 group-hover:scale-110"
-                  style={{
-                    fontVariationSettings: "'FILL' 1",
-                    color: accentColor
-                  }}
-                >
-                  {feature.icon}
-                </span>
-                <h5 className="text-2xl font-['Space_Grotesk'] font-bold text-[#ecedf6] mb-4">
+                {/* SVG renderers */}
+                {feature.id === 'lock' && (
+                  <svg
+                    className="w-12 h-12 mb-8 transition-transform duration-500 ease-out group-hover:-translate-y-1"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <rect
+                      x="4"
+                      y="10"
+                      width="16"
+                      height="11"
+                      rx="0.5"
+                      stroke={accentColorVal}
+                      strokeWidth="1.5"
+                    />
+                    <path
+                      d="M8 10V7c0-2.21 1.79-4 4-4s4 1.79 4 4v3"
+                      stroke={accentColorVal}
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                    />
+                    <path
+                      d="M12 13v3"
+                      stroke={accentColorVal}
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                    />
+                    <circle cx="12" cy="14.5" r="1" fill={accentColorVal} />
+                  </svg>
+                )}
+
+                {feature.id === 'groups' && (
+                  <svg
+                    className="w-12 h-12 mb-8 transition-transform duration-500 ease-out group-hover:-translate-y-1"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M17 21v-2a3 3 0 00-3-3H10a3 3 0 00-3 3v2"
+                      stroke={accentColorVal}
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                    />
+                    <circle
+                      cx="12"
+                      cy="11"
+                      r="3"
+                      stroke={accentColorVal}
+                      strokeWidth="1.5"
+                    />
+                    <path
+                      d="M21 21v-2a3 3 0 00-2-2.82M18 8a3 3 0 00-2.24-2.92"
+                      stroke={accentColorVal}
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      className="opacity-60"
+                    />
+                    <path
+                      d="M3 21v-2a3 3 0 012-2.82M6 8a3 3 0 012.24-2.92"
+                      stroke={accentColorVal}
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      className="opacity-60"
+                    />
+                  </svg>
+                )}
+
+                {feature.id === 'query_stats' && (
+                  <svg
+                    className="w-12 h-12 mb-8 transition-transform duration-500 ease-out group-hover:-translate-y-1"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M4 20h16M4 20V4M8 20v-6M12 20v-10M16 20v-14"
+                      stroke={accentColorVal}
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                    />
+                    <path
+                      d="M8 14l4-4 4 4 4-6"
+                      stroke={accentColorVal}
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="opacity-70"
+                    />
+                  </svg>
+                )}
+
+                {feature.id === 'security' && (
+                  <svg
+                    className="w-12 h-12 mb-8 transition-transform duration-500 ease-out group-hover:-translate-y-1"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"
+                      stroke={accentColorVal}
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                    <path
+                      d="M9 11l2 2 4-4"
+                      stroke={accentColorVal}
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                )}
+
+                <h5 className="text-2xl font-headline font-bold text-foreground mb-4">
                   {feature.title}
                 </h5>
               </div>
-              <p className="text-[#a9abb3] text-lg leading-relaxed relative z-10 font-light">
+              <p className="text-muted-foreground text-lg leading-relaxed relative z-10 font-light">
                 {feature.description}
               </p>
             </motion.div>

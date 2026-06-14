@@ -262,31 +262,31 @@ export default function AiAssistant() {
           return (
             <div
               key={`proj-${index}`}
-              className="my-3 p-3 bg-slate-900 border border-slate-800 hover:border-cyan-500/30 rounded-xl flex items-center gap-3 transition-all duration-300 shadow-lg"
+              className="my-3 p-3 bg-background border border-border hover:border-neon-cyan/30 rounded-none flex items-center gap-3 transition-all duration-300 shadow-lg"
             >
               {img && img !== 'null' && img !== 'undefined' && img !== '' ? (
                 <img
                   src={img}
                   alt={title}
-                  className="w-14 h-14 object-cover rounded-lg bg-slate-850 shrink-0 border border-slate-700/50"
+                  className="w-14 h-14 object-cover rounded-none bg-muted shrink-0 border border-border"
                 />
               ) : (
-                <div className="w-14 h-14 bg-slate-800 rounded-lg flex items-center justify-center shrink-0 border border-slate-700/50">
-                  <Bot className="w-6 h-6 text-slate-500" />
+                <div className="w-14 h-14 bg-muted rounded-none flex items-center justify-center shrink-0 border border-border">
+                  <Bot className="w-6 h-6 text-muted-foreground" />
                 </div>
               )}
               <div className="flex-1 min-w-0">
-                <h4 className="text-xs font-bold text-white truncate">
+                <h4 className="text-xs font-bold text-foreground truncate">
                   {title}
                 </h4>
                 <div className="flex items-center gap-1.5 mt-0.5">
                   <span
-                    className={`px-1.5 py-0.2 rounded text-[8px] font-semibold tracking-wider ${
+                    className={`px-1.5 py-0.2 rounded-none text-[8px] font-semibold tracking-wider ${
                       status === 'PROGRESS' ||
                       status === 'ACTIVE' ||
                       status === 'SUCCESS'
-                        ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
-                        : 'bg-rose-500/10 text-rose-400 border border-rose-500/20'
+                        ? 'bg-emerald-500/10 text-emerald-500 border border-emerald-500/20'
+                        : 'bg-neon-rose/10 text-neon-rose border border-neon-rose/20'
                     }`}
                   >
                     {status}
@@ -294,17 +294,17 @@ export default function AiAssistant() {
                 </div>
                 {raised && goal && !isNaN(parseFloat(raised)) && (
                   <div className="mt-1">
-                    <div className="w-full bg-slate-800 rounded-full h-1">
+                    <div className="w-full bg-muted rounded-none h-1">
                       <div
-                        className="bg-gradient-to-r from-cyan-500 to-blue-500 h-1 rounded-full"
+                        className="bg-gradient-to-r from-neon-cyan to-neon-purple h-1 rounded-none"
                         style={{
                           width: `${Math.min(100, (parseFloat(raised) / parseFloat(goal)) * 100)}%`
                         }}
                       ></div>
                     </div>
-                    <p className="text-[9px] text-slate-400 mt-1 font-mono">
+                    <p className="text-[9px] text-muted-foreground mt-1 font-mono">
                       {t('ai.raised')}{' '}
-                      <span className="text-cyan-400 font-semibold">
+                      <span className="text-neon-cyan font-semibold">
                         {raised}
                       </span>{' '}
                       / {goal} mUSDT
@@ -314,7 +314,7 @@ export default function AiAssistant() {
               </div>
               <a
                 href={`/projects/${slug}`}
-                className="px-2.5 py-1.5 text-[10px] bg-cyan-600 hover:bg-cyan-500 text-white font-medium rounded-lg transition-colors shrink-0 flex items-center gap-1 shadow-sm"
+                className="px-2.5 py-1.5 text-[10px] bg-neon-cyan hover:bg-neon-cyan/80 text-background font-semibold rounded-none transition-colors shrink-0 flex items-center gap-1 shadow-sm"
               >
                 {t('ai.view')}
                 <ExternalLink className="w-2.5 h-2.5" />
@@ -323,7 +323,7 @@ export default function AiAssistant() {
           )
         } catch (e) {
           return (
-            <span key={index} className="text-rose-400">
+            <span key={index} className="text-destructive">
               {t('ai.project_error')}
             </span>
           )
@@ -340,7 +340,7 @@ export default function AiAssistant() {
               navigator.clipboard.writeText(address)
               toast.success(t('ai.toast_wallet_copied'))
             }}
-            className="inline-flex items-center gap-1 px-1.5 py-0.5 mx-1 rounded bg-slate-900 border border-cyan-500/20 hover:border-cyan-500/40 text-cyan-400 font-mono text-[11px] cursor-pointer hover:bg-slate-850 transition-all duration-200"
+            className="inline-flex items-center gap-1 px-1.5 py-0.5 mx-1 rounded-none bg-background border border-neon-cyan/20 hover:border-neon-cyan/40 text-neon-cyan font-mono text-[11px] cursor-pointer hover:bg-muted transition-all duration-200"
             title={t('ai.wallet_tooltip')}
           >
             <Wallet className="w-3 h-3" />
@@ -361,11 +361,11 @@ export default function AiAssistant() {
             href={`https://sepolia.etherscan.io/tx/${hash}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1 px-1.5 py-0.5 mx-1 rounded bg-slate-900 border border-emerald-500/20 hover:border-emerald-500/40 text-emerald-400 font-mono text-[11px] hover:bg-slate-850 transition-all duration-200"
+            className="inline-flex items-center gap-1 px-1.5 py-0.5 mx-1 rounded-none bg-background border border-emerald-500/20 hover:border-emerald-500/40 text-emerald-500 font-mono text-[11px] hover:bg-muted transition-all duration-200"
             title={t('ai.tx_tooltip')}
           >
             <ExternalLink className="w-3 h-3" />
-            Tx:{' '}
+            Tx:
             {hash.length > 12
               ? `${hash.slice(0, 6)}...${hash.slice(-4)}`
               : hash}
@@ -381,14 +381,14 @@ export default function AiAssistant() {
           return (
             <div
               key={`img-${index}`}
-              className="my-2 border border-slate-800 rounded-lg overflow-hidden bg-slate-900 shadow-sm"
+              className="my-2 border border-border rounded-none overflow-hidden bg-card shadow-sm"
             >
               <img
                 src={url}
                 alt={caption}
                 className="w-full max-h-40 object-cover"
               />
-              <p className="text-[10px] text-slate-400 p-1.5 text-center italic bg-slate-950/20">
+              <p className="text-[10px] text-muted-foreground p-1.5 text-center italic bg-muted/20">
                 {caption}
               </p>
             </div>
@@ -416,9 +416,9 @@ export default function AiAssistant() {
           return (
             <div
               key={`line-${index}-${lineIdx}`}
-              className="pl-4 py-0.5 flex items-start gap-1.5 text-slate-200 text-sm"
+              className="pl-4 py-0.5 flex items-start gap-1.5 text-foreground text-sm"
             >
-              <span className="text-cyan-400 mt-2 shrink-0 w-1 h-1 rounded-full bg-cyan-400"></span>
+              <span className="text-neon-cyan mt-2 shrink-0 w-1.5 h-1.5 rounded-none bg-neon-cyan"></span>
               <span className="leading-relaxed">{listText}</span>
             </div>
           )
@@ -427,7 +427,7 @@ export default function AiAssistant() {
         return (
           <p
             key={`line-${index}-${lineIdx}`}
-            className="leading-relaxed mb-1 text-slate-200 text-sm"
+            className="leading-relaxed mb-1 text-foreground text-sm"
           >
             {cleanLine}
           </p>
@@ -438,41 +438,46 @@ export default function AiAssistant() {
 
   return (
     <div className="fixed bottom-6 right-6 z-50 font-sans">
-      {/* NÚT FLOAT TOGGLE CHAT WIDGET - Smooth Friendly Glow */}
+      {/* NÚT FLOAT TOGGLE CHAT WIDGET - Smooth Friendly Scale on Hover */}
       {!isOpen && (
         <button
           onClick={() => setIsOpen(true)}
-          className="group relative flex items-center justify-center w-14 h-14 rounded-full bg-slate-900 border border-slate-800 text-cyan-400 hover:text-cyan-300 hover:border-cyan-500/50 hover:bg-slate-850 transition-all duration-300 shadow-xl hover:shadow-[0_0_15px_rgba(6,182,212,0.25)] animate-bounce select-none"
-          style={{ animationDuration: '3s' }}
+          className="group relative flex items-center justify-center w-14 h-14 rounded-none bg-card border border-neon-cyan/50 text-neon-cyan hover:text-neon-cyan hover:bg-neon-cyan/10 transition-all duration-300 shadow-[2px_2px_0px_var(--neon-purple)] hover:shadow-none hover:translate-x-px hover:translate-y-px select-none"
           title={t('ai.tooltip')}
         >
           {/* Active Status Ring */}
-          <span className="absolute top-0.5 right-0.5 flex h-3 w-3">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
+          <span className="absolute top-0 right-0 flex h-3 w-3 z-20">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-none bg-emerald-400 opacity-75"></span>
+            <span className="relative inline-flex rounded-none h-3 w-3 bg-emerald-500"></span>
           </span>
 
-          <Bot className="w-6.5 h-6.5 group-hover:scale-105 transition-transform duration-200" />
+          <img
+            src="/logo.png"
+            alt="AI Assistant Logo"
+            className="w-14 h-14 object-contain group-hover:scale-105 transition-transform duration-200"
+          />
         </button>
       )}
 
       {/* CỬA SỔ HỘI THOẠI WIDGET */}
       {isOpen && (
-        <div className="flex flex-col w-96 max-w-[calc(100vw-2rem)] h-[550px] max-h-[85vh] rounded-2xl border border-slate-850 bg-slate-950/98 shadow-2xl overflow-hidden transition-all duration-300 animate-in fade-in zoom-in-95">
+        <div className="flex flex-col w-96 max-w-[calc(100vw-2rem)] h-[550px] max-h-[85vh] rounded-none border-2 border-border bg-card shadow-[4px_4px_0px_var(--neon-purple)] overflow-hidden transition-all duration-300 animate-in fade-in zoom-in-95">
           {/* HEADER CHAT - Clean & Elegant */}
-          <div className="relative flex items-center justify-between px-4 py-3.5 bg-slate-900 border-b border-slate-850 select-none">
+          <div className="relative flex items-center justify-between px-4 py-3.5 bg-muted/30 border-b border-border select-none">
             <div className="flex items-center gap-2">
-              <div className="relative flex items-center justify-center w-8 h-8 rounded-lg bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
-                <Bot className="w-5 h-5" />
-              </div>
+              <img
+                src="/logo.png"
+                alt="AI Logo"
+                className="w-14 h-14 object-contain my-[-10px] ml-[-12px] mr-[-10px]"
+              />
               <div>
                 <div className="flex items-center gap-1.5">
-                  <span className="text-sm font-bold text-white tracking-wide">
+                  <span className="text-sm font-bold text-foreground tracking-wide font-['Space_Grotesk']">
                     {t('ai.assistant_title')}
                   </span>
-                  <span className="flex h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                  <span className="flex h-1.5 w-1.5 rounded-none bg-emerald-500 animate-pulse"></span>
                 </div>
-                <span className="text-[9px] text-slate-400 flex items-center gap-1 mt-0.5">
+                <span className="text-[9px] text-muted-foreground flex items-center gap-1 mt-0.5">
                   {isLoggedIn ? (
                     <>
                       <CheckCircle2 className="w-2.5 h-2.5 text-emerald-400" />
@@ -482,7 +487,7 @@ export default function AiAssistant() {
                     </>
                   ) : (
                     <>
-                      <span className="w-1.5 h-1.5 bg-amber-400 rounded-full"></span>
+                      <span className="w-1.5 h-1.5 bg-amber-400 rounded-none"></span>
                       <span>{t('ai.guest')}</span>
                     </>
                   )}
@@ -493,14 +498,14 @@ export default function AiAssistant() {
             <div className="flex items-center gap-1.5">
               <button
                 onClick={handleClearHistory}
-                className="p-2 rounded-lg bg-slate-850 border border-slate-800 text-slate-400 hover:text-white hover:border-slate-700 transition-colors"
+                className="p-2 rounded-none bg-background border border-border text-muted-foreground hover:text-foreground transition-colors"
                 title={t('ai.clear_tooltip')}
               >
                 <RotateCcw className="w-3.5 h-3.5" />
               </button>
               <button
                 onClick={() => setIsOpen(false)}
-                className="p-2 rounded-lg bg-slate-850 border border-slate-800 text-slate-400 hover:text-white hover:border-slate-700 transition-colors"
+                className="p-2 rounded-none bg-background border border-border text-muted-foreground hover:text-foreground transition-colors"
               >
                 <X className="w-3.5 h-3.5" />
               </button>
@@ -508,7 +513,7 @@ export default function AiAssistant() {
           </div>
 
           {/* VÙNG CHỨA TIN NHẮN (MESSAGE CONTAINER) */}
-          <div className="flex-1 overflow-y-auto px-4 py-4 space-y-4 scrollbar-thin scrollbar-thumb-cyan-500/10 scrollbar-track-transparent">
+          <div className="flex-1 overflow-y-auto px-4 py-4 space-y-4 scrollbar-thin scrollbar-thumb-neon-cyan/10 scrollbar-track-transparent">
             {messages.map((msg, index) => (
               <div
                 key={index}
@@ -520,41 +525,41 @@ export default function AiAssistant() {
                   }`}
                 >
                   {/* Avatar Icon */}
-                  <div
-                    className={`flex items-center justify-center w-7 h-7 rounded-full shrink-0 border ${
-                      msg.sender === 'user'
-                        ? 'bg-cyan-950/20 border-cyan-800/40 text-cyan-400'
-                        : 'bg-slate-900 border-slate-800 text-slate-400'
-                    }`}
-                  >
-                    {msg.sender === 'user' ? (
+                  {msg.sender === 'user' ? (
+                    <div className="flex items-center justify-center w-7 h-7 rounded-none shrink-0 border bg-neon-cyan/10 border-neon-cyan/20 text-neon-cyan">
                       <User className="w-3.5 h-3.5" />
-                    ) : (
-                      <Bot className="w-3.5 h-3.5" />
-                    )}
-                  </div>
+                    </div>
+                  ) : (
+                    <div className="w-7 h-7 flex items-center justify-center shrink-0">
+                      <img
+                        src="/logo.png"
+                        alt="AI"
+                        className="w-12 h-12 max-w-none object-contain"
+                      />
+                    </div>
+                  )}
 
                   {/* Message Balloon */}
                   <div
-                    className={`px-3 py-2.5 rounded-2xl shadow-sm leading-relaxed ${
+                    className={`px-3 py-2.5 rounded-none shadow-sm leading-relaxed border ${
                       msg.sender === 'user'
-                        ? 'bg-cyan-600/90 text-white rounded-tr-sm'
-                        : 'bg-slate-900/95 text-slate-200 border border-slate-850/80 rounded-tl-sm'
+                        ? 'bg-neon-cyan text-background font-medium border-neon-cyan'
+                        : 'bg-background text-foreground border-border'
                     }`}
                   >
                     {/* Bouncing typing dots if streaming empty response */}
                     {msg.text === '' && msg.sender === 'ai' && isStreaming ? (
                       <div className="flex gap-1 items-center py-2 px-1 justify-start">
                         <span
-                          className="w-1.5 h-1.5 bg-cyan-400 rounded-full animate-bounce"
+                          className="w-1.5 h-1.5 bg-neon-cyan rounded-none animate-bounce"
                           style={{ animationDelay: '0ms' }}
                         ></span>
                         <span
-                          className="w-1.5 h-1.5 bg-cyan-400 rounded-full animate-bounce"
+                          className="w-1.5 h-1.5 bg-neon-cyan rounded-none animate-bounce"
                           style={{ animationDelay: '150ms' }}
                         ></span>
                         <span
-                          className="w-1.5 h-1.5 bg-cyan-400 rounded-full animate-bounce"
+                          className="w-1.5 h-1.5 bg-neon-cyan rounded-none animate-bounce"
                           style={{ animationDelay: '300ms' }}
                         ></span>
                       </div>
@@ -567,14 +572,16 @@ export default function AiAssistant() {
                       isStreaming &&
                       index === messages.length - 1 &&
                       msg.text !== '' && (
-                        <span className="inline-block w-1.5 h-3 bg-cyan-400 animate-pulse ml-1">
+                        <span className="inline-block w-1.5 h-3 bg-neon-cyan animate-pulse ml-1">
                           ▋
                         </span>
                       )}
 
                     <div
                       className={`text-[8px] mt-1.5 text-right opacity-50 ${
-                        msg.sender === 'user' ? 'text-white' : 'text-slate-400'
+                        msg.sender === 'user'
+                          ? 'text-background/70'
+                          : 'text-muted-foreground/70'
                       }`}
                     >
                       {msg.timestamp.toLocaleTimeString([], {
@@ -592,9 +599,9 @@ export default function AiAssistant() {
 
           {/* QUICK FAQs BADGES */}
           {messages.length === 1 && !isStreaming && (
-            <div className="px-4 pb-3 border-t border-slate-900 pt-3 select-none">
-              <span className="text-[10px] text-slate-400 flex items-center gap-1 font-semibold mb-2">
-                <HelpCircle className="w-3.5 h-3.5 text-cyan-500" />
+            <div className="px-4 pb-3 border-t border-border pt-3 select-none">
+              <span className="text-[10px] text-muted-foreground flex items-center gap-1 font-semibold mb-2">
+                <HelpCircle className="w-3.5 h-3.5 text-neon-cyan" />
                 {t('ai.suggested_questions')}
               </span>
               <div className="grid grid-cols-2 gap-2">
@@ -602,7 +609,7 @@ export default function AiAssistant() {
                   <button
                     key={i}
                     onClick={() => handleSendMessage(faq.q)}
-                    className="px-2.5 py-2 text-left text-[11px] bg-slate-900 border border-slate-800 hover:border-cyan-500/30 hover:bg-slate-850 rounded-lg text-slate-300 hover:text-white transition-all duration-200 line-clamp-1 truncate"
+                    className="px-2.5 py-2 text-left text-[11px] bg-muted/40 border border-border hover:border-neon-cyan/30 hover:bg-muted/80 rounded-none text-muted-foreground hover:text-foreground transition-all duration-200 line-clamp-1 truncate"
                   >
                     {faq.label}
                   </button>
@@ -612,7 +619,7 @@ export default function AiAssistant() {
           )}
 
           {/* KHU VỰC NHẬP TIN NHẮN (INPUT BAR) */}
-          <div className="p-3 bg-slate-900 border-t border-slate-850 select-none">
+          <div className="p-3 bg-muted/40 border-t border-border select-none">
             <form
               onSubmit={(e) => {
                 e.preventDefault()
@@ -629,22 +636,22 @@ export default function AiAssistant() {
                   placeholder={
                     isStreaming ? t('ai.thinking') : t('ai.placeholder')
                   }
-                  className="w-full bg-slate-950 border border-slate-800 focus:border-cyan-500/50 text-white placeholder-slate-500 text-xs rounded-xl pl-3 pr-8 py-2.5 outline-none transition-colors"
+                  className="w-full bg-background border border-border focus:border-neon-cyan/50 text-foreground placeholder-muted-foreground/50 text-xs rounded-none pl-3 pr-8 py-2.5 outline-none transition-colors"
                 />
-                <Sparkles className="absolute right-2.5 top-2.5 w-3.5 h-3.5 text-slate-600" />
+                <Sparkles className="absolute right-2.5 top-2.5 w-3.5 h-3.5 text-muted-foreground/60" />
               </div>
               <button
                 type="submit"
                 disabled={isStreaming || !inputMessage.trim()}
-                className="flex items-center justify-center p-2.5 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white disabled:bg-slate-900 disabled:text-slate-600 border border-cyan-500/10 disabled:border-slate-850 transition-colors shrink-0"
+                className="flex items-center justify-center p-2.5 rounded-none bg-neon-cyan hover:bg-neon-cyan/80 text-background disabled:bg-muted disabled:text-muted-foreground/50 border border-neon-cyan/40 shadow-[2px_2px_0px_rgba(0,0,0,0.1)] transition-colors shrink-0"
               >
                 <Send className="w-3.5 h-3.5" />
               </button>
             </form>
 
             {/* Friendly help footnote */}
-            <div className="text-[10px] text-slate-500 text-center mt-2 flex items-center justify-center gap-1">
-              <Sparkles className="w-3 h-3 text-cyan-500" />
+            <div className="text-[10px] text-muted-foreground/60 text-center mt-2 flex items-center justify-center gap-1 font-mono">
+              <Sparkles className="w-3 h-3 text-neon-cyan" />
               <span>{t('ai.footnote')}</span>
             </div>
           </div>

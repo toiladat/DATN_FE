@@ -49,12 +49,12 @@ export function KanbanCard({
   return (
     <div
       onClick={() => navigate(`/my-project/${project.id}`)}
-      className="shrink-0 bg-[#10131a] border border-[#2e323b]/60 hover:border-[#2e323b] transition-all duration-200 hover:-translate-y-px hover:shadow-lg hover:shadow-black/30 group cursor-pointer p-3 rounded-xl flex flex-col gap-3"
+      className="shrink-0 bg-card border border-border/60 hover:border-neon-cyan/50 transition-all duration-200 hover:-translate-y-px hover:shadow-[2px_2px_0px_var(--neon-purple)] group cursor-pointer p-3 rounded-none flex flex-col gap-3"
     >
       {/* Header: Thumbnail + Title */}
       <div className="flex gap-3 items-start">
         {project.image ? (
-          <div className="shrink-0 w-12 h-12 rounded-lg overflow-hidden bg-[#1c2028] border border-[#2e323b]/50">
+          <div className="shrink-0 w-12 h-12 rounded-none overflow-hidden bg-muted border border-border/50">
             <img
               src={project.image}
               alt={project.title}
@@ -62,19 +62,19 @@ export function KanbanCard({
             />
           </div>
         ) : (
-          <div className="shrink-0 w-12 h-12 rounded-lg bg-[#1c2028] border border-[#2e323b]/50 flex items-center justify-center">
-            <span className="material-symbols-outlined text-[#45484f] text-2xl">
+          <div className="shrink-0 w-12 h-12 rounded-none bg-muted border border-border/50 flex items-center justify-center">
+            <span className="material-symbols-outlined text-muted-foreground/60 text-2xl">
               image
             </span>
           </div>
         )}
         <div className="flex-1 min-w-0">
           {project.primaryCategory && (
-            <span className="inline-block mb-1 px-1.5 py-px rounded text-[9px] font-bold text-[#a9abb3] bg-[#1c2028] uppercase tracking-widest">
+            <span className="inline-block mb-1 px-1.5 py-px rounded-none text-[9px] font-bold text-muted-foreground bg-muted uppercase tracking-widest">
               {project.primaryCategory}
             </span>
           )}
-          <h4 className="text-[#ecedf6] font-['Space_Grotesk'] font-semibold text-[13px] leading-snug line-clamp-2 group-hover:text-white transition-colors">
+          <h4 className="text-foreground font-['Space_Grotesk'] font-semibold text-[13px] leading-snug line-clamp-2 group-hover:text-neon-cyan dark:group-hover:text-white transition-colors">
             {project.title}
           </h4>
         </div>
@@ -83,9 +83,11 @@ export function KanbanCard({
       {/* Progress/Status Area — logic unchanged */}
       {['pending', 'success', 'rejected'].includes(project.status) ||
       (project.status === 'active' && !(project.totalMilestones ?? 0)) ? (
-        <div className="flex items-center justify-between text-[11px] bg-[#0d1017] border border-[#2e323b]/40 rounded-lg py-2 px-3">
-          <span className="text-[#45484f]">{t('kanban.duration')}</span>
-          <span className="text-[#a9abb3] font-mono font-bold">
+        <div className="flex items-center justify-between text-[11px] bg-background border border-border/40 rounded-none py-2 px-3">
+          <span className="text-muted-foreground/60">
+            {t('kanban.duration')}
+          </span>
+          <span className="text-muted-foreground font-mono font-bold">
             {safeFormat(project.startDate, 'MMM d')} –{' '}
             {safeFormat(project.endDate, 'MMM d, yy')}
           </span>
@@ -100,10 +102,10 @@ export function KanbanCard({
                     (_, idx) => (
                       <div
                         key={idx}
-                        className={`flex-1 h-full rounded-full transition-colors duration-500 ${
+                        className={`flex-1 h-full rounded-none transition-colors duration-500 ${
                           idx < (project.completedMilestones ?? 0)
                             ? 'bg-[#4ade80]'
-                            : 'bg-[#1c2028]'
+                            : 'bg-muted'
                         }`}
                       />
                     )
@@ -113,7 +115,7 @@ export function KanbanCard({
               <TooltipContent
                 side="top"
                 sideOffset={8}
-                className="bg-[#1c2028] text-[#ecedf6] border-[#2e323b] shadow-xl font-bold font-['Space_Grotesk'] text-[10px] px-2 py-1"
+                className="bg-card text-foreground border border-border shadow-xl font-bold font-['Space_Grotesk'] text-[10px] px-2 py-1 rounded-none"
               >
                 <p>
                   {project.completedMilestones ?? 0} / {project.totalMilestones}{' '}
@@ -123,7 +125,7 @@ export function KanbanCard({
             </Tooltip>
           </TooltipProvider>
 
-          <div className="flex justify-between text-[10px] font-bold font-mono text-[#45484f]">
+          <div className="flex justify-between text-[10px] font-bold font-mono text-muted-foreground/60">
             <span>{t('kanban.Milestones')}</span>
             <span className="text-[#4ade80]">
               {Math.round(
@@ -140,9 +142,9 @@ export function KanbanCard({
           <TooltipProvider delayDuration={100}>
             <Tooltip>
               <TooltipTrigger asChild>
-                <div className="h-1 w-full bg-[#0d1017] rounded-full overflow-hidden border border-[#2e323b]/40 cursor-help">
+                <div className="h-1 w-full bg-background rounded-none overflow-hidden border border-border/40 cursor-help">
                   <div
-                    className="h-full bg-[#8ff5ff] transition-all duration-500 rounded-full"
+                    className="h-full bg-neon-cyan transition-all duration-500 rounded-none"
                     style={{
                       width: `${Math.min(
                         100,
@@ -156,7 +158,7 @@ export function KanbanCard({
               <TooltipContent
                 side="top"
                 sideOffset={8}
-                className="bg-[#1c2028] text-[#ecedf6] border-[#2e323b] shadow-xl font-bold font-['Space_Grotesk'] text-[10px] px-2 py-1"
+                className="bg-card text-foreground border border-border shadow-xl font-bold font-['Space_Grotesk'] text-[10px] px-2 py-1 rounded-none"
               >
                 <p>
                   {Math.round(
@@ -168,10 +170,10 @@ export function KanbanCard({
             </Tooltip>
           </TooltipProvider>
           <div className="flex justify-between text-[10px] font-mono font-bold">
-            <span className="text-[#8ff5ff]">
+            <span className="text-neon-cyan">
               ${project.raisedAmount.toLocaleString()}
             </span>
-            <span className="text-[#45484f]">
+            <span className="text-muted-foreground/60">
               ${project.fundingGoal.toLocaleString()}
             </span>
           </div>
@@ -179,7 +181,7 @@ export function KanbanCard({
       ) : null}
 
       {/* Footer */}
-      <div className="flex items-center justify-between text-[10px] text-[#45484f] mt-0.5">
+      <div className="flex items-center justify-between text-[10px] text-muted-foreground/60 mt-0.5">
         <div className="flex items-center gap-1">
           <span className="material-symbols-outlined text-[12px]">
             schedule
@@ -191,7 +193,7 @@ export function KanbanCard({
           <DropdownMenuTrigger asChild>
             <button
               onClick={(e) => e.stopPropagation()}
-              className="text-[#45484f] hover:text-[#a9abb3] opacity-0 group-hover:opacity-100 transition-all p-0.5 rounded focus:outline-none flex outline-none"
+              className="text-muted-foreground/60 hover:text-foreground opacity-0 group-hover:opacity-100 transition-all p-0.5 rounded focus:outline-none flex outline-none"
             >
               <span className="material-symbols-outlined text-[16px]">
                 more_horiz
@@ -201,10 +203,10 @@ export function KanbanCard({
           <DropdownMenuContent
             align="end"
             sideOffset={8}
-            className="bg-[#10131a] border-[#2e323b] text-[#ecedf6] min-w-[140px] font-['Space_Grotesk'] text-[12px] shadow-2xl p-1 z-50"
+            className="bg-card border border-border text-foreground min-w-[140px] font-['Space_Grotesk'] text-[12px] shadow-2xl p-1 z-50"
           >
             <DropdownMenuItem
-              className="focus:bg-[#1c2028] focus:text-[#ecedf6] cursor-pointer outline-none rounded py-1.5 px-2.5 font-medium"
+              className="focus:bg-muted focus:text-foreground cursor-pointer outline-none rounded py-1.5 px-2.5 font-medium"
               onSelect={(e) => {
                 e.preventDefault()
                 navigate(`/my-project/${project.id}`)
@@ -215,7 +217,7 @@ export function KanbanCard({
 
             {isPending && (
               <>
-                <DropdownMenuSeparator className="bg-[#2e323b] my-1" />
+                <DropdownMenuSeparator className="bg-border my-1" />
                 <DropdownMenuItem
                   className="focus:bg-[#ff716c]/10 focus:text-[#ff716c] text-[#ff716c] cursor-pointer outline-none rounded py-1.5 px-2.5 font-medium"
                   onClick={(e) => {
@@ -230,7 +232,7 @@ export function KanbanCard({
 
             {project.status === 'active' && (
               <>
-                <DropdownMenuSeparator className="bg-[#2e323b] my-1" />
+                <DropdownMenuSeparator className="bg-border my-1" />
                 <DropdownMenuItem
                   className="focus:bg-[#4ade80]/10 focus:text-[#4ade80] text-[#4ade80] cursor-pointer outline-none rounded py-1.5 px-2.5 font-medium"
                   onClick={(e) => e.stopPropagation()}

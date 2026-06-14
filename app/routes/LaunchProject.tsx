@@ -32,13 +32,13 @@ export default function LaunchProject() {
       default:
         return (
           <div className="flex flex-col items-center justify-center p-20 h-96 text-center w-full max-w-5xl mx-auto">
-            <span className="material-symbols-outlined text-6xl text-[#45484f] mb-4">
+            <span className="material-symbols-outlined text-6xl text-muted-foreground/60 mb-4">
               construction
             </span>
-            <h2 className="text-2xl font-['Space_Grotesk'] font-bold text-[#ecedf6] mb-2">
+            <h2 className="text-2xl font-['Space_Grotesk'] font-bold text-foreground mb-2">
               {currentStep} Module
             </h2>
-            <p className="text-[#a9abb3]">
+            <p className="text-muted-foreground">
               This section is currently under development.
             </p>
           </div>
@@ -66,7 +66,7 @@ export default function LaunchProject() {
         <SidebarInset className="bg-transparent flex-1 pt-24 px-6 md:px-12 pb-24 overflow-x-hidden relative">
           {/* Nút Toggle Sidebar (Chỉ chạy trên Shadcn Sidebar) */}
           <div className="absolute top-24 left-6 md:left-8 z-50">
-            <SidebarTrigger className="text-[#a9abb3] hover:text-[#8ff5ff] hover:bg-[#8ff5ff]/10 bg-[#161a21] border border-[#45484f]/20 shadow-md" />
+            <SidebarTrigger className="text-muted-foreground hover:text-neon-cyan hover:bg-neon-cyan/10 bg-card border border-border shadow-md" />
           </div>
 
           <div className="mt-12 w-full">{renderContent()}</div>

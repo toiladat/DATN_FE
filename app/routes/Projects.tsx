@@ -36,10 +36,10 @@ export default function Projects() {
   const totalPages = data?.totalPages || 0
 
   return (
-    <div className="bg-[#0a0c10] text-[#ecedf6] min-h-screen relative overflow-hidden font-['Space_Grotesk']">
+    <div className="bg-background text-foreground min-h-screen relative overflow-hidden font-['Space_Grotesk']">
       {/* Background Ambient Glow */}
-      <div className="absolute top-0 right-1/4 w-[600px] h-[600px] bg-[#8ff5ff]/5 rounded-[100%] blur-[150px] pointer-events-none mix-blend-screen" />
-      <div className="absolute bottom-1/4 left-1/4 w-[500px] h-[500px] bg-[#ac89ff]/5 rounded-[100%] blur-[150px] pointer-events-none mix-blend-screen" />
+      <div className="absolute top-0 right-1/4 w-[600px] h-[600px] bg-neon-cyan/5 rounded-[100%] blur-[150px] pointer-events-none mix-blend-screen" />
+      <div className="absolute bottom-1/4 left-1/4 w-[500px] h-[500px] bg-neon-purple/5 rounded-[100%] blur-[150px] pointer-events-none mix-blend-screen" />
 
       <main className="pt-32 pb-24 px-4 md:px-8 lg:px-12 xl:px-24 max-w-[1600px] mx-auto w-full relative z-10">
         <SearchFilter
@@ -51,11 +51,11 @@ export default function Projects() {
 
         {isLoading ? (
           <div className="flex flex-col items-center justify-center py-20">
-            <Loader2 className="w-10 h-10 animate-spin text-[#ac89ff] mb-4" />
-            <p className="text-[#a9abb3]">{t('search.searching')}</p>
+            <Loader2 className="w-10 h-10 animate-spin text-neon-purple mb-4" />
+            <p className="text-muted-foreground">{t('search.searching')}</p>
           </div>
         ) : isError ? (
-          <div className="text-center py-20 text-red-400">
+          <div className="text-center py-20 text-destructive">
             {t('error.Network')}
           </div>
         ) : (

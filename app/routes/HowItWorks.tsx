@@ -76,10 +76,10 @@ export default function HowItWorksPage() {
   ]
 
   return (
-    <div className="bg-[#0a0c10] text-[#ecedf6] min-h-screen relative overflow-hidden font-['Space_Grotesk']">
+    <div className="bg-background text-foreground min-h-screen relative overflow-hidden font-['Space_Grotesk']">
       {/* Background glow graphics */}
-      <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-[#8ff5ff]/3 rounded-full blur-[160px] pointer-events-none mix-blend-screen" />
-      <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-[#ac89ff]/3 rounded-full blur-[160px] pointer-events-none mix-blend-screen" />
+      <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-neon-cyan/3 rounded-full blur-[160px] pointer-events-none mix-blend-screen" />
+      <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-neon-purple/3 rounded-full blur-[160px] pointer-events-none mix-blend-screen" />
 
       {/* Main Content */}
       <main className="pt-32 pb-24 px-4 md:px-8 lg:px-12 xl:px-24 max-w-[1200px] mx-auto w-full relative z-10">
@@ -90,43 +90,43 @@ export default function HowItWorksPage() {
           transition={{ duration: 0.8 }}
           className="text-center max-w-3xl mx-auto mb-16"
         >
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#8ff5ff]/20 bg-[#8ff5ff]/5 text-[#8ff5ff] text-xs font-mono mb-6 uppercase tracking-wider">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#8ff5ff] animate-pulse" />
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-none border border-neon-cyan/20 bg-neon-cyan/5 text-neon-cyan text-xs font-mono mb-6 uppercase tracking-wider">
+            <span className="w-1.5 h-1.5 rounded-none bg-neon-cyan animate-pulse" />
             {t('how.badge.guide')}
           </div>
           <h1 className="text-3xl md:text-5xl font-bold tracking-tight mb-6 leading-tight">
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#8ff5ff] via-[#ac89ff] to-[#62e086]">
+            <span className="text-neon-cyan drop-shadow-[0_0_30px_var(--color-neon-cyan)/30] font-extrabold">
               {t('how.title')}
             </span>
           </h1>
-          <p className="text-[#a9abb3] text-sm md:text-base font-light leading-relaxed">
+          <p className="text-muted-foreground text-sm md:text-base font-light leading-relaxed">
             {t('how.subtitle')}
           </p>
         </motion.div>
 
         {/* Dynamic Horizontal Linear Stepper (Extremely clean, no cluttered icons) */}
-        <div className="w-full mb-16 bg-[#10131a]/60 border border-[#2e323b]/50 rounded-2xl p-2 backdrop-blur-md">
+        <div className="w-full mb-16 bg-card/60 border border-border/50 rounded-none p-2 backdrop-blur-md">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
             {[
               {
                 id: 'creation',
                 label: t('how.step.1'),
-                glow: 'shadow-[0_0_15px_rgba(143,245,255,0.15)] text-[#8ff5ff]'
+                glow: 'shadow-[0_0_15px_var(--color-neon-cyan)/15] text-neon-cyan'
               },
               {
                 id: 'fundraising',
                 label: t('how.step.2'),
-                glow: 'shadow-[0_0_15px_rgba(172,137,255,0.15)] text-[#ac89ff]'
+                glow: 'shadow-[0_0_15px_var(--color-neon-purple)/15] text-neon-purple'
               },
               {
                 id: 'execution',
                 label: t('how.step.3'),
-                glow: 'shadow-[0_0_15px_rgba(98,224,134,0.15)] text-[#62e086]'
+                glow: 'shadow-[0_0_15px_rgba(98,224,134,0.15)] text-emerald-600 dark:text-emerald-400'
               },
               {
                 id: 'payout',
                 label: t('how.step.4'),
-                glow: 'shadow-[0_0_15px_rgba(255,113,108,0.15)] text-[#ff716c]'
+                glow: 'shadow-[0_0_15px_var(--color-neon-rose)/15] text-neon-rose'
               }
             ].map((tab, idx) => {
               const isActive = activeTab === tab.id
@@ -134,15 +134,15 @@ export default function HowItWorksPage() {
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id as TabType)}
-                  className={`flex items-center justify-between gap-3 px-5 py-4 rounded-xl border text-sm font-semibold transition-all duration-300 ${
+                  className={`flex items-center justify-between gap-3 px-5 py-4 rounded-none border text-sm font-semibold transition-all duration-300 ${
                     isActive
-                      ? `bg-[#161a21]/90 border-current ${tab.glow} font-bold z-10`
-                      : 'bg-transparent text-[#a9abb3] border-transparent hover:text-white hover:bg-[#161a21]/30'
+                      ? `bg-surface-container-low/90 border-current ${tab.glow} font-bold z-10`
+                      : 'bg-transparent text-muted-foreground border-transparent hover:text-foreground hover:bg-surface-container-low/30'
                   }`}
                 >
                   <span>{tab.label}</span>
                   <ChevronRight
-                    className={`w-4 h-4 text-[#2e323b] hidden lg:block ${idx === 3 ? 'lg:hidden' : ''}`}
+                    className={`w-4 h-4 text-border hidden lg:block ${idx === 3 ? 'lg:hidden' : ''}`}
                   />
                 </button>
               )
@@ -163,51 +163,51 @@ export default function HowItWorksPage() {
           {activeTab === 'creation' && (
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
               <div className="lg:col-span-5 space-y-6">
-                <div className="bg-[#10131a]/80 border border-[#2e323b]/60 rounded-3xl p-8 backdrop-blur-md h-fit">
-                  <h2 className="text-xl md:text-2xl font-bold mb-3 text-[#ecedf6]">
+                <div className="bg-card/85 border border-border/60 rounded-none p-8 backdrop-blur-md h-fit">
+                  <h2 className="text-xl md:text-2xl font-bold mb-3 text-foreground">
                     {t('how.phase1.title')}
                   </h2>
-                  <p className="text-[#a9abb3] leading-relaxed font-light text-sm mb-6">
+                  <p className="text-muted-foreground leading-relaxed font-light text-sm mb-6">
                     {t('how.phase1.subtitle')}
                   </p>
 
                   {/* Setup Rules & Controls (Simple language) */}
-                  <div className="space-y-5 pt-6 border-t border-[#2e323b]/40">
-                    <h4 className="text-[10px] font-mono text-[#8ff5ff] uppercase tracking-widest font-bold">
+                  <div className="space-y-5 pt-6 border-t border-border/40">
+                    <h4 className="text-[10px] font-mono text-neon-cyan uppercase tracking-widest font-bold">
                       {t('how.phase1.rule_header')}
                     </h4>
 
                     <div className="flex gap-3">
-                      <CheckCircle className="w-5 h-5 text-[#62e086] shrink-0 mt-0.5" />
+                      <CheckCircle className="w-5 h-5 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
                       <div>
-                        <span className="text-sm font-bold text-[#ecedf6] block">
+                        <span className="text-sm font-bold text-foreground block">
                           {t('how.phase1.rule1.title')}
                         </span>
-                        <span className="text-xs text-[#a9abb3] font-light mt-1 block leading-relaxed">
+                        <span className="text-xs text-muted-foreground font-light mt-1 block leading-relaxed">
                           {t('how.phase1.rule1.desc')}
                         </span>
                       </div>
                     </div>
 
                     <div className="flex gap-3">
-                      <CheckCircle className="w-5 h-5 text-[#62e086] shrink-0 mt-0.5" />
+                      <CheckCircle className="w-5 h-5 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
                       <div>
-                        <span className="text-sm font-bold text-[#ecedf6] block">
+                        <span className="text-sm font-bold text-foreground block">
                           {t('how.phase1.rule2.title')}
                         </span>
-                        <span className="text-xs text-[#a9abb3] font-light mt-1 block leading-relaxed">
+                        <span className="text-xs text-muted-foreground font-light mt-1 block leading-relaxed">
                           {t('how.phase1.rule2.desc')}
                         </span>
                       </div>
                     </div>
 
                     <div className="flex gap-3">
-                      <CheckCircle className="w-5 h-5 text-[#62e086] shrink-0 mt-0.5" />
+                      <CheckCircle className="w-5 h-5 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
                       <div>
-                        <span className="text-sm font-bold text-[#ecedf6] block">
+                        <span className="text-sm font-bold text-foreground block">
                           {t('how.phase1.rule3.title')}
                         </span>
-                        <span className="text-xs text-[#a9abb3] font-light mt-1 block leading-relaxed">
+                        <span className="text-xs text-muted-foreground font-light mt-1 block leading-relaxed">
                           {t('how.phase1.rule3.desc')}
                         </span>
                       </div>
@@ -221,21 +221,21 @@ export default function HowItWorksPage() {
                 {creationSteps.map((step, idx) => (
                   <div
                     key={idx}
-                    className="flex gap-6 p-6 rounded-2xl border border-[#2e323b]/60 bg-[#161a21]/80 hover:border-[#8ff5ff]/30 transition-all duration-300 group hover:-translate-y-0.5"
+                    className="flex gap-6 p-6 rounded-none border border-border/60 bg-card/80 hover:border-neon-cyan/40 transition-all duration-300 group hover:-translate-y-0.5"
                   >
                     <div className="flex flex-col items-center shrink-0">
-                      <div className="w-10 h-10 rounded-full border border-[#2e323b] bg-[#10131a] flex items-center justify-center text-[#ecedf6] font-mono font-bold text-sm group-hover:text-[#8ff5ff] group-hover:border-[#8ff5ff]/30 transition-colors">
+                      <div className="w-10 h-10 rounded-none border border-border bg-background flex items-center justify-center text-foreground font-mono font-bold text-sm group-hover:text-neon-cyan group-hover:border-neon-cyan/30 transition-colors">
                         {step.step}
                       </div>
                       {idx !== creationSteps.length - 1 && (
-                        <div className="w-[1px] h-full bg-[#2e323b] mt-4" />
+                        <div className="w-[1px] h-full bg-border mt-4" />
                       )}
                     </div>
                     <div>
-                      <h4 className="text-base font-bold mb-2 text-[#ecedf6] group-hover:text-white transition-colors">
+                      <h4 className="text-base font-bold mb-2 text-foreground group-hover:text-foreground transition-colors">
                         {step.title}
                       </h4>
-                      <p className="text-xs text-[#a9abb3] leading-relaxed font-light">
+                      <p className="text-xs text-muted-foreground leading-relaxed font-light">
                         {step.desc}
                       </p>
                     </div>
@@ -248,12 +248,12 @@ export default function HowItWorksPage() {
           {/* STEP 2: FUNDRAISING */}
           {activeTab === 'fundraising' && (
             <div className="space-y-12">
-              <div className="bg-[#10131a]/80 border border-[#2e323b]/60 rounded-3xl p-8 md:p-12 relative overflow-hidden backdrop-blur-md">
+              <div className="bg-card/85 border border-border/60 rounded-none p-8 md:p-12 relative overflow-hidden backdrop-blur-md">
                 <div className="max-w-3xl">
-                  <h2 className="text-xl md:text-2xl font-bold mb-4 text-[#ecedf6]">
+                  <h2 className="text-xl md:text-2xl font-bold mb-4 text-foreground">
                     {t('how.phase2.title')}
                   </h2>
-                  <p className="text-[#a9abb3] leading-relaxed font-light mb-6 text-sm">
+                  <p className="text-muted-foreground leading-relaxed font-light mb-6 text-sm">
                     {t('how.phase2.desc')}
                   </p>
                 </div>
@@ -261,20 +261,20 @@ export default function HowItWorksPage() {
 
               {/* Grid block rules (Clean layout) */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div className="bg-[#161a21]/90 border border-[#2e323b]/60 rounded-2xl p-8 hover:border-[#ac89ff]/30 transition-all duration-300 group hover:-translate-y-1">
-                  <h3 className="text-lg font-bold mb-3 text-[#ecedf6] group-hover:text-[#ac89ff] transition-colors">
+                <div className="bg-surface-container-low/90 border border-border/60 rounded-none p-8 hover:border-neon-purple/40 transition-all duration-300 group hover:-translate-y-1">
+                  <h3 className="text-lg font-bold mb-3 text-foreground group-hover:text-neon-purple transition-colors">
                     {t('how.phase2.rule1.title')}
                   </h3>
-                  <p className="text-xs text-[#a9abb3] leading-relaxed font-light">
+                  <p className="text-xs text-muted-foreground leading-relaxed font-light">
                     {t('how.phase2.rule1.desc')}
                   </p>
                 </div>
 
-                <div className="bg-[#161a21]/90 border border-[#2e323b]/60 rounded-2xl p-8 hover:border-[#ac89ff]/30 transition-all duration-300 group hover:-translate-y-1">
-                  <h3 className="text-lg font-bold mb-3 text-[#ecedf6] group-hover:text-[#ac89ff] transition-colors">
+                <div className="bg-surface-container-low/90 border border-border/60 rounded-none p-8 hover:border-neon-purple/40 transition-all duration-300 group hover:-translate-y-1">
+                  <h3 className="text-lg font-bold mb-3 text-foreground group-hover:text-neon-purple transition-colors">
                     {t('how.phase2.rule2.title')}
                   </h3>
-                  <p className="text-xs text-[#a9abb3] leading-relaxed font-light">
+                  <p className="text-xs text-muted-foreground leading-relaxed font-light">
                     {t('how.phase2.rule2.desc')}
                   </p>
                 </div>
@@ -286,15 +286,15 @@ export default function HowItWorksPage() {
           {activeTab === 'execution' && (
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
               <div className="lg:col-span-5 space-y-6">
-                <div className="bg-[#10131a]/80 border border-[#2e323b]/60 rounded-3xl p-8 backdrop-blur-md h-fit">
-                  <h2 className="text-xl md:text-2xl font-bold mb-4 text-[#ecedf6]">
+                <div className="bg-card/85 border border-border/60 rounded-none p-8 backdrop-blur-md h-fit">
+                  <h2 className="text-xl md:text-2xl font-bold mb-4 text-foreground">
                     {t('how.phase3.title')}
                   </h2>
-                  <p className="text-[#a9abb3] leading-relaxed font-light mb-6 text-sm">
+                  <p className="text-muted-foreground leading-relaxed font-light mb-6 text-sm">
                     {t('how.phase3.desc')}
                   </p>
-                  <div className="space-y-4 pt-4 border-t border-[#2e323b]/40">
-                    <h4 className="text-[10px] font-mono text-[#62e086] uppercase tracking-widest font-bold">
+                  <div className="space-y-4 pt-4 border-t border-border/40">
+                    <h4 className="text-[10px] font-mono text-emerald-600 dark:text-emerald-400 uppercase tracking-widest font-bold">
                       {t('how.phase3.safety_header')}
                     </h4>
                     {[
@@ -303,8 +303,8 @@ export default function HowItWorksPage() {
                       t('how.phase3.safety.3')
                     ].map((text, idx) => (
                       <div key={idx} className="flex items-start gap-3">
-                        <CheckCircle className="w-5 h-5 text-[#62e086] shrink-0 mt-0.5" />
-                        <span className="text-xs text-[#ecedf6] font-light leading-relaxed">
+                        <CheckCircle className="w-5 h-5 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
+                        <span className="text-xs text-foreground font-light leading-relaxed">
                           {text}
                         </span>
                       </div>
@@ -318,21 +318,21 @@ export default function HowItWorksPage() {
                 {executionSteps.map((step, idx) => (
                   <div
                     key={idx}
-                    className="flex gap-6 p-6 rounded-2xl border border-[#2e323b]/60 bg-[#161a21]/80 hover:border-[#62e086]/30 transition-all duration-300 group hover:-translate-y-0.5"
+                    className="flex gap-6 p-6 rounded-none border border-border/60 bg-card/80 hover:border-emerald-500/30 transition-all duration-300 group hover:-translate-y-0.5"
                   >
                     <div className="flex flex-col items-center shrink-0">
-                      <div className="w-10 h-10 rounded-full border border-[#2e323b] bg-[#10131a] flex items-center justify-center text-[#ecedf6] font-mono font-bold text-sm group-hover:text-[#62e086] group-hover:border-[#62e086]/30 transition-colors">
+                      <div className="w-10 h-10 rounded-none border border-border bg-background flex items-center justify-center text-foreground font-mono font-bold text-sm group-hover:text-emerald-400 group-hover:border-emerald-500/30 transition-colors">
                         {step.step}
                       </div>
                       {idx !== executionSteps.length - 1 && (
-                        <div className="w-[1px] h-full bg-[#2e323b] mt-4" />
+                        <div className="w-[1px] h-full bg-border mt-4" />
                       )}
                     </div>
                     <div>
-                      <h4 className="text-base font-bold mb-2 text-[#ecedf6] transition-colors">
+                      <h4 className="text-base font-bold mb-2 text-foreground transition-colors">
                         {step.title}
                       </h4>
-                      <p className="text-xs text-[#a9abb3] leading-relaxed font-light">
+                      <p className="text-xs text-muted-foreground leading-relaxed font-light">
                         {step.desc}
                       </p>
                     </div>
@@ -345,12 +345,12 @@ export default function HowItWorksPage() {
           {/* STEP 4: PAYOUT & REFUND (Clear explanation of the 2 refund cases) */}
           {activeTab === 'payout' && (
             <div className="space-y-8">
-              <div className="bg-[#10131a]/80 border border-[#2e323b]/60 rounded-3xl p-8 md:p-12 relative overflow-hidden backdrop-blur-md">
+              <div className="bg-card/85 border border-border/60 rounded-none p-8 md:p-12 relative overflow-hidden backdrop-blur-md">
                 <div className="max-w-3xl">
-                  <h2 className="text-xl md:text-2xl font-bold mb-4 text-[#ecedf6]">
+                  <h2 className="text-xl md:text-2xl font-bold mb-4 text-foreground">
                     {t('how.phase4.title')}
                   </h2>
-                  <p className="text-[#a9abb3] leading-relaxed font-light text-sm">
+                  <p className="text-muted-foreground leading-relaxed font-light text-sm">
                     {t('how.phase4.subtitle')}
                   </p>
                 </div>
@@ -359,42 +359,42 @@ export default function HowItWorksPage() {
               {/* Main side-by-side Creator withdraw vs Backer refund splits */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 {/* Creator Withdraw card */}
-                <div className="bg-[#161a21]/90 border border-[#2e323b]/60 rounded-2xl p-8 hover:border-[#62e086]/30 transition-all duration-300 group hover:-translate-y-0.5 flex flex-col justify-between">
+                <div className="bg-surface-container-low/90 border border-border/60 rounded-none p-8 hover:border-emerald-500/30 transition-all duration-300 group hover:-translate-y-0.5 flex flex-col justify-between">
                   <div>
-                    <span className="text-[10px] font-mono font-bold text-[#62e086] uppercase tracking-wider bg-[#62e086]/5 border border-[#62e086]/20 px-2 py-0.5 rounded block w-fit mb-4">
+                    <span className="text-[10px] font-mono font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider bg-emerald-500/5 border border-emerald-500/20 px-2 py-0.5 rounded-none block w-fit mb-4">
                       {t('how.phase4.creator_badge')}
                     </span>
-                    <h3 className="text-lg font-bold mb-4 text-[#ecedf6] group-hover:text-white transition-colors">
+                    <h3 className="text-lg font-bold mb-4 text-foreground group-hover:text-foreground transition-colors">
                       {t('how.phase4.withdraw.title')}
                     </h3>
-                    <p className="text-xs text-[#a9abb3] leading-relaxed font-light mb-6">
+                    <p className="text-xs text-muted-foreground leading-relaxed font-light mb-6">
                       {t('how.phase4.withdraw.desc')}
                     </p>
 
                     <div className="space-y-4">
-                      <div className="p-4 bg-[#10131a]/60 border border-[#2e323b]/60 rounded-xl">
-                        <h4 className="text-sm font-bold text-[#62e086] mb-1.5">
+                      <div className="p-4 bg-background/60 border border-border/60 rounded-none">
+                        <h4 className="text-sm font-bold text-emerald-600 dark:text-emerald-400 mb-1.5">
                           {t('how.phase4.withdraw.step1.title')}
                         </h4>
-                        <p className="text-xs text-[#a9abb3] leading-relaxed font-light">
+                        <p className="text-xs text-muted-foreground leading-relaxed font-light">
                           {t('how.phase4.withdraw.step1.desc')}
                         </p>
                       </div>
 
-                      <div className="p-4 bg-[#10131a]/60 border border-[#2e323b]/60 rounded-xl">
-                        <h4 className="text-sm font-bold text-[#62e086] mb-1.5">
+                      <div className="p-4 bg-background/60 border border-border/60 rounded-none">
+                        <h4 className="text-sm font-bold text-emerald-600 dark:text-emerald-400 mb-1.5">
                           {t('how.phase4.withdraw.step2.title')}
                         </h4>
-                        <p className="text-xs text-[#a9abb3] leading-relaxed font-light">
+                        <p className="text-xs text-muted-foreground leading-relaxed font-light">
                           {t('how.phase4.withdraw.step2.desc')}
                         </p>
                       </div>
 
-                      <div className="p-4 bg-[#10131a]/60 border border-[#2e323b]/60 rounded-xl">
-                        <h4 className="text-sm font-bold text-[#62e086] mb-1.5">
+                      <div className="p-4 bg-background/60 border border-border/60 rounded-none">
+                        <h4 className="text-sm font-bold text-emerald-600 dark:text-emerald-400 mb-1.5">
                           {t('how.phase4.withdraw.step3.title')}
                         </h4>
-                        <p className="text-xs text-[#a9abb3] leading-relaxed font-light">
+                        <p className="text-xs text-muted-foreground leading-relaxed font-light">
                           {t('how.phase4.withdraw.step3.desc')}
                         </p>
                       </div>
@@ -403,33 +403,33 @@ export default function HowItWorksPage() {
                 </div>
 
                 {/* Supporters Refund cases (Explicitly lists the 2 clear cases) */}
-                <div className="bg-[#161a21]/90 border border-[#2e323b]/60 rounded-2xl p-8 hover:border-[#ff716c]/30 transition-all duration-300 group hover:-translate-y-0.5 flex flex-col justify-between">
+                <div className="bg-surface-container-low/90 border border-border/60 rounded-none p-8 hover:border-neon-rose/40 transition-all duration-300 group hover:-translate-y-0.5 flex flex-col justify-between">
                   <div>
-                    <span className="text-[10px] font-mono font-bold text-[#ff716c] uppercase tracking-wider bg-[#ff716c]/5 border border-[#ff716c]/20 px-2 py-0.5 rounded block w-fit mb-4">
+                    <span className="text-[10px] font-mono font-bold text-neon-rose uppercase tracking-wider bg-neon-rose/5 border border-neon-rose/20 px-2 py-0.5 rounded-none block w-fit mb-4">
                       {t('how.phase4.backer_badge')}
                     </span>
-                    <h3 className="text-lg font-bold mb-4 text-[#ecedf6] group-hover:text-white transition-colors">
+                    <h3 className="text-lg font-bold mb-4 text-foreground group-hover:text-foreground transition-colors">
                       {t('how.phase4.refund.title')}
                     </h3>
-                    <p className="text-xs text-[#a9abb3] leading-relaxed font-light mb-6">
+                    <p className="text-xs text-muted-foreground leading-relaxed font-light mb-6">
                       {t('how.phase4.refund.desc')}
                     </p>
 
                     <div className="space-y-4">
-                      <div className="p-4 bg-[#10131a]/60 border border-[#2e323b]/60 rounded-xl">
-                        <h4 className="text-sm font-bold text-[#ff716c] mb-1.5">
+                      <div className="p-4 bg-background/60 border border-border/60 rounded-none">
+                        <h4 className="text-sm font-bold text-neon-rose mb-1.5">
                           {t('how.phase4.refund.case1.title')}
                         </h4>
-                        <p className="text-xs text-[#a9abb3] leading-relaxed font-light">
+                        <p className="text-xs text-muted-foreground leading-relaxed font-light">
                           {t('how.phase4.refund.case1.desc')}
                         </p>
                       </div>
 
-                      <div className="p-4 bg-[#10131a]/60 border border-[#2e323b]/60 rounded-xl">
-                        <h4 className="text-sm font-bold text-[#ff716c] mb-1.5">
+                      <div className="p-4 bg-background/60 border border-border/60 rounded-none">
+                        <h4 className="text-sm font-bold text-neon-rose mb-1.5">
                           {t('how.phase4.refund.case2.title')}
                         </h4>
-                        <p className="text-xs text-[#a9abb3] leading-relaxed font-light">
+                        <p className="text-xs text-muted-foreground leading-relaxed font-light">
                           {t('how.phase4.refund.case2.desc')}
                         </p>
                       </div>
@@ -439,9 +439,9 @@ export default function HowItWorksPage() {
               </div>
 
               {/* General warning info box */}
-              <div className="bg-[#ff716c]/5 border border-[#ff716c]/20 p-5 rounded-2xl flex items-start gap-4 mt-8">
-                <Info className="w-5 h-5 text-[#ff716c] shrink-0 mt-0.5" />
-                <p className="text-xs text-[#ff716c] leading-relaxed">
+              <div className="bg-neon-rose/5 border border-neon-rose/20 p-5 rounded-none flex items-start gap-4 mt-8">
+                <Info className="w-5 h-5 text-neon-rose shrink-0 mt-0.5" />
+                <p className="text-xs text-neon-rose leading-relaxed">
                   {t('how.phase4.warning')}
                 </p>
               </div>

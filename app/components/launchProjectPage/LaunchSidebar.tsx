@@ -45,22 +45,22 @@ export function LaunchSidebar({
   return (
     <Sidebar
       collapsible="icon"
-      className="border-r border-[#45484f]/15 group/sidebar z-40 bg-[#10131a]"
+      className="border-r border-border group/sidebar z-40 bg-card"
     >
       {/* Header */}
       <SidebarHeader className="py-8 px-4 h-24 mb-4">
         {!isCollapsed ? (
           <div className="px-2 transition-opacity duration-300">
-            <h3 className="text-[#ecedf6] font-bold text-base font-['Space_Grotesk'] truncate">
+            <h3 className="text-foreground font-bold text-base font-['Space_Grotesk'] truncate">
               {t('nav.launch_idea')}
             </h3>
-            <p className="text-[#45484f] text-xs mt-1 truncate font-mono tracking-widest uppercase">
+            <p className="text-muted-foreground/45 text-xs mt-1 truncate font-mono tracking-widest uppercase">
               {t('common.wizard')}
             </p>
           </div>
         ) : (
           <div className="flex items-center justify-center h-full w-full">
-            <span className="material-symbols-outlined text-[#8ff5ff]">
+            <span className="material-symbols-outlined text-neon-cyan">
               magic_button
             </span>
           </div>
@@ -81,18 +81,18 @@ export function LaunchSidebar({
                       onClick={() => onStepChange(step.id)}
                       isActive={isActive}
                       className={`
-                        h-11 rounded-xl
+                        h-11 rounded-none border-l-2
                         transition-all duration-200
                         ${
                           isActive
-                            ? 'bg-[#1c2028] text-[#ecedf6] font-semibold'
-                            : 'text-[#73757d] hover:bg-[#161a21] hover:text-[#a9abb3]'
+                            ? 'bg-background text-foreground font-semibold border-neon-cyan'
+                            : 'text-muted-foreground/60 hover:bg-background hover:text-muted-foreground border-transparent'
                         }
                       `}
                     >
                       <span
                         className={`material-symbols-outlined text-xl shrink-0 ${
-                          isActive ? 'text-[#8ff5ff]' : ''
+                          isActive ? 'text-neon-cyan' : ''
                         }`}
                       >
                         {step.icon}
@@ -101,7 +101,7 @@ export function LaunchSidebar({
                         {step.label}
                       </span>
                       {isActive && !isCollapsed && (
-                        <span className="ml-auto w-1.5 h-1.5 rounded-full bg-[#8ff5ff] shadow-[0_0_6px_#8ff5ff] shrink-0" />
+                        <span className="ml-auto w-1.5 h-1.5 bg-neon-cyan shadow-[0_0_6px_var(--color-neon-cyan)] shrink-0" />
                       )}
                     </SidebarMenuButton>
                   </SidebarMenuItem>

@@ -94,7 +94,7 @@ function WalletProfileButton() {
           return (
             <button
               onClick={openConnectModal}
-              className="inline-flex items-center gap-2 h-9 px-4 rounded-xl text-[11px] font-bold uppercase tracking-widest border border-[#8ff5ff]/30 bg-[#8ff5ff]/5 text-[#8ff5ff] hover:bg-[#8ff5ff]/10 hover:border-[#8ff5ff]/60 hover:shadow-[0_0_12px_rgba(143,245,255,0.15)] transition-all duration-200"
+              className="inline-flex items-center gap-2 h-9 px-4 rounded-none text-[11px] font-headline font-bold uppercase tracking-widest border border-neon-cyan/35 bg-neon-cyan/5 text-neon-cyan hover:bg-neon-cyan/10 hover:border-neon-cyan/60 hover:shadow-[0_0_10px_rgba(143,245,255,0.1)] transition-all duration-200 shadow-[2px_2px_0px_0px_var(--neon-purple)] hover:shadow-[3px_3px_0px_0px_var(--neon-purple)] active:translate-y-0.5 active:translate-x-0.5 cursor-pointer"
             >
               <Wallet className="w-3.5 h-3.5" />
               {t('nav.connect_wallet')}
@@ -107,7 +107,7 @@ function WalletProfileButton() {
           return (
             <button
               onClick={openChainModal}
-              className="inline-flex items-center gap-2 h-9 px-4 rounded-xl text-[11px] font-bold uppercase tracking-widest border border-[#ff716c]/30 bg-[#ff716c]/5 text-[#ff716c] hover:bg-[#ff716c]/10 transition-all"
+              className="inline-flex items-center gap-2 h-9 px-4 rounded-none text-[11px] font-headline font-bold uppercase tracking-widest border border-neon-rose/35 bg-neon-rose/5 text-neon-rose hover:bg-neon-rose/10 transition-all shadow-[2px_2px_0px_0px_var(--neon-purple)] hover:shadow-[3px_3px_0px_0px_var(--neon-purple)] active:translate-y-0.5 active:translate-x-0.5 cursor-pointer"
             >
               <AlertTriangle className="w-3.5 h-3.5" />
               {t('nav.wrong_network')}
@@ -131,8 +131,8 @@ function WalletProfileButton() {
                     className="w-full h-full object-cover"
                   />
                 ) : (
-                  <div className="w-full h-full bg-[#1e222a] flex items-center justify-center">
-                    <User className="w-5 h-5 text-[#8ff5ff]/60" />
+                  <div className="w-full h-full bg-muted flex items-center justify-center">
+                    <User className="w-5 h-5 text-neon-cyan/60" />
                   </div>
                 )}
               </div>
@@ -142,7 +142,7 @@ function WalletProfileButton() {
                 <TooltipProvider>
                   <Tooltip delayDuration={100}>
                     <TooltipTrigger asChild>
-                      <div className="absolute -top-1 -right-1 w-4 h-4 bg-amber-500 rounded-full border-2 border-[#10131a] flex items-center justify-center shadow-sm z-10">
+                      <div className="absolute -top-1 -right-1 w-4 h-4 bg-warning rounded-full border-2 border-background flex items-center justify-center shadow-sm z-10">
                         <span className="text-[10px] font-bold text-white leading-none">
                           !
                         </span>
@@ -151,7 +151,7 @@ function WalletProfileButton() {
                     <TooltipContent
                       side="bottom"
                       sideOffset={8}
-                      className="bg-[#1e222a] text-[#ecedf6] border-[#2e323b]"
+                      className="bg-card text-foreground border border-border"
                     >
                       <p className="text-xs">
                         {t('nav.verify_account_tooltip')}
@@ -165,24 +165,24 @@ function WalletProfileButton() {
             {/* Address + balance pill */}
             <button
               onClick={() => setOpen((v) => !v)}
-              className="flex items-center gap-2 h-9 px-3 rounded-xl border border-[#2e323b] bg-[#10131a] hover:border-[#8ff5ff]/30 hover:bg-[#0d1018] transition-all group"
+              className="flex items-center gap-2 h-9 px-3 rounded-none border border-border bg-background hover:border-neon-cyan/35 hover:bg-card transition-all group cursor-pointer shadow-[2px_2px_0px_rgba(0,0,0,0.08)] dark:shadow-[2px_2px_0px_rgba(255,255,255,0.05)] active:translate-y-0.5 active:translate-x-0.5"
             >
-              <span className="text-[11px] font-mono text-[#a9abb3] group-hover:text-[#ecedf6] transition-colors">
+              <span className="text-[11px] font-mono text-muted-foreground group-hover:text-foreground transition-colors">
                 {account.displayName}
               </span>
               {musdtBalance && (
-                <span className="text-[10px] font-mono text-[#8ff5ff]/80 border-l border-[#2e323b] pl-2">
+                <span className="text-[10px] font-mono text-neon-cyan/80 border-l border-border pl-2">
                   {musdtBalance}
                 </span>
               )}
               <ChevronDown
-                className={`w-3 h-3 text-[#545760] transition-transform duration-150 ${open ? 'rotate-180' : ''}`}
+                className={`w-3 h-3 text-muted-foreground/60 transition-transform duration-150 ${open ? 'rotate-180' : ''}`}
               />
             </button>
 
             {/* Dropdown */}
             {open && (
-              <div className="absolute right-0 top-11 w-60 rounded-2xl border border-border/60 bg-background/95 backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.5)] z-50 overflow-hidden py-1">
+              <div className="absolute right-0 top-11 w-60 rounded-none border border-border/50 bg-background/95 backdrop-blur-xl shadow-[4px_4px_16px_rgba(0,0,0,0.25)] z-50 overflow-hidden py-1">
                 {/* Wallet info */}
                 <div className="px-4 py-3 border-b border-border/40">
                   <div className="flex items-center gap-2 mb-1.5">
@@ -214,7 +214,7 @@ function WalletProfileButton() {
                       className="flex items-center justify-center w-6 h-6 rounded-md text-muted-foreground/50 hover:text-foreground hover:bg-surface-variant transition-colors"
                     >
                       {copied ? (
-                        <Check className="w-3.5 h-3.5 text-[#6bcb77]" />
+                        <Check className="w-3.5 h-3.5 text-success" />
                       ) : (
                         <Copy className="w-3.5 h-3.5" />
                       )}
@@ -269,7 +269,7 @@ function WalletProfileButton() {
                         key={opt.value}
                         onClick={() => setTheme(opt.value)}
                         title={opt.label}
-                        className={`flex-1 flex items-center justify-center gap-1 py-1.5 rounded-lg text-[11px] transition-all ${
+                        className={`flex-1 flex items-center justify-center gap-1 py-1.5 rounded-none text-[11px] transition-all ${
                           theme === opt.value
                             ? 'bg-primary/20 text-primary border border-primary/30'
                             : 'text-muted-foreground hover:bg-surface-variant hover:text-foreground border border-transparent'
@@ -295,7 +295,7 @@ function WalletProfileButton() {
                       <button
                         key={opt.value}
                         onClick={() => i18n.changeLanguage(opt.value)}
-                        className={`flex-1 py-1.5 rounded-lg text-[11px] transition-all font-bold ${
+                        className={`flex-1 py-1.5 rounded-none text-[11px] transition-all font-bold ${
                           i18n.language === opt.value
                             ? 'bg-primary/20 text-primary border border-primary/30'
                             : 'text-muted-foreground hover:bg-surface-variant hover:text-foreground border border-transparent'
@@ -314,7 +314,7 @@ function WalletProfileButton() {
                       logout()
                       setOpen(false)
                     }}
-                    className="w-full flex items-center gap-3 px-4 py-2.5 text-[13px] text-red-400/80 hover:text-red-400 hover:bg-red-500/5 transition-colors"
+                    className="w-full flex items-center gap-3 px-4 py-2.5 text-[13px] text-destructive/80 hover:text-destructive hover:bg-destructive/5 transition-colors"
                   >
                     <LogOut className="w-4 h-4" />
                     {t('nav.disconnect')}
@@ -346,8 +346,15 @@ const Header = () => {
     <header className="fixed top-0 w-full z-50 bg-background/80 backdrop-blur-xl border-b border-border/50 shadow-[0_4px_20px_rgba(var(--primary),0.05)] flex items-center justify-between px-4 md:px-8 h-20 transition-colors duration-300">
       {/* Logo */}
       <NavLink to="/" onClick={() => setIsMenuOpen(false)}>
-        <div className="text-2xl font-bold tracking-tighter text-primary drop-shadow-[0_0_8px_rgba(var(--primary),0.5)] font-headline">
-          VAULT_PRIME
+        <div className="flex items-center gap-1 group">
+          <img
+            src="/logo.png"
+            alt="FundHive Logo"
+            className="h-20 w-20 object-contain my-[-10px] ml-[-15px] mr-[-10px] transition-transform duration-300 group-hover:scale-105"
+          />
+          <span className="text-2xl font-bold tracking-tighter text-foreground font-headline">
+            FundHive
+          </span>
         </div>
       </NavLink>
 
@@ -381,7 +388,7 @@ const Header = () => {
         <button
           onClick={() => setIsMenuOpen(!isMenuOpen)}
           aria-label="Toggle menu"
-          className="w-9 h-9 flex items-center justify-center rounded-xl border border-border/50 text-muted-foreground hover:text-foreground hover:bg-surface-variant transition-colors"
+          className="w-9 h-9 flex items-center justify-center rounded-none border border-border/50 text-muted-foreground hover:text-foreground hover:bg-surface-variant transition-colors"
         >
           {isMenuOpen ? <X size={20} /> : <Menu size={20} />}
         </button>
@@ -398,7 +405,7 @@ const Header = () => {
                     to={link.path}
                     onClick={() => setIsMenuOpen(false)}
                     className={({ isActive }) =>
-                      `block py-4 px-6 rounded-xl font-headline font-bold text-lg border border-transparent transition-all ${
+                      `block py-4 px-6 rounded-none font-headline font-bold text-lg border border-transparent transition-all ${
                         isActive
                           ? 'bg-primary/10 text-primary border-primary/20'
                           : 'text-muted-foreground hover:bg-surface-variant hover:text-foreground'

@@ -68,8 +68,8 @@ export function ProjectReviews({
     <div className="space-y-6 max-w-3xl">
       {/* ── Header ──────────────────────────────────────────────────── */}
       <div className="flex items-center gap-2 mb-2">
-        <MessageSquare className="w-5 h-5 text-[#8ff5ff]" />
-        <span className="text-base font-bold text-[#ecedf6]">
+        <MessageSquare className="w-5 h-5 text-neon-cyan" />
+        <span className="text-base font-bold text-foreground">
           {reviews.length > 0
             ? reviews.length === 1
               ? t('reviews.comments_count', { count: reviews.length })
@@ -83,7 +83,7 @@ export function ProjectReviews({
         <form onSubmit={handleSubmit} className="flex gap-3 items-start">
           {/* Current user avatar */}
           <div
-            className="w-9 h-9 rounded-full flex items-center justify-center font-bold text-sm shrink-0 mt-0.5"
+            className="w-9 h-9 rounded-none flex items-center justify-center font-bold text-sm shrink-0 mt-0.5"
             style={{
               background: `${userColor}22`,
               border: `1.5px solid ${userColor}55`,
@@ -96,11 +96,11 @@ export function ProjectReviews({
           </div>
 
           <div
-            className={`flex-1 flex items-end gap-2 bg-[#161b25] border rounded-2xl px-4 py-3 transition-all duration-200 ${focused ? 'border-[#8ff5ff]/40 shadow-[0_0_0_3px_rgba(143,245,255,0.07)]' : 'border-[#2e323b]'}`}
+            className={`flex-1 flex items-end gap-2 bg-card border rounded-none px-4 py-3 transition-all duration-200 ${focused ? 'border-neon-cyan/40 shadow-[2px_2px_0px_var(--neon-purple)]' : 'border-border'}`}
           >
             <textarea
               rows={focused ? 3 : 1}
-              className="flex-1 bg-transparent text-sm text-[#ecedf6] placeholder-[#545760] focus:outline-none resize-none leading-relaxed transition-all duration-200"
+              className="flex-1 bg-transparent text-sm text-foreground placeholder-muted-foreground/45 focus:outline-none resize-none leading-relaxed transition-all duration-200"
               placeholder={t('reviews.write_placeholder')}
               value={content}
               onChange={(e) => setContent(e.target.value)}
@@ -121,7 +121,7 @@ export function ProjectReviews({
                   exit={{ opacity: 0, scale: 0.8 }}
                   type="submit"
                   disabled={!content.trim() || isPending}
-                  className="shrink-0 self-end text-[#8ff5ff] disabled:opacity-30 hover:text-[#a6fcff] transition-colors mb-0.5"
+                  className="shrink-0 self-end text-neon-cyan disabled:opacity-30 hover:text-neon-cyan/85 transition-colors mb-0.5"
                 >
                   {isPending ? (
                     <Loader2 className="w-5 h-5 animate-spin" />
@@ -136,15 +136,15 @@ export function ProjectReviews({
       ) : (
         // ── Unauthenticated: fake input that triggers toast on click ──
         <div
-          className="flex items-center gap-3 bg-[#161b25] border border-[#2e323b] rounded-2xl px-4 py-3 cursor-text"
+          className="flex items-center gap-3 bg-card border border-border rounded-none px-4 py-3 cursor-text"
           onClick={() =>
             toast.warning(t('reviews.connect_wallet_warning'), {
               duration: 3000
             })
           }
         >
-          <div className="w-9 h-9 rounded-full bg-[#1f2530] border border-[#2e323b] shrink-0" />
-          <p className="text-sm text-[#545760] select-none">
+          <div className="w-9 h-9 rounded-none bg-background border border-border shrink-0" />
+          <p className="text-sm text-muted-foreground/45 select-none">
             {t('reviews.write_placeholder')}
           </p>
         </div>
@@ -154,10 +154,10 @@ export function ProjectReviews({
       <div className="space-y-5">
         {isLoading ? (
           <div className="flex justify-center py-10">
-            <Loader2 className="w-6 h-6 animate-spin text-[#8ff5ff]" />
+            <Loader2 className="w-6 h-6 animate-spin text-neon-cyan" />
           </div>
         ) : reviews.length === 0 ? (
-          <div className="text-center py-10 text-[#545760] text-sm">
+          <div className="text-center py-10 text-muted-foreground/45 text-sm">
             {t('reviews.empty')}
           </div>
         ) : (

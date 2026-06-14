@@ -144,8 +144,8 @@ export function ImageUpload({
           <div
             className={`relative flex-shrink-0 ${previews.length > 0 ? 'w-32 h-32 sm:w-40 sm:h-40' : 'w-full h-48'} border-2 border-dashed rounded-xl transition-all cursor-pointer flex flex-col items-center justify-center text-center p-4 group ${
               isDragging
-                ? 'border-[#8ff5ff] bg-[#8ff5ff]/5'
-                : 'border-[#45484f]/30 hover:border-[#8ff5ff]/50 hover:bg-[#8ff5ff]/5 bg-[#1c2028]'
+                ? 'border-neon-cyan bg-neon-cyan/5'
+                : 'border-border hover:border-neon-cyan/50 hover:bg-neon-cyan/5 bg-card'
             }`}
             onDragOver={onDragOver}
             onDragLeave={onDragLeave}
@@ -162,7 +162,7 @@ export function ImageUpload({
             />
 
             <div
-              className={`rounded-full bg-[#22262f] border border-[#45484f]/30 flex items-center justify-center transition-colors text-[#a9abb3] group-hover:text-[#8ff5ff] group-hover:border-[#8ff5ff]/50 ${previews.length > 0 ? 'w-10 h-10 mb-2' : 'w-12 h-12 mb-4'}`}
+              className={`rounded-full bg-muted border border-border flex items-center justify-center transition-colors text-muted-foreground group-hover:text-neon-cyan group-hover:border-neon-cyan/50 ${previews.length > 0 ? 'w-10 h-10 mb-2' : 'w-12 h-12 mb-4'}`}
             >
               <span
                 className={`material-symbols-outlined ${previews.length > 0 ? 'text-xl' : 'text-2xl'}`}
@@ -172,16 +172,16 @@ export function ImageUpload({
             </div>
             {previews.length === 0 ? (
               <>
-                <p className="text-[#ecedf6] font-medium mb-1">
-                  <span className="text-[#8ff5ff]">Click to upload</span> or
+                <p className="text-foreground font-medium mb-1">
+                  <span className="text-neon-cyan">Click to upload</span> or
                   drag and drop
                 </p>
-                <p className="text-[#a9abb3] text-xs mt-1">
+                <p className="text-muted-foreground text-xs mt-1">
                   Upload up to {maxImages} images (SVG, PNG, JPG)
                 </p>
               </>
             ) : (
-              <p className="text-[#a9abb3] text-[10px] sm:text-xs">
+              <p className="text-muted-foreground text-[10px] sm:text-xs">
                 Add more ({files.length}/{maxImages})
               </p>
             )}
@@ -192,7 +192,7 @@ export function ImageUpload({
         {previews.map((preview, index) => (
           <div
             key={index}
-            className="relative w-32 h-32 sm:w-40 sm:h-40 rounded-xl overflow-hidden group border border-[#45484f]/30 flex-shrink-0 bg-[#1c2028]"
+            className="relative w-32 h-32 sm:w-40 sm:h-40 rounded-xl overflow-hidden group border border-border flex-shrink-0 bg-muted"
           >
             <img
               src={preview}
@@ -200,10 +200,10 @@ export function ImageUpload({
               className="w-full h-full object-cover"
             />
 
-            <div className="absolute inset-0 bg-[#0b0e14]/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+            <div className="absolute inset-0 bg-background/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
               <button
                 onClick={(e) => removeImage(index, e)}
-                className="w-10 h-10 bg-[#22262f] text-[#ecedf6] rounded-full hover:bg-red-500 hover:text-white transition-colors flex items-center justify-center shadow-lg transform hover:scale-110 active:scale-95"
+                className="w-10 h-10 bg-muted text-foreground rounded-full hover:bg-red-500 hover:text-white transition-colors flex items-center justify-center shadow-lg transform hover:scale-110 active:scale-95 cursor-pointer"
                 title="Remove image"
               >
                 <span className="material-symbols-outlined text-[20px]">

@@ -78,7 +78,7 @@ export function RefundButton({
         variant="outline"
         size="sm"
         disabled
-        className="h-8 text-xs font-semibold uppercase tracking-wider text-green-500 border-green-500/30 bg-green-500/10"
+        className="h-8 text-xs font-semibold uppercase tracking-wider text-green-500 border-green-500/30 bg-green-500/10 rounded-none"
       >
         {t('compact.refunded')}
       </Button>
@@ -91,7 +91,7 @@ export function RefundButton({
       disabled={isLoading}
       variant="outline"
       size="sm"
-      className="h-8 text-xs font-semibold uppercase tracking-wider text-[#ff716c] border-[#ff716c]/30 bg-[#ff716c]/10 hover:bg-[#ff716c]/20 hover:text-[#ff716c] transition-colors"
+      className="h-8 text-xs font-semibold uppercase tracking-wider text-neon-rose border-neon-rose/30 bg-neon-rose/10 hover:bg-neon-rose/20 hover:text-neon-rose transition-all cursor-pointer rounded-none shadow-[1px_1px_0px_var(--neon-rose)]"
     >
       {isLoading ? (
         <>

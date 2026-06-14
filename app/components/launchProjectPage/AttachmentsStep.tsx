@@ -302,10 +302,10 @@ export function AttachmentsStep({ onStepChange }: AttachmentsStepProps = {}) {
     <div className="max-w-6xl mx-auto pb-32">
       {/* Header */}
       <header className="mb-12">
-        <h1 className="text-5xl font-['Space_Grotesk'] font-bold tracking-tight text-[#ecedf6] mb-4">
+        <h1 className="text-5xl font-['Space_Grotesk'] font-bold tracking-tight text-foreground mb-4">
           {t('attachments.title')}
         </h1>
-        <p className="text-[#a9abb3] text-lg max-w-2xl">
+        <p className="text-muted-foreground text-lg max-w-2xl">
           {t('attachments.desc')}
         </p>
       </header>
@@ -314,9 +314,9 @@ export function AttachmentsStep({ onStepChange }: AttachmentsStepProps = {}) {
         {/* Upload Panel */}
         <div className="lg:col-span-5 space-y-6">
           {/* Category + Description selectors */}
-          <div className="bg-[#10131a] border border-[#45484f]/20 rounded-xl p-5 space-y-4">
+          <div className="bg-card border border-border rounded-none p-5 space-y-4">
             <div>
-              <Label className="block text-xs font-['Inter'] uppercase tracking-widest text-[#a9abb3] mb-2">
+              <Label className="block text-xs font-['Inter'] uppercase tracking-widest text-muted-foreground mb-2">
                 {t('attachments.category')}
               </Label>
               <Select
@@ -325,10 +325,10 @@ export function AttachmentsStep({ onStepChange }: AttachmentsStepProps = {}) {
                   setPendingCategory(v as AttachmentCategory)
                 }
               >
-                <SelectTrigger className="w-full bg-[#1c2028] border-none rounded-lg text-[#ecedf6] focus:ring-1 focus:ring-[#8ff5ff]/50 h-11 shadow-none">
+                <SelectTrigger className="w-full bg-background border border-border rounded-none text-foreground focus:ring-1 focus:ring-neon-cyan/50 h-11 shadow-none">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent className="bg-[#22262f] border-[#45484f]/30 text-[#ecedf6]">
+                <SelectContent className="bg-card border border-border text-foreground rounded-none">
                   {CATEGORIES.map((cat) => (
                     <SelectItem key={cat} value={cat}>
                       <span className="flex items-center gap-2">
@@ -349,18 +349,18 @@ export function AttachmentsStep({ onStepChange }: AttachmentsStepProps = {}) {
             {/* Custom name — only shown when Other is selected */}
             {pendingCategory === 'Other' && (
               <div>
-                <Label className="block text-xs font-['Inter'] uppercase tracking-widest text-[#a9abb3] mb-2">
+                <Label className="block text-xs font-['Inter'] uppercase tracking-widest text-muted-foreground mb-2">
                   {t('attachments.typeName')}{' '}
-                  <span className="normal-case tracking-normal text-[#ff716c]">
+                  <span className="normal-case tracking-normal text-neon-rose">
                     *
                   </span>
                 </Label>
                 <div className="relative">
-                  <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[#a9abb3] text-base pointer-events-none">
+                  <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-base pointer-events-none">
                     edit
                   </span>
                   <Input
-                    className="w-full bg-[#1c2028] border-none rounded-lg text-[#ecedf6] placeholder:text-slate-600 h-11 pl-9 pr-4 focus-visible:ring-1 focus-visible:ring-[#8ff5ff]/50 shadow-none"
+                    className="w-full bg-background border border-border rounded-none text-foreground placeholder:text-muted-foreground/50 h-11 pl-9 pr-4 focus-visible:ring-1 focus-visible:ring-neon-cyan/50 shadow-none"
                     placeholder={t('attachments.typeNamePlaceholder')}
                     value={pendingCustomName}
                     onChange={(e) => setPendingCustomName(e.target.value)}
@@ -371,14 +371,14 @@ export function AttachmentsStep({ onStepChange }: AttachmentsStepProps = {}) {
             )}
 
             <div>
-              <Label className="block text-xs font-['Inter'] uppercase tracking-widest text-[#a9abb3] mb-2">
+              <Label className="block text-xs font-['Inter'] uppercase tracking-widest text-muted-foreground mb-2">
                 {t('attachments.description')}{' '}
-                <span className="normal-case tracking-normal text-[#45484f]">
+                <span className="normal-case tracking-normal text-muted-foreground/60">
                   ({t('common.optional')})
                 </span>
               </Label>
               <Input
-                className="w-full bg-[#1c2028] border-none rounded-lg text-[#ecedf6] placeholder:text-slate-600 h-11 px-4 focus-visible:ring-1 focus-visible:ring-[#8ff5ff]/50 shadow-none"
+                className="w-full bg-background border border-border rounded-none text-foreground placeholder:text-muted-foreground/50 h-11 px-4 focus-visible:ring-1 focus-visible:ring-neon-cyan/50 shadow-none"
                 placeholder={t('attachments.descriptionPlaceholder')}
                 value={pendingDescription}
                 onChange={(e) => setPendingDescription(e.target.value)}
@@ -388,11 +388,11 @@ export function AttachmentsStep({ onStepChange }: AttachmentsStepProps = {}) {
 
           {/* Drop Zone */}
           <div
-            className={`relative rounded-xl border-2 border-dashed transition-all duration-200 cursor-pointer
+            className={`relative rounded-none border-2 border-dashed transition-all duration-200 cursor-pointer
               ${
                 isDragging
-                  ? 'border-[#8ff5ff] bg-[#8ff5ff]/5 scale-[1.01]'
-                  : 'border-[#45484f]/40 bg-[#0d1017] hover:border-[#8ff5ff]/40 hover:bg-[#8ff5ff]/5'
+                  ? 'border-neon-cyan bg-neon-cyan/5 scale-[1.01]'
+                  : 'border-border bg-card hover:border-neon-cyan/45 hover:bg-neon-cyan/5'
               }
               ${totalFiles >= MAX_FILES ? 'opacity-50 pointer-events-none' : ''}
             `}
@@ -414,28 +414,28 @@ export function AttachmentsStep({ onStepChange }: AttachmentsStepProps = {}) {
             />
             <div className="flex flex-col items-center justify-center py-12 px-6 text-center">
               <div
-                className={`w-16 h-16 rounded-2xl flex items-center justify-center mb-4 transition-all
-                  ${isDragging ? 'bg-[#8ff5ff]/20 scale-110' : 'bg-[#1c2028]'}`}
+                className={`w-16 h-16 rounded-none border border-border/30 flex items-center justify-center mb-4 transition-all
+                  ${isDragging ? 'bg-neon-cyan/20 scale-110' : 'bg-background'}`}
               >
                 <span
                   className={`material-symbols-outlined text-3xl transition-colors
-                    ${isDragging ? 'text-[#8ff5ff]' : 'text-[#45484f]'}`}
+                    ${isDragging ? 'text-neon-cyan' : 'text-muted-foreground/60'}`}
                 >
                   cloud_upload
                 </span>
               </div>
-              <p className="text-[#ecedf6] font-['Space_Grotesk'] font-semibold mb-1">
+              <p className="text-foreground font-['Space_Grotesk'] font-semibold mb-1">
                 {isDragging
                   ? t('attachments.dropHere')
                   : t('attachments.dragDrop')}
               </p>
-              <p className="text-[#45484f] text-sm">
+              <p className="text-muted-foreground/60 text-sm">
                 {t('attachments.orBrowse', { browse: t('attachments.browse') })}
               </p>
-              <p className="text-[#45484f] text-xs mt-4">
+              <p className="text-muted-foreground/60 text-xs mt-4">
                 {t('attachments.constraints', { max: MAX_SIZE_MB })}
               </p>
-              <div className="mt-3 px-3 py-1 rounded-full bg-[#1c2028] text-[10px] text-[#a9abb3] font-mono">
+              <div className="mt-3 px-3 py-1 rounded-none bg-background text-[10px] text-muted-foreground font-mono">
                 {t('attachments.filesUsed', {
                   count: totalFiles,
                   max: MAX_FILES
@@ -450,27 +450,27 @@ export function AttachmentsStep({ onStepChange }: AttachmentsStepProps = {}) {
               {uploadingFiles.map((u) => (
                 <div
                   key={u.id}
-                  className="flex items-center gap-3 p-3 bg-[#10131a] rounded-xl border border-[#45484f]/20"
+                  className="flex items-center gap-3 p-3 bg-card rounded-none border border-border"
                 >
-                  <span className="material-symbols-outlined text-[#8ff5ff] text-lg animate-spin">
+                  <span className="material-symbols-outlined text-neon-cyan text-lg animate-spin">
                     progress_activity
                   </span>
                   <div className="flex-1 min-w-0">
-                    <p className="text-xs text-[#ecedf6] truncate">
+                    <p className="text-xs text-foreground truncate">
                       {u.file.name}
                     </p>
                     {u.error ? (
-                      <p className="text-xs text-[#ff716c]">{u.error}</p>
+                      <p className="text-xs text-neon-rose">{u.error}</p>
                     ) : (
-                      <div className="mt-1 h-1 bg-[#1c2028] rounded-full overflow-hidden">
+                      <div className="mt-1 h-1 bg-background rounded-none overflow-hidden">
                         <div
-                          className="h-full bg-[#8ff5ff] rounded-full transition-all"
+                          className="h-full bg-neon-cyan rounded-none transition-all"
                           style={{ width: `${u.progress}%` }}
                         />
                       </div>
                     )}
                   </div>
-                  <span className="text-xs font-mono text-[#45484f]">
+                  <span className="text-xs font-mono text-muted-foreground/60">
                     {u.error ? '✗' : `${u.progress}%`}
                   </span>
                 </div>
@@ -484,16 +484,16 @@ export function AttachmentsStep({ onStepChange }: AttachmentsStepProps = {}) {
           <div className="space-y-3">
             {attachments.map((att, index) => (
               <div key={`${att.url}-${index}`} className="group relative">
-                <div className="absolute -inset-0.5 bg-gradient-to-r from-cyan-500/10 to-purple-500/10 rounded-xl blur opacity-0 group-hover:opacity-100 transition duration-500" />
-                <div className="relative bg-[#10131a] rounded-xl border border-white/5 overflow-hidden">
+                <div className="absolute -inset-0.5 bg-gradient-to-r from-neon-cyan/10 to-neon-purple/10 rounded-none blur opacity-0 group-hover:opacity-100 transition duration-500" />
+                <div className="relative bg-card rounded-none border border-border overflow-hidden">
                   {editingIndex === index ? (
                     /* Edit mode */
                     <div className="p-4 space-y-3">
                       <div className="flex items-center gap-2 mb-2">
-                        <span className="material-symbols-outlined text-[#8ff5ff] text-lg">
+                        <span className="material-symbols-outlined text-neon-cyan text-lg">
                           edit_note
                         </span>
-                        <span className="text-xs text-[#a9abb3] truncate font-mono">
+                        <span className="text-xs text-muted-foreground truncate font-mono">
                           {att.url.split('/').pop()}
                         </span>
                       </div>
@@ -503,10 +503,10 @@ export function AttachmentsStep({ onStepChange }: AttachmentsStepProps = {}) {
                           setEditCategory(v as AttachmentCategory)
                         }
                       >
-                        <SelectTrigger className="w-full bg-[#1c2028] border-none rounded-lg text-[#ecedf6] h-10 shadow-none">
+                        <SelectTrigger className="w-full bg-background border border-border rounded-none text-foreground h-10 shadow-none">
                           <SelectValue />
                         </SelectTrigger>
-                        <SelectContent className="bg-[#22262f] border-[#45484f]/30 text-[#ecedf6]">
+                        <SelectContent className="bg-card border border-border text-foreground rounded-none">
                           {CATEGORIES.map((cat) => (
                             <SelectItem key={cat} value={cat}>
                               {cat}
@@ -517,11 +517,11 @@ export function AttachmentsStep({ onStepChange }: AttachmentsStepProps = {}) {
                       {/* Custom name input — shown when Other is selected */}
                       {editCategory === 'Other' && (
                         <div className="relative">
-                          <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[#a9abb3] text-sm pointer-events-none">
+                          <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-sm pointer-events-none">
                             edit
                           </span>
                           <Input
-                            className="w-full bg-[#1c2028] border-none rounded-lg text-[#ecedf6] placeholder:text-slate-600 h-10 pl-9 pr-4 focus-visible:ring-1 focus-visible:ring-[#8ff5ff]/50 shadow-none text-sm"
+                            className="w-full bg-background border border-border rounded-none text-foreground placeholder:text-muted-foreground/50 h-10 pl-9 pr-4 focus-visible:ring-1 focus-visible:ring-neon-cyan/50 shadow-none text-sm"
                             placeholder={t('attachments.typeNamePlaceholder')}
                             value={editCustomName}
                             onChange={(e) => setEditCustomName(e.target.value)}
@@ -530,7 +530,7 @@ export function AttachmentsStep({ onStepChange }: AttachmentsStepProps = {}) {
                         </div>
                       )}
                       <Input
-                        className="w-full bg-[#1c2028] border-none rounded-lg text-[#ecedf6] placeholder:text-slate-600 h-10 px-4 focus-visible:ring-1 focus-visible:ring-[#8ff5ff]/50 shadow-none"
+                        className="w-full bg-background border border-border rounded-none text-foreground placeholder:text-muted-foreground/50 h-10 px-4 focus-visible:ring-1 focus-visible:ring-neon-cyan/50 shadow-none"
                         placeholder={t('attachments.descriptionPlaceholder')}
                         value={editDescription}
                         onChange={(e) => setEditDescription(e.target.value)}
@@ -539,7 +539,7 @@ export function AttachmentsStep({ onStepChange }: AttachmentsStepProps = {}) {
                         <Button
                           size="sm"
                           onClick={saveEdit}
-                          className="flex-1 h-8 bg-[#8ff5ff] hover:bg-[#a8f8ff] text-[#00383d] font-bold rounded-lg border-none text-xs"
+                          className="flex-1 h-8 bg-neon-cyan hover:bg-neon-cyan/80 text-background font-bold rounded-none border border-neon-cyan shadow-[1px_1px_0px_0px_var(--neon-purple)] text-xs"
                         >
                           {t('btn.save')}
                         </Button>
@@ -547,7 +547,7 @@ export function AttachmentsStep({ onStepChange }: AttachmentsStepProps = {}) {
                           size="sm"
                           variant="ghost"
                           onClick={() => setEditingIndex(null)}
-                          className="flex-1 h-8 text-[#a9abb3] hover:text-[#ecedf6] rounded-lg text-xs"
+                          className="flex-1 h-8 text-muted-foreground hover:text-foreground rounded-none text-xs"
                         >
                           {t('btn.cancel')}
                         </Button>
@@ -558,7 +558,7 @@ export function AttachmentsStep({ onStepChange }: AttachmentsStepProps = {}) {
                     <div className="flex items-center gap-4 p-4">
                       {/* File type icon */}
                       <div
-                        className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0"
+                        className="w-12 h-12 rounded-none flex items-center justify-center flex-shrink-0"
                         style={{
                           background: `${CATEGORY_COLORS[att.category]}15`,
                           border: `1px solid ${CATEGORY_COLORS[att.category]}30`
@@ -575,7 +575,7 @@ export function AttachmentsStep({ onStepChange }: AttachmentsStepProps = {}) {
                       {/* Info */}
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 mb-0.5">
-                          <p className="text-sm font-['Space_Grotesk'] font-semibold text-[#ecedf6] truncate">
+                          <p className="text-sm font-['Space_Grotesk'] font-semibold text-foreground truncate">
                             {att.category === 'Other' && att.customCategoryName
                               ? att.customCategoryName
                               : att.category}
@@ -583,7 +583,7 @@ export function AttachmentsStep({ onStepChange }: AttachmentsStepProps = {}) {
                         </div>
                         <div className="flex items-center gap-2 flex-wrap">
                           {att.description && (
-                            <span className="text-[#73757d] text-xs italic truncate max-w-[180px]">
+                            <span className="text-muted-foreground text-xs italic truncate max-w-[180px]">
                               {att.description}
                             </span>
                           )}
@@ -594,7 +594,7 @@ export function AttachmentsStep({ onStepChange }: AttachmentsStepProps = {}) {
                       <div className="flex items-center gap-1 shrink-0">
                         <button
                           onClick={() => startEdit(index)}
-                          className="p-2 text-[#45484f] hover:text-[#ac89ff] transition-colors"
+                          className="p-2 text-muted-foreground/60 hover:text-neon-purple transition-colors"
                           title="Edit"
                         >
                           <span className="material-symbols-outlined text-lg">
@@ -603,7 +603,7 @@ export function AttachmentsStep({ onStepChange }: AttachmentsStepProps = {}) {
                         </button>
                         <button
                           onClick={() => removeAttachment(index)}
-                          className="p-2 text-[#45484f] hover:text-[#ff716c] transition-colors"
+                          className="p-2 text-muted-foreground/60 hover:text-neon-rose transition-colors"
                           title="Remove"
                         >
                           <span className="material-symbols-outlined text-lg">
@@ -618,14 +618,14 @@ export function AttachmentsStep({ onStepChange }: AttachmentsStepProps = {}) {
             ))}
 
             {attachments.length === 0 && uploadingFiles.length === 0 && (
-              <div className="relative p-14 bg-black/20 rounded-xl border border-dashed border-[#45484f]/30 flex flex-col items-center justify-center text-center">
-                <span className="material-symbols-outlined text-4xl text-[#45484f] mb-4">
+              <div className="relative p-14 bg-muted/10 rounded-none border border-dashed border-border flex flex-col items-center justify-center text-center">
+                <span className="material-symbols-outlined text-4xl text-muted-foreground/60 mb-4">
                   folder_open
                 </span>
-                <p className="text-[#a9abb3] text-sm italic">
+                <p className="text-muted-foreground text-sm italic">
                   {t('attachments.empty')}
                 </p>
-                <p className="text-[#45484f] text-xs mt-1">
+                <p className="text-muted-foreground/60 text-xs mt-1">
                   {t('attachments.emptySub')}
                 </p>
               </div>
@@ -644,7 +644,7 @@ export function AttachmentsStep({ onStepChange }: AttachmentsStepProps = {}) {
                   return (
                     <div
                       key={cat}
-                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold"
+                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-none text-xs font-bold"
                       style={{
                         background: `${CATEGORY_COLORS[cat]}15`,
                         border: `1px solid ${CATEGORY_COLORS[cat]}25`,
