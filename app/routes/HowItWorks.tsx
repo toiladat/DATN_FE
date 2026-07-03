@@ -99,7 +99,7 @@ export default function HowItWorksPage() {
               {t('how.title')}
             </span>
           </h1>
-          <p className="text-muted-foreground text-sm md:text-base font-light leading-relaxed">
+          <p className="text-muted-foreground text-base md:text-lg leading-relaxed">
             {t('how.subtitle')}
           </p>
         </motion.div>
@@ -167,13 +167,13 @@ export default function HowItWorksPage() {
                   <h2 className="text-xl md:text-2xl font-bold mb-3 text-foreground">
                     {t('how.phase1.title')}
                   </h2>
-                  <p className="text-muted-foreground leading-relaxed font-light text-sm mb-6">
+                  <p className="text-muted-foreground leading-relaxed text-base mb-6">
                     {t('how.phase1.subtitle')}
                   </p>
 
                   {/* Setup Rules & Controls (Simple language) */}
                   <div className="space-y-5 pt-6 border-t border-border/40">
-                    <h4 className="text-[10px] font-mono text-neon-cyan uppercase tracking-widest font-bold">
+                    <h4 className="text-[11px] font-mono text-neon-cyan uppercase tracking-widest font-bold">
                       {t('how.phase1.rule_header')}
                     </h4>
 
@@ -183,7 +183,7 @@ export default function HowItWorksPage() {
                         <span className="text-sm font-bold text-foreground block">
                           {t('how.phase1.rule1.title')}
                         </span>
-                        <span className="text-xs text-muted-foreground font-light mt-1 block leading-relaxed">
+                        <span className="text-sm text-muted-foreground mt-1.5 block leading-relaxed">
                           {t('how.phase1.rule1.desc')}
                         </span>
                       </div>
@@ -195,7 +195,7 @@ export default function HowItWorksPage() {
                         <span className="text-sm font-bold text-foreground block">
                           {t('how.phase1.rule2.title')}
                         </span>
-                        <span className="text-xs text-muted-foreground font-light mt-1 block leading-relaxed">
+                        <span className="text-sm text-muted-foreground mt-1.5 block leading-relaxed">
                           {t('how.phase1.rule2.desc')}
                         </span>
                       </div>
@@ -207,7 +207,7 @@ export default function HowItWorksPage() {
                         <span className="text-sm font-bold text-foreground block">
                           {t('how.phase1.rule3.title')}
                         </span>
-                        <span className="text-xs text-muted-foreground font-light mt-1 block leading-relaxed">
+                        <span className="text-sm text-muted-foreground mt-1.5 block leading-relaxed">
                           {t('how.phase1.rule3.desc')}
                         </span>
                       </div>
@@ -235,7 +235,7 @@ export default function HowItWorksPage() {
                       <h4 className="text-base font-bold mb-2 text-foreground group-hover:text-foreground transition-colors">
                         {step.title}
                       </h4>
-                      <p className="text-xs text-muted-foreground leading-relaxed font-light">
+                      <p className="text-sm text-muted-foreground leading-relaxed">
                         {step.desc}
                       </p>
                     </div>
@@ -253,7 +253,7 @@ export default function HowItWorksPage() {
                   <h2 className="text-xl md:text-2xl font-bold mb-4 text-foreground">
                     {t('how.phase2.title')}
                   </h2>
-                  <p className="text-muted-foreground leading-relaxed font-light mb-6 text-sm">
+                  <p className="text-muted-foreground leading-relaxed mb-6 text-base">
                     {t('how.phase2.desc')}
                   </p>
                 </div>
@@ -265,7 +265,7 @@ export default function HowItWorksPage() {
                   <h3 className="text-lg font-bold mb-3 text-foreground group-hover:text-neon-purple transition-colors">
                     {t('how.phase2.rule1.title')}
                   </h3>
-                  <p className="text-xs text-muted-foreground leading-relaxed font-light">
+                  <p className="text-sm text-muted-foreground leading-relaxed">
                     {t('how.phase2.rule1.desc')}
                   </p>
                 </div>
@@ -274,7 +274,7 @@ export default function HowItWorksPage() {
                   <h3 className="text-lg font-bold mb-3 text-foreground group-hover:text-neon-purple transition-colors">
                     {t('how.phase2.rule2.title')}
                   </h3>
-                  <p className="text-xs text-muted-foreground leading-relaxed font-light">
+                  <p className="text-sm text-muted-foreground leading-relaxed">
                     {t('how.phase2.rule2.desc')}
                   </p>
                 </div>
@@ -290,11 +290,11 @@ export default function HowItWorksPage() {
                   <h2 className="text-xl md:text-2xl font-bold mb-4 text-foreground">
                     {t('how.phase3.title')}
                   </h2>
-                  <p className="text-muted-foreground leading-relaxed font-light mb-6 text-sm">
+                  <p className="text-muted-foreground leading-relaxed mb-6 text-base">
                     {t('how.phase3.desc')}
                   </p>
                   <div className="space-y-4 pt-4 border-t border-border/40">
-                    <h4 className="text-[10px] font-mono text-emerald-600 dark:text-emerald-400 uppercase tracking-widest font-bold">
+                    <h4 className="text-[11px] font-mono text-emerald-600 dark:text-emerald-400 uppercase tracking-widest font-bold">
                       {t('how.phase3.safety_header')}
                     </h4>
                     {[
@@ -304,7 +304,7 @@ export default function HowItWorksPage() {
                     ].map((text, idx) => (
                       <div key={idx} className="flex items-start gap-3">
                         <CheckCircle className="w-5 h-5 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
-                        <span className="text-xs text-foreground font-light leading-relaxed">
+                        <span className="text-sm text-foreground leading-relaxed">
                           {text}
                         </span>
                       </div>
@@ -350,7 +350,7 @@ export default function HowItWorksPage() {
                   <h2 className="text-xl md:text-2xl font-bold mb-4 text-foreground">
                     {t('how.phase4.title')}
                   </h2>
-                  <p className="text-muted-foreground leading-relaxed font-light text-sm">
+                  <p className="text-muted-foreground leading-relaxed text-base">
                     {t('how.phase4.subtitle')}
                   </p>
                 </div>
@@ -367,7 +367,7 @@ export default function HowItWorksPage() {
                     <h3 className="text-lg font-bold mb-4 text-foreground group-hover:text-foreground transition-colors">
                       {t('how.phase4.withdraw.title')}
                     </h3>
-                    <p className="text-xs text-muted-foreground leading-relaxed font-light mb-6">
+                    <p className="text-sm text-muted-foreground leading-relaxed mb-6">
                       {t('how.phase4.withdraw.desc')}
                     </p>
 
@@ -376,7 +376,7 @@ export default function HowItWorksPage() {
                         <h4 className="text-sm font-bold text-emerald-600 dark:text-emerald-400 mb-1.5">
                           {t('how.phase4.withdraw.step1.title')}
                         </h4>
-                        <p className="text-xs text-muted-foreground leading-relaxed font-light">
+                        <p className="text-sm text-muted-foreground leading-relaxed">
                           {t('how.phase4.withdraw.step1.desc')}
                         </p>
                       </div>
@@ -385,7 +385,7 @@ export default function HowItWorksPage() {
                         <h4 className="text-sm font-bold text-emerald-600 dark:text-emerald-400 mb-1.5">
                           {t('how.phase4.withdraw.step2.title')}
                         </h4>
-                        <p className="text-xs text-muted-foreground leading-relaxed font-light">
+                        <p className="text-sm text-muted-foreground leading-relaxed">
                           {t('how.phase4.withdraw.step2.desc')}
                         </p>
                       </div>
@@ -394,7 +394,7 @@ export default function HowItWorksPage() {
                         <h4 className="text-sm font-bold text-emerald-600 dark:text-emerald-400 mb-1.5">
                           {t('how.phase4.withdraw.step3.title')}
                         </h4>
-                        <p className="text-xs text-muted-foreground leading-relaxed font-light">
+                        <p className="text-sm text-muted-foreground leading-relaxed">
                           {t('how.phase4.withdraw.step3.desc')}
                         </p>
                       </div>
@@ -411,7 +411,7 @@ export default function HowItWorksPage() {
                     <h3 className="text-lg font-bold mb-4 text-foreground group-hover:text-foreground transition-colors">
                       {t('how.phase4.refund.title')}
                     </h3>
-                    <p className="text-xs text-muted-foreground leading-relaxed font-light mb-6">
+                    <p className="text-sm text-muted-foreground leading-relaxed mb-6">
                       {t('how.phase4.refund.desc')}
                     </p>
 
@@ -420,7 +420,7 @@ export default function HowItWorksPage() {
                         <h4 className="text-sm font-bold text-neon-rose mb-1.5">
                           {t('how.phase4.refund.case1.title')}
                         </h4>
-                        <p className="text-xs text-muted-foreground leading-relaxed font-light">
+                        <p className="text-sm text-muted-foreground leading-relaxed">
                           {t('how.phase4.refund.case1.desc')}
                         </p>
                       </div>
@@ -429,7 +429,7 @@ export default function HowItWorksPage() {
                         <h4 className="text-sm font-bold text-neon-rose mb-1.5">
                           {t('how.phase4.refund.case2.title')}
                         </h4>
-                        <p className="text-xs text-muted-foreground leading-relaxed font-light">
+                        <p className="text-sm text-muted-foreground leading-relaxed">
                           {t('how.phase4.refund.case2.desc')}
                         </p>
                       </div>
@@ -441,7 +441,7 @@ export default function HowItWorksPage() {
               {/* General warning info box */}
               <div className="bg-neon-rose/5 border border-neon-rose/20 p-5 rounded-none flex items-start gap-4 mt-8">
                 <Info className="w-5 h-5 text-neon-rose shrink-0 mt-0.5" />
-                <p className="text-xs text-neon-rose leading-relaxed">
+                <p className="text-sm text-neon-rose leading-relaxed">
                   {t('how.phase4.warning')}
                 </p>
               </div>

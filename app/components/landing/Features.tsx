@@ -33,7 +33,7 @@ export function Features() {
   ]
 
   return (
-    <section className="py-32 px-4 max-w-7xl mx-auto relative">
+    <section className="pt-12 pb-18 px-4 max-w-7xl mx-auto relative">
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-[500px] bg-neon-cyan/5 rounded-[100%] blur-[120px] pointer-events-none" />
 
       <motion.div
@@ -52,7 +52,7 @@ export function Features() {
           </h2>
         </div>
         <div className="flex-1 space-y-8">
-          <p className="text-xl text-muted-foreground leading-relaxed font-light">
+          <p className="text-lg md:text-xl text-muted-foreground leading-relaxed">
             {t('landing.features_desc')}
           </p>
           <div className="flex gap-6">
@@ -66,11 +66,8 @@ export function Features() {
         </div>
       </motion.div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 relative z-10">
         {features.map((feature, index) => {
-          // Asymmetrical layout mapping
-          const spanClass =
-            index === 0 || index === 3 ? 'md:col-span-2' : 'md:col-span-1'
           const bgClass =
             index % 2 === 0 ? 'bg-card/40' : 'bg-surface-container-low/30'
           const hoverBorderClass =
@@ -93,7 +90,7 @@ export function Features() {
                 ease: 'easeOut'
               }}
               key={index}
-              className={`p-10 rounded-none ${bgClass} border border-border/40 ${hoverBorderClass} backdrop-blur-sm transition-all duration-700 ease-out group relative overflow-hidden flex flex-col justify-between min-h-[320px] ${spanClass}`}
+              className={`p-8 rounded-none ${bgClass} border border-border/40 ${hoverBorderClass} backdrop-blur-sm transition-all duration-700 ease-out group relative overflow-hidden flex flex-col gap-4 min-h-[220px] col-span-1`}
             >
               {/* Subtle hover gradient */}
               <div
@@ -222,7 +219,7 @@ export function Features() {
                   {feature.title}
                 </h5>
               </div>
-              <p className="text-muted-foreground text-lg leading-relaxed relative z-10 font-light">
+              <p className="text-muted-foreground text-base md:text-lg leading-relaxed relative z-10">
                 {feature.description}
               </p>
             </motion.div>

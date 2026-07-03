@@ -22,7 +22,7 @@ interface Message {
 }
 
 export default function AiAssistant() {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const [isOpen, setIsOpen] = useState(false)
   const [inputMessage, setInputMessage] = useState('')
   const [messages, setMessages] = useState<Message[]>([])
@@ -126,6 +126,38 @@ export default function AiAssistant() {
     setMessages(updated)
     saveChatHistory(updated)
     setInputMessage('')
+
+    // OVERRIDE FOR STATIC FAUCET INFO - RESPOND INSTANTLY (Extremely robust keyword checking)
+    const normalizedText = textToSend.toLowerCase().trim()
+    const isUsdtFaq =
+      normalizedText.includes('musdt') &&
+      (normalizedText.includes('nhận') ||
+        normalizedText.includes('lấy') ||
+        normalizedText.includes('nạp') ||
+        normalizedText.includes('faucet') ||
+        normalizedText.includes('thử nghiệm') ||
+        normalizedText.includes('invest') ||
+        normalizedText.includes('get') ||
+        normalizedText.includes('add') ||
+        normalizedText.includes('tích'))
+
+    if (isUsdtFaq) {
+      const detailedAnswer =
+        i18n.language === 'vi'
+          ? `mUSDT (Mock USDT) là đồng stablecoin định danh chuẩn ERC20 được sử dụng chính thức trên nền tảng FundHive để thực hiện các giao dịch đầu tư và giải ngân. \n\nĐể nhận mUSDT thử nghiệm và tích hợp vào ví, bạn thực hiện các bước sau:\n\n1. THÔNG TIN TOKEN mUSDT:\n- Mạng lưới: Sepolia Testnet\n- Địa chỉ hợp đồng (Contract Address): 0x26A0d19F8c7D56F676b835fc990d6038dC075c84\n- Ký hiệu: mUSDT\n- Số thập phân (Decimals): 18\n\n2. CÁCH NHẬN mUSDT THỬ NGHIỆM (FAUCET):\n- Bạn có thể liên hệ Ban Quản trị hệ thống để được chuyển mUSDT trực tiếp vào ví cá nhân của bạn.\n- Hoặc bạn có thể tự nhận mUSDT bằng cách truy cập trực tiếp vào hợp đồng mUSDT trên Sepolia Etherscan: https://sepolia.etherscan.io/address/0x26A0d19F8c7D56F676b835fc990d6038dC075c84#writeContract, kết nối ví và nhấn nút Write tại mục Faucet hoặc mint để nhận token miễn phí.\n\n3. CÁCH ADD TOKEN VÀO VÍ (MetaMask, Rabby...):\n- Chuyển ví sang mạng Sepolia Testnet.\n- Chọn "Import Tokens" hoặc "Nhập token".\n- Dán địa chỉ hợp đồng: 0x26A0d19F8c7D56F676b835fc990d6038dC075c84\n- Nhấn "Add Custom Token" để hoàn tất hiển thị số dư.`
+          : `mUSDT (Mock USDT) is the official ERC20 stablecoin used on FundHive for investment and release operations. \n\nTo top up test mUSDT and add it to your wallet, follow these steps:\n\n1. mUSDT TOKEN INFORMATION:\n- Network: Sepolia Testnet\n- Contract Address: 0x26A0d19F8c7D56F676b835fc990d6038dC075c84\n- Symbol: mUSDT\n- Decimals: 18\n\n2. HOW TO GET TEST mUSDT (FAUCET):\n- You can contact the Administration to transfer mUSDT directly to your address.\n- Alternatively, you can mint it directly on Sepolia Etherscan: https://sepolia.etherscan.io/address/0x26A0d19F8c7D56F676b835fc990d6038dC075c84#writeContract, connect your wallet, and execute the Faucet/mint function to claim test tokens.\n\n3. HOW TO ADD TOKEN TO WALLET (MetaMask, Rabby...):\n- Switch your wallet to Sepolia Testnet.\n- Select "Import Tokens" or "Add Token".\n- Paste the contract address: 0x26A0d19F8c7D56F676b835fc990d6038dC075c84\n- Click "Add Custom Token" to finish.`
+
+      const aiMsg: Message = {
+        sender: 'ai',
+        text: detailedAnswer,
+        timestamp: new Date()
+      }
+      const finalChat = [...updated, aiMsg]
+      setMessages(finalChat)
+      saveChatHistory(finalChat)
+      return
+    }
+
     setIsStreaming(true)
 
     // Tạo tin nhắn trống của AI để chuẩn bị stream
@@ -255,9 +287,41 @@ export default function AiAssistant() {
       if (part.startsWith('[PROJECT:') && part.endsWith(']')) {
         try {
           const content = part.slice(9, -1)
-          const [title, slug, img, status, raised, goal] = content
-            .split('|')
-            .map((x) => x.trim())
+          const fields = content.split('|').map((x) => x.trim())
+
+          let title = fields[0] || 'Dự án'
+          let slug = fields[1] || ''
+          let img = fields[2] || ''
+          let status = fields[3] || ''
+          let raised = fields[4] || ''
+          let goal = fields[5] || ''
+
+          if (slug) {
+            const match = slug.match(/slug:\s*([a-z0-9-]+)/i)
+            if (match && match[1]) {
+              slug = match[1]
+            } else {
+              slug = slug.replace(/^slug:\s*/i, '').trim()
+            }
+          }
+
+          if (img) {
+            img = img.replace(/unshade\.com/i, 'unsplash.com').trim()
+          }
+
+          if (!slug && title) {
+            slug = title
+              .toLowerCase()
+              .normalize('NFD')
+              .replace(/[\u0300-\u036f]/g, '')
+              .replace(/[đĐ]/g, 'd')
+              .replace(/[^a-z0-9\s-]/g, '')
+              .trim()
+              .replace(/\s+/g, '-')
+              .replace(/-+/g, '-')
+          }
+
+          const hasValidSlug = slug && slug !== 'undefined' && slug !== 'null'
 
           return (
             <div
@@ -280,17 +344,19 @@ export default function AiAssistant() {
                   {title}
                 </h4>
                 <div className="flex items-center gap-1.5 mt-0.5">
-                  <span
-                    className={`px-1.5 py-0.2 rounded-none text-[8px] font-semibold tracking-wider ${
-                      status === 'PROGRESS' ||
-                      status === 'ACTIVE' ||
-                      status === 'SUCCESS'
-                        ? 'bg-emerald-500/10 text-emerald-500 border border-emerald-500/20'
-                        : 'bg-neon-rose/10 text-neon-rose border border-neon-rose/20'
-                    }`}
-                  >
-                    {status}
-                  </span>
+                  {status && (
+                    <span
+                      className={`px-1.5 py-0.2 rounded-none text-[8px] font-semibold tracking-wider ${
+                        status === 'PROGRESS' ||
+                        status === 'ACTIVE' ||
+                        status === 'SUCCESS'
+                          ? 'bg-emerald-500/10 text-emerald-500 border border-emerald-500/20'
+                          : 'bg-neon-rose/10 text-neon-rose border border-neon-rose/20'
+                      }`}
+                    >
+                      {status}
+                    </span>
+                  )}
                 </div>
                 {raised && goal && !isNaN(parseFloat(raised)) && (
                   <div className="mt-1">
@@ -312,13 +378,15 @@ export default function AiAssistant() {
                   </div>
                 )}
               </div>
-              <a
-                href={`/projects/${slug}`}
-                className="px-2.5 py-1.5 text-[10px] bg-neon-cyan hover:bg-neon-cyan/80 text-background font-semibold rounded-none transition-colors shrink-0 flex items-center gap-1 shadow-sm"
-              >
-                {t('ai.view')}
-                <ExternalLink className="w-2.5 h-2.5" />
-              </a>
+              {hasValidSlug && (
+                <a
+                  href={`/projects/${slug}`}
+                  className="px-2.5 py-1.5 text-[10px] bg-neon-cyan hover:bg-neon-cyan/80 text-background font-semibold rounded-none transition-colors shrink-0 flex items-center gap-1 shadow-sm"
+                >
+                  {t('ai.view')}
+                  <ExternalLink className="w-2.5 h-2.5" />
+                </a>
+              )}
             </div>
           )
         } catch (e) {
@@ -416,10 +484,12 @@ export default function AiAssistant() {
           return (
             <div
               key={`line-${index}-${lineIdx}`}
-              className="pl-4 py-0.5 flex items-start gap-1.5 text-foreground text-sm"
+              className="pl-4 py-0.5 flex items-start gap-1.5 text-foreground text-sm min-w-0 w-full"
             >
               <span className="text-neon-cyan mt-2 shrink-0 w-1.5 h-1.5 rounded-none bg-neon-cyan"></span>
-              <span className="leading-relaxed">{listText}</span>
+              <span className="leading-relaxed break-words min-w-0 flex-1">
+                {listText}
+              </span>
             </div>
           )
         }
@@ -427,7 +497,7 @@ export default function AiAssistant() {
         return (
           <p
             key={`line-${index}-${lineIdx}`}
-            className="leading-relaxed mb-1 text-foreground text-sm"
+            className="leading-relaxed mb-1 text-foreground text-sm break-words w-full"
           >
             {cleanLine}
           </p>
@@ -520,7 +590,7 @@ export default function AiAssistant() {
                 className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'} animate-in fade-in duration-250`}
               >
                 <div
-                  className={`flex gap-2 max-w-[85%] ${
+                  className={`flex gap-2 max-w-[85%] min-w-0 ${
                     msg.sender === 'user' ? 'flex-row-reverse' : 'flex-row'
                   }`}
                 >
@@ -530,18 +600,18 @@ export default function AiAssistant() {
                       <User className="w-3.5 h-3.5" />
                     </div>
                   ) : (
-                    <div className="w-7 h-7 flex items-center justify-center shrink-0">
+                    <div className="flex items-center justify-center w-7 h-7 rounded-none shrink-0 border bg-muted/20 border-border">
                       <img
                         src="/logo.png"
                         alt="AI"
-                        className="w-12 h-12 max-w-none object-contain"
+                        className="w-5 h-5 object-contain"
                       />
                     </div>
                   )}
 
                   {/* Message Balloon */}
                   <div
-                    className={`px-3 py-2.5 rounded-none shadow-sm leading-relaxed border ${
+                    className={`px-3 py-2.5 rounded-none shadow-sm leading-relaxed border break-words whitespace-pre-wrap min-w-0 w-full ${
                       msg.sender === 'user'
                         ? 'bg-neon-cyan text-background font-medium border-neon-cyan'
                         : 'bg-background text-foreground border-border'

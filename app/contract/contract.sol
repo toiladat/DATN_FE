@@ -233,14 +233,10 @@ contract FundHiveMilestoneERC20 {
         if (project.status == ProjectStatus.FAILED) {
             amountToRefund = userContribution;
         } else if (project.status == ProjectStatus.CANCELLED) {
-            amountToRefund = (userContribution * project.remainingBalance) / project.goal;
+            amountToRefund = (userContribution * project.remainingBalance) / project.totalFunded;
         }
 
         contributions[_projectId][msg.sender] = 0;
-        
-        if(project.status == ProjectStatus.CANCELLED){
-            project.remainingBalance -= amountToRefund;
-        }
 
         // Trả token bằng SafeERC20
         fundingToken.safeTransfer(msg.sender, amountToRefund);

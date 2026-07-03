@@ -23,7 +23,7 @@ export function FeaturedProjects() {
   }
 
   return (
-    <section className="py-32 px-4 max-w-7xl mx-auto relative">
+    <section className="py-16 px-4 max-w-7xl mx-auto relative">
       {/* Background ambient glow */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-[600px] bg-[radial-gradient(ellipse_at_center,rgba(143,245,255,0.03)_0%,transparent_70%)] pointer-events-none -z-10" />
 

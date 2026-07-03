@@ -15,7 +15,9 @@
   --color-primary-container: var(--primary-container);
   --color-secondary-dim: var(--secondary-dim);
   --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
   --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
   --color-tertiary: var(--tertiary);
 
   --color-surface-container-highest: var(--surface-container-highest);

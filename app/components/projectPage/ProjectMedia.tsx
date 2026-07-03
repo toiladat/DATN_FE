@@ -32,7 +32,7 @@ export function ProjectMedia({ project }: { project: ProjectDetail }) {
   }
 
   return (
-    <div className="lg:col-span-8 flex flex-col rounded-none overflow-hidden border border-border/50 bg-card shadow-sm dark:shadow-[0_8px_30px_rgba(0,0,0,0.3)]">
+    <div className="lg:col-span-8 flex flex-col self-start rounded-none overflow-hidden border border-border/50 bg-card shadow-sm dark:shadow-[0_8px_30px_rgba(0,0,0,0.3)]">
       {/* ── Tab bar — only when both exist ── */}
       {showTabs && (
         <div className="flex border-b border-border/30 shrink-0">

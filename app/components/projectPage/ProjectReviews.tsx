@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Send, Loader2, MessageSquare } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
@@ -44,19 +44,24 @@ export function ProjectReviews({
   const { isAuthenticated } = useAuth()
   const [content, setContent] = useState('')
   const [focused, setFocused] = useState(false)
+  const submittingRef = useRef(false)
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    if (!content.trim() || isPending) return
+    if (!content.trim() || isPending || submittingRef.current) return
+
+    submittingRef.current = true
     addReview(
       { content: content.trim() },
       {
         onSuccess: () => {
           setContent('')
           setFocused(false)
+          submittingRef.current = false
         },
         onError: (err) => {
           toast.error(getErrorMessage(err, t('reviews.send_error')))
+          submittingRef.current = false
         }
       }
     )
@@ -109,7 +114,8 @@ export function ProjectReviews({
               onKeyDown={(e) => {
                 if (e.key === 'Enter' && !e.shiftKey) {
                   e.preventDefault()
-                  handleSubmit(e as any)
+                  e.stopPropagation()
+                  e.currentTarget.form?.requestSubmit()
                 }
               }}
             />

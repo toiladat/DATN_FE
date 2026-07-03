@@ -177,7 +177,6 @@ export function ProjectDetailView({
 
           <div className="lg:col-span-4 flex flex-col gap-6">
             <ProjectStats project={project} />
-            <TopInvestors project={project} />
 
             {/* InvestCTA: chỉ trên public view, khi PROGRESS, và không phải owner */}
             {isPublicView && isProgress && !isOwner && (
@@ -220,6 +219,9 @@ export function ProjectDetailView({
             )}
           </div>
         </section>
+
+        {/* ── Top Investors (Horizontal scroll strip) ────────────────── */}
+        <TopInvestors project={project} />
 
         {/* ── Tabs ────────────────────────────────────────────────────── */}
         <ProjectTabs

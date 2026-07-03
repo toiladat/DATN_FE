@@ -9,6 +9,11 @@ export function Hero() {
   const { t } = useTranslation()
   const { data: stats } = useGetProjectStats()
 
+  const successRate =
+    stats && stats.total > 0
+      ? Math.round((stats.success / stats.total) * 100)
+      : 100
+
   return (
     <section className="relative min-h-screen flex items-center justify-center pt-40 pb-24 overflow-hidden bg-background">
       {/* Absolute Drenched Glows */}
@@ -41,11 +46,10 @@ export function Hero() {
           transition={{ duration: 0.8, delay: 0.1, ease: 'easeOut' }}
           className="text-5xl sm:text-7xl md:text-8xl lg:text-[105px] font-headline font-bold leading-[0.95] tracking-tighter text-foreground mb-8 drop-shadow-2xl max-w-5xl [text-wrap:balance]"
         >
-          {t('hero.titleMain')}{' '}
+          {t('hero.titleMain')} <br />
           <span className="text-neon-cyan drop-shadow-[0_0_20px_rgba(143,245,255,0.3)] font-extrabold">
             {t('hero.titleHighlight')}
           </span>{' '}
-          {t('hero.titleEnd')}
         </motion.h1>
 
         {/* Subtitle */}
@@ -113,7 +117,7 @@ export function Hero() {
                 {t('hero.stats.poolLabel')}
               </span>
               <span className="text-4xl md:text-5xl lg:text-6xl font-headline font-bold text-neon-cyan drop-shadow-[0_0_15px_rgba(143,245,255,0.25)] font-mono tracking-tight">
-                {t('hero.stats.poolValue')}
+                {stats ? `${successRate}%` : t('hero.stats.poolValue')}
               </span>
             </div>
 

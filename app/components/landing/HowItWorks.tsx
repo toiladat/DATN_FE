@@ -20,7 +20,7 @@ export function HowItWorks() {
   ]
 
   return (
-    <section className="py-32 bg-background border-y border-border/20 relative overflow-hidden">
+    <section className="pt-16 pb-10 bg-background border-y border-border/20 relative overflow-hidden">
       <div className="absolute top-0 right-1/4 w-[500px] h-[500px] bg-neon-purple/5 rounded-[100%] blur-[120px] pointer-events-none" />
       <div className="absolute bottom-0 left-1/4 w-[500px] h-[500px] bg-neon-cyan/5 rounded-[100%] blur-[120px] pointer-events-none" />
 
