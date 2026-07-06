@@ -56,7 +56,7 @@ export function RefundButton({
       toast.info(t('refund.tx_sent'))
 
       // Gửi txHash cho Backend ngay lập tức
-      await apiClient.post(`/project/${projectId}/refund`, { txHash })
+      await apiClient.post(`/projects/${projectId}/refund`, { txHash })
 
       // Invalidate cache
       queryClient.invalidateQueries({ queryKey: projectKeys.all })
